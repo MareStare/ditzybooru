@@ -5,6 +5,10 @@ Ditzybooru is an alternative modern web frontend for [Philomena](https://github.
 
 Ditzybooru doesn't have a standalone backend. It reaches out to the origin Philomena-based server (e.g. https://derpibooru.org) for images, comments, user profile data, etc. Therefore, all data is still stored on the origin server. You can also optionally log in to Ditzybooru with your account on the origin server, and all your favourites, uploads, and comments will still be available. Any changes you make on Ditzybooru will be pushed to the origin server, and any data you see on the origin server can be seen on the Ditzybooru frontend.
 
+<div align="center">
+<img src="https://github.com/user-attachments/assets/15571c0b-4aff-4743-961b-e29bd1235da8" width="500"/>
+</div>
+
 ## The Mission
 
 The ideal goal of this project is to create a modern React NextJS SSR web frontend for Philomena and potentially integrate it upstream or use it as a basis for Philomena-native moder frontend. A less ambitious goal is to just make it available as a web app on a separate domain, extending it with extra features that are not available on the original Derpibooru frontend.
