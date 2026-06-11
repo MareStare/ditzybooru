@@ -11,7 +11,7 @@ Ditzybooru doesn't have a standalone backend. It reaches out to the origin Philo
 
 ## The Mission
 
-The ideal goal of this project is to create a modern React NextJS SSR web frontend for Philomena and potentially integrate it upstream or use it as a basis for Philomena-native moder frontend. A less ambitious goal is to just make it available as a web app on a separate domain, extending it with extra features that are not available on the original Derpibooru frontend.
+The ideal goal of this project is to create a modern React NextJS SSR web frontend for Philomena and potentially integrate it upstream or use it as a basis for Philomena-native modern frontend. A less ambitious goal is to just make it available as a web app on a separate domain, extending it with extra features that are not available on the original Derpibooru frontend.
 
 ## Design
 
@@ -24,7 +24,7 @@ Ideally, an equivalent or similar API will be exposed by Philomena natively, and
 ## License
 
 <sup>
-Licensed under the <a href="./LICENSE.txt">AGPL-3.0 license</a> just like the [Philomena project](https://github.com/philomena-dev/philomena).
+Licensed under the <a href="./LICENSE.txt">AGPL-3.0 license</a> just like the <a href="https://github.com/philomena-dev/philomena">Philomena project</a>.
 </sup>
 
 <br>
