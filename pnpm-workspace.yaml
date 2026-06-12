@@ -1,0 +1,13 @@
+packages:
+  - frontend
+
+allowBuilds:
+  unrs-resolver: true
+
+minimumReleaseAgeExclude:
+  - eslint@10.5.0
+  - lucide-react@1.18.0
+
+onlyBuiltDependencies:
+  - esbuild
+  - lightningcss

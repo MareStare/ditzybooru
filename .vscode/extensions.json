@@ -1,0 +1,53 @@
+{
+  "recommendations": [
+    // `.js`, `.ts` linter
+    "dbaeumer.vscode-eslint",
+
+    // `.js`, `.ts`. `.css`, `.json`, `.yaml`, `.md` formatter
+    "esbenp.prettier-vscode",
+
+    // Spell checker enforced on CI
+    "tekumara.typos-vscode",
+
+    // Rust LSP
+    "rust-lang.rust-analyzer",
+
+    // TOML LSP
+    "tamasfe.even-better-toml",
+
+    // Terraform LSP
+    "hashicorp.terraform",
+
+    // Better TS diagnostics in IDE. It's recommended to go through these
+    // instructions here to make the errors less noisy and more convenient:
+    // https://github.com/yoavbls/pretty-ts-errors/blob/main/docs/hide-original-errors.md
+    "yoavbls.pretty-ts-errors",
+
+    // Container management extension by Microsoft
+    "ms-azuretools.vscode-containers",
+
+    // Dockerfile LSP by Docker Inc.
+    "docker.docker",
+
+    // Github Actions LSP
+    "github.vscode-github-actions",
+
+    // Bash LSP
+    "mads-hartmann.bash-ide-vscode",
+
+    // Bash formatter
+    "foxundermoon.shell-format",
+
+    // Bash linter
+    "timonwong.shellcheck",
+
+    // YAML LSP
+    "redhat.vscode-yaml",
+
+    // Helm LSP
+    "tim-koehler.helm-intellisense",
+
+    // Kubernetes UI and Helm syntax highlighting
+    "ms-kubernetes-tools.vscode-kubernetes-tools"
+  ]
+}
