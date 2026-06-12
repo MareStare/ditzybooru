@@ -1,4 +1,3 @@
-
 # Ditzybooru
 
 Ditzybooru is an alternative modern web frontend for [Philomena](https://github.com/philomena-dev/philomena)-based backends like [Derpibooru](https://derpibooru.org). The main production instance https://ditzybooru.org is backed by Derpibooru, but Ditzybooru is self-hostable with any other Philomena-based backend of your choice.

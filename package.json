@@ -1,0 +1,22 @@
+{
+  "name": "ditzybooru",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter frontend dev",
+    "generate-routes": "pnpm --filter frontend generate-routes",
+    "build": "pnpm --filter frontend build",
+    "preview": "pnpm --filter frontend preview",
+    "test": "pnpm --filter frontend test",
+    "lint": "eslint",
+    "fmt": "prettier --write .",
+    "fmt:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "typescript": "^6.0",
+    "prettier": "^3.8",
+    "eslint": "^10.5",
+    "typescript-eslint": "^8.61",
+    "@tanstack/eslint-config": "^0.4"
+  }
+}
