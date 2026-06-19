@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+# Install this as a git pre-commit hook:
+# ln -sf ../../.githooks/pre-commit .git/hooks/pre-commit
+
+set -euxo pipefail
+
+pnpm fmt
+
+typos

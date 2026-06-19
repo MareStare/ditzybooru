@@ -24,3 +24,6 @@ trim_trailing_whitespace = true
 # exremely ugly. The issue about that in the VSCode extension repo:
 # https://github.com/foxundermoon/vs-shell-format/issues/371
 switch_case_indent = true
+
+[*.{sh,rs}]
+indent_size = 4

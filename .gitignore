@@ -1,3 +1,6 @@
 target
 node_modules
 dist
+
+# Directory where our scripts install binaries with dependencies we need.
+tools
