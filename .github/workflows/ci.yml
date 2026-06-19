@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [master]
+
+jobs:
+  typescript-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v6
+        with: { version: 11 }
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm ci
+      - run: pnpm fmt:check
+      - run: pnpm type-check
+      - run: pnpm lint
+      - run: pnpm build
+
+  # Check for typos in the repository based on a static dictionary
+  typos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: ./scripts/install/typos.sh
+      - run: typos
