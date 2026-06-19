@@ -7,7 +7,7 @@
     "generate-routes": "pnpm --filter frontend generate-routes",
     "build": "pnpm --filter frontend build",
     "preview": "pnpm --filter frontend preview",
-    "test": "pnpm --filter frontend test",
+    "type-check": "pnpm --filter frontend type-check",
     "lint": "eslint",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check ."
