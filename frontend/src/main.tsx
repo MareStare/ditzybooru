@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './route-tree.gen';
+import { unwrap } from './utils/assertions';
 
 const router = createRouter({
   routeTree,
@@ -14,7 +15,7 @@ declare module '@tanstack/react-router' {
   }
 }
 
-const rootElement = document.getElementById('app')!;
+const rootElement = unwrap(document.getElementById('app'));
 
 if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
