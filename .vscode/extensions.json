@@ -49,8 +49,8 @@
 
     // Kubernetes UI and Helm syntax highlighting
     "ms-kubernetes-tools.vscode-kubernetes-tools",
-    
-    //bradlc.vscode-tailwindcss
+
+    // Tailwind LSP
     "bradlc.vscode-tailwindcss"
   ]
 }
