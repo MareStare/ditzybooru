@@ -1,7 +1,6 @@
 import prototypeStyles from '../prototypeComponents.module.css';
-import HeaderButton from './ui/HeaderButton';
 import { Button } from './ui/button';
-import { ArrowUpIcon, ArrowDownIcon, StarIcon, TextIcon, EyeOffIcon } from 'lucide-react';
+import { ArrowUpIcon, ArrowDownIcon, StarIcon, EyeOffIcon } from 'lucide-react';
 
 export default function CardHeader() {
   return (
