@@ -2,7 +2,6 @@ import { Button } from '#/components/ui/button';
 import { createFileRoute } from '@tanstack/react-router';
 import MostRecent from '#/components/MostRecent';
 
-
 export const Route = createFileRoute('/')({ component: Home });
 
 function Home() {
@@ -12,7 +11,7 @@ function Home() {
       <p className="mt-4 text-lg">
         Edit <code>src/routes/index.tsx</code> to get started.
       </p>
-      <MostRecent/>
+      <MostRecent />
     </div>
   );
 }

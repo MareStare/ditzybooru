@@ -1,29 +1,26 @@
-.cardHeader{
-    background-color: cornflowerblue;
-    border: 2px;
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    justify-content: center;
-    gap: 4px;
+.cardHeader {
+  background-color: cornflowerblue;
+  border: 2px;
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  justify-content: center;
+  gap: 4px;
 }
 
-.imageCard{
-    width: 20%;
-    border: solid 2px cornflowerblue;
+.imageCard {
+  width: 20%;
+  border: solid 2px cornflowerblue;
 }
 
-.imageGallery
-{
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2px;
-    border: solid 2px cornflowerblue;
-
+.imageGallery {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  border: solid 2px cornflowerblue;
 }
 
-.blockHeader
-{
-    background-color: darksalmon;
-    display: flex;
+.blockHeader {
+  background-color: darksalmon;
+  display: flex;
 }
