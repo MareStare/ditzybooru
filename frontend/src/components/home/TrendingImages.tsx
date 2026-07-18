@@ -37,10 +37,9 @@ const topScoringQuery = `/search?q=*&sf=${searchSorts.score.sf}&sd=${searchSorts
 export function TrendingImages() {
   return (
     <SidebarBlock
-      title="Trending Images"
+      title="Trending"
       href={trendingQuery}
       icon={<TrendingUp className="size-4 text-primary" />}
-      footer={{ label: 'All Time Top Scoring', href: topScoringQuery }}
       bodyClassName="grid grid-cols-2 gap-2 p-2"
     >
       {topScoring.map(image => (

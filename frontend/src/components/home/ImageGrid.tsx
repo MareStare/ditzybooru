@@ -1,0 +1,116 @@
+import { Fragment, useState } from 'react';
+import type { ReactNode } from 'react';
+
+import type { Image } from '#/lib/types';
+import { unwrap } from '#/lib/assertions';
+import { formatCount } from '#/lib/format';
+import { cn } from '#/lib/utils';
+import { MediaBox } from './MediaBox';
+import { Pagination } from './Pagination';
+
+/** Thumbnail grid sizing presets. */
+const GRID_SIZES = {
+  /** Fixed ~150px thumbnails — used for compact lists like watched images. */
+  small: 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))]',
+  /** ~150px thumbnails that grow to ~225px on wide viewports (Philomena's main list). */
+  large: 'grid-cols-[repeat(auto-fill,minmax(150px,1fr))] min-[1150px]:grid-cols-[repeat(auto-fill,minmax(225px,1fr))]',
+} as const;
+
+type ImageGridSize = keyof typeof GRID_SIZES;
+
+/** One switchable view within an {@link ImageGrid}. */
+export interface ImageGridTab {
+  /** Search query backing this tab; identifies the view it would fetch. */
+  query: string;
+  /** Human-readable label rendered on the tab. */
+  label: string;
+  images: Array<Image>;
+  total: number;
+  /** Optional icon rendered before the label. */
+  icon?: ReactNode;
+}
+
+interface ImageGridProps {
+  /** The tabs to render; the first one is selected initially. */
+  tabs: Array<ImageGridTab>;
+  /** Heading level, so the page keeps a single logical `h1`. */
+  headingLevel?: 1 | 2;
+  /** Thumbnail grid sizing preset. */
+  size?: ImageGridSize;
+}
+
+/**
+ * A tabbed image gallery: a row of tabs, pagination, a responsive thumbnail
+ * grid and a results footer. Each tab is a distinct query (recently uploaded,
+ * top, random, …) and keeps its own current page, preserved while switching
+ * between tabs. Mirrors Philomena's image `index`.
+ */
+export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridProps) {
+  const [activeTab, setActiveTab] = useState(0);
+  // Each tab keeps its own current page, preserved as the user switches tabs.
+  const [pages, setPages] = useState<Array<number>>(() => tabs.map(() => 1));
+
+  const Heading = headingLevel === 1 ? 'h1' : 'h2';
+  const active = unwrap(tabs[activeTab]);
+  const page = unwrap(pages[activeTab]);
+  const setPage = (next: number) => {
+    setPages(prev => prev.map((p, i) => (i === activeTab ? next : p)));
+  };
+
+  return (
+    <section className="rounded-xl border bg-card">
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-3 py-2.5">
+        {/* A row of view tabs. The active one is wrapped in the section heading
+            so the page keeps a single logical heading as tabs switch. */}
+        <div className="flex flex-wrap items-center gap-1" aria-label="Image views">
+          {tabs.map((tab, index) => {
+            const selected = index === activeTab;
+            const button = (
+              <button
+                type="button"
+                title={`Browse ${tab.label}`}
+                aria-current={selected ? 'page' : undefined}
+                onClick={() => {
+                  setActiveTab(index);
+                }}
+                className={cn(
+                  'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-base font-semibold transition-colors',
+                  selected
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                )}
+              >
+                {tab.icon}
+                {tab.label}
+              </button>
+            );
+
+            return selected ? (
+              <Heading key={index} className="text-base font-semibold">
+                {button}
+              </Heading>
+            ) : (
+              <Fragment key={index}>{button}</Fragment>
+            );
+          })}
+        </div>
+      </header>
+
+      {/* Match Philomena: fixed ~225px thumbnails (150px below 1150px) that
+          add columns as the viewport widens, rather than stretching. */}
+      <div className={cn('grid gap-2 p-3', GRID_SIZES[size])}>
+        {active.images.map(image => (
+          <MediaBox key={image.id} image={image} />
+        ))}
+      </div>
+
+      <footer className="sticky bottom-0 z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card/80 px-3 py-2.5 backdrop-blur supports-backdrop-filter:bg-card/65">
+        <Pagination page={page} onPageChange={setPage} />
+        <span className="text-sm text-muted-foreground">
+          Showing <strong className="text-foreground">1&ndash;{active.images.length}</strong> of{' '}
+          <strong className="text-foreground">{formatCount(active.total)}</strong> total
+        </span>
+      </footer>
+    </section>
+  );
+}

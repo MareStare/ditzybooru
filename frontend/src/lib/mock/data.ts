@@ -261,6 +261,15 @@ export const topScoring: Array<Image> = [
   makeImage(2001, 6, { score: 842, upvotes: 870, downvotes: 28, faves: 588, commentCount: 63 }),
 ];
 
+/** "Top (all time)" — the highest-scoring images, most points first. */
+export const topAllTime: Array<Image> = [...images].sort((a, b) => b.score - a.score);
+
+/** "Random" — the same images cycled in a different order to stand in for a random sort. */
+export const randomImages: Array<Image> = [...images].reverse();
+
+/** Images the current user has hidden. */
+export const hiddenImages: Array<Image> = images.slice(0, 6);
+
 /** Watched images (only shown when the user is signed in). */
 export const watchedImages: Array<Image> = [
   makeImage(3006, 4, { score: 88, upvotes: 92, downvotes: 4, faves: 51, commentCount: 3 }),
