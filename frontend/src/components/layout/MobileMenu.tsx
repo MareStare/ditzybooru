@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { LogIn, Radio, Upload, UserPlus, X } from 'lucide-react';
+import { Heart, LogIn, Mail, Radio, Upload, UserPlus, X } from 'lucide-react';
 
 import { primaryNav } from '#/lib/mock/site';
 import { currentUser, liveChannelCount } from '#/lib/mock/data';
@@ -73,6 +73,14 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
             <Radio className="mr-2 inline size-4 text-green-500" />
             Live
             <span className="ml-1.5 rounded bg-muted px-1.5 py-0.5 text-xs tabular-nums">{liveChannelCount}</span>
+          </a>
+          <a href="/pages/donations" className={sectionLink} onClick={onClose}>
+            <Heart className="mr-2 inline size-4 text-green-600 dark:text-green-400" />
+            Donate
+          </a>
+          <a href="/pages/contact" className={sectionLink} onClick={onClose}>
+            <Mail className="mr-2 inline size-4" />
+            Contact
           </a>
 
           <div className="my-2 h-px bg-border" />
