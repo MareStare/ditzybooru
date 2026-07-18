@@ -20,6 +20,19 @@ Ditzybooru uses a custom backend designed to close the API gap for the alternati
 
 Ideally, an equivalent or similar API will be exposed by Philomena natively, and attempts will be made to integrate the API design upstream, making Ditzybooru's proxy backend redundant, per se, in the future.
 
+## Development
+
+Recommended VSCode settings:
+
+```json
+{
+  "tailwindCSS.classFunctions": ["cva", "cn"],
+  "files.associations": {
+    "global.css": "tailwindcss"
+  }
+}
+```
+
 ## License
 
 <sup>

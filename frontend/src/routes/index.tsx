@@ -1,16 +1,22 @@
 import { createFileRoute } from '@tanstack/react-router';
-import MostRecent from '#/components/MostRecent';
+
+import { ActivitySidebar } from '#/components/home/ActivitySidebar';
+import { ImageList } from '#/components/home/ImageList';
+import { WatchedImages } from '#/components/home/WatchedImages';
+import { currentUser, images, totalImages } from '#/lib/mock/data';
 
 export const Route = createFileRoute('/')({ component: Home });
 
 function Home() {
   return (
-    <div className="p-8">
-      <h1 className="text-4xl font-bold">Welcome to Ditzybooru</h1>
-      <p className="mt-4 text-lg">
-        Edit <code>src/routes/index.tsx</code> to get started.
-      </p>
-      <MostRecent />
+    <div className="px-3 py-4 md:px-4">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-4">
+        <ActivitySidebar />
+        <div className="flex min-w-0 flex-1 flex-col gap-4">
+          <ImageList title="Recently Uploaded" images={images} total={totalImages} />
+          {currentUser ? <WatchedImages /> : null}
+        </div>
+      </div>
     </div>
   );
 }
