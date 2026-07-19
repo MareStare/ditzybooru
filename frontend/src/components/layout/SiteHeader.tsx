@@ -157,7 +157,7 @@ export function SiteHeader() {
           <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
             D
           </span>
-          <span className="hidden text-base font-semibold tracking-tight sm:inline">Ditzybooru</span>
+          <span className="hidden text-base font-semibold tracking-tight sm:inline">Ditzybooru (preview)</span>
         </a>
 
         <a href="/images/new" className={cn(headerLink, 'hidden shrink-0 sm:inline-flex')} title="Upload">
