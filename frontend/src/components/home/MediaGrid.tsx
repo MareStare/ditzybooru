@@ -52,7 +52,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
 
   // The active tab is wrapped in the section heading
   // so the page keeps a single logical heading as tabs switch.
-  const Heading = `h${headingLevel}`;
+  const Heading = `h${headingLevel}` as const;
 
   const active = unwrap(tabs[activeTab]);
   const page = unwrap(pages[activeTab]);
@@ -86,13 +86,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
               </button>
             );
 
-            return selected ? (
-              <Heading key={index} className="">
-                {button}
-              </Heading>
-            ) : (
-              <Fragment key={index}>{button}</Fragment>
-            );
+            return selected ? <Heading key={index}>{button}</Heading> : <Fragment key={index}>{button}</Fragment>;
           })}
         </div>
       </header>

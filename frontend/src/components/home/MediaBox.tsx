@@ -119,7 +119,7 @@ export function MediaBox({ className, image, src = image.representations.thumb }
           title="Comments"
           className="py-1.5 inline-flex h-full items-center gap-0.5 rounded px-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
-          <MessageSquare class="size-3.5" />
+          <MessageSquare className="size-3.5" />
           <span>
             <Int value={image.commentCount} />
           </span>
