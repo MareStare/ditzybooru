@@ -57,7 +57,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
             <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
               D
             </span>
-            <span className="text-base font-semibold tracking-tight">Ditzybooru (preview 4)</span>
+            <span className="text-base font-semibold tracking-tight">Ditzybooru (preview 5)</span>
           </span>
           <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="Close menu">
             <X />
