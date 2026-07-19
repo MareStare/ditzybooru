@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 import { ActivitySidebar } from '#/components/home/ActivitySidebar';
-import { ImageGrid } from '#/components/home/ImageGrid';
+import { ImageGrid } from '#/components/home/MediaGrid';
 import { WatchedImages } from '#/components/home/WatchedImages';
 import { currentUser, hiddenImages, images, randomImages, topAllTime, totalImages } from '#/lib/mock/data';
 import { ArrowUp, Clock, Dices, EyeOff } from 'lucide-react';

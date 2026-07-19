@@ -36,7 +36,7 @@ export function ThemeColorSwitcher() {
               const active = entry.id === color;
               // Gray is the one unsaturated swatch; every other color previews at a
               // fixed chroma over its `--theme-hue-<id>` defined in global.css.
-              const chroma = entry.id === 'gray' ? 0 : 0.16;
+              const chroma = entry.id === 'gray' ? '0' : '0.16';
               return (
                 <button
                   key={entry.id}
@@ -47,7 +47,7 @@ export function ThemeColorSwitcher() {
                   onClick={() => {
                     select(entry.id);
                   }}
-                  style={{ background: `oklch(0.62 ${String(chroma)} var(--theme-hue-${entry.id}))` }}
+                  style={{ background: `oklch(0.62 ${chroma} var(--theme-hue-${entry.id}))` }}
                   className={cn(
                     'flex size-7 items-center justify-center rounded-md border border-black/10 text-white transition-transform hover:scale-110',
                     active ? 'ring-2 ring-ring ring-offset-2 ring-offset-popover' : null,

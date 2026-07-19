@@ -1,7 +1,7 @@
 import { Eye } from 'lucide-react';
 
 import { watchedImages } from '#/lib/mock/data';
-import { ImageGrid } from './ImageGrid';
+import { ImageGrid } from './MediaGrid';
 
 /**
  * "Watched Images" block shown in the main column when the user is signed in

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { Image } from '#/lib/types';
+import type { Media } from '#/lib/types';
 
 type VoteState = 'up' | 'down' | null;
 
@@ -27,7 +27,7 @@ interface ImageInteraction extends ImageInteractionState {
  * backend yet, so state is kept locally and never persisted — clicking simply
  * updates the on-screen counters the way the real API eventually will.
  */
-export function useImageInteraction(image: Image): ImageInteraction {
+export function useImageInteraction(image: Media): ImageInteraction {
   const [state, setState] = useState<ImageInteractionState>(() => ({
     score: image.score,
     upvotes: image.upvotes,

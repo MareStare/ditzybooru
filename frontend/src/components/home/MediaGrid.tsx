@@ -1,9 +1,9 @@
 import { Fragment, useState } from 'react';
 import type { ReactNode } from 'react';
 
-import type { Image } from '#/lib/types';
+import type { Media } from '#/lib/types';
 import { unwrap } from '#/lib/assertions';
-import { formatCount } from '#/lib/format';
+import { Int } from '#/components/ui/int';
 import { cn } from '#/lib/utils';
 import { MediaBox } from './MediaBox';
 import { Pagination } from './Pagination';
@@ -24,7 +24,7 @@ export interface ImageGridTab {
   query: string;
   /** Human-readable label rendered on the tab. */
   label: string;
-  images: Array<Image>;
+  images: Array<Media>;
   total: number;
   /** Optional icon rendered before the label. */
   icon?: ReactNode;
@@ -50,7 +50,10 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
   // Each tab keeps its own current page, preserved as the user switches tabs.
   const [pages, setPages] = useState<Array<number>>(() => tabs.map(() => 1));
 
-  const Heading = headingLevel === 1 ? 'h1' : 'h2';
+  // The active tab is wrapped in the section heading
+  // so the page keeps a single logical heading as tabs switch.
+  const Heading = `h${headingLevel}`;
+
   const active = unwrap(tabs[activeTab]);
   const page = unwrap(pages[activeTab]);
   const setPage = (next: number) => {
@@ -58,10 +61,8 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
   };
 
   return (
-    <section className="rounded-xl border bg-card">
+    <section className="rounded-xl bg-card">
       <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-3 py-2.5">
-        {/* A row of view tabs. The active one is wrapped in the section heading
-            so the page keeps a single logical heading as tabs switch. */}
         <div className="flex flex-wrap items-center gap-1" aria-label="Image views">
           {tabs.map((tab, index) => {
             const selected = index === activeTab;
@@ -74,7 +75,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
                   setActiveTab(index);
                 }}
                 className={cn(
-                  'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-base font-semibold transition-colors',
+                  'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-colors',
                   selected
                     ? 'bg-primary/10 text-primary'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground',
@@ -86,7 +87,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
             );
 
             return selected ? (
-              <Heading key={index} className="text-base font-semibold">
+              <Heading key={index} className="">
                 {button}
               </Heading>
             ) : (
@@ -107,8 +108,12 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
       <footer className="sticky bottom-0 z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card/80 px-3 py-2.5 backdrop-blur supports-backdrop-filter:bg-card/65">
         <Pagination page={page} onPageChange={setPage} />
         <span className="text-sm text-muted-foreground">
-          Showing <strong className="text-foreground">1&ndash;{active.images.length}</strong> of{' '}
-          <strong className="text-foreground">{formatCount(active.total)}</strong> total
+          Showing{' '}
+          <strong className="text-foreground">
+            1<span className="px-0.5">&ndash;</span>
+            {active.images.length}
+          </strong>{' '}
+          of <Int className="text-foreground font-bold" value={active.total} /> total
         </span>
       </footer>
     </section>

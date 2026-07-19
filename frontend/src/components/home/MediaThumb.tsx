@@ -1,10 +1,10 @@
 import { EyeOff, Film } from 'lucide-react';
 
-import type { Image } from '#/lib/types';
+import type { Media } from '#/lib/types';
 import { cn } from '#/lib/utils';
 
 interface MediaThumbProps {
-  image: Image;
+  image: Media;
   /** Which representation to render. */
   src: string;
   /** Alt/title text (Philomena uses a "Size / Tagged: …" summary). */
@@ -23,9 +23,9 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
 
   return (
     <a
-      href={`/images/${String(image.id)}`}
+      href={`/images/${image.id}`}
       title={title}
-      className={cn('group/thumb relative block overflow-hidden bg-muted', className)}
+      className={cn('group/thumb relative block overflow-hidden', className)}
     >
       {hidden ? (
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-muted text-muted-foreground">
@@ -44,7 +44,7 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
         alt={title}
         loading="lazy"
         className={cn(
-          'absolute inset-0 size-full object-cover transition-transform duration-200 group-hover/thumb:scale-[1.03]',
+          'absolute inset-0 size-full object-contain transition-transform duration-200 group-hover/thumb:scale-[1.03]',
           image.spoilered && !hidden ? 'blur-lg' : null,
         )}
       />
@@ -59,7 +59,6 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
   );
 }
 
-/** Builds the "Size: WxH | Tagged: …" hover text that Philomena uses. */
-export function imageTitle(image: Image): string {
-  return `Size: ${String(image.width)}x${String(image.height)} | Tagged: ${image.tags.join(', ')}`;
+export function imageTitle(image: Media): string {
+  return `Size: ${image.width}x${image.height} | Tagged: ${image.tags.join(', ')}`;
 }

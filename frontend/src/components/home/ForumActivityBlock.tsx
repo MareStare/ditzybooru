@@ -1,19 +1,19 @@
 import { MessagesSquare, Pin } from 'lucide-react';
 
 import { topics } from '#/lib/mock/data';
-import type { Topic } from '#/lib/types';
+import type { ForumTopic } from '#/lib/types';
 import { SidebarBlock } from './SidebarBlock';
 import { UserAttribution } from './UserAttribution';
 
-function TopicStrip({ topic }: { topic: Topic }) {
+function TopicStrip({ topic }: { topic: ForumTopic }) {
   return (
-    <div className="px-3 py-2 text-sm leading-snug odd:bg-muted/30">
+    <div className="px-3 py-2 text-sm">
       {topic.sticky ? <Pin className="mr-1 inline size-3 text-muted-foreground" /> : null}
       {topic.lastPost ? (
         <>
           <UserAttribution author={topic.lastPost.author} />{' '}
           <a
-            href={`/forums/${topic.forum.slug}/topics/${topic.slug}?post_id=${String(topic.lastPost.id)}#post_${String(topic.lastPost.id)}`}
+            href={`/forums/${topic.forum.slug}/topics/${topic.slug}?post_id=${topic.lastPost.id}#post_${topic.lastPost.id}`}
             className="text-muted-foreground hover:text-foreground"
           >
             replied to

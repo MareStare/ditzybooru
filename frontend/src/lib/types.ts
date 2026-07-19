@@ -1,21 +1,6 @@
-/**
- * Domain types for the Ditzybooru frontend.
- *
- * These mirror the shapes exposed by the Philomena REST API (see
- * `openapi.yaml` in the philomena repo) so that the mock data used during this
- * migration can be swapped for real API responses with minimal churn. Only the
- * fields the home page actually needs are modelled here.
- */
+export type MimeType = 'image/gif' | 'image/jpeg' | 'image/png' | 'image/svg+xml' | 'video/webm';
 
-/** The MIME types Philomena serves for image records. */
-export type ImageMimeType = 'image/gif' | 'image/jpeg' | 'image/png' | 'image/svg+xml' | 'video/webm';
-
-/**
- * Pre-rendered thumbnail URLs for a single image. A size only points at a
- * downscaled file when the original is larger than that size; otherwise it
- * points at the full image.
- */
-export interface Representations {
+export interface MediaReprs {
   full: string;
   tall: string;
   large: string;
@@ -26,14 +11,13 @@ export interface Representations {
   thumbTiny: string;
 }
 
-/** A single image/media record. */
-export interface Image {
+export interface Media {
   id: number;
   createdAt: string;
   width: number;
   height: number;
   aspectRatio: number;
-  mimeType: ImageMimeType;
+  mimeType: MimeType;
   /** Tag names, ordered as Philomena orders them for display. */
   tags: Array<string>;
   tagCount: number;
@@ -43,7 +27,7 @@ export interface Image {
   faves: number;
   commentCount: number;
   sourceUrls: Array<string>;
-  representations: Representations;
+  representations: MediaReprs;
   /** Whether the image is hit by the current filter and should be spoilered. */
   spoilered: boolean;
   /** Whether the image was deleted/merged and hidden from users. */
@@ -55,14 +39,14 @@ export interface User {
   id: number;
   name: string;
   slug: string;
-  avatarUrl: string | null;
+  avatarUrl: null | string;
 }
 
 /** An anonymous-or-named attribution attached to comments/posts. */
 export interface Attribution {
-  user: User | null;
+  user: null | User;
   /** Displayed when the author posted anonymously. */
-  anonymousName: string | null;
+  anonymousName: null | string;
 }
 
 /** A recent comment, as shown in the activity sidebar. */
@@ -75,33 +59,30 @@ export interface Comment {
   imageThumbTiny: string;
 }
 
-/** A live-stream channel. */
-export interface Channel {
+export interface LiveStreamChannel {
   id: number;
   title: string;
   shortName: string;
   isLive: boolean;
   nsfw: boolean;
   viewers: number;
-  avatarUrl: string | null;
+  avatarUrl: null | string;
 }
 
-/** A discussion forum. */
 export interface Forum {
   id: string;
   name: string;
   slug: string;
 }
 
-/** A forum topic, as shown in the activity sidebar. */
-export interface Topic {
+export interface ForumTopic {
   id: number;
   title: string;
   slug: string;
   sticky: boolean;
   forum: Forum;
-  lastPost: {
+  lastPost: null | {
     id: number;
     author: Attribution;
-  } | null;
+  };
 }

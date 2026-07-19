@@ -8,16 +8,16 @@ import { SidebarBlock } from './SidebarBlock';
 import { UserAttribution } from './UserAttribution';
 
 function CommentStrip({ comment }: { comment: Comment }) {
-  const imageId = String(comment.imageId);
+  const imageId = comment.imageId;
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 text-sm odd:bg-muted/30">
+    <div className="flex items-center gap-2 px-3 py-2 text-sm">
       <a href={`/images/${imageId}`} className="shrink-0">
         <img src={comment.imageThumbTiny} alt="" loading="lazy" className="size-10 rounded object-cover" />
       </a>
-      <div className="min-w-0 flex-1 leading-snug">
+      <div className="min-w-0 flex-1">
         <div className="truncate">
-          <a href={`/images/${imageId}#comment_${String(comment.id)}`} className="font-medium hover:text-primary">
+          <a href={`/images/${imageId}#comment_${comment.id}`} className="font-medium hover:text-primary">
             #{comment.imageId}
           </a>{' '}
           <span className="text-muted-foreground">by</span> <UserAttribution author={comment.author} />

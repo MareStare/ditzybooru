@@ -1,12 +1,3 @@
-/** Formatting helpers shared across the frontend. */
-
-const numberFormatter = new Intl.NumberFormat('en-US');
-
-/** Formats an integer with thousands separators, e.g. `2147483` → `2,147,483`. */
-export function formatCount(value: number): string {
-  return numberFormatter.format(value);
-}
-
 const relativeFormatter = new Intl.RelativeTimeFormat('en-US', { numeric: 'auto' });
 
 const RELATIVE_UNITS: Array<[Intl.RelativeTimeFormatUnit, number]> = [

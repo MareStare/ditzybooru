@@ -1,6 +1,6 @@
 import { FeaturedImage } from './FeaturedImage';
 import { TrendingImages } from './TrendingImages';
-import { StreamsBlock } from './StreamsBlock';
+import { LiveStreamsBlock } from './LiveStreamsBlock';
 import { ForumActivityBlock } from './ForumActivityBlock';
 import { RecentCommentsBlock } from './RecentCommentsBlock';
 
@@ -13,7 +13,7 @@ export function ActivitySidebar() {
     <aside className="hidden w-full shrink-0 flex-col gap-3 lg:flex lg:w-[330px]">
       <FeaturedImage />
       <TrendingImages />
-      <StreamsBlock />
+      <LiveStreamsBlock />
       <ForumActivityBlock />
       <RecentCommentsBlock />
     </aside>

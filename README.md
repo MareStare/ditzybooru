@@ -28,7 +28,10 @@ Recommended VSCode settings:
 {
   "tailwindCSS.classFunctions": ["cva", "cn"],
   "files.associations": {
-    "global.css": "tailwindcss"
+    "*.css": "tailwindcss"
+  },
+  "editor.quickSuggestions": {
+    "strings": "on"
   }
 }
 ```

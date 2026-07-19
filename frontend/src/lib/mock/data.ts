@@ -7,7 +7,7 @@
  * source images are the ones seeded in Philomena's
  * `priv/repo/seeds_development.json`, so the mockup renders with real imagery.
  */
-import type { Channel, Comment, Forum, Image, ImageMimeType, Representations, Topic, User } from '#/lib/types';
+import type { LiveStreamChannel, Comment, Forum, Media, MimeType, MediaReprs, ForumTopic, User } from '#/lib/types';
 
 /**
  * Origin that serves the mock media files — the Derpibooru CDN, as referenced
@@ -24,11 +24,11 @@ interface ImageSeed {
   ext: string;
   width: number;
   height: number;
-  mimeType: ImageMimeType;
+  mimeType: MimeType;
   tags: Array<string>;
 }
 
-function representations(seed: ImageSeed): Representations {
+function representations(seed: ImageSeed): MediaReprs {
   // Derpibooru serves each size at `/img/<date>/<id>/<size>.<ext>`.
   const url = (name: string) => `${MEDIA_ORIGIN}${seed.base}/${name}`;
   return {
@@ -187,7 +187,7 @@ const seeds: Array<ImageSeed> = [
 function seedById(id: number): ImageSeed {
   const seed = seeds.find(s => s.id === id);
   if (!seed) {
-    throw new Error(`BUG: no image seed with id ${String(id)}`);
+    throw new Error(`BUG: no image seed with id ${id}`);
   }
   return seed;
 }
@@ -201,7 +201,7 @@ interface ImageStats {
   spoilered?: boolean;
 }
 
-function makeImage(id: number, seedId: number, stats: ImageStats): Image {
+function makeImage(id: number, seedId: number, stats: ImageStats): Media {
   const seed = seedById(seedId);
   return {
     id,
@@ -226,7 +226,7 @@ function makeImage(id: number, seedId: number, stats: ImageStats): Image {
 
 // The main image list. Real thumbnails, fabricated stats — cycles through the
 // available seeds so the grid looks full.
-export const images: Array<Image> = [
+export const images: Array<Media> = [
   makeImage(1024, 2, { score: 412, upvotes: 430, downvotes: 18, faves: 268, commentCount: 24 }),
   makeImage(1023, 5, { score: 389, upvotes: 401, downvotes: 12, faves: 251, commentCount: 9 }),
   makeImage(1022, 6, { score: 305, upvotes: 320, downvotes: 15, faves: 198, commentCount: 41 }),
@@ -245,7 +245,7 @@ export const images: Array<Image> = [
 ];
 
 /** The featured image shown at the top of the sidebar. */
-export const featuredImage: Image = makeImage(1020, 1, {
+export const featuredImage: Media = makeImage(1020, 1, {
   score: 913,
   upvotes: 940,
   downvotes: 27,
@@ -254,7 +254,7 @@ export const featuredImage: Image = makeImage(1020, 1, {
 });
 
 /** "Trending Images" — top scoring images from the last 3 days. */
-export const topScoring: Array<Image> = [
+export const topScoring: Array<Media> = [
   makeImage(2004, 2, { score: 1204, upvotes: 1230, downvotes: 26, faves: 812, commentCount: 44 }),
   makeImage(2003, 5, { score: 1096, upvotes: 1120, downvotes: 24, faves: 733, commentCount: 31 }),
   makeImage(2002, 4, { score: 987, upvotes: 1005, downvotes: 18, faves: 690, commentCount: 12 }),
@@ -262,16 +262,16 @@ export const topScoring: Array<Image> = [
 ];
 
 /** "Top (all time)" — the highest-scoring images, most points first. */
-export const topAllTime: Array<Image> = [...images].sort((a, b) => b.score - a.score);
+export const topAllTime: Array<Media> = [...images].sort((a, b) => b.score - a.score);
 
 /** "Random" — the same images cycled in a different order to stand in for a random sort. */
-export const randomImages: Array<Image> = [...images].reverse();
+export const randomImages: Array<Media> = [...images].reverse();
 
 /** Images the current user has hidden. */
-export const hiddenImages: Array<Image> = images.slice(0, 6);
+export const hiddenImages: Array<Media> = images.slice(0, 6);
 
 /** Watched images (only shown when the user is signed in). */
-export const watchedImages: Array<Image> = [
+export const watchedImages: Array<Media> = [
   makeImage(3006, 4, { score: 88, upvotes: 92, downvotes: 4, faves: 51, commentCount: 3 }),
   makeImage(3005, 3, { score: 61, upvotes: 66, downvotes: 5, faves: 30, commentCount: 1 }),
   makeImage(3004, 6, { score: 45, upvotes: 49, downvotes: 4, faves: 27, commentCount: 8 }),
@@ -292,7 +292,7 @@ const forums = {
 } satisfies Record<string, Forum>;
 
 /** Live-stream channels shown in the "Streams" block. */
-export const channels: Array<Channel> = [
+export const channels: Array<LiveStreamChannel> = [
   {
     id: 1,
     title: 'Ponyville Live',
@@ -342,7 +342,7 @@ export const channels: Array<Channel> = [
 ];
 
 /** Recent forum topics shown in the "Forum Activity" block. */
-export const topics: Array<Topic> = [
+export const topics: Array<ForumTopic> = [
   {
     id: 1,
     title: 'What are you listening to right now?',

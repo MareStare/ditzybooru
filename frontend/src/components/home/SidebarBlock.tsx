@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { ChevronRight } from 'lucide-react';
 
 import { cn } from '#/lib/utils';
 
@@ -26,8 +25,8 @@ export function SidebarBlock({ title, href, icon, className, bodyClassName, chil
   );
 
   return (
-    <section className={cn('overflow-hidden rounded-xl border bg-card', className)}>
-      <div className="border-b px-3 py-2 text-sm font-semibold">
+    <section className={cn('overflow-hidden rounded-xl bg-card', className)}>
+      <div className="px-3 py-2 text-sm font-semibold">
         {href ? (
           <a
             href={href}
