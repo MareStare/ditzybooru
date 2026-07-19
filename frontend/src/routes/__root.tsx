@@ -2,6 +2,9 @@ import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
+import { SiteHeader } from '#/components/layout/SiteHeader';
+import { SiteFooter } from '#/components/layout/SiteFooter';
+
 import '../global.css';
 
 export const Route = createRootRoute({
@@ -10,8 +13,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
-      <Outlet />
+    <div className="flex min-h-screen flex-col">
+      <SiteHeader />
+      <main className="flex-1">
+        <Outlet />
+      </main>
+      <SiteFooter />
       <TanStackDevtools
         config={{
           position: 'bottom-right',
@@ -23,6 +30,6 @@ function RootComponent() {
           },
         ]}
       />
-    </>
+    </div>
   );
 }

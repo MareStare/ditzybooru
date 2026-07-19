@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ditzybooru</title>
+    <script>
+      // Apply the persisted theme in a dedicated script that is loaded synchronously
+      // to avoid a flash of the wrong theme. Kept it in sync with ThemeLightnessToggle
+      // and ThemeColorSwitcher.
+      (() => {
+        const savedLightness = localStorage.getItem('theme-lightness');
+        const isDarkTheme =
+          savedLightness == null
+            ? window.matchMedia('(prefers-color-scheme: dark)').matches
+            : savedLightness === 'dark';
+        document.documentElement.setAttribute('data-theme-lightness', isDarkTheme ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme-color', localStorage.getItem('theme-color') ?? 'blue');
+      })();
+    </script>
   </head>
   <body>
     <div id="app"></div>
