@@ -21,7 +21,7 @@ export default [
           message: 'Use inline exports, such as `export function Foo() {}`, instead of a separate export block.',
         },
       ],
-      'restrict-  template-expressions': [
+      '@typescript-eslint/restrict-template-expressions': [
         'error',
         {
           allowNumber: true,
