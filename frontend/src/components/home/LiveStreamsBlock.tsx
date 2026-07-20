@@ -4,6 +4,7 @@ import { channels } from '#/lib/mock/data';
 import type { LiveStreamChannel } from '#/lib/types';
 import { Badge } from '#/components/ui/badge';
 import { Int } from '#/components/ui/int';
+import { SidebarBlock } from './SidebarBlock';
 
 function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
   return (
@@ -41,18 +42,12 @@ function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
 /** "Streams" block: live and offline channels. */
 export function LiveStreamsBlock() {
   return (
-    <section className="overflow-hidden rounded-xl border bg-card">
-      <div className="border-b px-3 py-2 text-sm font-semibold">
-        <a href="/channels" className="flex items-center justify-center gap-1.5 transition-colors hover:text-primary">
-          <Radio className="size-4 text-green-500" />
-          Live Streams
-        </a>
-      </div>
+    <SidebarBlock title="Live Streams" href="/channels" icon={<Radio className="size-4 text-primary" />}>
       <div className="divide-y">
         {channels.map(channel => (
           <ChannelStrip key={channel.id} channel={channel} />
         ))}
       </div>
-    </section>
+    </SidebarBlock>
   );
 }

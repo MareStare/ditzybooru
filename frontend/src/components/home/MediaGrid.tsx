@@ -61,7 +61,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
   };
 
   return (
-    <section className="rounded-xl bg-card">
+    <section className="rounded-xl border bg-card">
       <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-3 py-2.5">
         <div className="flex flex-wrap items-center gap-1" aria-label="Image views">
           {tabs.map((tab, index) => {
@@ -99,7 +99,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
         ))}
       </div>
 
-      <footer className="sticky bottom-0 z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card/80 px-3 py-2.5 backdrop-blur supports-backdrop-filter:bg-card/65">
+      <footer className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card px-3 py-2.5">
         <Pagination page={page} onPageChange={setPage} />
         <span className="text-sm text-muted-foreground">
           Showing{' '}

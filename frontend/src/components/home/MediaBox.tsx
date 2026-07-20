@@ -66,7 +66,7 @@ export function MediaBox({ className, image, src = image.representations.thumb }
         className,
       )}
     >
-      <div className="flex h-7 shrink-0 items-center justify-center gap-0.5 border-b bg-muted px-1 text-xs tabular-nums">
+      <div className="flex h-7 shrink-0 items-center justify-center gap-0.5 border-b bg-card-header/50 px-1 text-xs tabular-nums">
         <InteractionButton
           onClick={interaction.toggleFave}
           active={interaction.faved}

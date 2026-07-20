@@ -28,11 +28,11 @@ export function SidebarBlock({ title, href, icon, footer, className, bodyClassNa
 
   return (
     <section className={cn('overflow-hidden rounded-xl bg-card', className)}>
-      <div className="px-3 py-2 text-sm font-semibold">
+      <div className="bg-card-header px-3 py-2 text-center text-sm font-semibold text-card-header-foreground [&_svg]:text-card-header-foreground">
         {href ? (
           <a
             href={href}
-            className="flex items-center justify-center text-foreground transition-colors hover:text-primary"
+            className="flex items-center justify-center text-card-header-foreground transition-colors hover:text-white"
           >
             {heading}
           </a>

@@ -14,7 +14,6 @@ export function TrendingImages() {
       title="Trending"
       href={trendingQuery}
       icon={<TrendingUp className="size-4 text-primary" />}
-      className="border"
       bodyClassName="grid grid-cols-2 gap-2"
     >
       {topScoring.map(image => (

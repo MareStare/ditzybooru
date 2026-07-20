@@ -22,7 +22,13 @@ export function ThemeColorSwitcher() {
 
   return (
     <div className="group relative">
-      <Button variant="ghost" size="icon-sm" title="Accent color" aria-label="Accent color">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        title="Accent color"
+        aria-label="Accent color"
+        className="text-primary-nav-foreground/85 hover:bg-white/10 hover:text-primary-nav-foreground dark:hover:bg-white/10 dark:hover:text-primary-nav-foreground"
+      >
         <Palette />
       </Button>
 
