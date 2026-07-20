@@ -39,7 +39,6 @@ function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
   );
 }
 
-/** "Streams" block: live and offline channels. */
 export function LiveStreamsBlock() {
   return (
     <SidebarBlock title="Live Streams" href="/channels" icon={<Radio className="size-4 text-primary" />}>

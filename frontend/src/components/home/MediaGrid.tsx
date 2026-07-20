@@ -91,8 +91,8 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
         </div>
       </header>
 
-      {/* Match Philomena: fixed ~225px thumbnails (150px below 1150px) that
-          add columns as the viewport widens, rather than stretching. */}
+      {/* Match Philomena's image list: auto-fill adds thumbnail columns as the
+          viewport widens instead of stretching a fixed number of columns. */}
       <div className={cn('grid gap-2 p-3', GRID_SIZES[size])}>
         {active.images.map(image => (
           <MediaBox key={image.id} image={image} />

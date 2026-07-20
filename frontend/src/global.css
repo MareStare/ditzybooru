@@ -149,14 +149,6 @@ body {
   --sidebar-ring: oklch(0.62 calc(0.12 * var(--theme-chroma)) var(--theme-hue));
 }
 
-/*
- * Color knob. Each accent color's OKLCH hue angle is defined once here as
- * `--theme-hue-<color>`, then consumed both by the `[data-theme-color]` rules below
- * (to pick the active `--theme-hue`) and by the swatch previews in
- * ThemeColorSwitcher.tsx (via `var(--theme-hue-<color>)`). Gray has no dedicated
- * chroma variable — it just sets `--theme-chroma: 0`, which neutralizes all tints
- * regardless of `--theme-hue`.
- */
 :root {
   --theme-hue-red: 25;
   --theme-hue-orange: 55;

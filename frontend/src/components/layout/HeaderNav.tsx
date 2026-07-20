@@ -46,7 +46,7 @@ function NavEntry({ item }: { item: NavItem }) {
  */
 export function HeaderNav() {
   return (
-    <nav className="hidden border-b bg-card/40 md:block">
+    <nav className="hidden border-b bg-card/80 md:block">
       <div className="flex h-10 items-center gap-1 px-3 md:px-4">
         <div className="flex items-center">
           {primaryNav.map(item => (
