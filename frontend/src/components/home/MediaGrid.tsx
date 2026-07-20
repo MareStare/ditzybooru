@@ -62,7 +62,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
 
   return (
     <section className="rounded-xl border bg-card">
-      <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-3 py-2.5">
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-t-xl bg-card-header px-3 text-card-header-foreground">
         <div className="flex flex-wrap items-center gap-1" aria-label="Image views">
           {tabs.map((tab, index) => {
             const selected = index === activeTab;
@@ -75,10 +75,10 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
                   setActiveTab(index);
                 }}
                 className={cn(
-                  'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-colors',
+                  'inline-flex items-center gap-1.5 rounded-md text-sm font-medium transition-colors py-2 px-2.5  ',
                   selected
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                    ? 'bg-white/8 font-semibold text-card-header-foreground'
+                    : 'text-card-header-foreground/70 hover:bg-white/10 hover:text-card-header-foreground',
                 )}
               >
                 {tab.icon}
@@ -93,7 +93,7 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
 
       {/* Match Philomena's image list: auto-fill adds thumbnail columns as the
           viewport widens instead of stretching a fixed number of columns. */}
-      <div className={cn('grid gap-2 p-3', GRID_SIZES[size])}>
+      <div className={cn('grid gap-2 py-2', GRID_SIZES[size])}>
         {active.images.map(image => (
           <MediaBox key={image.id} image={image} />
         ))}
