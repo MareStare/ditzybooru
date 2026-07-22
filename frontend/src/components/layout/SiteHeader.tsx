@@ -13,7 +13,12 @@ import { ThemeColorSwitcher } from './ThemeColorSwitcher';
 import { ThemeLightnessToggle } from './ThemeLightnessToggle';
 
 const headerLink =
-  'inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground';
+  'inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-primary-nav-foreground/80 transition-colors hover:bg-white/10 hover:text-primary-nav-foreground';
+
+// Ghost buttons rendered on the dark top bar need their light hover swapped for
+// a translucent-white one so it reads against the charcoal in both light and dark.
+const primaryNavGhost =
+  'text-primary-nav-foreground/85 hover:bg-white/10 hover:text-primary-nav-foreground dark:hover:bg-white/10 dark:hover:text-primary-nav-foreground';
 
 const userMenuLinks: Array<{ label: string; href: string }> = [
   { label: 'Watched', href: '/search?q=my:watched' },
@@ -40,7 +45,7 @@ function SearchBar() {
       role="search"
     >
       <div className="relative min-w-0 flex-1">
-        <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-white/55" />
         <Input
           value={query}
           onValueChange={setQuery}
@@ -49,10 +54,17 @@ function SearchBar() {
           inputMode="search"
           autoCapitalize="none"
           spellCheck={false}
-          className="pl-8"
+          className="border-white/15 bg-white/10 pl-8 text-white placeholder:text-white/55 focus-visible:border-white/40 dark:bg-white/10"
         />
       </div>
-      <Button type="submit" variant="secondary" size="icon" title="Search" aria-label="Search">
+      <Button
+        type="submit"
+        variant="secondary"
+        size="icon"
+        title="Search"
+        aria-label="Search"
+        className="border border-white/15 bg-white/10 text-primary-nav-foreground hover:bg-white/20"
+      >
         <Search />
       </Button>
       <a
@@ -61,7 +73,14 @@ function SearchBar() {
         aria-label="Reverse image search"
         className="hidden sm:inline-flex"
       >
-        <Button type="button" variant="ghost" size="icon" title="Search using an image" tabIndex={-1}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          title="Search using an image"
+          tabIndex={-1}
+          className={primaryNavGhost}
+        >
           <Camera />
         </Button>
       </a>
@@ -102,13 +121,16 @@ function UserMenu() {
       <div className="group relative ml-1">
         <button
           type="button"
-          className="flex items-center gap-1 rounded-md p-0.5 transition-colors hover:bg-muted"
+          className="flex items-center gap-1 rounded-md p-0.5 transition-colors hover:bg-white/10"
           aria-label="User menu"
         >
           <Avatar className="size-7">
-            <AvatarFallback>{initials(currentUser.name)}</AvatarFallback>
+            {/* The topbar is a fixed dark charcoal, so the default muted fallback
+             * blends into it in dark mode. Use the contrast-paired accent tokens
+             * (matching the logo badge) so the PFP reads clearly in both themes. */}
+            <AvatarFallback className="bg-primary text-primary-foreground">{initials(currentUser.name)}</AvatarFallback>
           </Avatar>
-          <ChevronDown className="size-3.5 text-muted-foreground" />
+          <ChevronDown className="size-3.5 text-primary-nav-foreground/60" />
         </button>
         <div className="invisible absolute right-0 top-full z-30 mt-1 min-w-48 rounded-lg border bg-popover p-1 opacity-0 shadow-lg transition-[opacity,transform] duration-150 -translate-y-1 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
           <a
@@ -138,12 +160,12 @@ export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
+    <header className="sticky top-0 z-40 border-b border-black/25 bg-primary-nav text-primary-nav-foreground">
       <div className="flex h-14 items-center gap-2 px-3 md:gap-3 md:px-4">
         <Button
           variant="ghost"
           size="icon"
-          className="md:hidden"
+          className={cn('md:hidden', primaryNavGhost)}
           aria-label="Open menu"
           aria-expanded={mobileMenuOpen}
           onClick={() => {

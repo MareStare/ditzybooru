@@ -17,4 +17,7 @@ export default defineConfig({
     }),
     viteReact(),
   ],
+  build: {
+    target: ['es2019', 'chrome80', 'firefox69', 'edge80', 'safari13', 'ios13', 'opera63'],
+  },
 });

@@ -1,5 +1,6 @@
-import { Fragment, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
+import { Check, ChevronDown } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
 import { unwrap } from '#/lib/assertions';
@@ -49,57 +50,119 @@ export function ImageGrid({ tabs, headingLevel = 2, size = 'large' }: ImageGridP
   const [activeTab, setActiveTab] = useState(0);
   // Each tab keeps its own current page, preserved as the user switches tabs.
   const [pages, setPages] = useState<Array<number>>(() => tabs.map(() => 1));
+  const [open, setOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // The active tab is wrapped in the section heading
   // so the page keeps a single logical heading as tabs switch.
   const Heading = `h${headingLevel}` as const;
 
   const active = unwrap(tabs[activeTab]);
+  // With a single tab there's nothing to switch to, so render the label as
+  // static heading text instead of an interactive dropdown.
+  const hasDropdown = tabs.length > 1;
   const page = unwrap(pages[activeTab]);
   const setPage = (next: number) => {
     setPages(prev => prev.map((p, i) => (i === activeTab ? next : p)));
   };
 
+  // Close the tab dropdown on an outside click or the Escape key.
+  useEffect(() => {
+    if (!open) return;
+    const onPointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+    };
+    document.addEventListener('pointerdown', onPointerDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown);
+      document.removeEventListener('keydown', onKeyDown);
+    };
+  }, [open]);
+
   return (
-    <section className="rounded-xl bg-card">
-      <header className="flex flex-wrap items-center gap-x-4 gap-y-2 border-b px-3 py-2.5">
-        <div className="flex flex-wrap items-center gap-1" aria-label="Image views">
-          {tabs.map((tab, index) => {
-            const selected = index === activeTab;
-            const button = (
+    <section className="rounded-xl border bg-card">
+      <header className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-t-xl bg-card-header px-3 text-card-header-foreground">
+        {/* The active tab doubles as the section heading, so the page keeps a
+            single logical heading as the dropdown switches views. */}
+        <Heading>
+          {!hasDropdown ? (
+            <span className="py-2 inline-flex items-center gap-1.5 px-2.5 text-sm font-semibold text-card-header-foreground">
+              {active.icon}
+              {active.label}
+            </span>
+          ) : (
+            <div ref={menuRef} className="relative">
               <button
                 type="button"
-                title={`Browse ${tab.label}`}
-                aria-current={selected ? 'page' : undefined}
+                title="Switch image view"
+                aria-haspopup="menu"
+                aria-expanded={open}
                 onClick={() => {
-                  setActiveTab(index);
+                  setOpen(prev => !prev);
                 }}
-                className={cn(
-                  'inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 transition-colors',
-                  selected
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                )}
+                className="py-2 inline-flex items-center gap-1.5 rounded-md px-2.5 text-sm font-semibold text-card-header-foreground transition-colors hover:bg-white/10"
               >
-                {tab.icon}
-                {tab.label}
+                {active.icon}
+                {active.label}
+                <ChevronDown className={cn('size-3.5 opacity-70 transition-transform', open ? 'rotate-180' : null)} />
               </button>
-            );
 
-            return selected ? <Heading key={index}>{button}</Heading> : <Fragment key={index}>{button}</Fragment>;
-          })}
-        </div>
+              {open ? (
+                // Dark panel matching the header instead of the light popover, so
+                // the menu reads as an extension of the card header.
+                <div
+                  role="menu"
+                  aria-label="Image views"
+                  className="absolute left-0 top-full z-30 mt-1 min-w-48 origin-top rounded-lg border border-white/10 bg-card-header p-1 text-card-header-foreground shadow-lg"
+                >
+                  {tabs.map((tab, index) => {
+                    const selected = index === activeTab;
+                    return (
+                      <button
+                        key={index}
+                        type="button"
+                        role="menuitemradio"
+                        aria-checked={selected}
+                        title={`Browse ${tab.label}`}
+                        onClick={() => {
+                          setActiveTab(index);
+                          setOpen(false);
+                        }}
+                        className={cn(
+                          'flex w-full items-center gap-1.5 rounded-md py-1.5 px-2.5 text-sm transition-colors',
+                          selected
+                            ? 'bg-white/8 font-semibold text-card-header-foreground'
+                            : 'text-card-header-foreground/70 hover:bg-white/10 hover:text-card-header-foreground',
+                        )}
+                      >
+                        {tab.icon}
+                        {tab.label}
+                        <Check className={cn('ml-auto size-4', selected ? null : 'invisible')} />
+                      </button>
+                    );
+                  })}
+                </div>
+              ) : null}
+            </div>
+          )}
+        </Heading>
       </header>
 
-      {/* Match Philomena: fixed ~225px thumbnails (150px below 1150px) that
-          add columns as the viewport widens, rather than stretching. */}
-      <div className={cn('grid gap-2 p-3', GRID_SIZES[size])}>
+      {/* Match Philomena's image list: auto-fill adds thumbnail columns as the
+          viewport widens instead of stretching a fixed number of columns. */}
+      <div className={cn('grid gap-2 py-2', GRID_SIZES[size])}>
         {active.images.map(image => (
           <MediaBox key={image.id} image={image} />
         ))}
       </div>
 
-      <footer className="sticky bottom-0 z-20 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card/80 px-3 py-2.5 backdrop-blur supports-backdrop-filter:bg-card/65">
+      <footer className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-b-xl border-t bg-card px-3 py-2.5">
         <Pagination page={page} onPageChange={setPage} />
         <span className="text-sm text-muted-foreground">
           Showing{' '}

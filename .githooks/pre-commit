@@ -5,6 +5,11 @@
 
 set -euxo pipefail
 
-pnpm fmt
-
 typos
+
+mapfile -t staged_files < <(git diff --cached --name-only --diff-filter=ACMR)
+
+if [[ ${#staged_files[@]} -gt 0 ]]; then
+  pnpm exec prettier --write --ignore-unknown "${staged_files[@]}"
+  git add -- "${staged_files[@]}"
+fi

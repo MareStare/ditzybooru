@@ -136,8 +136,8 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
     </div>
   );
 
-  // Portal to <body> so the overlay escapes the header's stacking context and
-  // `backdrop-filter` containing block — otherwise `fixed`/`z-50` would be
-  // trapped inside the header and sit below the page content.
+  // Portal to <body> so the overlay escapes the header's stacking context —
+  // otherwise `fixed`/`z-50` would be trapped inside the sticky, `z-40` header
+  // and sit below the page content.
   return typeof document === 'undefined' ? overlay : createPortal(overlay, document.body);
 }

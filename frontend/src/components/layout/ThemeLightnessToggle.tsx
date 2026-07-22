@@ -27,6 +27,7 @@ export function ThemeLightnessToggle() {
       onClick={toggle}
       title="Toggle light/dark"
       aria-label="Toggle light/dark theme"
+      className="text-primary-nav-foreground/85 hover:bg-white/10 hover:text-primary-nav-foreground dark:hover:bg-white/10 dark:hover:text-primary-nav-foreground"
     >
       {lightness === 'dark' ? <Sun /> : <Moon />}
     </Button>
