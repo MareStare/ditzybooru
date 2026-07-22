@@ -2,8 +2,6 @@ packages:
   - frontend
 
 allowBuilds:
-  '@parcel/watcher': true
-  lightningcss-cli: true
   unrs-resolver: true
 
 minimumReleaseAgeExclude:
