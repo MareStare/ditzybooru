@@ -9,8 +9,9 @@
     "dev": "vite dev",
     "generate-routes": "tsr generate",
     "build": "vite build",
-    "preview": "vite preview",
-    "type-check": "tsc --noEmit"
+    "preview": "npm run build && wrangler dev",
+    "type-check": "tsc --noEmit",
+    "deploy": "npm run build && wrangler deploy"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
@@ -38,6 +39,7 @@
     "@types/react": "^19.2",
     "@types/react-dom": "^19.2",
     "@vitejs/plugin-react": "^6.0",
-    "vite": "^8.0"
+    "vite": "^8.0",
+    "wrangler": "^4.113.0"
   }
 }
