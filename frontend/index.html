@@ -4,6 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ditzybooru</title>
+    <!--
+      Legacy-browser fallback stylesheet. `/legacy-browsers-fallback.min.css` is a flattened,
+      un-layered build of our Tailwind CSS (see the `build:css` script). Browsers without
+      cascade layer support drop everything inside `@layer {}`, so the layered CSS emitted
+      by the app bundle would leave them unstyled — this file styles them instead.
+    -->
+    <link rel="stylesheet" href="/legacy-browsers-fallback.min.css" />
+    <script>
+      // Modern browsers get the layered CSS from the app bundle, so disable the
+      // fallback here to avoid applying two copies of the styles. Runs synchronously
+      // right after the <link> so the fallback is gone before first paint (no FOUC).
+      // We gate on cascade layers AND CSS nesting since the layered CSS relies on both.
+      (() => {
+        if (typeof CSSLayerBlockRule !== 'undefined' && typeof CSSNestedDeclarations !== 'undefined') {
+          for (const link of document.querySelectorAll('link[rel="stylesheet"]')) {
+            if (link.href.includes('/legacy-browsers-fallback.min.css')) {
+              link.disabled = true;
+              break;
+            }
+          }
+        }
+      })();
+    </script>
     <script>
       // Apply the persisted theme in a dedicated script that is loaded synchronously
       // to avoid a flash of the wrong theme. Kept it in sync with ThemeLightnessToggle
