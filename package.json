@@ -2,12 +2,14 @@
   "name": "ditzybooru",
   "private": true,
   "type": "module",
+  "workspaces": [
+    "frontend"
+  ],
   "scripts": {
-    "dev": "pnpm --filter frontend dev",
-    "generate-routes": "pnpm --filter frontend generate-routes",
-    "build": "pnpm --filter frontend build",
-    "preview": "pnpm --filter frontend preview",
-    "type-check": "pnpm --filter frontend type-check",
+    "dev": "npm run dev --workspace frontend",
+    "build": "npm run build --workspace frontend",
+    "preview": "npm run preview --workspace frontend",
+    "type-check": "npm run type-check --workspace frontend",
     "lint": "eslint",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check ."
