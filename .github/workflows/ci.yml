@@ -12,19 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: pnpm/action-setup@v6
-        with: { version: 11 }
-
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: pnpm
+          cache: npm
 
-      - run: pnpm ci
-      - run: pnpm fmt:check
-      - run: pnpm type-check
-      - run: pnpm lint
-      - run: pnpm build
+      - run: npm ci
+      - run: npm run fmt:check
+      - run: npm run type-check
+      - run: npm run lint
+      - run: npm run build
 
   # Check for typos in the repository based on a static dictionary
   typos:

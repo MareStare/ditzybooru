@@ -13,7 +13,6 @@ export default [
       'sort-imports': 'off',
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
-      'pnpm/json-enforce-catalog': 'off',
       'no-restricted-syntax': [
         'error',
         {
