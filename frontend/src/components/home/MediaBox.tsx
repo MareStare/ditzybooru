@@ -1,8 +1,14 @@
-import { ArrowDown, ArrowUp, EyeOff, MessageSquare, Star } from 'lucide-react';
+import { ArrowDown, ArrowUp, EyeOff, ImagePlus, Link, MessageSquare, MoreHorizontal, Star } from 'lucide-react';
 import type { ClassValue } from 'clsx';
 import type { Media } from '#/lib/types';
 import { useImageInteraction } from '#/hooks/useImageInteraction';
 import { Int } from '#/components/ui/int';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '#/components/ui/dropdown-menu';
 import { cn } from '#/lib/utils';
 import { MediaThumb, imageTitle } from './MediaThumb';
 
@@ -52,9 +58,9 @@ interface MediaBoxProps {
 }
 
 /**
- * A single image thumbnail with Philomena's interaction bar (fave / upvote /
- * score / downvote / comments / hide). Interactions update the on-screen
- * counters optimistically via {@link useImageInteraction}.
+ * A single image thumbnail with Philomena's interaction bar (comments / fave /
+ * upvote / score, plus a share / gallery / hide / downvote overflow menu).
+ * Interactions update the on-screen counters optimistically via {@link useImageInteraction}.
  */
 export function MediaBox({ className, image, src = image.representations.thumb }: MediaBoxProps) {
   const interaction = useImageInteraction(image);
@@ -66,22 +72,32 @@ export function MediaBox({ className, image, src = image.representations.thumb }
         className,
       )}
     >
-      <div className="flex h-7 shrink-0 items-center justify-center gap-0.5 border-b bg-card-header/50 px-1 text-xs tabular-nums">
-        <InteractionButton
-          onClick={interaction.toggleFave}
-          active={interaction.faved}
-          activeClass="bg-amber-500/25 text-amber-500 hover:bg-amber-500/25 hover:text-amber-500"
-          title="Fave!"
-          label="Faves"
-        >
-          <Star className={cn('size-3.5', interaction.faved ? 'fill-current' : null)} />
-          {/*
-          Not showing faves count to reduce UI clutter.
-          <Int value={interaction.faves} />
-          */}
-        </InteractionButton>
+      <div className="flex h-7 shrink-0 items-center justify-center border-b bg-card-header/50 px-1 text-xs tabular-nums">
+        <div className="flex h-full items-center gap-1 px-1">
+          <InteractionButton
+            onClick={interaction.toggleFave}
+            active={interaction.faved}
+            activeClass="bg-amber-500/25 text-amber-500 hover:bg-amber-500/25 hover:text-amber-500"
+            title="Fave!"
+            label="Faves"
+          >
+            <Star className={cn('size-3.5', interaction.faved ? 'fill-current' : null)} />
+            {/*
+            Not showing faves count to reduce UI clutter.
+            <Int value={interaction.faves} />
+            */}
+          </InteractionButton>
 
-        <div className="flex items-center">
+          <span
+            className={cn(
+              'text-center font-medium',
+              interaction.score > 0 ? 'text-green-600 dark:text-green-400' : null,
+              interaction.score < 0 ? 'text-red-600 dark:text-red-400' : null,
+            )}
+            title="Score"
+          >
+            {interaction.score}
+          </span>
           <InteractionButton
             onClick={interaction.toggleUpvote}
             className="hover:text-green-600"
@@ -92,48 +108,46 @@ export function MediaBox({ className, image, src = image.representations.thumb }
           >
             <ArrowUp className="size-3.5" strokeWidth={interaction.vote === 'up' ? 2.75 : 2} />
           </InteractionButton>
-          <span
-            className={cn(
-              'text-center font-medium',
-              interaction.score > 0 ? 'text-green-600 dark:text-green-400' : null,
-              interaction.score < 0 ? 'text-red-600 dark:text-red-400' : null,
-            )}
-            title="Score"
-          >
-            <Int value={interaction.score} />
-          </span>
-          <InteractionButton
-            onClick={interaction.toggleDownvote}
-            className="hover:text-red-600 dark:hover:text-red-400"
-            active={interaction.vote === 'down'}
-            activeClass="text-red-600 dark:text-red-400 bg-red-600/25 hover:bg-red-600/25 dark:bg-red-400/25 dark:hover:bg-red-400/25"
-            title="Neigh!"
-            label="Downvote"
-          >
-            <ArrowDown className="size-3.5" strokeWidth={interaction.vote === 'down' ? 2.75 : 2} />
-          </InteractionButton>
         </div>
 
         <a
           href={`/images/${image.id}#comments`}
           title="Comments"
-          className="py-1.5 inline-flex h-full items-center gap-0.5 rounded px-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          className="inline-flex h-full items-center gap-0.5 rounded px-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
         >
           <MessageSquare className="size-3.5" />
-          <span>
-            <Int value={image.commentCount} />
-          </span>
+          <Int value={image.commentCount} />
         </a>
 
-        <InteractionButton
-          onClick={interaction.toggleHidden}
-          active={interaction.hidden}
-          activeClass="text-red-600 hover:text-red-600 dark:text-red-400"
-          title="Hide"
-          label="Hide"
-        >
-          <EyeOff className="size-3.5" />
-        </InteractionButton>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            title="More"
+            aria-label="More options"
+            className="inline-flex h-full items-center rounded px-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+          >
+            <MoreHorizontal className="size-3.5" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" className="w-max min-w-40">
+            <DropdownMenuItem
+              onClick={() => void navigator.clipboard.writeText(`${window.location.origin}/images/${image.id}`)}
+            >
+              <Link className="size-3.5" />
+              Copy link
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={interaction.toggleGallery}>
+              <ImagePlus className="size-3.5" />
+              {interaction.inGallery ? 'Remove from gallery' : 'Add to gallery'}
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={interaction.toggleHidden}>
+              <EyeOff className="size-3.5" />
+              {interaction.hidden ? 'Unhide' : 'Hide'}
+            </DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" onClick={interaction.toggleDownvote}>
+              <ArrowDown className="size-3.5" />
+              {interaction.vote === 'down' ? 'Remove downvote' : 'Downvote'}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       <MediaThumb

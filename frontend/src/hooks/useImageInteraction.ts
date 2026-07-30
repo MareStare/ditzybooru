@@ -12,6 +12,7 @@ interface ImageInteractionState {
   vote: VoteState;
   faved: boolean;
   hidden: boolean;
+  inGallery: boolean;
 }
 
 interface ImageInteraction extends ImageInteractionState {
@@ -19,10 +20,11 @@ interface ImageInteraction extends ImageInteractionState {
   toggleDownvote: () => void;
   toggleFave: () => void;
   toggleHidden: () => void;
+  toggleGallery: () => void;
 }
 
 /**
- * Client-side, optimistic image interactions (fave / upvote / downvote / hide),
+ * Client-side, optimistic image interactions (fave / upvote / downvote / hide / gallery),
  * mirroring the behaviour of Philomena's thumbnail interaction bar. There is no
  * backend yet, so state is kept locally and never persisted — clicking simply
  * updates the on-screen counters the way the real API eventually will.
@@ -36,6 +38,7 @@ export function useImageInteraction(image: Media): ImageInteraction {
     vote: null,
     faved: false,
     hidden: false,
+    inGallery: false,
   }));
 
   const toggleUpvote = () => {
@@ -82,5 +85,9 @@ export function useImageInteraction(image: Media): ImageInteraction {
     setState(prev => ({ ...prev, hidden: !prev.hidden }));
   };
 
-  return { ...state, toggleUpvote, toggleDownvote, toggleFave, toggleHidden };
+  const toggleGallery = () => {
+    setState(prev => ({ ...prev, inGallery: !prev.inGallery }));
+  };
+
+  return { ...state, toggleUpvote, toggleDownvote, toggleFave, toggleHidden, toggleGallery };
 }
