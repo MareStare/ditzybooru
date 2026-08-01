@@ -1,0 +1,6 @@
+{
+  "enabledPlugins": {
+    "modern-web-guidance@googlechrome": true,
+    "chrome-devtools-mcp@chrome-devtools-plugins": true
+  }
+}
