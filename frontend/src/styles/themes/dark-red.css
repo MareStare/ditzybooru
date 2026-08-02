@@ -1,0 +1,16 @@
+/**
+ * Dark red.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+.ds[data-ds-theme='dark-red'] {
+  --base: #923131;
+  --page: #412121;
+  --ink: #e0e0e0;
+
+  --link: #dbdb00;
+  --link-hover: #fff3bd;
+}

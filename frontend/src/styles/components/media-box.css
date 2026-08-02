@@ -1,0 +1,167 @@
+/**
+ * The thumbnail card and its interaction bar (fave / upvote / score / downvote
+ * / comments / hide). The densest, most repeated element on the site — it is
+ * the one place where a few extra pixels of padding cost real images per screen.
+ */
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  gap: var(--space-2);
+}
+
+.media-box {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  border: var(--border-width) solid var(--surface-media);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface);
+
+  transition:
+    border-color var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out);
+}
+
+.media-box:hover {
+  border-color: color-mix(in oklab, var(--surface-media), #000 8%);
+  box-shadow: var(--shadow-md);
+}
+
+.media-box-bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--space-0-5);
+
+  min-block-size: 24px;
+  padding-inline: var(--space-1);
+
+  border-bottom: var(--border-width) solid var(--surface-media);
+  background-color: var(--surface-sunken);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.media-action {
+  --media-action-color: var(--text-muted);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+
+  padding-inline: var(--space-1);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background-color: transparent;
+
+  color: var(--media-action-color);
+  font: inherit;
+  font-size: var(--text-xs);
+
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.media-action:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.media-action[aria-pressed='true'] {
+  color: var(--media-action-color);
+}
+
+.media-action--fave {
+  --media-action-color: var(--fave);
+}
+.media-action--fave[aria-pressed='true'] {
+  background-color: var(--fave-bg);
+}
+.media-action--fave[aria-pressed='true']:hover {
+  background-color: var(--fave-bg);
+  color: var(--fave);
+}
+
+.media-action--up {
+  --media-action-color: var(--score-positive);
+}
+.media-action--up[aria-pressed='true'] {
+  background-color: var(--vote-up-bg);
+}
+.media-action--up[aria-pressed='true']:hover {
+  background-color: var(--vote-up-bg);
+  color: var(--score-positive);
+}
+
+.media-action--down,
+.media-action--hide {
+  --media-action-color: var(--score-negative);
+}
+.media-action--down[aria-pressed='true'],
+.media-action--hide[aria-pressed='true'] {
+  background-color: var(--vote-down-bg);
+}
+.media-action--down[aria-pressed='true']:hover,
+.media-action--hide[aria-pressed='true']:hover {
+  background-color: var(--vote-down-bg);
+  color: var(--score-negative);
+}
+
+/* Inactive actions stay muted until hovered, so the bar reads as one strip
+ * rather than as a row of coloured icons. */
+.media-action:not([aria-pressed='true']) {
+  color: var(--text-muted);
+}
+
+.media-action:not([aria-pressed='true']):hover {
+  color: var(--media-action-color);
+}
+
+.media-score {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--space-1);
+  color: var(--text-subtle);
+  font-weight: var(--weight-medium);
+}
+
+.media-score--positive {
+  color: var(--score-positive);
+}
+.media-score--negative {
+  color: var(--score-negative);
+}
+
+.media-thumb {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background-color: var(--surface-sunken);
+}
+
+.media-thumb img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Spoilered / hidden images: the overlay is a real element so it survives
+ * forced-colors mode, where background-image would be dropped. */
+.media-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: var(--space-2);
+
+  background-color: color-mix(in oklab, #000000 62%, transparent);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: var(--text-xs);
+  text-align: center;
+}

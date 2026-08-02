@@ -1,0 +1,85 @@
+/**
+ * Tier 1 scales — everything that is not a color. Theme-independent: these
+ * values are identical in every theme and derive only from the knobs.
+ */
+
+.ds {
+  /* ---- Radius ------------------------------------------------------- */
+
+  --radius-xs: calc(var(--radius-unit) * 0.34);
+  --radius-sm: calc(var(--radius-unit) * 0.67);
+  --radius-md: var(--radius-unit);
+  --radius-lg: calc(var(--radius-unit) * 1.67);
+  --radius-full: 9999px;
+
+  /* For a child inset by exactly one border, so nested corners stay
+   * concentric instead of drifting apart. */
+
+  /* ---- Borders ------------------------------------------------------ */
+
+  --border: var(--border-width) solid var(--border-color);
+  --divider: var(--border-width) solid var(--border-color-subtle);
+
+  /* ---- Depth -------------------------------------------------------- */
+
+  /* Tinted, not gray: shadows carry the theme hue so they read as part of the
+   * theme rather than as a generic drop shadow.
+   *
+   * `--base` is the input rather than `--page`, because it is the one theme
+   * color that is saturated in every theme — the page is near-white on light
+   * themes, so darkening it would carry no hue at all. At 22% the result lands
+   * at L 0.07-0.15 across all ten themes, which is the depth a shadow wants,
+   * and every consumer below fades it further with an alpha. */
+  --shadow-color: color-mix(in oklab, var(--base) 22%, #000);
+
+  --shadow-sm:
+    0 1px 3px color-mix(in oklab, var(--shadow-color) calc(22% * var(--shadow-force)), transparent),
+    0 1px 2px color-mix(in oklab, var(--shadow-color) calc(14% * var(--shadow-force)), transparent);
+
+  --shadow-md:
+    0 4px 12px color-mix(in oklab, var(--shadow-color) calc(24% * var(--shadow-force)), transparent),
+    0 1px 3px color-mix(in oklab, var(--shadow-color) calc(16% * var(--shadow-force)), transparent);
+
+  /* A 1px inner top highlight. Cheap, and it is most of what separates a
+   * panel that looks "lit" from one that looks like a flat rectangle. */
+  --edge-highlight: inset 0 var(--border-width) 0
+    color-mix(in oklab, var(--edge-tint) calc(var(--edge-alpha) * var(--shadow-force)), transparent);
+
+  /* ---- Space -------------------------------------------------------- */
+
+  --space-0-5: calc(0.125rem * var(--density));
+  --space-1: calc(0.25rem * var(--density));
+  --space-1-5: calc(0.375rem * var(--density));
+  --space-2: calc(0.5rem * var(--density));
+  --space-3: calc(0.75rem * var(--density));
+  --space-4: calc(1rem * var(--density));
+  --space-6: calc(1.5rem * var(--density));
+
+  /* ---- Typography --------------------------------------------------- */
+
+  --text-2xs: calc(0.6875rem * var(--font-scale));
+  --text-xs: calc(0.75rem * var(--font-scale));
+  --text-sm: calc(0.8125rem * var(--font-scale));
+  --text-md: calc(0.875rem * var(--font-scale));
+  --text-lg: calc(1rem * var(--font-scale));
+  --text-xl: calc(1.1875rem * var(--font-scale));
+
+  --leading-tight: 1.2;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  --tracking-tight: -0.011em;
+  --tracking-wide: 0.02em;
+
+  /* ---- Motion ------------------------------------------------------- */
+
+  --duration-fast: calc(100ms * var(--motion-scale));
+  --duration: calc(150ms * var(--motion-scale));
+
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+
+  /* ---- Layout ------------------------------------------------------- */
+}

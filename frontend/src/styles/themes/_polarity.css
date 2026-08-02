@@ -1,0 +1,89 @@
+/**
+ * Everything a theme does NOT have to say.
+ *
+ * A theme file declares at most five colors (see `dark-blue.css`). Everything
+ * else that separates a light theme from a dark one lives here, in two blocks,
+ * so adding a theme never means copying a block of derived values.
+ *
+ * Two kinds of value:
+ *
+ *  - Directions. `--lift` moves away from the background, `--sink` toward it.
+ *    Both flip with polarity, which is what lets `semantic.css` be written once
+ *    rather than once per polarity.
+ *  - Mix weights (`--w-*`). How far a derived color travels between its two
+ *    endpoints. These differ sharply by polarity — chrome sits 25% of the way
+ *    from the base color toward the page in a dark theme and 80% in a light one
+ *    — and that difference is the whole reason one formula can serve both.
+ *
+ * Imported BEFORE the individual themes: these selectors have the same
+ * specificity as `.ds[data-ds-theme='light-blue']`, so a theme file has to come
+ * later to override anything set here.
+ */
+
+.ds[data-ds-theme^='dark-'] {
+  color-scheme: dark;
+
+  --lift: #fff;
+  --sink: #000;
+
+  /* A 1px inner top highlight reads as "lit from above" against a dark
+   * surface. */
+  --edge-tint: #fff;
+  --edge-alpha: 5%;
+
+  --w-elev: 6%;
+  --w-recess: 55%;
+  --w-chrome: 25%;
+  --w-chrome-deep: 42%;
+  --w-field: 49%;
+  --w-frame: 12%;
+
+  /* Status fills are dark and saturated so the normal foreground stays readable
+   * on them. Identical in every dark theme — these carry meaning, not identity,
+   * so they are not a theme's business. */
+  --success: #144714;
+  --danger: #66211f;
+  --warning: #7d4825;
+
+  --tag-bg-mix: 82%;
+  --tag-border-mix: 55%;
+}
+
+.ds[data-ds-theme^='light-'] {
+  color-scheme: light;
+
+  /* On a light background, "away from the background" means darker. */
+  --lift: #000;
+  --sink: #fff;
+
+  /* A white highlight on an already-white surface is invisible; light themes
+   * get their definition from shadow and borders instead. */
+  --edge-tint: #fff;
+  --edge-alpha: 0%;
+
+  /* All five light themes share a page and a foreground; they differ only in
+   * their base color and their links. */
+  --page: #f8fafc;
+  --ink: #333333;
+
+  /* The nav is a saturated mid-tone here, far too dark to carry `--ink`. */
+  --text-on-nav: #ffffff;
+
+  --w-elev: 2%;
+  --w-recess: 60%;
+  --w-chrome: 80%;
+  --w-chrome-deep: 84%;
+  --w-field: 19%;
+  --w-frame: 30%;
+
+  /* Pastels, for the same reason the dark ones are dark: the foreground has to
+   * stay readable on top of them. */
+  --success: #bde9a3;
+  --danger: #ebc0bb;
+  --warning: #eee9bc;
+
+  /* Mixing 82% toward white leaves tag borders too faint to register on a white
+   * surface. Dark themes have the opposite problem. */
+  --tag-bg-mix: 80%;
+  --tag-border-mix: 42%;
+}

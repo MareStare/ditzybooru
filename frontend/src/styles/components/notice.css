@@ -1,0 +1,83 @@
+/**
+ * Notices, badges and the site-notice strip. Same one-input contract as
+ * buttons: a variant sets `--notice-seed`.
+ */
+
+.notice {
+  --notice-seed: var(--link);
+  --notice-color: var(--notice-seed);
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+
+  border: var(--border-width) solid color-mix(in oklab, var(--notice-color), var(--surface) 55%);
+  border-inline-start-width: max(3px, calc(var(--border-width) * 2));
+  border-inline-start-color: var(--notice-color);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: color-mix(in oklab, var(--notice-color), var(--surface) 84%);
+
+  color: var(--text-color);
+  font-size: var(--text-sm);
+}
+
+.notice--success {
+  --notice-seed: var(--vote-up);
+}
+.notice--warning {
+  --notice-seed: #e07b27;
+}
+.notice--danger {
+  --notice-seed: var(--vote-down);
+}
+
+.notice-title {
+  display: block;
+  margin-block-end: var(--space-0-5);
+  font-weight: var(--weight-semibold);
+}
+
+/* ---- Badges ------------------------------------------------------------ */
+
+.badge {
+  --badge-seed: var(--brand);
+  --badge-color: var(--badge-seed);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-1-5);
+
+  border-radius: var(--radius-full);
+  background-color: color-mix(in oklab, var(--badge-color), var(--surface) 76%);
+
+  color: color-mix(in oklab, var(--badge-color), var(--text-color) 30%);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.badge--unread {
+  --badge-seed: var(--unread);
+}
+.badge--staff {
+  --badge-seed: #511b4e;
+}
+.badge--fave {
+  --badge-seed: var(--fave);
+}
+
+/* ---- Site notice ------------------------------------------------------- */
+
+.site-notice {
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: color-mix(in oklab, var(--surface), var(--base) 12%);
+  color: var(--text-color);
+  font-size: var(--text-sm);
+  text-align: center;
+}

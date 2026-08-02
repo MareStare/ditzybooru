@@ -1,0 +1,57 @@
+/**
+ * Ditzybooru design system — raw CSS, no framework.
+ *
+ * Everything is scoped to the `.ds` root class rather than `:root` so this can
+ * coexist with the Tailwind/shadcn styling the existing pages still use (both
+ * define `--radius-md`, `--font-sans`, `--border`, … and would collide on
+ * `:root`). Once the migration is done, swap `.ds` for `:root` and drop the
+ * wrapper — no token names change.
+ *
+ * No cascade layers are used. Priority comes from two things instead, and the
+ * import order below is load-bearing for the first:
+ *
+ *  - Source order, for rules of equal specificity. Tokens before themes before
+ *    base before components; a theme's seeds must be able to override the
+ *    shared polarity defaults, and a component must be able to override a base
+ *    element rule.
+ *  - Specificity, for everything else. Base rules target elements through
+ *    `:where()` so they contribute nothing, leaving every component class free
+ *    to restyle a plain `<h2>` without a fight.
+ *
+ * Being unlayered also means these rules outrank Tailwind's, which lives in
+ * `@layer base/components/utilities` via `global.css` — unlayered always beats
+ * layered. That is the behaviour we want: inside a `.ds` subtree the design
+ * system wins.
+ */
+
+@import './tokens/knobs.css';
+@import './tokens/scale.css';
+@import './tokens/palette.css';
+@import './tokens/semantic.css';
+
+/* Must precede the individual themes — same specificity, so order decides. */
+@import './themes/_polarity.css';
+
+@import './themes/dark-blue.css';
+@import './themes/dark-purple.css';
+@import './themes/dark-green.css';
+@import './themes/dark-red.css';
+@import './themes/dark-gray.css';
+@import './themes/light-blue.css';
+@import './themes/light-purple.css';
+@import './themes/light-green.css';
+@import './themes/light-red.css';
+@import './themes/light-gray.css';
+
+@import './base.css';
+
+@import './components/nav.css';
+@import './components/panel.css';
+@import './components/button.css';
+@import './components/tag.css';
+@import './components/field.css';
+@import './components/media-box.css';
+@import './components/table.css';
+@import './components/notice.css';
+@import './components/pagination.css';
+@import './components/dropdown.css';

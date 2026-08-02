@@ -1,0 +1,23 @@
+/**
+ * Theme-invariant colors used by more than one component.
+ *
+ * Byte-identical across all of Derpibooru's themes — dark-blue, dark-red,
+ * light-blue, the lot. Philomena redeclares them in each of its 18 theme files.
+ *
+ * Anything only one component needs lives in that component instead; the tag
+ * category colors, for instance, are all in `components/tag.css`. What is left
+ * here is genuinely shared, and load-bearing for recognition: the
+ * fave/upvote/downvote colors are muscle memory. Do not "modernize" them.
+ */
+
+.ds {
+  /* ---- Interactions -------------------------------------------------- */
+
+  --fave: #a18e27;
+  --vote-up: #5b9b26;
+  --vote-down: #da3412;
+
+  /* ---- Site state ---------------------------------------------------- */
+
+  --unread: #ff8800;
+}

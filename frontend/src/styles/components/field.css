@@ -1,0 +1,171 @@
+/**
+ * Form controls.
+ *
+ * Native elements styled as ordinary boxes rather than re-created, so keyboard
+ * handling, IME, autofill and assistive-tech semantics stay intact.
+ */
+
+.field {
+  inline-size: 100%;
+  min-block-size: 32px;
+  padding: var(--space-1-5) var(--space-2);
+
+  border: var(--border-width) solid var(--border-color-input);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-sunken);
+
+  color: var(--text-color);
+  font: inherit;
+  font-size: var(--text-sm);
+
+  transition:
+    border-color var(--duration) var(--ease-out),
+    background-color var(--duration) var(--ease-out);
+}
+
+.field::placeholder {
+  color: var(--text-subtle);
+}
+
+.field:hover:not(:disabled, :read-only) {
+  border-color: var(--border-color-strong);
+}
+
+.field:disabled {
+  background-color: var(--surface-disabled);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* `:user-invalid`, not `:invalid` — do not flag a required-but-empty field
+ * before the user has touched it. */
+.field:user-invalid {
+  border-color: var(--score-negative);
+}
+
+textarea.field {
+  min-block-size: 5lh;
+  resize: vertical;
+}
+
+/* Grows with its content instead of scrolling inside a fixed box. */
+.field--auto {
+  field-sizing: content;
+}
+
+.field-label {
+  display: block;
+  margin-block-end: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.field-hint {
+  margin-block-start: var(--space-1);
+  color: var(--text-subtle);
+  font-size: var(--text-xs);
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---- Checkbox / radio -------------------------------------------------- */
+
+.choice {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 24px;
+  color: var(--text-color);
+  font-size: var(--text-sm);
+}
+
+/* `:where()` keeps this at zero specificity so `.switch` below — and any
+ * other control dropped into a `.choice` — can size itself without an
+ * override war. */
+.choice :where(input) {
+  inline-size: 1.05em;
+  block-size: 1.05em;
+  margin: 0;
+  accent-color: var(--brand);
+}
+
+/* `:has()` instead of a JS-managed class on the label. */
+.choice:has(:checked) {
+  color: var(--text-color);
+  font-weight: var(--weight-medium);
+}
+
+.choice:has(:disabled) {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Switch ------------------------------------------------------------ */
+
+.switch {
+  --switch-w: 2.6rem;
+  --switch-h: 1.4rem;
+
+  position: relative;
+  flex-shrink: 0;
+  inline-size: var(--switch-w);
+  block-size: var(--switch-h);
+  margin: 0;
+
+  border: var(--border-width) solid var(--border-color-input);
+  border-radius: var(--radius-full);
+  background-color: var(--surface-sunken);
+  appearance: none;
+
+  transition: background-color var(--duration) var(--ease-out);
+}
+
+.switch::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: 2px;
+  inline-size: calc(var(--switch-h) - 6px);
+  block-size: calc(var(--switch-h) - 6px);
+  border-radius: var(--radius-full);
+  background-color: var(--text-muted);
+  translate: 0 -50%;
+  transition:
+    translate var(--duration) var(--ease-out),
+    background-color var(--duration) var(--ease-out);
+}
+
+.switch:checked {
+  border-color: var(--brand);
+  background-color: var(--brand);
+}
+
+.switch:checked::after {
+  background-color: var(--text-on-nav);
+  translate: calc(var(--switch-w) - var(--switch-h)) -50%;
+}
+
+/* ---- Search bar -------------------------------------------------------- */
+
+.search {
+  display: flex;
+  align-items: stretch;
+  inline-size: 100%;
+}
+
+.search .field {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+.search .btn {
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+  margin-inline-start: calc(var(--border-width) * -1);
+}

@@ -1,0 +1,14 @@
+/**
+ * Light purple. `--page` and `--ink` come from `_polarity.css`.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+.ds[data-ds-theme='light-purple'] {
+  --base: #8048ad;
+
+  --link: #9241d9;
+  --link-hover: #cf73d0;
+}

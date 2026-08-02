@@ -1,0 +1,99 @@
+/**
+ * Semantic colors — everything the components actually name.
+ *
+ * Written ONCE for every theme, light and dark. A theme supplies at most five
+ * colors (`--base`, `--page`, `--ink`, `--link`, `--link-hover`); every value
+ * below is a `color-mix()` away from those, from the polarity constants in
+ * `_polarity.css`, or from the fixed palette.
+ *
+ * Three mechanisms carry the light/dark difference so this file never branches:
+ *
+ *   --lift    move away from the background — lighter in a dark theme, darker
+ *             in a light one. The correct direction for hover states, text
+ *             tiers and border contrast in BOTH polarities.
+ *   --sink    move toward the background. Disabled and recessed states.
+ *   --w-*     how far a derived color travels. Chrome sits 25% of the way from
+ *             `--base` to `--page` in a dark theme and 80% in a light one; the
+ *             formula is identical, only the weight differs.
+ *
+ * Two cases deliberately use literal colors rather than the direction pair:
+ *
+ *   - Raised surfaces (popovers, dropdowns) mix toward literal white, because
+ *     elevation reads as "lighter" in light and dark UI alike. In a light theme
+ *     whose surface is already white this is a no-op and shadow does the work.
+ *   - Chromatic surfaces (nav bar, panel headers, filled buttons) darken toward
+ *     literal black on hover in both polarities, because they are saturated
+ *     mid-tones rather than backgrounds.
+ */
+
+.ds {
+  /* ---- Surfaces ------------------------------------------------------ */
+
+  --surface-page: var(--page);
+
+  /* Elevation is lighter in both polarities, so this mixes toward white rather
+   * than toward `--lift`. */
+  --surface: color-mix(in oklab, var(--page), #fff var(--w-elev));
+  --surface-sunken: color-mix(in oklab, var(--surface), var(--page) var(--w-recess));
+
+  --surface-hover: color-mix(in oklab, var(--surface), var(--lift) 7%);
+  --surface-selected: color-mix(in oklab, var(--surface), var(--base) 16%);
+  --surface-disabled: color-mix(in oklab, var(--surface), var(--sink) 12%);
+
+  /* ---- Chrome -------------------------------------------------------- */
+
+  /* The nav bar is painted with the theme's base color directly; everything
+   * else in this group is that color fading toward the page. */
+  --surface-nav: var(--base);
+  --surface-nav-field: color-mix(in oklab, var(--base), var(--page) var(--w-field));
+  --surface-nav-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
+
+  /* Panel ("block" in Philomena) title strips. */
+  --surface-panel: var(--surface);
+  --surface-panel-header: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
+  --surface-panel-header-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
+
+  --surface-media: color-mix(in oklab, var(--border-color), #fff var(--w-frame));
+
+  /* ---- Text ---------------------------------------------------------- */
+
+  --text-color: var(--ink);
+  --text-muted: color-mix(in oklab, var(--ink), var(--surface) 32%);
+  --text-subtle: color-mix(in oklab, var(--ink), var(--surface) 52%);
+  --text-disabled: color-mix(in oklab, var(--ink), var(--surface) 68%);
+
+  /* Dark themes reuse the normal foreground on the nav; light themes flip to
+   * white in `_polarity.css`. */
+  --text-on-nav: var(--ink);
+
+  /* ---- Links --------------------------------------------------------- */
+
+  /* `--link` and `--link-hover` are theme inputs; the rest follow. */
+  --link-on-panel-header: var(--link);
+
+  /* ---- Borders ------------------------------------------------------- */
+
+  --border-color: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
+  --border-color-subtle: color-mix(in oklab, var(--border-color), var(--surface) 45%);
+  --border-color-strong: color-mix(in oklab, var(--border-color), var(--lift) 18%);
+  --border-color-input: color-mix(in oklab, var(--border-color), var(--lift) 10%);
+
+  /* ---- Status -------------------------------------------------------- */
+
+  /* `--success`, `--danger` and `--warning` are polarity constants; the button
+   * that uses them derives its own fill. `--brand` is the theme's own accent,
+   * lifted off the base so it reads against both the page and the nav. */
+  --brand: color-mix(in oklab, var(--base), var(--lift) 28%);
+
+  /* ---- Scores -------------------------------------------------------- */
+
+  --score-positive: var(--vote-up);
+  --score-negative: var(--vote-down);
+
+  /* ---- Component tuning ---------------------------------------------- */
+
+  /* Translucent fills for the active state of the interaction bar. */
+  --fave-bg: color-mix(in oklab, var(--fave) 25%, transparent);
+  --vote-up-bg: color-mix(in oklab, var(--vote-up) 25%, transparent);
+  --vote-down-bg: color-mix(in oklab, var(--vote-down) 25%, transparent);
+}

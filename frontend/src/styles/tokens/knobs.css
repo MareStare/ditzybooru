@@ -1,0 +1,55 @@
+/**
+ * Tier 1 knobs — the values a user is allowed to change from the site settings.
+ *
+ * Deliberately NOT registered with `@property`, to keep the browser floor low.
+ * That makes them plain token streams, with two consequences to write code
+ * against:
+ *
+ *  1. An invalid value is not rejected at parse time. It propagates into every
+ *     `calc()` that reads the knob and makes those declarations invalid at
+ *     computed-value time, so `--density: banana` collapses spacing site-wide
+ *     rather than falling back to 1. Whatever writes these — the settings UI,
+ *     a localStorage rehydration — is responsible for emitting valid values.
+ *
+ *  2. `@container style()` compares token streams TEXTUALLY, not by computed
+ *     value. `--border-width: 0.0px` and `calc(0px)` do NOT match a
+ *     `style(--border-width: 0px)` query even though they compute to the same
+ *     length. Only `--border-width` and `--shadow-force` are style-queried
+ *     (see `components/panel.css`), so those two must be written in exactly the
+ *     canonical form the query uses: `0px` and `0`.
+ *
+ * Every knob is given a value on `.ds` below, so none of them is ever unset.
+ */
+
+.ds {
+  /* Corner rounding. 0px reproduces classic Derpibooru's hard corners. */
+  --radius-unit: 6px;
+
+  /* Hairline weight. At 0px, panels rely on shadow and surface contrast. */
+  --border-width: 1px;
+
+  /* Depth multiplier. 0 is fully flat, 1.6 is heavy. */
+  --shadow-force: 1;
+
+  /* Spacing multiplier: 0.85 compact / 1 cozy / 1.15 comfortable. */
+  --density: 1;
+
+  /* Type. The families are inputs like any other knob, not derived values. */
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'Droid Sans Mono', menlo, monospace;
+
+  /* Type size multiplier. */
+  --font-scale: 1;
+
+  /* Animation speed multiplier. 0 disables transitions. */
+  --motion-scale: 1;
+
+  /* Progressive enhancement — Chromium-only today, ignored elsewhere. */
+  --corner-shape: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds {
+    --motion-scale: 0;
+  }
+}

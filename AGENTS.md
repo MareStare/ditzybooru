@@ -1,4 +1,5 @@
 - Don't automatically update the git index, don't use `git rm`. Instead, leave your changes unstaged letting the human review/stage them manually.
+- `npm run dev` server may already be running by the developer. Don't stop this process, reuse it.
 
 # Code Conventions
 

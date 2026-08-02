@@ -1,4 +1,4 @@
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
@@ -12,13 +12,17 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  // `/dev/*` routes are internal tooling that renders its own chrome. The site
+  // header and footer would fight them for the page's look.
+  const isDevRoute = useRouterState({ select: state => state.location.pathname.startsWith('/dev/') });
+
   return (
     <div className="flex min-h-screen flex-col">
-      <SiteHeader />
+      {isDevRoute ? null : <SiteHeader />}
       <main className="flex-1">
         <Outlet />
       </main>
-      <SiteFooter />
+      {isDevRoute ? null : <SiteFooter />}
       <TanStackDevtools
         config={{
           position: 'bottom-right',

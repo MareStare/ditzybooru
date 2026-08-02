@@ -1,0 +1,79 @@
+/**
+ * Dropdown / popover surface. Uses the native popover attribute where the
+ * markup allows, so it lives in the top layer and gets light-dismiss for free.
+ */
+
+.menu {
+  min-inline-size: 12rem;
+  padding: var(--space-1);
+  margin: 0;
+
+  border: var(--border);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: color-mix(in oklab, var(--surface), #fff 5%);
+  box-shadow:
+    0 12px 32px color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-force)), transparent),
+    var(--edge-highlight);
+
+  color: var(--text-color);
+  font-size: var(--text-sm);
+  list-style: none;
+}
+
+.menu[popover] {
+  position: absolute;
+  inset: auto;
+  overflow: visible;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: 28px;
+  padding: var(--space-1) var(--space-2);
+
+  border: 0;
+  border-radius: max(0px, calc(var(--radius-md) - var(--border-width)));
+  corner-shape: var(--corner-shape);
+  background-color: transparent;
+
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: start;
+
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.menu-item:hover:not(:disabled),
+.menu-item:focus-visible {
+  background-color: var(--surface-hover);
+  color: inherit;
+}
+
+.menu-item[aria-selected='true'] {
+  background-color: var(--surface-selected);
+}
+
+.menu-item:disabled {
+  color: var(--text-disabled);
+}
+
+.menu-separator {
+  block-size: var(--border-width);
+  margin: var(--space-1) 0;
+  border: 0;
+  background-color: var(--border-color-subtle);
+}
+
+.menu-label {
+  padding: var(--space-1) var(--space-2);
+  color: var(--text-subtle);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}

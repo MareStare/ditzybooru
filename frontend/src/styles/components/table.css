@@ -1,0 +1,45 @@
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+
+.table th {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-width) solid var(--border-color-strong);
+  background-color: var(--surface-panel-header-sub);
+  color: var(--text-color);
+  font-weight: var(--weight-semibold);
+  text-align: start;
+  text-wrap: balance;
+}
+
+.table td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--divider);
+}
+
+.table tbody tr:nth-child(odd) {
+  background-color: color-mix(in oklab, var(--surface), var(--lift) 4%);
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: var(--surface);
+}
+
+.table tbody tr:hover {
+  background-color: var(--surface-hover);
+}
+
+.table--numeric td:not(:first-child),
+.table--numeric th:not(:first-child) {
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+/* A wide table must scroll inside its own box, never widen the page. */
+.table-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+}

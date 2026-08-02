@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
+import { Route as DevStylingRouteImport } from './routes/dev/styling';
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
+const DevStylingRoute = DevStylingRouteImport.update({
+  id: '/dev/styling',
+  path: '/dev/styling',
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/dev/styling': typeof DevStylingRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/dev/styling': typeof DevStylingRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/dev/styling': typeof DevStylingRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/';
+  fullPaths: '/' | '/dev/styling';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/';
-  id: '__root__' | '/';
+  to: '/' | '/dev/styling';
+  id: '__root__' | '/' | '/dev/styling';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  DevStylingRoute: typeof DevStylingRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/dev/styling': {
+      id: '/dev/styling';
+      path: '/dev/styling';
+      fullPath: '/dev/styling';
+      preLoaderRoute: typeof DevStylingRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DevStylingRoute: DevStylingRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

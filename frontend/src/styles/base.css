@@ -1,0 +1,105 @@
+/**
+ * Element defaults inside a design-system root.
+ *
+ * No `*` selectors: a blanket reset reaches into web components and other
+ * subtrees that then need `!important` to escape it. Everything here targets
+ * concrete elements, wrapped in `:where()` so it contributes zero specificity
+ * and authors never have to fight it to restyle a plain `<h2>`.
+ */
+
+.ds {
+  background-color: var(--surface-page);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  accent-color: var(--brand);
+  scrollbar-color: var(--border-color-strong) var(--surface-page);
+}
+
+.ds :where(h1, h2, h3, h4, h5, h6) {
+  margin: 0 0 var(--space-2);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+.ds :where(h1) {
+  font-size: calc(1.5rem * var(--font-scale));
+}
+.ds :where(h2) {
+  font-size: calc(1.375rem * var(--font-scale));
+}
+.ds :where(h3) {
+  font-size: var(--text-xl);
+}
+.ds :where(h4) {
+  font-size: var(--text-lg);
+}
+.ds :where(h5, h6) {
+  font-size: var(--text-md);
+}
+
+.ds :where(p) {
+  margin: 0 0 var(--space-3);
+  text-wrap: pretty;
+}
+
+.ds :where(p:last-child) {
+  margin-bottom: 0;
+}
+
+.ds :where(a) {
+  color: var(--link);
+  text-decoration: none;
+  transition: color var(--duration) var(--ease-out);
+}
+
+.ds :where(a):hover {
+  color: var(--link-hover);
+}
+
+.ds :where(code, kbd, samp, pre) {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+.ds :where(code) {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-xs);
+  background-color: var(--surface-sunken);
+}
+
+.ds :where(hr) {
+  height: 0;
+  margin: var(--space-4) 0;
+  border: 0;
+  border-top: var(--divider);
+}
+
+.ds :where(img, svg, video, canvas) {
+  display: block;
+  max-width: 100%;
+}
+
+/* Counters, scores and timestamps must not jitter as their digits change. */
+.ds :where(time, .num) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* One focus style for everything. `:focus-visible`, never `:focus`, so a
+ * mouse click on a button does not leave a ring behind. */
+.ds :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+.ds :where(button, [role='button']):not(:disabled) {
+  cursor: pointer;
+}
+
+.ds :where(::selection) {
+  background-color: color-mix(in oklab, var(--brand) 45%, transparent);
+}

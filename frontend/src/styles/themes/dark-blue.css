@@ -1,0 +1,17 @@
+/**
+ * Derpibooru's default theme.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+.ds[data-ds-theme='dark-blue'] {
+  --base: #284371;
+  --page: #141a24;
+  --ink: #e0e0e0;
+
+  --link: #478acc;
+  /* The signature purple hover. Do not normalize this to a blue. */
+  --link-hover: #b099dd;
+}
