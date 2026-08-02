@@ -2,9 +2,9 @@
  * Layout for the /ui/playground page. Not part of the design system — it
  * only arranges the specimens, the control rail and the token inspector.
  *
- * The page renders inside the ordinary site chrome, so the knobs it writes land
+ * The page renders inside the ordinary site chrome, so the settings it writes land
  * on `:root` and re-style the header and footer along with the specimens. The
- * two rails stick below the header rather than at the top of the viewport,
+ * rail sticks below the header rather than at the top of the viewport,
  * which is what `--header-h` is published for.
  */
 
@@ -16,15 +16,6 @@
 @media (width >= 60rem) {
   .pg {
     grid-template-columns: 16rem minmax(0, 1fr);
-  }
-}
-
-/* The token inspector only earns its own column once there is width to spare —
- * a second one on the left, beside the knobs. Below this it drops under the
- * specimens as a normal block. */
-@media (width >= 90rem) {
-  .pg {
-    grid-template-columns: 16rem 19rem minmax(0, 1fr);
   }
 }
 
@@ -149,101 +140,6 @@
 
 .pg-title {
   font-size: var(--text-xl);
-}
-
-/* ---- Token inspector --------------------------------------------------- */
-
-/* Sits second in the DOM, between the control rail and the specimens, which is
- * where it lands once there are three columns. Until then `order` moves it
- * behind the specimens so a narrow viewport does not read knobs, then 32 token
- * rows, then the components. */
-.pg-tokens-rail {
-  order: 1;
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  padding: var(--space-3);
-  min-inline-size: 0;
-}
-
-@media (width >= 90rem) {
-  .pg-tokens-rail {
-    order: 0;
-    grid-column: auto;
-    position: sticky;
-    inset-block-start: var(--header-h);
-    /* No left margin: the control rail's own right margin already separates
-     * the two, and doubling them would open a gutter twice as wide. */
-    margin: var(--space-3);
-    margin-inline-start: 0;
-    block-size: calc(100dvh - var(--header-h) - var(--space-6));
-    overflow-y: auto;
-    overscroll-behavior: contain;
-
-    border: var(--border);
-    border-radius: var(--radius-lg);
-    corner-shape: var(--corner-shape);
-    background-color: var(--surface);
-    box-shadow: var(--shadow-sm);
-  }
-}
-
-/* One token per line in the sidebar. Below the sidebar breakpoint the same list
- * is a full-width block, where a single column would be absurdly long, so it
- * falls back to as many columns as fit. */
-.pg-tokens {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
-  gap: var(--space-1);
-}
-
-@media (width >= 90rem) {
-  .pg-tokens {
-    grid-template-columns: minmax(0, 1fr);
-  }
-}
-
-.pg-token {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1);
-  border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
-  background-color: var(--surface);
-  font-size: var(--text-2xs);
-}
-
-.pg-token:hover {
-  background-color: var(--surface-hover);
-}
-
-.pg-token-chip {
-  flex-shrink: 0;
-  inline-size: 1.75rem;
-  block-size: 1.75rem;
-  border: var(--border-width) solid var(--border-color-strong);
-  border-radius: var(--radius-xs);
-  corner-shape: var(--corner-shape);
-}
-
-.pg-token-text {
-  display: flex;
-  flex-direction: column;
-  min-inline-size: 0;
-}
-
-.pg-token-name {
-  font-family: var(--font-mono);
-  color: var(--text-color);
-  overflow-wrap: anywhere;
-}
-
-.pg-token-value {
-  color: var(--text-subtle);
-  font-family: var(--font-mono);
-  overflow-wrap: anywhere;
 }
 
 /* ---- Specimen helpers -------------------------------------------------- */

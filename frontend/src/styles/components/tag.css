@@ -14,7 +14,17 @@
 
 .tag {
   --tag-seed: #4aa158;
-  --tag-color: var(--tag-seed);
+
+  /* The seed names the category; it is NOT the text color.
+   *
+   * Philomena paints the label in the raw seed on a tinted wash of the same
+   * seed, which lands every category between 1.7:1 and 2.5:1 — the tag text is
+   * the least legible thing on the page in either polarity. Pushing the seed
+   * along `--lift` (white in a dark theme, black in a light one) keeps the hue
+   * that identifies the category while moving the lightness far enough from the
+   * wash to clear WCAG AA. The border and background still derive from the
+   * seed, so the tag keeps reading as its category color. */
+  --tag-color: color-mix(in oklab, var(--tag-seed), var(--lift) var(--tag-text-mix));
 
   display: inline-flex;
   align-items: center;

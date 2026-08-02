@@ -40,12 +40,15 @@
 .nav-link--donate {
   border: var(--border-width) solid color-mix(in oklab, var(--vote-up), var(--surface) 62%);
   background-color: color-mix(in oklab, var(--vote-up), var(--surface) 86%);
-  color: color-mix(in oklab, var(--vote-up), var(--text-color) 25%);
+  /* The plain body text, not the vote-up green: on a green-tinted wash the
+   * green itself lands between 4.0 and 4.5 depending on the theme's base. The
+   * border and background already say "this is the donate link". */
+  color: var(--text-color);
 }
 
 .nav-bar--sub .nav-link--donate:hover {
   background-color: color-mix(in oklab, var(--vote-up), var(--surface) 74%);
-  color: color-mix(in oklab, var(--vote-up), var(--text-color) 15%);
+  color: var(--text-color);
 }
 
 /* The strip's contents move into the mobile drawer below this. Keep in sync

@@ -8,7 +8,10 @@
     "paths": {
       "#/*": ["./src/*"]
     },
-    "lib": ["ES2019", "DOM", "DOM.Iterable"],
+    /* A deliberately low floor for the app's own code, plus `ES2022.Error` for
+       `new Error(message, { cause })` — baseline since 2021, and the only way to
+       chain an error without flattening it into a string. */
+    "lib": ["ES2019", "ES2022.Error", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
 
     /* Bundler mode */

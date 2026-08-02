@@ -77,6 +77,10 @@ body {
   margin-bottom: 0;
 }
 
+/* No underline anywhere, including in running text — Derpibooru does not
+ * underline, and the link color carries it. axe's `link-in-text-block` rule is
+ * satisfied by luminance instead: `--link` is far enough from `--text-color`
+ * to clear the 3:1 the rule asks for, which the suite checks. */
 :where(a) {
   color: var(--link);
   text-decoration: none;
@@ -85,14 +89,6 @@ body {
 
 :where(a):hover {
   color: var(--link-hover);
-}
-
-/* A link surrounded by prose has to be distinguishable without relying on
- * color. Navigation, menu entries and cards are unambiguous from position, so
- * this is scoped to running text rather than applied to every anchor. */
-:where(p, li) :where(a) {
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 :where(code, kbd, samp, pre) {

@@ -1,5 +1,5 @@
 /**
- * Theme knobs: the {@link ThemeLightness} (light/dark) and the accent
+ * Theme settings: the {@link ThemeLightness} (light/dark) and the accent
  * {@link ThemeColor}.
  *
  * Lightness has two layers. What the user picks is a

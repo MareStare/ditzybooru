@@ -148,15 +148,24 @@
   align-items: stretch;
 }
 
-/* The score reads as one of the controls, not as a highlight: same color as the
- * idle actions around it. A green 412 next to a grey star drew the eye to the
- * one number on the card that the reader is least likely to be looking for. */
+/* Green up, red down, as on Derpibooru — the sign of the score is the one thing
+ * a reader scanning a grid actually wants from it, and color carries that
+ * faster than the minus sign does. A score of exactly 0 stays muted: there is
+ * no direction to signal. */
 .media-score {
   display: inline-flex;
   align-items: center;
   padding-inline: var(--space-0-5);
   color: var(--text-muted);
   font-weight: var(--weight-medium);
+}
+
+.media-score--positive {
+  color: var(--score-positive);
+}
+
+.media-score--negative {
+  color: var(--score-negative);
 }
 
 /* ---- Overflow menu ----------------------------------------------------- */

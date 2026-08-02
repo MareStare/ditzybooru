@@ -1,0 +1,118 @@
+/**
+ * The appearance settings. Sized to fit both hosts unchanged: the header's
+ * appearance menu, which is `max-content` wide, and the playground's 16rem
+ * control rail — hence the explicit `min-inline-size` rather than leaving the
+ * width to whatever the labels happen to measure.
+ */
+
+.ui-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  /* No minimum: the playground's rail is a fixed 16rem and anything wider than
+   * its content box turns the whole rail into a horizontal scroller. The
+   * segmented tracks are `1fr` columns, so they take whatever they are given —
+   * in the header menu that is the width of the nine-swatch hue row above. */
+  min-inline-size: 0;
+}
+
+.ui-setting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.ui-setting__label {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+/* ---- Previews ---------------------------------------------------------- */
+
+/* Drawn in `currentColor`, so a stop inherits the same muted/selected treatment
+ * the text stops get from `.segmented__option` — the preview dims and lifts
+ * along with everything else rather than sitting at a fixed contrast. */
+.ui-setting-preview {
+  display: block;
+  color: inherit;
+}
+
+/* One corner of a box, not a whole box: at 16px a fully rounded rectangle is
+ * indistinguishable from a slightly rounded one, whereas a single corner shows
+ * the radius at full size. */
+.ui-setting-preview--corner {
+  inline-size: 14px;
+  block-size: 14px;
+  border-block-start: 2px solid currentColor;
+  border-inline-start: 2px solid currentColor;
+  border-start-start-radius: var(--preview-radius);
+  corner-shape: var(--corner-shape);
+}
+
+/* A filled swatch whose border is the weight on offer. Filled rather than
+ * hollow so the `None` stop is still a visible shape — an empty cell reads as a
+ * rendering failure rather than as an absence of outlines. */
+.ui-setting-preview--outline {
+  inline-size: 16px;
+  block-size: 14px;
+  border: var(--preview-width) solid currentColor;
+  border-radius: 2px;
+  corner-shape: var(--corner-shape);
+  background-color: color-mix(in oklab, currentColor 22%, transparent);
+}
+
+/* Fixed 14px base, deliberately NOT `--text-*`: this is a sample of the setting,
+ * so it has to scale with the stop it belongs to and not with the value
+ * currently applied to the page — otherwise every stop looks the same size. */
+.ui-setting-preview--text {
+  font-size: calc(14px * var(--preview-scale));
+  font-weight: var(--weight-medium);
+  line-height: 1;
+}
+
+/* ---- Reset ------------------------------------------------------------- */
+
+.ui-settings__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  min-block-size: 28px;
+  padding-inline: var(--space-2);
+
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-sunken);
+
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-xs);
+
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+/* Matches the marker on the default stop of each control. Nudged down because
+ * the glyph sits at the top of its em box, which leaves it floating above the
+ * cap height of the label beside it. */
+.ui-settings__reset-mark {
+  font-size: var(--text-sm);
+  line-height: 1;
+  translate: 0 2px;
+}
+
+.ui-settings__reset:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+/* Disabled rather than hidden while everything is already at its default: a
+ * control that vanishes once you have finished with it is one the reader has to
+ * rediscover the next time they change something. */
+.ui-settings__reset:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}

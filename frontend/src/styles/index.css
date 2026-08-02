@@ -24,7 +24,7 @@
 
 @import '@fontsource-variable/inter';
 
-@import './tokens/knobs.css';
+@import './tokens/ui-settings.css';
 @import './tokens/scale.css';
 @import './tokens/palette.css';
 @import './tokens/semantic.css';
@@ -62,10 +62,11 @@
 @import '../components/ui/Menu.css';
 @import '../components/ui/Pagination.css';
 @import '../components/ui/Panel.css';
+@import '../components/ui/Segmented.css';
 
 /* ---- Features ---------------------------------------------------------- */
 
-@import '../components/layout/AppearanceKnobs.css';
+@import '../components/layout/UiSettings.css';
 @import '../components/layout/SiteHeader.css';
 @import '../components/layout/HeaderNav.css';
 @import '../components/layout/MobileMenu.css';

@@ -181,7 +181,14 @@ export function MediaBox({ className, image, src = image.representations.thumb }
           {/* Deliberately not `<Int>`: the thousands separator buys nothing on a
               3-4 digit score and its extra glyph is real width in a bar this
               tight. */}
-          <span className="media-score" title="Score">
+          <span
+            className={cn(
+              'media-score',
+              interaction.score > 0 && 'media-score--positive',
+              interaction.score < 0 && 'media-score--negative',
+            )}
+            title="Score"
+          >
             {interaction.score}
           </span>
           <InteractionButton

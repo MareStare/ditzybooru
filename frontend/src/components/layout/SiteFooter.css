@@ -57,8 +57,3 @@
   font-size: var(--text-xs);
   text-align: center;
 }
-
-.site-footer__note a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}

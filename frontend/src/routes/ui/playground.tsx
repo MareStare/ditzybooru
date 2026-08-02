@@ -1,16 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { ArrowUp, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
-import { AppearanceKnobs } from '#/components/layout/AppearanceKnobs';
+import { UiSettingsControls } from '#/components/layout/UiSettings';
 import { Badge } from '#/components/ui/Badge';
 import { Button, ButtonGroup } from '#/components/ui/Button';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelTabs } from '#/components/ui/Panel';
 import { MediaGrid } from '#/components/home/MediaGrid';
-import { useKnobs } from '#/hooks/useKnobs';
 import { hiddenImages, images, randomImages, topAllTime, totalImages } from '#/lib/mock/data';
-import type { Knobs } from '#/lib/knobs';
 
 export const Route = createFileRoute('/ui/playground')({ component: UiPlayground });
 
@@ -28,50 +26,12 @@ const TAG_CATEGORIES = [
   { modifier: 'tag--body-type', label: 'anthro', count: '54k' },
 ] as const;
 
-/** Tokens worth eyeballing side by side when a knob or theme changes. */
-const INSPECTED_TOKENS = [
-  '--surface-page',
-  '--surface',
-  '--surface-sunken',
-  '--surface-hover',
-  '--surface-selected',
-  '--surface-nav',
-  '--surface-nav-field',
-  '--surface-nav-sub',
-  '--surface-panel-header',
-  '--surface-panel-header-sub',
-  '--surface-media',
-  '--text-color',
-  '--text-muted',
-  '--text-subtle',
-  '--text-disabled',
-  '--link',
-  '--link-hover',
-  '--link-on-panel-header',
-  '--border-color',
-  '--border-color-subtle',
-  '--border-color-strong',
-  '--brand',
-  '--success',
-  '--danger',
-  '--warning',
-  '--fave',
-  '--vote-up',
-  '--vote-down',
-  '--unread',
-];
-
 function UiPlayground() {
-  // Only to re-read the token inspector when a knob moves; the sliders
-  // themselves are `AppearanceKnobs`, shared with the header's menu.
-  const knobs = useKnobs();
-
   return (
     <div className="pg">
-      {/* Both rails scroll independently, so both need a name (two unlabelled
-          complementary landmarks are indistinguishable) and a tab stop (a
-          scroll container is unreachable by keyboard without one). */}
-      <aside className="pg-rail" aria-label="Design tokens knobs" tabIndex={0}>
+      {/* The rail scrolls independently, so it needs a name and a tab stop — a
+          scroll container is unreachable by keyboard without one. */}
+      <aside className="pg-rail" aria-label="UI settings" tabIndex={0}>
         <div>
           <h1 className="pg-title">UI playground</h1>
           <p className="pg-note">
@@ -80,15 +40,13 @@ function UiPlayground() {
           </p>
         </div>
 
-        <AppearanceKnobs />
+        <UiSettingsControls />
 
         <p className="pg-note">
-          Try <code>Corners: Square</code> with <code>Outlines: Hairline</code> for the classic Derpibooru look, or{' '}
-          <code>Outlines: None</code> to watch panels switch to depth-based separation via a container style query.
+          Try <code>Outlines: None</code> to watch panels switch from borders to depth-based separation, via a container
+          style query rather than a class.
         </p>
       </aside>
-
-      <TokenInspector knobs={knobs} />
 
       {/* A plain `div`: the page already renders inside the app shell's `main`. */}
       <div className="pg-main">
@@ -482,58 +440,5 @@ function TypographySpecimen() {
       </p>
       <p className="pg-note">Muted text for timestamps and counters: posted 3 hours ago · 1,204 views · 88 faves</p>
     </Section>
-  );
-}
-
-function TokenInspector({ knobs }: { knobs: Knobs }) {
-  const [values, setValues] = useState<Array<[string, string]>>([]);
-
-  useEffect(() => {
-    const root = document.documentElement;
-
-    const read = () => {
-      const styles = getComputedStyle(root);
-      setValues(INSPECTED_TOKENS.map(name => [name, styles.getPropertyValue(name).trim()]));
-    };
-
-    // Read after paint so a just-applied knob or theme attribute is reflected.
-    let frame = requestAnimationFrame(read);
-
-    // The theme lives on `<html>` and is switched from the site header, which
-    // this component knows nothing about — so watch the attributes rather than
-    // trying to thread the theme through as a prop.
-    const observer = new MutationObserver(() => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(read);
-    });
-    observer.observe(root, { attributeFilter: ['data-theme-lightness', 'data-theme-color'] });
-
-    return () => {
-      cancelAnimationFrame(frame);
-      observer.disconnect();
-    };
-  }, [knobs]);
-
-  return (
-    <aside className="pg-tokens-rail" aria-label="Resolved token values" tabIndex={0}>
-      <div>
-        <h2 className="pg-card-head pg-card-head--bare">Resolved tokens</h2>
-        <p className="pg-note">
-          Computed values for the current theme, read back from the live root. Everything here derives from the handful
-          of seed colors in the theme file.
-        </p>
-      </div>
-      <div className="pg-tokens">
-        {values.map(([name, value]) => (
-          <div className="pg-token" key={name}>
-            <span className="pg-token-chip" style={{ background: `var(${name})` }} />
-            <span className="pg-token-text">
-              <span className="pg-token-name">{name}</span>
-              <span className="pg-token-value">{value}</span>
-            </span>
-          </div>
-        ))}
-      </div>
-    </aside>
   );
 }

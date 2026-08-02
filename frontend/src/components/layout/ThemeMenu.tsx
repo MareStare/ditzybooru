@@ -5,7 +5,8 @@ import { Check, Monitor, Moon, Paintbrush, Palette, Sun } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
-import { AppearanceKnobs } from './AppearanceKnobs';
+import { Segmented } from '#/components/ui/Segmented';
+import { UiSettingsControls } from './UiSettings';
 import {
   applyThemeColor,
   applyThemeLightnessPreference,
@@ -56,8 +57,6 @@ export function ThemeMenu() {
     setPreference(next);
   };
 
-  const thumbIndex = THEME_LIGHTNESS_PREFERENCES.findIndex(option => option.id === preference);
-
   return (
     <Dropdown
       align="end"
@@ -68,30 +67,27 @@ export function ThemeMenu() {
       }
     >
       <div className="menu theme-menu">
-        <p className="theme-menu__title">Appearance</p>
-        <div className="theme-switch" role="radiogroup" aria-label="Appearance">
-          <span className="theme-switch__thumb" style={{ '--thumb-index': Math.max(thumbIndex, 0) } as CSSProperties} />
-          {THEME_LIGHTNESS_PREFERENCES.map(option => {
+        <p className="theme-menu__title">Lightness</p>
+        <Segmented
+          label="Lightness"
+          value={preference}
+          onChange={selectPreference}
+          options={THEME_LIGHTNESS_PREFERENCES.map(option => {
             const Icon = LIGHTNESS_ICONS[option.id];
-            return (
-              <button
-                key={option.id}
-                type="button"
-                role="radio"
-                aria-checked={preference === option.id}
-                className="theme-switch__option"
-                onClick={() => {
-                  selectPreference(option.id);
-                }}
-              >
-                <Icon size={14} />
-                {option.label}
-              </button>
-            );
+            return {
+              value: option.id,
+              label: option.label,
+              preview: (
+                <>
+                  <Icon size={14} />
+                  {option.label}
+                </>
+              ),
+            };
           })}
-        </div>
+        />
 
-        <p className="theme-menu__title">Accent color</p>
+        <p className="theme-menu__title">Hue</p>
         <div className="theme-menu__colors">
           {THEME_COLORS.map(entry => {
             const active = entry.id === color;
@@ -118,7 +114,7 @@ export function ThemeMenu() {
         </div>
 
         <p className="theme-menu__title">Layout</p>
-        <AppearanceKnobs />
+        <UiSettingsControls />
 
         <hr className="theme-menu__separator" />
 

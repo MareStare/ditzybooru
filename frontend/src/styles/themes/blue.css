@@ -11,7 +11,7 @@
 
 :root {
   --seed-blue-dark: #284371;
-  --seed-blue-light: #2f7cb5;
+  --seed-blue-light: #2c74a9;
 }
 
 :root[data-theme-lightness='dark'][data-theme-color='blue'] {

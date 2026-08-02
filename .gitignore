@@ -1,6 +1,7 @@
 target
 node_modules
 dist
+frontend/.tanstack/tmp
 
 # Directory where our scripts install binaries with dependencies we need.
 tools

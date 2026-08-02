@@ -23,85 +23,26 @@
   margin-block-end: var(--space-3);
 }
 
-/* ---- Light / dark / system slider -------------------------------------- */
+/* ---- Hue --------------------------------------------------------------- */
 
-/* A track with a thumb that slides between three stops, rather than three
- * separate buttons: the movement is what says these are one setting with one
- * value. The stops are still real buttons, so keyboard and AT are unaffected. */
-.theme-switch {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-
-  padding: 2px;
-  border: var(--border-width) solid var(--border-color);
-  border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
-  background-color: var(--surface-sunken);
-}
-
-.theme-switch__thumb {
-  position: absolute;
-  z-index: 0;
-  inset-block: 2px;
-  inset-inline-start: 2px;
-  inline-size: calc((100% - 4px) / 3);
-
-  border-radius: max(0px, calc(var(--radius-md) - 2px));
-  corner-shape: var(--corner-shape);
-  background-color: var(--surface-selected);
-  box-shadow: var(--shadow-sm);
-
-  translate: calc(var(--thumb-index) * 100%) 0;
-  transition: translate var(--duration) var(--ease-out);
-}
-
-.theme-switch__option {
-  position: relative;
-  z-index: 1;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-1);
-  min-block-size: 28px;
-  padding-inline: var(--space-2);
-
-  border: 0;
-  background-color: transparent;
-
-  color: var(--text-muted);
-  font: inherit;
-  font-size: var(--text-xs);
-  font-weight: var(--weight-medium);
-  white-space: nowrap;
-
-  transition: color var(--duration) var(--ease-out);
-}
-
-.theme-switch__option[aria-checked='true'],
-.theme-switch__option:hover {
-  color: var(--text-color);
-}
-
-/* ---- Accent colors ----------------------------------------------------- */
-
-/* Fixed tracks, not `1fr`: the menu is `max-content` wide, so flexible columns
- * stretch the gaps and the grid stops reading as a swatch block. */
+/* One row of nine, which is what sets the menu's width — every control below it
+ * then stretches to match. A wrapped grid would be narrower but would read as a
+ * palette to pick coordinates from rather than as a list of nine alternatives. */
 .theme-menu__colors {
-  display: grid;
-  grid-template-columns: repeat(3, 28px);
-  gap: var(--space-1-5);
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-1);
 }
 
 /* One solid fill: the swatch answers "what color is this theme", and the
  * polarity it would be shown in is the setting directly above it. */
 .theme-swatch {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: 28px;
-  block-size: 28px;
+  inline-size: 26px;
+  block-size: 26px;
 
   /* Derived from the swatch rather than from the theme, because several dark
    * seeds (#284371 blue, #2e3439 gray) sit within a few points of the menu

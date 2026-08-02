@@ -49,17 +49,22 @@
 
   /* How far the fave/upvote/downvote colors are lifted before being painted as
    * icons. Dark surfaces swallow all three otherwise. */
-  --w-icon-lift: 34%;
+  --w-icon-lift: 46%;
 
   /* Status fills are dark and saturated so the normal foreground stays readable
    * on them. Identical in every dark theme — these carry meaning, not identity,
    * so they are not a theme's business. */
   --success: #144714;
   --danger: #66211f;
-  --warning: #7d4825;
+  --warning: #71401f;
 
   --tag-bg-mix: 82%;
   --tag-border-mix: 55%;
+
+  /* How far the category seed is pushed toward white before it is used as tag
+   * text. Tuned to the worst seed in the set — the mid-tone purples and blues,
+   * which start closest to a dark wash. */
+  --tag-text-mix: 66%;
 }
 
 :root[data-theme-lightness='light'] {
@@ -97,7 +102,7 @@
    * the wrong direction for a recess and leaves white text stranded on it. */
   --nav-field-target: #000;
 
-  --w-icon-lift: 14%;
+  --w-icon-lift: 32%;
 
   /* Pastels, for the same reason the dark ones are dark: the foreground has to
    * stay readable on top of them. */
@@ -109,4 +114,8 @@
    * surface. Dark themes have the opposite problem. */
   --tag-bg-mix: 80%;
   --tag-border-mix: 42%;
+
+  /* Higher than the dark theme's: the wash here is near-white, so the label has
+   * further to travel to clear AA against it. */
+  --tag-text-mix: 60%;
 }
