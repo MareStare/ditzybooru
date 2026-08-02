@@ -119,3 +119,80 @@ export function onSystemLightnessChange(listener: (lightness: ThemeLightness) =>
     media.removeEventListener('change', handler);
   };
 }
+
+/* ---- Store -------------------------------------------------------------- */
+
+/**
+ * The theme as a subscribable value, mirroring `lib/uiSettings`.
+ *
+ * A module-level store rather than component state, because the theme is one
+ * global setting with more than one view of it, and because "is everything at
+ * its default" — the question the reset button asks — spans the theme and the
+ * UI settings together.
+ */
+export interface ThemeState {
+  preference: ThemeLightnessPreference;
+  lightness: ThemeLightness;
+  color: ThemeColor;
+}
+
+export const DEFAULT_THEME: ThemeState = {
+  preference: DEFAULT_THEME_LIGHTNESS_PREFERENCE,
+  lightness: DEFAULT_THEME_LIGHTNESS,
+  color: DEFAULT_THEME_COLOR,
+};
+
+let current: ThemeState = DEFAULT_THEME;
+const listeners = new Set<() => void>();
+
+function notify(): void {
+  for (const listener of listeners) listener();
+}
+
+export function getTheme(): ThemeState {
+  return current;
+}
+
+export function subscribeTheme(listener: () => void): () => void {
+  listeners.add(listener);
+  return () => {
+    listeners.delete(listener);
+  };
+}
+
+/** Adopts whatever the pre-paint script already put on `<html>`. */
+export function hydrateTheme(): void {
+  current = {
+    preference: readThemeLightnessPreference(),
+    lightness: readThemeLightness(),
+    color: readThemeColor(),
+  };
+  notify();
+}
+
+export function setThemeLightnessPreference(preference: ThemeLightnessPreference): void {
+  current = { ...current, preference, lightness: applyThemeLightnessPreference(preference) };
+  notify();
+}
+
+/** Only meaningful while the preference is `system`: records what the OS just
+ *  switched to, which is already reflected on `<html>` by the caller. */
+export function setResolvedLightness(lightness: ThemeLightness): void {
+  current = { ...current, lightness };
+  notify();
+}
+
+export function setThemeColor(color: ThemeColor): void {
+  applyThemeColor(color);
+  current = { ...current, color };
+  notify();
+}
+
+export function themeIsDefault(theme: ThemeState): boolean {
+  return theme.preference === DEFAULT_THEME.preference && theme.color === DEFAULT_THEME.color;
+}
+
+export function resetTheme(): void {
+  setThemeColor(DEFAULT_THEME.color);
+  setThemeLightnessPreference(DEFAULT_THEME.preference);
+}

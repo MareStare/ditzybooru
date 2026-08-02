@@ -1,5 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 
+import { UndoDot } from 'lucide-react';
+
 import { cn } from '#/lib/utils';
 
 import type { ClassValue } from '#/lib/utils';
@@ -65,11 +67,12 @@ export function Segmented<TValue extends string | number>({
             // the text it does show.
             title={isDefault ? `${option.label} (default)` : option.label}
             aria-label={isDefault ? `${option.label} (default)` : option.label}
-            className={cn('segmented__option', isDefault && 'segmented__option--default')}
+            className="segmented__option"
             onClick={() => {
               onChange(option.value);
             }}
           >
+            {isDefault ? <UndoDot className="segmented__default-mark" size={11} aria-hidden="true" /> : null}
             {option.preview ?? option.label}
           </button>
         );

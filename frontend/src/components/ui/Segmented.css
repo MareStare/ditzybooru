@@ -66,20 +66,14 @@
 
 /* The stop the setting shipped with, marked only once the reader has moved off
  * it — a mark on every default would be noise on a menu where most settings are
- * untouched. The same `*` the reset button carries, so the two read as one
- * idea: this is the value that button would restore.
+ * untouched. The same undo icon the reset button carries, so the two read as
+ * one idea: this is the value that button would restore.
  *
  * Absolutely positioned in the corner rather than placed in the flow, so
  * marking a stop never changes the width of the track. */
-.segmented__option--default::before {
-  content: '*';
+.segmented__default-mark {
   position: absolute;
   inset-block-start: 1px;
-  inset-inline-start: 3px;
-
-  font-size: var(--text-sm);
-  /* The glyph already sits high in its em box; without this its own line box
-   * pushes it back down into the label. */
-  line-height: 1;
-  opacity: 0.7;
+  inset-inline-start: 2px;
+  opacity: 0.75;
 }

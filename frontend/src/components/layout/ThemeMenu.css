@@ -8,6 +8,11 @@
 
 .theme-menu {
   inline-size: max-content;
+  /* Never wider than the viewport it has to fit inside. The panel hangs off a
+   * trigger that is itself a few buttons in from the right edge, so on a phone
+   * a `max-content` menu runs off the LEFT of the screen — where there is no
+   * scrollbar to recover it. */
+  max-inline-size: calc(100vw - 2 * var(--space-2));
   padding: var(--space-2);
 }
 
@@ -23,26 +28,16 @@
   margin-block-end: var(--space-3);
 }
 
-/* ---- Hue --------------------------------------------------------------- */
-
-/* One row of nine, which is what sets the menu's width — every control below it
- * then stretches to match. A wrapped grid would be narrower but would read as a
- * palette to pick coordinates from rather than as a list of nine alternatives. */
-.theme-menu__colors {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--space-1);
-}
-
 /* One solid fill: the swatch answers "what color is this theme", and the
  * polarity it would be shown in is the setting directly above it. */
 .theme-swatch {
-  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: 26px;
-  block-size: 26px;
+  /* Sized by its grid track rather than fixed, so nine of them always fit the
+   * menu however narrow it gets. */
+  min-inline-size: 0;
+  aspect-ratio: 1;
 
   /* Derived from the swatch rather than from the theme, because several dark
    * seeds (#284371 blue, #2e3439 gray) sit within a few points of the menu
@@ -96,4 +91,21 @@
 .theme-menu__link:hover {
   background-color: var(--surface-hover);
   color: var(--text-color);
+}
+
+/* Below this the header's right-hand buttons leave too little room to hang a
+ * panel off the trigger at all, so it detaches and pins to the viewport's right
+ * edge instead. `fixed` rather than a wider `absolute`, because the offset that
+ * matters is from the screen, not from the button. */
+@media (width < 30rem) {
+  .theme-menu-anchor > .dropdown__panel {
+    position: fixed;
+    inset-block-start: var(--nav-bar-h);
+    inset-inline: var(--space-2) var(--space-2);
+  }
+
+  .theme-menu {
+    inline-size: auto;
+    max-inline-size: none;
+  }
 }

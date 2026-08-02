@@ -39,7 +39,10 @@
  * tinted item in a row of neutral ones. */
 .nav-link--donate {
   border: var(--border-width) solid color-mix(in oklab, var(--vote-up), var(--surface) 62%);
-  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 86%);
+  /* Barely tinted. At 86% the wash drifted far enough per theme that
+   * `--text-color` on it landed under 4.5:1 in the warmer bases; at 94% the
+   * pair reduces to text-on-surface, which is verified everywhere. */
+  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 94%);
   /* The plain body text, not the vote-up green: on a green-tinted wash the
    * green itself lands between 4.0 and 4.5 depending on the theme's base. The
    * border and background already say "this is the donate link". */
@@ -47,7 +50,7 @@
 }
 
 .nav-bar--sub .nav-link--donate:hover {
-  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 74%);
+  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 86%);
   color: var(--text-color);
 }
 

@@ -95,15 +95,6 @@
     color var(--duration-fast) var(--ease-out);
 }
 
-/* Matches the marker on the default stop of each control. Nudged down because
- * the glyph sits at the top of its em box, which leaves it floating above the
- * cap height of the label beside it. */
-.ui-settings__reset-mark {
-  font-size: var(--text-sm);
-  line-height: 1;
-  translate: 0 2px;
-}
-
 .ui-settings__reset:hover:not(:disabled) {
   background-color: var(--surface-hover);
   color: var(--text-color);
@@ -115,4 +106,27 @@
 .ui-settings__reset:disabled {
   color: var(--text-disabled);
   cursor: default;
+}
+
+/* ---- Hue swatches ------------------------------------------------------ */
+
+/* One row of nine, which is what sets the menu's width — every control above it
+ * then stretches to match. A wrapped grid would be narrower but would read as a
+ * palette to pick coordinates from rather than as a list of nine alternatives.
+ *
+ * `1fr` tracks rather than fixed ones so the row shrinks with the menu on a
+ * narrow screen instead of pushing it off the side. */
+.ui-settings__hues {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: var(--space-1);
+  margin-block-start: var(--space-1);
+}
+
+/* The default hue, marked the same way a default segmented stop is — but only
+ * while some other hue is selected, and never on the selected one, which is
+ * already wearing a check. */
+.theme-swatch__default {
+  opacity: 0.75;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 55%));
 }

@@ -136,16 +136,26 @@ let page: Page;
 let axeSource: string;
 let baseUrl: string;
 
-/** Loads a path with a theme applied and returns axe's violations for it. */
+/**
+ * Loads a path with a theme applied and returns axe's violations for it.
+ *
+ * The theme is set through localStorage and a reload rather than by writing the
+ * attributes directly. Writing them races the app: with no stored preference
+ * the site follows `prefers-color-scheme`, and that listener will overwrite
+ * `data-theme-lightness` out from under the test — which showed up as
+ * intermittent runs reporting light-theme colors on a page the test had just
+ * set to dark. Storing an explicit preference takes the listener out of play.
+ */
 async function audit(path: string, lightness: Lightness, color: Color, options: RunOptions): Promise<Array<string>> {
-  await page.goto(`${baseUrl}${path}`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}${path}`, { waitUntil: 'domcontentloaded' });
   await page.evaluate(
     ({ l, c }) => {
-      document.documentElement.setAttribute('data-theme-lightness', l);
-      document.documentElement.setAttribute('data-theme-color', c);
+      localStorage.setItem('theme-lightness', l);
+      localStorage.setItem('theme-color', c);
     },
     { l: lightness, c: color },
   );
+  await page.reload({ waitUntil: 'networkidle' });
   await page.evaluate(axeSource);
   const results = await page.evaluate(async ({ opts }) => (window as unknown as AxeWindow).axe.run(document, opts), {
     opts: options,
