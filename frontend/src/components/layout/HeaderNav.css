@@ -1,0 +1,57 @@
+/**
+ * The secondary navigation strip under the top app bar.
+ *
+ * Unlike the primary bar this sits on a page surface rather than on the theme's
+ * base color, so it uses the ordinary text tokens and lifts on hover instead of
+ * darkening.
+ */
+
+.nav-bar--sub {
+  min-block-size: var(--nav-sub-h);
+  gap: 0;
+  padding-inline: var(--space-2);
+
+  border-block-end: var(--border);
+  background-color: var(--surface);
+  color: var(--text-color);
+}
+
+.nav-bar--sub .nav-link {
+  color: var(--text-muted);
+}
+
+.nav-bar--sub .nav-link:hover {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.nav-sub__spacer {
+  flex: 1;
+}
+
+.nav-sub__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Donate reads as an affordance rather than another section link — the one
+ * tinted item in a row of neutral ones. */
+.nav-link--donate {
+  border: var(--border-width) solid color-mix(in oklab, var(--vote-up), var(--surface) 62%);
+  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 86%);
+  color: color-mix(in oklab, var(--vote-up), var(--text-color) 25%);
+}
+
+.nav-bar--sub .nav-link--donate:hover {
+  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 74%);
+  color: color-mix(in oklab, var(--vote-up), var(--text-color) 15%);
+}
+
+/* The strip's contents move into the mobile drawer below this. Keep in sync
+ * with the `--nav-sub-h` query in `tokens/scale.css`. */
+@media (width < 48rem) {
+  .nav-bar--sub {
+    display: none;
+  }
+}

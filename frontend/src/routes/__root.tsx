@@ -1,28 +1,26 @@
-import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router';
+import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
 
-import '../global.css';
+// The one stylesheet entry point: `styles/index.css` imports every other CSS
+// file in the project, so the whole site compiles to a single stylesheet.
+import '#/styles/index.css';
 
 export const Route = createRootRoute({
   component: RootComponent,
 });
 
 function RootComponent() {
-  // `/dev/*` routes are internal tooling that renders its own chrome. The site
-  // header and footer would fight them for the page's look.
-  const isDevRoute = useRouterState({ select: state => state.location.pathname.startsWith('/dev/') });
-
   return (
-    <div className="flex min-h-screen flex-col">
-      {isDevRoute ? null : <SiteHeader />}
-      <main className="flex-1">
+    <div className="app-shell">
+      <SiteHeader />
+      <main className="app-shell__main">
         <Outlet />
       </main>
-      {isDevRoute ? null : <SiteFooter />}
+      <SiteFooter />
       <TanStackDevtools
         config={{
           position: 'bottom-right',

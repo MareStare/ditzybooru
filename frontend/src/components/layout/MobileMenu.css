@@ -1,0 +1,138 @@
+/**
+ * The small-screen navigation drawer. Portalled to `<body>`, so it is not
+ * subject to the header's stacking context and can sit over the page.
+ */
+
+.drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+.drawer__scrim {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  border: 0;
+  background-color: color-mix(in oklab, #000 55%, transparent);
+  cursor: default;
+  animation: drawer-fade calc(180ms * var(--motion-scale)) var(--ease-out);
+}
+
+.drawer__panel {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+
+  display: flex;
+  flex-direction: column;
+  inline-size: 18rem;
+  max-inline-size: 85%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  border-inline-end: var(--border);
+  background-color: var(--surface-page);
+  box-shadow: var(--shadow-md);
+
+  animation: drawer-slide calc(180ms * var(--motion-scale)) var(--ease-out);
+}
+
+@keyframes drawer-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes drawer-slide {
+  from {
+    translate: -100% 0;
+  }
+}
+
+.drawer__head {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-block-size: var(--nav-bar-h);
+  padding-inline: var(--space-3);
+  border-block-end: var(--border);
+  background-color: var(--surface-nav);
+  color: var(--text-on-nav);
+}
+
+.drawer__body {
+  flex: 1;
+  padding: var(--space-2);
+}
+
+.drawer__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+
+  color: var(--text-color);
+  font-size: var(--text-sm);
+  transition: background-color var(--duration) var(--ease-out);
+}
+
+.drawer__link:hover {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.drawer__link--section {
+  font-weight: var(--weight-medium);
+}
+
+/* A dropdown entry from the desktop bar, flattened into an indented child row
+ * because a drawer has the vertical room the bar does not. */
+.drawer__link--child {
+  padding-block: var(--space-1-5);
+  padding-inline-start: calc(var(--space-3) * 2.5);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.drawer__group {
+  margin-block-end: var(--space-1);
+}
+
+.drawer__separator {
+  block-size: var(--border-width);
+  margin: var(--space-2) 0;
+  border: 0;
+  background-color: var(--border-color-subtle);
+}
+
+.drawer__count {
+  padding: 0 var(--space-1-5);
+  border-radius: var(--radius-full);
+  background-color: var(--surface-sunken);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.drawer__link--live svg {
+  color: var(--vote-up);
+}
+
+.drawer__link--donate svg {
+  color: var(--vote-up);
+}
+
+/* The drawer only exists while the secondary bar is folded away. Keep in sync
+ * with the `--nav-sub-h` query in `tokens/scale.css`. */
+@media (width >= 48rem) {
+  .drawer {
+    display: none;
+  }
+}

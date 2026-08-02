@@ -1,0 +1,12 @@
+/* Two thumbnails per row: at the sidebar's width that lands each box at roughly
+ * Philomena's `thumb_small`, which is the representation this block requests.
+ *
+ * Qualified with `.panel-body` so the padding outranks `.panel-body--flush`'s
+ * `padding: 0` on specificity rather than on where this file happens to sit in
+ * the import list. */
+.panel-body.trending-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-2);
+}

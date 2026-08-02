@@ -7,7 +7,7 @@
 
 .field {
   inline-size: 100%;
-  min-block-size: 32px;
+  min-block-size: calc(36px * var(--density));
   padding: var(--space-1-5) var(--space-2);
 
   border: var(--border-width) solid var(--border-color-input);

@@ -1,23 +1,50 @@
 /**
- * Element defaults inside a design-system root.
+ * Element defaults.
  *
- * No `*` selectors: a blanket reset reaches into web components and other
- * subtrees that then need `!important` to escape it. Everything here targets
- * concrete elements, wrapped in `:where()` so it contributes zero specificity
- * and authors never have to fight it to restyle a plain `<h2>`.
+ * Beyond `box-sizing` there are no `*` selectors: a blanket reset reaches into
+ * web components and other subtrees that then need `!important` to escape it.
+ * Everything here targets concrete elements, wrapped in `:where()` so it
+ * contributes zero specificity and authors never have to fight it to restyle a
+ * plain `<h2>`.
  */
 
-.ds {
+/* The one blanket rule. Border-box is load-bearing for every fixed-size control
+ * in the system, and there is no element that wants the alternative. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-block-size: 100%;
+}
+
+:root {
   background-color: var(--surface-page);
   color: var(--text-color);
   font-family: var(--font-sans);
-  font-size: var(--text-sm);
-  line-height: 1.45;
   accent-color: var(--brand);
   scrollbar-color: var(--border-color-strong) var(--surface-page);
 }
 
-.ds :where(h1, h2, h3, h4, h5, h6) {
+/* The document's text size is set HERE, never on `:root`.
+ *
+ * `rem` resolves against the root element's own font size, and the whole token
+ * scale — every `--text-*`, every `--space-*` — is written in `rem`. Setting
+ * `font-size: var(--text-sm)` on `:root` therefore feeds the scale back into
+ * itself: the root lands at 13px, `1rem` becomes 13px, and every token silently
+ * shrinks by another 19%. Keeping the root at the browser default anchors `rem`
+ * to 16px, which is what the scale is calibrated against. */
+body {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
   margin: 0 0 var(--space-2);
   font-weight: var(--weight-semibold);
   line-height: var(--leading-tight);
@@ -25,81 +52,105 @@
   text-wrap: balance;
 }
 
-.ds :where(h1) {
+:where(h1) {
   font-size: calc(1.5rem * var(--font-scale));
 }
-.ds :where(h2) {
+:where(h2) {
   font-size: calc(1.375rem * var(--font-scale));
 }
-.ds :where(h3) {
+:where(h3) {
   font-size: var(--text-xl);
 }
-.ds :where(h4) {
+:where(h4) {
   font-size: var(--text-lg);
 }
-.ds :where(h5, h6) {
+:where(h5, h6) {
   font-size: var(--text-md);
 }
 
-.ds :where(p) {
+:where(p) {
   margin: 0 0 var(--space-3);
   text-wrap: pretty;
 }
 
-.ds :where(p:last-child) {
+:where(p:last-child) {
   margin-bottom: 0;
 }
 
-.ds :where(a) {
+:where(a) {
   color: var(--link);
   text-decoration: none;
   transition: color var(--duration) var(--ease-out);
 }
 
-.ds :where(a):hover {
+:where(a):hover {
   color: var(--link-hover);
 }
 
-.ds :where(code, kbd, samp, pre) {
+/* A link surrounded by prose has to be distinguishable without relying on
+ * color. Navigation, menu entries and cards are unambiguous from position, so
+ * this is scoped to running text rather than applied to every anchor. */
+:where(p, li) :where(a) {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+:where(code, kbd, samp, pre) {
   font-family: var(--font-mono);
   font-size: 0.92em;
 }
 
-.ds :where(code) {
+:where(code) {
   padding: 0.1em 0.35em;
   border-radius: var(--radius-xs);
   background-color: var(--surface-sunken);
 }
 
-.ds :where(hr) {
-  height: 0;
+:where(hr) {
+  block-size: 0;
   margin: var(--space-4) 0;
   border: 0;
   border-top: var(--divider);
 }
 
-.ds :where(img, svg, video, canvas) {
+:where(img, svg, video, canvas) {
   display: block;
-  max-width: 100%;
+  max-inline-size: 100%;
 }
 
 /* Counters, scores and timestamps must not jitter as their digits change. */
-.ds :where(time, .num) {
+:where(time, data) {
   font-variant-numeric: tabular-nums;
 }
 
 /* One focus style for everything. `:focus-visible`, never `:focus`, so a
  * mouse click on a button does not leave a ring behind. */
-.ds :where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--link);
   outline-offset: 2px;
   border-radius: var(--radius-xs);
 }
 
-.ds :where(button, [role='button']):not(:disabled) {
+:where(button, [role='button']):not(:disabled) {
   cursor: pointer;
 }
 
-.ds :where(::selection) {
+:where(::selection) {
   background-color: color-mix(in oklab, var(--brand) 45%, transparent);
+}
+
+/* ---- Utilities --------------------------------------------------------- */
+
+/* Available to assistive technology, invisible on screen. Used for headings
+ * that a tablist or an icon-only control already conveys visually. */
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }

@@ -3,7 +3,7 @@
  * values are identical in every theme and derive only from the knobs.
  */
 
-.ds {
+:root {
   /* ---- Radius ------------------------------------------------------- */
 
   --radius-xs: calc(var(--radius-unit) * 0.34);
@@ -57,12 +57,16 @@
 
   /* ---- Typography --------------------------------------------------- */
 
+  /* Anchored to a 16px root — see the note in `base.css` about why the root's
+   * own font size must stay there. `--text-sm` is the workhorse: body copy, nav
+   * links, buttons, table cells and menu items all sit on it, so it is the one
+   * value that decides whether the site reads dense or cramped. */
   --text-2xs: calc(0.6875rem * var(--font-scale));
   --text-xs: calc(0.75rem * var(--font-scale));
-  --text-sm: calc(0.8125rem * var(--font-scale));
-  --text-md: calc(0.875rem * var(--font-scale));
+  --text-sm: calc(0.875rem * var(--font-scale));
+  --text-md: calc(0.9375rem * var(--font-scale));
   --text-lg: calc(1rem * var(--font-scale));
-  --text-xl: calc(1.1875rem * var(--font-scale));
+  --text-xl: calc(1.25rem * var(--font-scale));
 
   --leading-tight: 1.2;
 
@@ -82,4 +86,24 @@
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 
   /* ---- Layout ------------------------------------------------------- */
+
+  /* The sticky site header's two rows. Published as tokens because anything
+   * that sticks below the header (the playground's control rails, an image
+   * page's sticky toolbar) has to offset itself by exactly this much, and
+   * measuring it in JS would be a resize-observer for a constant. */
+  --nav-bar-h: calc(56px * var(--density));
+  --nav-sub-h: 0px;
+  --header-h: calc(var(--nav-bar-h) + var(--nav-sub-h));
+
+  /* The width of the home page's activity sidebar. */
+  --sidebar-w: 330px;
+}
+
+/* The secondary nav row only exists once there is room for it; below this the
+ * mobile drawer carries its links instead. Keep in sync with the same query in
+ * `components/layout/HeaderNav.css`. */
+@media (width >= 48rem) {
+  :root {
+    --nav-sub-h: calc(40px * var(--density));
+  }
 }

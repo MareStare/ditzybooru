@@ -1,0 +1,80 @@
+/**
+ * The appearance sliders. Sized to fit both hosts unchanged: the header's
+ * appearance menu, which is `max-content` wide, and the playground's 16rem
+ * control rail — hence the explicit `min-inline-size` rather than leaving the
+ * width to whatever the labels happen to measure.
+ */
+
+.knobs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-inline-size: 13rem;
+}
+
+.knob {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-0-5);
+}
+
+.knob__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.knob__label {
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* Tabular figures so the row does not twitch sideways as a percentage ticks
+ * through the widths of its digits while the slider is being dragged. */
+.knob__value {
+  color: var(--text-color);
+  font-variant-numeric: tabular-nums;
+}
+
+.knob__slider {
+  inline-size: 100%;
+  margin: 0;
+  accent-color: var(--brand);
+}
+
+.knobs__reset {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1-5);
+  min-block-size: 28px;
+  padding-inline: var(--space-2);
+
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-sunken);
+
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-xs);
+
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.knobs__reset:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+/* Disabled rather than hidden while everything is already at its default: a
+ * control that vanishes once you have finished with it is one the reader has to
+ * rediscover the next time they change something. */
+.knobs__reset:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}

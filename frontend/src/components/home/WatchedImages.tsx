@@ -1,7 +1,7 @@
 import { Eye } from 'lucide-react';
 
 import { watchedImages } from '#/lib/mock/data';
-import { ImageGrid } from './MediaGrid';
+import { MediaGrid } from './MediaGrid';
 
 /**
  * "Watched Images" block shown in the main column when the user is signed in
@@ -14,13 +14,13 @@ export function WatchedImages() {
   }
 
   return (
-    <ImageGrid
+    <MediaGrid
       size="small"
       tabs={[
         {
           query: 'my:watched',
           label: 'Watched',
-          icon: <Eye className="size-4 text-primary" />,
+          icon: <Eye size={16} />,
           images: watchedImages,
           total: watchedImages.length,
         },

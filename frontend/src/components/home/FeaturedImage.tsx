@@ -6,7 +6,7 @@ import { MediaBox } from './MediaBox';
 export function FeaturedImage() {
   return (
     <SidebarBlock title="Featured">
-      <MediaBox className="border-none" image={featuredImage} src={featuredImage.representations.medium} />
+      <MediaBox className="media-box--bare" image={featuredImage} src={featuredImage.representations.medium} />
     </SidebarBlock>
   );
 }

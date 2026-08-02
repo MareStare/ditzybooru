@@ -10,7 +10,7 @@
  * fave/upvote/downvote colors are muscle memory. Do not "modernize" them.
  */
 
-.ds {
+:root {
   /* ---- Interactions -------------------------------------------------- */
 
   --fave: #a18e27;

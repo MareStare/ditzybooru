@@ -3,6 +3,8 @@ import { EyeOff, Film } from 'lucide-react';
 import type { Media } from '#/lib/types';
 import { cn } from '#/lib/utils';
 
+import type { ClassValue } from '#/lib/utils';
+
 interface MediaThumbProps {
   image: Media;
   /** Which representation to render. */
@@ -11,7 +13,7 @@ interface MediaThumbProps {
   title: string;
   /** Whether the user has hidden the image via the interaction bar. */
   hidden?: boolean;
-  className?: string;
+  className?: ClassValue;
 }
 
 /**
@@ -20,22 +22,14 @@ interface MediaThumbProps {
  */
 export function MediaThumb({ image, src, title, hidden = false, className }: MediaThumbProps) {
   const isVideo = image.mimeType === 'video/webm';
+  const spoilered = image.spoilered && !hidden;
 
   return (
-    <a
-      href={`/images/${image.id}`}
-      title={title}
-      className={cn('group/thumb relative block overflow-hidden', className)}
-    >
-      {hidden ? (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-muted text-muted-foreground">
-          <EyeOff className="size-5" />
-          <span className="text-xs font-medium">Hidden</span>
-        </div>
-      ) : image.spoilered ? (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-1 bg-muted/95 text-muted-foreground">
-          <EyeOff className="size-5" />
-          <span className="text-xs font-medium">Spoilered</span>
+    <a href={`/images/${image.id}`} title={title} className={cn('media-thumb', className)}>
+      {hidden || spoilered ? (
+        <div className={cn('media-overlay', spoilered && 'media-overlay--spoilered')}>
+          <EyeOff size={20} />
+          <span>{hidden ? 'Hidden' : 'Spoilered'}</span>
         </div>
       ) : null}
 
@@ -43,15 +37,12 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
         src={src}
         alt={title}
         loading="lazy"
-        className={cn(
-          'absolute inset-0 size-full object-contain transition-transform duration-200 group-hover/thumb:scale-[1.03]',
-          image.spoilered && !hidden ? 'blur-lg' : null,
-        )}
+        className={cn('media-thumb__image', spoilered && 'media-thumb__image--spoilered')}
       />
 
-      {isVideo && !image.spoilered && !hidden ? (
-        <span className="absolute top-1 right-1 z-10 inline-flex items-center gap-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
-          <Film className="size-3" />
+      {isVideo && !spoilered && !hidden ? (
+        <span className="media-thumb__format">
+          <Film size={12} />
           WebM
         </span>
       ) : null}

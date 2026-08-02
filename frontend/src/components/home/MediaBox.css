@@ -1,0 +1,178 @@
+/**
+ * The thumbnail card and its interaction bar (fave / upvote / score / downvote
+ * / comments / hide). The densest, most repeated element on the site — it is
+ * the one place where a few extra pixels of padding cost real images per screen.
+ */
+
+/* No `overflow: hidden` here, even though the corners want clipping: the
+ * overflow menu has to escape the card. The bar and the thumb round their own
+ * outer corners instead. */
+.media-box {
+  --radius-inner: max(0px, calc(var(--radius-md) - var(--border-width)));
+
+  display: flex;
+  flex-direction: column;
+
+  border: var(--border-width) solid var(--surface-media);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface);
+
+  transition:
+    border-color var(--duration) var(--ease-out),
+    box-shadow var(--duration) var(--ease-out);
+}
+
+.media-box:hover {
+  border-color: color-mix(in oklab, var(--surface-media), #000 8%);
+  box-shadow: var(--shadow-md);
+}
+
+/* Borderless variant, for a box that is already inside a frame of its own —
+ * the featured image sitting alone in a sidebar panel. */
+.media-box--bare {
+  --radius-inner: 0px;
+
+  border: 0;
+  border-radius: 0;
+}
+
+/* Controls sit tight against each other, the way Derpibooru's do: the bar is a
+ * single dense readout, not six spaced-out buttons. The spacing is fixed rather
+ * than responsive — a card whose controls shift position as the grid resizes is
+ * harder to use than one whose controls are always in the same place. */
+.media-box-bar {
+  display: flex;
+  flex-shrink: 0;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0;
+
+  min-block-size: 28px;
+  padding-inline: var(--space-0-5);
+
+  border-start-start-radius: var(--radius-inner);
+  border-start-end-radius: var(--radius-inner);
+  corner-shape: var(--corner-shape);
+  border-block-end: var(--border-width) solid var(--surface-media);
+  background-color: color-mix(in oklab, var(--surface-panel-header), var(--surface) 50%);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.media-action {
+  --media-action-color: var(--text-muted);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-0-5);
+
+  padding-inline: var(--space-0-5);
+  border: 0;
+  border-radius: var(--radius-xs);
+  background-color: transparent;
+
+  color: var(--media-action-color);
+  font: inherit;
+  font-size: var(--text-xs);
+
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+/* Icons keep their size no matter how tight the bar gets; the bar sheds padding
+ * and then labels instead of squashing the glyphs into slivers. */
+.media-action svg {
+  flex-shrink: 0;
+}
+
+.media-action:hover:not(:disabled) {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.media-action[aria-pressed='true'] {
+  color: var(--media-action-color);
+}
+
+.media-action--fave {
+  --media-action-color: var(--fave-strong);
+}
+.media-action--fave[aria-pressed='true'] {
+  background-color: var(--fave-bg);
+}
+.media-action--fave[aria-pressed='true']:hover {
+  background-color: var(--fave-bg);
+  color: var(--fave);
+}
+
+.media-action--up {
+  --media-action-color: var(--score-positive);
+}
+.media-action--up[aria-pressed='true'] {
+  background-color: var(--vote-up-bg);
+}
+.media-action--up[aria-pressed='true']:hover {
+  background-color: var(--vote-up-bg);
+  color: var(--score-positive);
+}
+
+.media-action--down,
+.media-action--hide {
+  --media-action-color: var(--score-negative);
+}
+.media-action--down[aria-pressed='true'],
+.media-action--hide[aria-pressed='true'] {
+  background-color: var(--vote-down-bg);
+}
+.media-action--down[aria-pressed='true']:hover,
+.media-action--hide[aria-pressed='true']:hover {
+  background-color: var(--vote-down-bg);
+  color: var(--score-negative);
+}
+
+/* Inactive actions stay muted until hovered, so the bar reads as one strip
+ * rather than as a row of coloured icons. */
+.media-action:not([aria-pressed='true']) {
+  color: var(--text-muted);
+}
+
+.media-action:not([aria-pressed='true']):hover {
+  color: var(--media-action-color);
+}
+
+/* Upvote / score / downvote are one control, not three — no gap between them. */
+.media-box__votes {
+  display: inline-flex;
+  align-items: stretch;
+}
+
+/* The score reads as one of the controls, not as a highlight: same color as the
+ * idle actions around it. A green 412 next to a grey star drew the eye to the
+ * one number on the card that the reader is least likely to be looking for. */
+.media-score {
+  display: inline-flex;
+  align-items: center;
+  padding-inline: var(--space-0-5);
+  color: var(--text-muted);
+  font-weight: var(--weight-medium);
+}
+
+/* ---- Overflow menu ----------------------------------------------------- */
+
+.media-box__more {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Lifted above the media boxes that follow it in the grid, which would
+ * otherwise paint over it — they come later in the DOM at the same z-index. */
+.media-box__menu {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-end: 0;
+  z-index: 20;
+  min-inline-size: 11rem;
+  text-align: start;
+}

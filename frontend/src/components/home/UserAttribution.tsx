@@ -4,11 +4,11 @@ import type { Attribution } from '#/lib/types';
 export function UserAttribution({ author }: { author: Attribution }) {
   if (author.user) {
     return (
-      <a href={`/profiles/${author.user.slug}`} className="text-primary font-semibold hover:text-primary">
+      <a href={`/profiles/${author.user.slug}`} className="user-attribution">
         {author.user.name}
       </a>
     );
   }
 
-  return <span className="font-semibold">{author.anonymousName ?? 'Anonymous'}</span>;
+  return <span className="user-attribution">{author.anonymousName ?? 'Anonymous'}</span>;
 }

@@ -1,24 +1,14 @@
 import { useState } from 'react';
-import { Bell, Camera, ChevronDown, Filter, Menu, MessageSquare, Search, Upload } from 'lucide-react';
+import { Bell, Camera, ChevronDown, Filter, Menu as MenuIcon, MessageSquare, Search, Upload } from 'lucide-react';
 
-import { Avatar, AvatarFallback } from '#/components/ui/avatar';
-import { Button } from '#/components/ui/button';
-import { Input } from '#/components/ui/input';
+import { Avatar } from '#/components/ui/Avatar';
+import { Button } from '#/components/ui/Button';
+import { Dropdown } from '#/components/ui/Dropdown';
+import { Menu, MenuLink, MenuSeparator } from '#/components/ui/Menu';
 import { currentUser } from '#/lib/mock/data';
-import { initials } from '#/lib/format';
-import { cn } from '#/lib/utils';
 import { HeaderNav } from './HeaderNav';
 import { MobileMenu } from './MobileMenu';
-import { ThemeColorSwitcher } from './ThemeColorSwitcher';
-import { ThemeLightnessToggle } from './ThemeLightnessToggle';
-
-const headerLink =
-  'inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 text-sm font-medium text-primary-nav-foreground/80 transition-colors hover:bg-white/10 hover:text-primary-nav-foreground';
-
-// Ghost buttons rendered on the dark top bar need their light hover swapped for
-// a translucent-white one so it reads against the charcoal in both light and dark.
-const primaryNavGhost =
-  'text-primary-nav-foreground/85 hover:bg-white/10 hover:text-primary-nav-foreground dark:hover:bg-white/10 dark:hover:text-primary-nav-foreground';
+import { ThemeMenu } from './ThemeMenu';
 
 const userMenuLinks: Array<{ label: string; href: string }> = [
   { label: 'Watched', href: '/search?q=my:watched' },
@@ -41,156 +31,126 @@ function SearchBar() {
       onSubmit={event => {
         event.preventDefault();
       }}
-      className="flex min-w-0 flex-1 items-center gap-1"
+      className="nav-search"
       role="search"
     >
-      <div className="relative min-w-0 flex-1">
-        <Search className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-white/55" />
-        <Input
+      <div className="nav-search__box">
+        <Search className="nav-search__icon" size={16} />
+        <input
+          className="field"
           value={query}
-          onValueChange={setQuery}
+          onChange={event => {
+            setQuery(event.target.value);
+          }}
           placeholder="Search"
           aria-label="Search"
           inputMode="search"
           autoCapitalize="none"
           spellCheck={false}
-          className="border-white/15 bg-white/10 pl-8 text-white placeholder:text-white/55 focus-visible:border-white/40 dark:bg-white/10"
         />
       </div>
-      <Button
-        type="submit"
-        variant="secondary"
-        size="icon"
-        title="Search"
-        aria-label="Search"
-        className="border border-white/15 bg-white/10 text-primary-nav-foreground hover:bg-white/20"
-      >
-        <Search />
+      <Button type="submit" variant="ghost" icon title="Search" aria-label="Search">
+        <Search size={16} />
       </Button>
       <a
         href="/search/reverse"
         title="Search using an image"
         aria-label="Reverse image search"
-        className="hidden sm:inline-flex"
+        className="nav-link nav__compact-hidden"
       >
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          title="Search using an image"
-          tabIndex={-1}
-          className={primaryNavGhost}
-        >
-          <Camera />
-        </Button>
+        <Camera size={16} />
       </a>
     </form>
   );
 }
 
 function UserMenu() {
-  if (!currentUser) {
+  const user = currentUser;
+
+  if (!user) {
     return (
-      <div className="flex items-center gap-1">
-        <a href="/registrations/new" className={cn(headerLink, 'hidden sm:inline-flex')}>
+      <>
+        <a href="/registrations/new" className="nav-link nav__compact-hidden">
           Register
         </a>
-        <a href="/sessions/new" className={headerLink}>
+        <a href="/sessions/new" className="nav-link">
           Login
         </a>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="flex items-center gap-0.5">
-      <a href="/notifications" className={`${headerLink} relative`} title="Notifications" aria-label="Notifications">
-        <Bell className="size-4" />
-        <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
-          3
-        </span>
+    <>
+      <a href="/notifications" className="nav-link nav-link--badged" title="Notifications" aria-label="Notifications">
+        <Bell size={16} />
+        <span className="nav-link__badge">3</span>
       </a>
-      <a href="/conversations" className={headerLink} title="Conversations" aria-label="Conversations">
-        <MessageSquare className="size-4" />
+      <a href="/conversations" className="nav-link" title="Conversations" aria-label="Conversations">
+        <MessageSquare size={16} />
       </a>
-      <a href="/filters" className={cn(headerLink, 'hidden lg:inline-flex')} title="Filters">
-        <Filter className="size-4" />
-        <span className="hidden xl:inline">Filters</span>
+      <a href="/filters" className="nav-link nav__compact-hidden" title="Filters" aria-label="Filters">
+        <Filter size={16} />
       </a>
 
-      <div className="group relative ml-1">
-        <button
-          type="button"
-          className="flex items-center gap-1 rounded-md p-0.5 transition-colors hover:bg-white/10"
-          aria-label="User menu"
-        >
-          <Avatar className="size-7">
-            {/* The topbar is a fixed dark charcoal, so the default muted fallback
-             * blends into it in dark mode. Use the contrast-paired accent tokens
-             * (matching the logo badge) so the PFP reads clearly in both themes. */}
-            <AvatarFallback className="bg-primary text-primary-foreground">{initials(currentUser.name)}</AvatarFallback>
-          </Avatar>
-          <ChevronDown className="size-3.5 text-primary-nav-foreground/60" />
-        </button>
-        <div className="invisible absolute right-0 top-full z-30 mt-1 min-w-48 rounded-lg border bg-popover p-1 opacity-0 shadow-lg transition-[opacity,transform] duration-150 -translate-y-1 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-          <a
-            href={`/profiles/${currentUser.slug}`}
-            className="block rounded-md px-3 py-1.5 text-sm font-semibold text-popover-foreground hover:bg-muted"
-          >
-            {currentUser.name}
-          </a>
-          <div className="my-1 h-px bg-border" />
+      <Dropdown
+        align="end"
+        trigger={
+          <button type="button" className="nav-link" aria-label="User menu">
+            <Avatar name={user.name} src={user.avatarUrl} />
+            <ChevronDown className="dropdown__chevron" size={14} />
+          </button>
+        }
+      >
+        <Menu>
+          <MenuLink href={`/profiles/${user.slug}`}>
+            <strong>{user.name}</strong>
+          </MenuLink>
+          <MenuSeparator />
           {userMenuLinks.map(link => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="block rounded-md px-3 py-1.5 text-sm text-popover-foreground transition-colors hover:bg-muted"
-            >
+            <MenuLink key={link.href} href={link.href}>
               {link.label}
-            </a>
+            </MenuLink>
           ))}
-        </div>
-      </div>
-    </div>
+        </Menu>
+      </Dropdown>
+    </>
   );
 }
 
-/** The sticky application header: logo, search and user actions + nav bar. */
+/** The sticky application header: brand, search and user actions + nav bar. */
 export function SiteHeader() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-black/25 bg-primary-nav text-primary-nav-foreground">
-      <div className="flex h-14 items-center gap-2 px-3 md:gap-3 md:px-4">
+    <header className="nav">
+      <div className="nav-bar">
         <Button
           variant="ghost"
-          size="icon"
-          className={cn('md:hidden', primaryNavGhost)}
+          icon
+          className="nav__burger"
           aria-label="Open menu"
           aria-expanded={mobileMenuOpen}
           onClick={() => {
             setMobileMenuOpen(true);
           }}
         >
-          <Menu />
+          <MenuIcon size={18} />
         </Button>
 
-        <a href="/" className="flex shrink-0 items-center gap-2" aria-label="Home">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">
-            D
-          </span>
-          <span className="hidden text-base font-semibold tracking-tight sm:inline">Ditzybooru</span>
+        <a href="/" className="nav-brand" aria-label="Home">
+          <span className="nav-brand__mark">D</span>
+          <span className="nav-brand__name">Ditzybooru</span>
         </a>
 
-        <a href="/images/new" className={cn(headerLink, 'hidden shrink-0 sm:inline-flex')} title="Upload">
-          <Upload className="size-4" />
+        <a href="/images/new" className="nav-link nav__compact-hidden" title="Upload" aria-label="Upload">
+          <Upload size={16} />
         </a>
 
         <SearchBar />
 
-        <div className="flex shrink-0 items-center gap-0.5">
-          <ThemeColorSwitcher />
-          <ThemeLightnessToggle />
+        <div className="nav__actions">
+          <ThemeMenu />
           <UserMenu />
         </div>
       </div>

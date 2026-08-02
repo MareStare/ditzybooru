@@ -1,9 +1,9 @@
 /**
  * Everything a theme does NOT have to say.
  *
- * A theme file declares at most five colors (see `dark-blue.css`). Everything
- * else that separates a light theme from a dark one lives here, in two blocks,
- * so adding a theme never means copying a block of derived values.
+ * A theme declares at most five colors per polarity (see `blue.css`).
+ * Everything else that separates a light theme from a dark one lives here, in
+ * two blocks, so adding a theme never means copying a block of derived values.
  *
  * Two kinds of value:
  *
@@ -15,12 +15,11 @@
  *    from the base color toward the page in a dark theme and 80% in a light one
  *    — and that difference is the whole reason one formula can serve both.
  *
- * Imported BEFORE the individual themes: these selectors have the same
- * specificity as `.ds[data-ds-theme='light-blue']`, so a theme file has to come
- * later to override anything set here.
+ * Selectors here are one attribute less specific than a theme's own
+ * `[data-theme-lightness][data-theme-color]`, so a theme always wins.
  */
 
-.ds[data-ds-theme^='dark-'] {
+:root[data-theme-lightness='dark'] {
   color-scheme: dark;
 
   --lift: #fff;
@@ -33,10 +32,24 @@
 
   --w-elev: 6%;
   --w-recess: 55%;
-  --w-chrome: 25%;
-  --w-chrome-deep: 42%;
+  /* Chrome sits further toward the page than Derpibooru's 25%: at 25% the
+   * panel title strip was light enough to drop `--ink` on it to APCA Lc 73,
+   * under the Lc 75 body-text floor. 36% keeps the tint and buys ~8 Lc. */
+  --w-chrome: 36%;
+  --w-chrome-deep: 48%;
   --w-field: 49%;
   --w-frame: 12%;
+
+  /* The selected tab lifts off the strip, but only far enough to read as lit —
+   * every point of lightness here is a point of contrast lost against `--ink`. */
+  --w-tab-active: 10%;
+
+  /* The nav search field is a recess in the bar, so it darkens toward the page. */
+  --nav-field-target: var(--page);
+
+  /* How far the fave/upvote/downvote colors are lifted before being painted as
+   * icons. Dark surfaces swallow all three otherwise. */
+  --w-icon-lift: 34%;
 
   /* Status fills are dark and saturated so the normal foreground stays readable
    * on them. Identical in every dark theme — these carry meaning, not identity,
@@ -49,7 +62,7 @@
   --tag-border-mix: 55%;
 }
 
-.ds[data-ds-theme^='light-'] {
+:root[data-theme-lightness='light'] {
   color-scheme: light;
 
   /* On a light background, "away from the background" means darker. */
@@ -61,8 +74,8 @@
   --edge-tint: #fff;
   --edge-alpha: 0%;
 
-  /* All five light themes share a page and a foreground; they differ only in
-   * their base color and their links. */
+  /* Every light theme shares a page and a foreground; they differ only in their
+   * base color and their links. */
   --page: #f8fafc;
   --ink: #333333;
 
@@ -73,8 +86,18 @@
   --w-recess: 60%;
   --w-chrome: 80%;
   --w-chrome-deep: 84%;
-  --w-field: 19%;
+  --w-field: 14%;
   --w-frame: 30%;
+
+  /* The light themes' strip is already close to the page, so it takes a much
+   * bigger push toward white before the selected tab separates from it. */
+  --w-tab-active: 62%;
+
+  /* Mixing toward the page would make the field LIGHTER than the nav, which is
+   * the wrong direction for a recess and leaves white text stranded on it. */
+  --nav-field-target: #000;
+
+  --w-icon-lift: 14%;
 
   /* Pastels, for the same reason the dark ones are dark: the foreground has to
    * stay readable on top of them. */

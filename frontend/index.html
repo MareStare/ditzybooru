@@ -6,16 +6,48 @@
     <title>Ditzybooru</title>
     <script>
       // Apply the persisted theme in a dedicated script that is loaded synchronously
-      // to avoid a flash of the wrong theme. Kept it in sync with ThemeLightnessToggle
-      // and ThemeColorSwitcher.
+      // to avoid a flash of the wrong theme. Keep in sync with `lib/theme.ts`.
+      //
+      // A missing `theme-lightness` means the "system" preference, which is also
+      // what a browser with no saved choice has — so there is no third value to
+      // handle here.
       (() => {
         const savedLightness = localStorage.getItem('theme-lightness');
         const isDarkTheme =
-          savedLightness == null
-            ? window.matchMedia('(prefers-color-scheme: dark)').matches
-            : savedLightness === 'dark';
+          savedLightness === 'light' || savedLightness === 'dark'
+            ? savedLightness === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
         document.documentElement.setAttribute('data-theme-lightness', isDarkTheme ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme-color', localStorage.getItem('theme-color') ?? 'blue');
+      })();
+
+      // The appearance knobs, same story: applied here so the first paint is
+      // already at the saved spacing and text size rather than reflowing once
+      // React mounts. Keep in sync with `knobProperties` in `lib/knobs.ts`.
+      //
+      // Ranges are NOT re-validated here — `lib/knobs.ts` clamps on the way in,
+      // and every knob has a value on `:root` in `tokens/knobs.css`, so the
+      // worst a corrupt entry can do is be skipped by the `typeof` guard below.
+      (() => {
+        let saved;
+        try {
+          saved = JSON.parse(localStorage.getItem('ui-knobs'));
+        } catch {
+          return;
+        }
+        if (typeof saved !== 'object' || saved === null) return;
+
+        const properties = {
+          '--radius-unit': typeof saved.radius === 'number' ? saved.radius + 'px' : null,
+          '--border-width': typeof saved.borderWidth === 'number' ? saved.borderWidth + 'px' : null,
+          '--shadow-force': typeof saved.shadow === 'number' ? String(saved.shadow) : null,
+          '--density': typeof saved.density === 'number' ? String(saved.density) : null,
+          '--font-scale': typeof saved.fontScale === 'number' ? String(saved.fontScale) : null,
+          '--motion-scale': typeof saved.motion === 'number' ? String(saved.motion) : null,
+        };
+        for (const [name, value] of Object.entries(properties)) {
+          if (value !== null) document.documentElement.style.setProperty(name, value);
+        }
       })();
     </script>
   </head>

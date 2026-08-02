@@ -23,6 +23,12 @@ jobs:
       - run: npm run lint
       - run: npm run build
 
+      # Structural a11y via axe-core plus an APCA contrast audit over all 18
+      # theme combinations. `playwright-core` ships no browser of its own, so
+      # one is fetched here rather than on every `npm ci`.
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test
+
   # Check for typos in the repository based on a static dictionary
   typos:
     runs-on: ubuntu-latest

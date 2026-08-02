@@ -1,6 +1,10 @@
 /**
- * Notices, badges and the site-notice strip. Same one-input contract as
- * buttons: a variant sets `--notice-seed`.
+ * Notices and the site-notice strip. Same one-input contract as buttons: a
+ * variant sets `--notice-seed`.
+ *
+ * No component owns these yet — nothing outside the UI playground renders
+ * one. When the first page does, these rules move next to its `.tsx`, the way
+ * badges did (`components/ui/Badge.css`).
  */
 
 .notice {
@@ -37,37 +41,6 @@
   display: block;
   margin-block-end: var(--space-0-5);
   font-weight: var(--weight-semibold);
-}
-
-/* ---- Badges ------------------------------------------------------------ */
-
-.badge {
-  --badge-seed: var(--brand);
-  --badge-color: var(--badge-seed);
-
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  padding: 0 var(--space-1-5);
-
-  border-radius: var(--radius-full);
-  background-color: color-mix(in oklab, var(--badge-color), var(--surface) 76%);
-
-  color: color-mix(in oklab, var(--badge-color), var(--text-color) 30%);
-  font-size: var(--text-2xs);
-  font-weight: var(--weight-semibold);
-  line-height: 1.6;
-  white-space: nowrap;
-}
-
-.badge--unread {
-  --badge-seed: var(--unread);
-}
-.badge--staff {
-  --badge-seed: #511b4e;
-}
-.badge--fave {
-  --badge-seed: var(--fave);
 }
 
 /* ---- Site notice ------------------------------------------------------- */

@@ -1,0 +1,43 @@
+/**
+ * The tabbed thumbnail gallery: a `.panel` whose title bar is a tab strip and
+ * whose body is a responsive grid.
+ */
+
+/* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
+ * number of them, which is what keeps the thumbnails a constant size — the same
+ * thing Philomena's image list does. */
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-2);
+  padding: var(--space-2);
+}
+
+/* The main listing trades column count for thumbnail size once there is enough
+ * width that 150px thumbnails start looking like a contact sheet. */
+@media (width >= 1150px) {
+  .media-grid--large {
+    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  }
+}
+
+.media-grid__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+
+  padding: var(--space-2) var(--space-3);
+  border-block-start: var(--divider);
+  background-color: var(--surface);
+}
+
+.media-grid__count {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.media-grid__count strong {
+  color: var(--text-color);
+  font-weight: var(--weight-semibold);
+}

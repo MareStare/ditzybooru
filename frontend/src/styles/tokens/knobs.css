@@ -15,13 +15,13 @@
  *     value. `--border-width: 0.0px` and `calc(0px)` do NOT match a
  *     `style(--border-width: 0px)` query even though they compute to the same
  *     length. Only `--border-width` and `--shadow-force` are style-queried
- *     (see `components/panel.css`), so those two must be written in exactly the
- *     canonical form the query uses: `0px` and `0`.
+ *     (see `components/ui/Panel.css`), so those two must be written in exactly
+ *     the canonical form the query uses: `0px` and `0`.
  *
- * Every knob is given a value on `.ds` below, so none of them is ever unset.
+ * Every knob is given a value on `:root` below, so none of them is ever unset.
  */
 
-.ds {
+:root {
   /* Corner rounding. 0px reproduces classic Derpibooru's hard corners. */
   --radius-unit: 6px;
 
@@ -49,7 +49,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ds {
+  :root {
     --motion-scale: 0;
   }
 }

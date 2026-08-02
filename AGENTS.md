@@ -3,4 +3,5 @@
 
 # Code Conventions
 
+- Don't write untyped JavaScript, use TypeScript instead.
 - Use `unwrap()` from `lib/assertions` instead of non-null assertions (`!` suffix), but prefer using the type system to avoid nulls.

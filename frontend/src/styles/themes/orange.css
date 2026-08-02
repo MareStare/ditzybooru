@@ -1,0 +1,30 @@
+/**
+ * Orange. Not one of Philomena's themes — inferred to sit in the same family as
+ * the ported ones: a desaturated mid-dark base over a near-black page tinted
+ * with the same hue, and a saturated mid-tone base on light.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  --seed-orange-dark: #7a4a25;
+  --seed-orange-light: #a85c15;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='orange'] {
+  --base: var(--seed-orange-dark);
+  --page: #1c150f;
+  --ink: #ececee;
+
+  --link: #eda767;
+  --link-hover: #b099dd;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='orange'] {
+  --base: var(--seed-orange-light);
+
+  --link: #95500f;
+  --link-hover: #9273d0;
+}

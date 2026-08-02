@@ -1,0 +1,31 @@
+/**
+ * Pink. Not one of Philomena's themes — inferred, taking red's structure at a
+ * hue rotated toward magenta.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  --seed-pink-dark: #6d2b48;
+  --seed-pink-light: #b83567;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='pink'] {
+  --base: var(--seed-pink-dark);
+  --page: #1c1116;
+  --ink: #ececee;
+
+  --link: #f2b3cf;
+  /* Red's hover is a yellow; at this hue that reads as a clash, so pink borrows
+   * purple's lavender instead. */
+  --link-hover: #cbb5f8;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='pink'] {
+  --base: var(--seed-pink-light);
+
+  --link: #a32a58;
+  --link-hover: #9273d0;
+}

@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react';
 
+import { Panel, PanelBody, PanelFooter, PanelHeader } from '#/components/ui/Panel';
 import { cn } from '#/lib/utils';
+
+import type { ClassValue } from '#/lib/utils';
 
 interface SidebarBlockProps {
   title: string;
@@ -9,48 +12,45 @@ interface SidebarBlockProps {
   icon?: ReactNode;
   /** Optional link rendered at the bottom of the block. */
   footer?: { label: string; href: string };
-  className?: string;
-  bodyClassName?: string;
+  className?: ClassValue;
+  bodyClassName?: ClassValue;
+  /** Whether the body keeps the panel's padding. Lists and grids opt out. */
+  flush?: boolean;
   children: ReactNode;
 }
 
 /**
  * A titled sidebar block, mirroring Philomena's `.block` with a
- * `.block__header--single-item` header and optional footer link.
+ * `.block__header--single-item` header and optional footer link. A thin
+ * composition over {@link Panel} — it exists to keep the sidebar's five blocks
+ * from restating the same header/footer shape.
  */
-export function SidebarBlock({ title, href, icon, footer, className, bodyClassName, children }: SidebarBlockProps) {
+export function SidebarBlock({
+  title,
+  href,
+  icon,
+  footer,
+  className,
+  bodyClassName,
+  flush = true,
+  children,
+}: SidebarBlockProps) {
   const heading = (
-    <span className="inline-flex items-center gap-1.5">
+    <>
       {icon}
       {title}
-    </span>
+    </>
   );
 
   return (
-    <section className={cn('overflow-hidden rounded-xl bg-card', className)}>
-      <div className="bg-card-header px-3 py-2 text-center text-sm font-semibold text-card-header-foreground [&_svg]:text-card-header-foreground">
-        {href ? (
-          <a
-            href={href}
-            className="flex items-center justify-center text-card-header-foreground transition-colors hover:text-white"
-          >
-            {heading}
-          </a>
-        ) : (
-          heading
-        )}
-      </div>
+    <Panel className={cn(className)}>
+      <PanelHeader center>{href === undefined ? heading : <a href={href}>{heading}</a>}</PanelHeader>
 
-      <div className={bodyClassName}>{children}</div>
+      <PanelBody flush={flush} className={cn(bodyClassName)}>
+        {children}
+      </PanelBody>
 
-      {footer ? (
-        <a
-          href={footer.href}
-          className="block border-t px-3 py-2 text-center text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        >
-          {footer.label}
-        </a>
-      ) : null}
-    </section>
+      {footer ? <PanelFooter href={footer.href}>{footer.label}</PanelFooter> : null}
+    </Panel>
   );
 }

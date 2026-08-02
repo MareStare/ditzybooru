@@ -1,0 +1,32 @@
+/**
+ * Blue — Derpibooru's default, and Ditzybooru's.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ *
+ * The two `--seed-*` values are the same base colors, published unconditionally
+ * so the accent picker can preview a theme that is not currently applied.
+ */
+
+:root {
+  --seed-blue-dark: #284371;
+  --seed-blue-light: #2f7cb5;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='blue'] {
+  --base: var(--seed-blue-dark);
+  --page: #141a24;
+  --ink: #ececee;
+
+  --link: #8cc4f0;
+  /* The signature purple hover. Do not normalize this to a blue. */
+  --link-hover: #b099dd;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='blue'] {
+  --base: var(--seed-blue-light);
+
+  --link: #1f6ea6;
+  --link-hover: #9273d0;
+}

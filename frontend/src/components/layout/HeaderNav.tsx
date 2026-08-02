@@ -1,41 +1,38 @@
 import { ChevronDown, Heart, Mail } from 'lucide-react';
 
+import { Dropdown } from '#/components/ui/Dropdown';
+import { Menu, MenuLink } from '#/components/ui/Menu';
 import { primaryNav } from '#/lib/mock/site';
 import type { NavItem } from '#/lib/mock/site';
 
 function NavEntry({ item }: { item: NavItem }) {
-  const hasChildren = item.children !== undefined && item.children.length > 0;
+  const children = item.children ?? [];
+
+  if (children.length === 0) {
+    return (
+      <a href={item.href} className="nav-link">
+        {item.label}
+      </a>
+    );
+  }
 
   return (
-    <div className="group relative">
-      <a
-        href={item.href}
-        className="inline-flex h-full items-center gap-1 px-3 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground group-hover:text-foreground"
-      >
-        {item.label}
-        {hasChildren ? (
-          <ChevronDown className="size-3.5 opacity-60 transition-transform group-hover:rotate-180" />
-        ) : null}
-      </a>
-
-      {hasChildren ? (
-        // `pt-1` (not `mt-1`) offsets the panel while keeping this wrapper flush
-        // with the trigger, so there's no dead zone to cross on the way down.
-        <div className="invisible absolute left-0 top-full z-30 pt-1 opacity-0 transition-[opacity,transform] duration-150 -translate-y-1 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
-          <div className="min-w-44 origin-top rounded-lg border bg-popover p-1 shadow-lg">
-            {item.children?.map(child => (
-              <a
-                key={child.href}
-                href={child.href}
-                className="block rounded-md px-3 py-1.5 text-sm text-popover-foreground transition-colors hover:bg-muted"
-              >
-                {child.label}
-              </a>
-            ))}
-          </div>
-        </div>
-      ) : null}
-    </div>
+    <Dropdown
+      trigger={
+        <a href={item.href} className="nav-link">
+          {item.label}
+          <ChevronDown className="dropdown__chevron" size={14} />
+        </a>
+      }
+    >
+      <Menu>
+        {children.map(child => (
+          <MenuLink key={child.href} href={child.href}>
+            {child.label}
+          </MenuLink>
+        ))}
+      </Menu>
+    </Dropdown>
   );
 }
 
@@ -46,32 +43,24 @@ function NavEntry({ item }: { item: NavItem }) {
  */
 export function HeaderNav() {
   return (
-    <nav className="hidden border-b bg-card/80 md:block">
-      <div className="flex h-10 items-center gap-1 px-3 md:px-4">
-        <div className="flex items-center">
-          {primaryNav.map(item => (
-            <NavEntry key={item.href} item={item} />
-          ))}
-        </div>
+    <nav className="nav-bar nav-bar--sub" aria-label="Sections">
+      {primaryNav.map(item => (
+        <NavEntry key={item.href} item={item} />
+      ))}
 
-        <div className="ml-auto flex items-center gap-1">
-          <a
-            href="/pages/donations"
-            title="Become a patron or donate"
-            className="inline-flex items-center gap-1.5 rounded-md border border-green-600/30 bg-green-600/10 px-2.5 py-1 text-sm font-medium text-green-700 transition-colors hover:bg-green-600/20 dark:border-green-500/30 dark:text-green-300"
-          >
-            <Heart className="size-3.5" />
-            Donate
-          </a>
-          <a
-            href="/pages/contact"
-            title="Contact us"
-            className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <Mail className="size-3.5" />
-            Contact
-          </a>
-        </div>
+      <span className="nav-sub__spacer" />
+
+      <div className="nav-sub__actions">
+        {/* The UI playground lives in the appearance menu — it is a styling
+            tool, so it belongs with the styling controls. */}
+        <a href="/pages/donations" className="nav-link nav-link--donate" title="Become a patron or donate">
+          <Heart size={14} />
+          Donate
+        </a>
+        <a href="/pages/contact" className="nav-link" title="Contact us">
+          <Mail size={14} />
+          Contact
+        </a>
       </div>
     </nav>
   );

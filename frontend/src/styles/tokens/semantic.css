@@ -26,7 +26,7 @@
  *     mid-tones rather than backgrounds.
  */
 
-.ds {
+:root {
   /* ---- Surfaces ------------------------------------------------------ */
 
   --surface-page: var(--page);
@@ -45,7 +45,7 @@
   /* The nav bar is painted with the theme's base color directly; everything
    * else in this group is that color fading toward the page. */
   --surface-nav: var(--base);
-  --surface-nav-field: color-mix(in oklab, var(--base), var(--page) var(--w-field));
+  --surface-nav-field: color-mix(in oklab, var(--base), var(--nav-field-target) var(--w-field));
   --surface-nav-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
 
   /* Panel ("block" in Philomena) title strips. */
@@ -53,14 +53,24 @@
   --surface-panel-header: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
   --surface-panel-header-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
 
+  /* The selected tab, lifted OUT of the title strip rather than sunk into the
+   * panel below it. Mixing toward literal white in both polarities, because a
+   * selected tab has to read as the lit one — the `--lift` direction would make
+   * it darker than the strip on a light theme, which reads as pressed-in. */
+  --surface-tab-active: color-mix(in oklab, var(--surface-panel-header), #fff var(--w-tab-active));
+
   --surface-media: color-mix(in oklab, var(--border-color), #fff var(--w-frame));
 
   /* ---- Text ---------------------------------------------------------- */
 
+  /* The tiers are pulled much closer to `--ink` than a typical scale, because
+   * APCA is unforgiving of mid-tones on a tinted surface: the old 32/52/68 split
+   * put secondary text at Lc 45 and tertiary at Lc 26, both illegible by WCAG 3
+   * measures even though they looked fine at a glance on a bright monitor. */
   --text-color: var(--ink);
-  --text-muted: color-mix(in oklab, var(--ink), var(--surface) 32%);
-  --text-subtle: color-mix(in oklab, var(--ink), var(--surface) 52%);
-  --text-disabled: color-mix(in oklab, var(--ink), var(--surface) 68%);
+  --text-muted: color-mix(in oklab, var(--ink), var(--surface) 20%);
+  --text-subtle: color-mix(in oklab, var(--ink), var(--surface) 34%);
+  --text-disabled: color-mix(in oklab, var(--ink), var(--surface) 58%);
 
   /* Dark themes reuse the normal foreground on the nav; light themes flip to
    * white in `_polarity.css`. */
@@ -68,8 +78,13 @@
 
   /* ---- Links --------------------------------------------------------- */
 
-  /* `--link` and `--link-hover` are theme inputs; the rest follow. */
-  --link-on-panel-header: var(--link);
+  /* `--link` and `--link-hover` are theme inputs; the rest follow.
+   *
+   * A link on the panel title strip cannot be the page link color: the strip is
+   * a saturated mid-tone, and the same blue that reads on the page scores under
+   * Lc 30 on it. Pushing it away from the strip along `--lift` fixes both
+   * polarities with one formula. */
+  --link-on-panel-header: color-mix(in oklab, var(--link), var(--lift) 34%);
 
   /* ---- Borders ------------------------------------------------------- */
 
@@ -85,10 +100,16 @@
    * lifted off the base so it reads against both the page and the nav. */
   --brand: color-mix(in oklab, var(--base), var(--lift) 28%);
 
-  /* ---- Scores -------------------------------------------------------- */
+  /* ---- Interaction icons --------------------------------------------- */
 
-  --score-positive: var(--vote-up);
-  --score-negative: var(--vote-down);
+  /* What actually gets painted. The palette values in `palette.css` are the
+   * identity and stay exact — they are muscle memory, and they still fill the
+   * translucent active states below — but as a 14px glyph on a dark surface the
+   * raw colors bottom out around APCA Lc 26. Lifting them off the background is
+   * the same move `--link-on-panel-header` makes, for the same reason. */
+  --score-positive: color-mix(in oklab, var(--vote-up), var(--lift) var(--w-icon-lift));
+  --score-negative: color-mix(in oklab, var(--vote-down), var(--lift) var(--w-icon-lift));
+  --fave-strong: color-mix(in oklab, var(--fave), var(--lift) var(--w-icon-lift));
 
   /* ---- Component tuning ---------------------------------------------- */
 
