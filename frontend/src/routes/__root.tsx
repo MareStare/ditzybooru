@@ -5,7 +5,9 @@ import { TanStackDevtools } from '@tanstack/react-devtools';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
 
-import '../global.css';
+// The one stylesheet entry point: `styles/index.css` imports every other CSS
+// file in the project, so the whole site compiles to a single stylesheet.
+import '#/styles/index.css';
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -13,9 +15,9 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="app-shell">
       <SiteHeader />
-      <main className="flex-1">
+      <main className="app-shell__main">
         <Outlet />
       </main>
       <SiteFooter />

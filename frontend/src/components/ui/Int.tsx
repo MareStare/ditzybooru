@@ -1,7 +1,9 @@
 import { cn } from '#/lib/utils';
 
+import type { ClassValue } from '#/lib/utils';
+
 interface Props {
-  className?: string;
+  className?: ClassValue;
   value: number;
 }
 
@@ -20,7 +22,7 @@ export function Int({ className, value }: Props) {
   return (
     // Wrapping in a `<data>` element just in case some custom CSS or user scripts
     // need the machine-readable value.
-    <data value={value} className={cn('[word-spacing:-1px] whitespace-pre', className)}>
+    <data value={value} className={cn('int', className)}>
       {chars.join('')}
     </data>
   );

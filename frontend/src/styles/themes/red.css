@@ -1,0 +1,28 @@
+/**
+ * Red.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  --seed-red-dark: #923131;
+  --seed-red-light: #b93232;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='red'] {
+  --base: var(--seed-red-dark);
+  --page: #412121;
+  --ink: #ececee;
+
+  --link: #ebeb4d;
+  --link-hover: #fff3bd;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='red'] {
+  --base: var(--seed-red-light);
+
+  --link: #b32e2e;
+  --link-hover: #944563;
+}

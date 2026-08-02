@@ -1,0 +1,28 @@
+/**
+ * Purple.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  --seed-purple-dark: #36274e;
+  --seed-purple-light: #71399b;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='purple'] {
+  --base: var(--seed-purple-dark);
+  --page: #15121a;
+  --ink: #ececee;
+
+  --link: #d3b3f7;
+  --link-hover: #cbb5f8;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='purple'] {
+  --base: var(--seed-purple-light);
+
+  --link: #7c2fbd;
+  --link-hover: #cf73d0;
+}

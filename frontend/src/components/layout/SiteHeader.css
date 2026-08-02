@@ -1,0 +1,196 @@
+/**
+ * Top app bar. Two rows, as in Derpibooru: the primary bar with the brand,
+ * search field and account controls, and a secondary strip of section links
+ * (`HeaderNav.css`).
+ *
+ * Everything on the primary bar sits on `--surface-nav` — the theme's own base
+ * color — so it uses `--text-on-nav` rather than `--text-color`, and hover
+ * states darken toward black rather than lifting, because a saturated mid-tone
+ * is not a background.
+ */
+
+.nav {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 40;
+
+  background-color: var(--surface-nav);
+  color: var(--text-on-nav);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--nav-bar-h);
+  padding-inline: var(--space-3);
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  padding: var(--space-1-5) var(--space-2);
+
+  border: 0;
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: transparent;
+
+  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+
+  transition:
+    background-color var(--duration) var(--ease-out),
+    color var(--duration) var(--ease-out);
+}
+
+.nav-link:hover {
+  background-color: color-mix(in oklab, var(--surface-nav), #000 14%);
+  color: var(--text-on-nav);
+}
+
+/* ---- Brand ------------------------------------------------------------- */
+
+.nav-brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-on-nav);
+}
+
+.nav-brand__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 32px;
+  block-size: 32px;
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--brand);
+  color: var(--text-on-nav);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.nav-brand__name {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* ---- Search ------------------------------------------------------------ */
+
+/* The field is embedded in the bar, sitting on the nav color rather than on a
+ * page surface, so it takes `--surface-nav-field` instead of `--surface-sunken`. */
+.nav-search {
+  display: flex;
+  flex: 1;
+  min-inline-size: 0;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.nav-search__box {
+  position: relative;
+  flex: 1;
+  min-inline-size: 0;
+}
+
+.nav-search__icon {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-start: var(--space-2);
+  translate: 0 -50%;
+  pointer-events: none;
+  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%);
+}
+
+/* Height comes from `.field`; only the leading padding changes, to clear the
+ * search glyph sitting inside the box. */
+.nav-search .field {
+  padding-inline-start: calc(var(--space-2) * 2 + 16px);
+  border-color: color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 12%);
+  background-color: var(--surface-nav-field);
+  color: var(--text-on-nav);
+}
+
+.nav-search .field::placeholder {
+  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%);
+}
+
+.nav-search .field:hover:not(:disabled, :read-only) {
+  border-color: color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 30%);
+  background-color: color-mix(in oklab, var(--surface-nav-field), #000 12%);
+}
+
+/* ---- Actions ----------------------------------------------------------- */
+
+.nav__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-0-5);
+}
+
+/* Buttons on the bar are ghosts against a saturated fill, not against a page
+ * surface, so the shared `--surface-hover` would be invisible under them. */
+.nav .btn--ghost {
+  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%);
+}
+
+.nav .btn--ghost:hover:not(:disabled) {
+  background-color: color-mix(in oklab, var(--surface-nav), #000 14%);
+  color: var(--text-on-nav);
+}
+
+/* The unread counter riding on the notifications bell. Absolute rather than
+ * inline so the bell keeps its square hit area. */
+.nav-link--badged {
+  position: relative;
+}
+
+.nav-link__badge {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 16px;
+  block-size: 16px;
+  padding-inline: var(--space-0-5);
+
+  border-radius: var(--radius-full);
+  background-color: var(--unread);
+
+  color: #000;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---- Responsive -------------------------------------------------------- */
+
+/* The burger only exists while the secondary bar is folded away into it. Keep
+ * in sync with the `--nav-sub-h` query in `tokens/scale.css`. */
+@media (width >= 48rem) {
+  .nav__burger {
+    display: none;
+  }
+}
+
+/* Below this the brand wordmark, the upload shortcut and the reverse-search
+ * button all lose to the search field, which is the reason the bar exists. */
+@media (width < 40rem) {
+  .nav-brand__name,
+  .nav__compact-hidden {
+    display: none;
+  }
+}

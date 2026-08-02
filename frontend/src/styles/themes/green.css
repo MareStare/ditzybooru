@@ -1,0 +1,28 @@
+/**
+ * Green.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  --seed-green-dark: #226430;
+  --seed-green-light: #257a42;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='green'] {
+  --base: var(--seed-green-dark);
+  --page: #091a11;
+  --ink: #ececee;
+
+  --link: #3ee08a;
+  --link-hover: #b099dd;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='green'] {
+  --base: var(--seed-green-light);
+
+  --link: #04641f;
+  --link-hover: #13bb16;
+}

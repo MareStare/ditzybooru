@@ -1,0 +1,43 @@
+/**
+ * The user avatar: an image when there is one, initials when there is not.
+ *
+ * Sized off a single `--avatar-size` so a caller can pin it to a row height
+ * (the nav bar) without restating the border radius or the font size.
+ */
+
+.avatar {
+  --avatar-size: 28px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
+  overflow: hidden;
+
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+
+  /* The nav bar is a saturated mid-tone in every theme, so a muted fallback
+   * would sink into it. `--brand` is the one accent guaranteed to be lifted off
+   * both the page and the nav. */
+  background-color: var(--brand);
+
+  color: var(--text-on-nav);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1;
+  user-select: none;
+}
+
+.avatar--sm {
+  --avatar-size: 24px;
+}
+
+.avatar__image {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}

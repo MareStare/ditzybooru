@@ -1,0 +1,90 @@
+/**
+ * Ditzybooru design system — raw CSS, no framework.
+ *
+ * The single stylesheet entry point. A component's rules live next to its
+ * `.tsx`, so a component is one directory entry rather than two, but no `.tsx`
+ * imports CSS — every file is pulled in here instead, so the whole site
+ * compiles to one stylesheet with an order this file states outright.
+ *
+ * Adding a component means adding its `@import` below. Forgetting to is the one
+ * failure mode of this arrangement, and it is a loud one: the component renders
+ * unstyled.
+ *
+ * No cascade layers are used. Priority comes from two things instead, and the
+ * import order below is load-bearing for the first:
+ *
+ *  - Source order, for rules of equal specificity. Tokens before themes before
+ *    base before primitives before features: a theme's seeds must override the
+ *    shared polarity defaults, and a feature must be able to restyle a
+ *    primitive it composes.
+ *  - Specificity, for everything else. Base rules target elements through
+ *    `:where()` so they contribute nothing, leaving every component class free
+ *    to restyle a plain `<h2>` without a fight.
+ */
+
+@import '@fontsource-variable/inter';
+
+@import './tokens/ui-settings.css';
+@import './tokens/scale.css';
+@import './tokens/palette.css';
+@import './tokens/semantic.css';
+
+/* Must precede the individual themes — one attribute less specific, and the
+ * light block supplies the `--page`/`--ink` a light theme does not restate. */
+@import './themes/_polarity.css';
+
+@import './themes/red.css';
+@import './themes/orange.css';
+@import './themes/yellow.css';
+@import './themes/green.css';
+@import './themes/teal.css';
+@import './themes/blue.css';
+@import './themes/purple.css';
+@import './themes/pink.css';
+@import './themes/gray.css';
+
+@import './base.css';
+
+/* ---- Primitives -------------------------------------------------------- */
+
+/* Those with no owning component yet stay here; when one grows a `.tsx`, its
+ * rules move next to it — see `components/ui/Button.css`. */
+@import './components/field.css';
+@import './components/tag.css';
+@import './components/notice.css';
+@import './components/table.css';
+
+@import '../components/ui/Avatar.css';
+@import '../components/ui/Badge.css';
+@import '../components/ui/Button.css';
+@import '../components/ui/Dropdown.css';
+@import '../components/ui/Int.css';
+@import '../components/ui/Menu.css';
+@import '../components/ui/Pagination.css';
+@import '../components/ui/Panel.css';
+@import '../components/ui/Segmented.css';
+
+/* ---- Features ---------------------------------------------------------- */
+
+@import '../components/layout/UiSettings.css';
+@import '../components/layout/SiteHeader.css';
+@import '../components/layout/HeaderNav.css';
+@import '../components/layout/MobileMenu.css';
+@import '../components/layout/SiteFooter.css';
+@import '../components/layout/ThemeMenu.css';
+
+@import '../components/home/ActivitySidebar.css';
+@import '../components/home/ForumActivityBlock.css';
+@import '../components/home/LiveStreamsBlock.css';
+@import '../components/home/MediaBox.css';
+@import '../components/home/MediaGrid.css';
+@import '../components/home/MediaThumb.css';
+@import '../components/home/RecentCommentsBlock.css';
+@import '../components/home/TrendingImages.css';
+@import '../components/home/UserAttribution.css';
+
+/* ---- Pages ------------------------------------------------------------- */
+
+@import '../routes/__root.css';
+@import '../routes/index.css';
+@import '../routes/ui/playground.css';

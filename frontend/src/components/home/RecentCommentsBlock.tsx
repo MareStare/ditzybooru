@@ -4,6 +4,7 @@ import { comments } from '#/lib/mock/data';
 import type { Comment } from '#/lib/types';
 import { searchSorts } from '#/lib/mock/site';
 import { timeAgo } from '#/lib/format';
+import { PanelList } from '#/components/ui/Panel';
 import { SidebarBlock } from './SidebarBlock';
 import { UserAttribution } from './UserAttribution';
 
@@ -11,20 +12,20 @@ function CommentStrip({ comment }: { comment: Comment }) {
   const imageId = comment.imageId;
 
   return (
-    <div className="flex items-center gap-2 px-3 py-2 text-sm">
-      <a href={`/images/${imageId}`} className="shrink-0">
-        <img src={comment.imageThumbTiny} alt="" loading="lazy" className="size-10 rounded object-cover" />
+    <li className="comment-row">
+      <a href={`/images/${imageId}`} aria-label={`Image ${imageId}`}>
+        <img src={comment.imageThumbTiny} alt="" loading="lazy" className="comment-row__thumb" />
       </a>
-      <div className="min-w-0 flex-1">
-        <div className="truncate">
-          <a href={`/images/${imageId}#comment_${comment.id}`} className="font-medium hover:text-primary">
-            #{comment.imageId}
+      <div className="comment-row__text">
+        <div className="comment-row__head">
+          <a href={`/images/${imageId}#comment_${comment.id}`} className="comment-row__id">
+            #{imageId}
           </a>{' '}
-          <span className="text-muted-foreground">by</span> <UserAttribution author={comment.author} />
+          <span className="comment-row__by">by</span> <UserAttribution author={comment.author} />
         </div>
-        <div className="text-xs text-muted-foreground">{timeAgo(new Date(comment.createdAt))}</div>
+        <div className="comment-row__time">{timeAgo(new Date(comment.createdAt))}</div>
       </div>
-    </div>
+    </li>
   );
 }
 
@@ -36,14 +37,14 @@ export function RecentCommentsBlock() {
     <SidebarBlock
       title="Recent Comments"
       href="/comments"
-      icon={<MessageCircle className="size-4 text-primary" />}
+      icon={<MessageCircle size={16} />}
       footer={{ label: 'Most Commented-on Images', href: mostCommentedQuery }}
     >
-      <div className="divide-y">
+      <PanelList>
         {comments.map(comment => (
           <CommentStrip key={comment.id} comment={comment} />
         ))}
-      </div>
+      </PanelList>
     </SidebarBlock>
   );
 }

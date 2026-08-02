@@ -10,33 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
+import { Route as UiPlaygroundRouteImport } from './routes/ui/playground';
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
+const UiPlaygroundRoute = UiPlaygroundRouteImport.update({
+  id: '/ui/playground',
+  path: '/ui/playground',
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/ui/playground': typeof UiPlaygroundRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/ui/playground': typeof UiPlaygroundRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/ui/playground': typeof UiPlaygroundRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/';
+  fullPaths: '/' | '/ui/playground';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/';
-  id: '__root__' | '/';
+  to: '/' | '/ui/playground';
+  id: '__root__' | '/' | '/ui/playground';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  UiPlaygroundRoute: typeof UiPlaygroundRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +58,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/ui/playground': {
+      id: '/ui/playground';
+      path: '/ui/playground';
+      fullPath: '/ui/playground';
+      preLoaderRoute: typeof UiPlaygroundRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  UiPlaygroundRoute: UiPlaygroundRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

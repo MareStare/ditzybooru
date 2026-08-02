@@ -1,0 +1,32 @@
+/**
+ * Gray.
+ *
+ * A theme is only these values. Surfaces, chrome, borders, panel headers, the
+ * media frame and every text tier are derived from them in `semantic.css`;
+ * status colors and the light/dark constants come from `_polarity.css`.
+ */
+
+:root {
+  /* Re-based from Derpibooru's #171a1d. That value sat far darker than the
+   * theme's own panel headers and media frames, so no single set of mix
+   * weights could produce them from it. #2e3439 is the mid-gray those values
+   * were already clustered around. */
+  --seed-gray-dark: #2e3439;
+  --seed-gray-light: #69747f;
+}
+
+:root[data-theme-lightness='dark'][data-theme-color='gray'] {
+  --base: var(--seed-gray-dark);
+  --page: #0c0c0c;
+  --ink: #ececee;
+
+  --link: #c3d6e3;
+  --link-hover: #b099dd;
+}
+
+:root[data-theme-lightness='light'][data-theme-color='gray'] {
+  --base: var(--seed-gray-light);
+
+  --link: #31667f;
+  --link-hover: #9273d0;
+}

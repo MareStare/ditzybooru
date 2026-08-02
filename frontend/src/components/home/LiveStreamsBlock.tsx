@@ -2,51 +2,46 @@ import { Radio } from 'lucide-react';
 
 import { channels } from '#/lib/mock/data';
 import type { LiveStreamChannel } from '#/lib/types';
-import { Badge } from '#/components/ui/badge';
-import { Int } from '#/components/ui/int';
+import { Badge, BadgeDot } from '#/components/ui/Badge';
+import { Int } from '#/components/ui/Int';
+import { PanelList } from '#/components/ui/Panel';
 import { SidebarBlock } from './SidebarBlock';
 
 function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
   return (
-    <a
-      href={`/channels/${channel.shortName}`}
-      className="flex items-center gap-2 px-3 py-2 text-sm transition-colors odd:bg-muted/30 hover:bg-muted"
-    >
-      <span className="min-w-0 flex-1 truncate">
-        {channel.title}
-        {channel.nsfw ? (
-          <span className="ml-1" title="NSFW">
-            🔞
-          </span>
-        ) : null}
-      </span>
-      {channel.isLive ? (
-        <span className="flex shrink-0 items-center gap-1.5">
-          <span className="text-xs text-muted-foreground tabular-nums">
-            <Int value={channel.viewers} /> {channel.viewers === 1 ? 'viewer' : 'viewers'}
-          </span>
-          <Badge variant="success" className="gap-1">
-            <span className="size-1.5 animate-pulse rounded-full bg-green-500" />
-            LIVE
-          </Badge>
+    <li className="channel-row">
+      <a href={`/channels/${channel.shortName}`} className="channel-row__link">
+        <span className="channel-row__title">
+          {channel.title}
+          {channel.nsfw ? <span title="NSFW"> 🔞</span> : null}
         </span>
-      ) : (
-        <Badge variant="danger" className="shrink-0">
-          OFF AIR
-        </Badge>
-      )}
-    </a>
+
+        {channel.isLive ? (
+          <span className="channel-row__status">
+            <span className="channel-row__viewers">
+              <Int value={channel.viewers} /> {channel.viewers === 1 ? 'viewer' : 'viewers'}
+            </span>
+            <Badge variant="success">
+              <BadgeDot />
+              LIVE
+            </Badge>
+          </span>
+        ) : (
+          <Badge variant="danger">OFF AIR</Badge>
+        )}
+      </a>
+    </li>
   );
 }
 
 export function LiveStreamsBlock() {
   return (
-    <SidebarBlock title="Live Streams" href="/channels" icon={<Radio className="size-4 text-primary" />}>
-      <div className="divide-y">
+    <SidebarBlock title="Live Streams" href="/channels" icon={<Radio size={16} />}>
+      <PanelList>
         {channels.map(channel => (
           <ChannelStrip key={channel.id} channel={channel} />
         ))}
-      </div>
+      </PanelList>
     </SidebarBlock>
   );
 }

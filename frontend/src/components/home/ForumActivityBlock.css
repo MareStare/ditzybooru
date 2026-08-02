@@ -1,0 +1,25 @@
+/* One recently active topic. A single run of text rather than a two-line row:
+ * "<author> replied to <topic> in <forum>" reads as a sentence, and the sidebar
+ * has no width to spare for a layout. */
+.forum-topic {
+  font-size: var(--text-sm);
+}
+
+.forum-topic__pin {
+  display: inline;
+  margin-inline-end: var(--space-1);
+  color: var(--text-subtle);
+  vertical-align: -0.1em;
+}
+
+.forum-topic__title {
+  font-weight: var(--weight-medium);
+}
+
+.forum-topic__meta {
+  color: var(--text-muted);
+}
+
+.forum-topic__meta:hover {
+  color: var(--text-color);
+}

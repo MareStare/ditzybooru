@@ -1,0 +1,58 @@
+/**
+ * The hover/focus-revealed anchor for a `.menu`.
+ *
+ * No JS: the panel is revealed by `:hover` and `:focus-within` on the wrapper,
+ * so it works for pointer and keyboard alike without an open-state hook, an
+ * outside-click listener or an Escape handler to keep in sync.
+ */
+
+.dropdown {
+  position: relative;
+  display: inline-flex;
+}
+
+.dropdown__panel {
+  position: absolute;
+  inset-block-start: 100%;
+  inset-inline-start: 0;
+  z-index: 30;
+
+  /* Padding, not margin: the gap under the trigger has to remain part of the
+   * wrapper, or the pointer crosses a dead zone on the way down and the panel
+   * closes underneath it. */
+  padding-block-start: var(--space-1);
+
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 -4px;
+
+  transition:
+    opacity var(--duration) var(--ease-out),
+    translate var(--duration) var(--ease-out),
+    visibility var(--duration) var(--ease-out);
+}
+
+/* Anchored to the trigger's trailing edge, for menus near the end of a bar
+ * that would otherwise overflow the viewport. */
+.dropdown__panel--end {
+  inset-inline-start: auto;
+  inset-inline-end: 0;
+}
+
+.dropdown:hover > .dropdown__panel,
+.dropdown:focus-within > .dropdown__panel {
+  visibility: visible;
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* The affordance on the trigger, flipped while the panel is open. */
+.dropdown__chevron {
+  opacity: 0.6;
+  transition: rotate var(--duration) var(--ease-out);
+}
+
+.dropdown:hover .dropdown__chevron,
+.dropdown:focus-within .dropdown__chevron {
+  rotate: 180deg;
+}

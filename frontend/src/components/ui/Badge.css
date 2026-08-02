@@ -1,0 +1,58 @@
+/**
+ * Badges. Same one-input contract as buttons and notices: a variant sets
+ * `--badge-seed` and the fill and foreground derive from it.
+ */
+
+.badge {
+  --badge-seed: var(--brand);
+  --badge-color: var(--badge-seed);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0 var(--space-1-5);
+
+  border-radius: var(--radius-full);
+  background-color: color-mix(in oklab, var(--badge-color), var(--surface) 76%);
+
+  /* Pulled most of the way to the foreground: at 30% the badge's own hue
+   * dominated the label and left it around APCA Lc 40 on its own fill. The tint
+   * that identifies the badge is the background's job. */
+  color: color-mix(in oklab, var(--badge-color), var(--text-color) 62%);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.badge--success {
+  --badge-seed: var(--vote-up);
+}
+.badge--danger {
+  --badge-seed: var(--vote-down);
+}
+.badge--unread {
+  --badge-seed: var(--unread);
+}
+.badge--staff {
+  --badge-seed: #511b4e;
+}
+.badge--fave {
+  --badge-seed: var(--fave);
+}
+
+/* The pulsing dot on a live-stream badge. Rides `--motion-scale`, so the motion
+ * setting at 0 — and `prefers-reduced-motion` through it — stops it dead. */
+.badge__dot {
+  inline-size: 0.375rem;
+  block-size: 0.375rem;
+  border-radius: var(--radius-full);
+  background-color: currentcolor;
+  animation: badge-pulse calc(1400ms * var(--motion-scale)) var(--ease-out) infinite;
+}
+
+@keyframes badge-pulse {
+  50% {
+    opacity: 0.3;
+  }
+}

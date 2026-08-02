@@ -1,0 +1,105 @@
+/**
+ * Tags.
+ *
+ * Philomena declares three variables per category (colour, background, border)
+ * for eleven categories, in both theme bases — 66 declarations. Here a category
+ * sets `--tag-seed` and the background and border derive from it, so the whole
+ * set stays in tune and a new category costs one line.
+ *
+ * The mix ratios live on the theme root as `--tag-bg-mix` / `--tag-border-mix`
+ * (see `tokens/semantic.css`) rather than here, so a theme can retune the whole
+ * tag system in one line. Declaring them on `.tag` itself would win over any
+ * inherited theme value and make them unoverridable.
+ */
+
+.tag {
+  --tag-seed: #4aa158;
+
+  /* The seed names the category; it is NOT the text color.
+   *
+   * Philomena paints the label in the raw seed on a tinted wash of the same
+   * seed, which lands every category between 1.7:1 and 2.5:1 — the tag text is
+   * the least legible thing on the page in either polarity. Pushing the seed
+   * along `--lift` (white in a dark theme, black in a light one) keeps the hue
+   * that identifies the category while moving the lightness far enough from the
+   * wash to clear WCAG AA. The border and background still derive from the
+   * seed, so the tag keeps reading as its category color. */
+  --tag-color: color-mix(in oklab, var(--tag-seed), var(--lift) var(--tag-text-mix));
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-block-size: 24px;
+  padding: var(--space-0-5) var(--space-2);
+
+  border: var(--border-width) solid color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-border-mix));
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-bg-mix));
+
+  color: var(--tag-color);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  white-space: nowrap;
+
+  transition:
+    background-color var(--duration) var(--ease-out),
+    border-color var(--duration) var(--ease-out);
+}
+
+a.tag:hover,
+button.tag:hover {
+  background-color: color-mix(in oklab, var(--tag-color), var(--surface) calc(var(--tag-bg-mix) - 14%));
+  color: var(--tag-color);
+}
+
+/* Count badge riding along inside the tag. */
+.tag-count {
+  padding-inline-start: var(--space-1);
+  border-inline-start: var(--border-width) solid
+    color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-border-mix));
+  color: color-mix(in oklab, var(--tag-color), var(--text-color) 40%);
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-normal);
+}
+
+.tag--rating {
+  --tag-seed: #418dd9;
+}
+.tag--spoiler {
+  --tag-seed: #d49b39;
+}
+.tag--origin {
+  --tag-seed: #6f66d6;
+}
+.tag--oc {
+  --tag-seed: #b157b7;
+}
+.tag--error {
+  --tag-seed: #d45460;
+}
+.tag--character {
+  --tag-seed: #4aaabf;
+}
+.tag--content-official {
+  --tag-seed: #b9b541;
+}
+.tag--content-fanmade {
+  --tag-seed: #cc8eb5;
+}
+.tag--species {
+  --tag-seed: #b16b50;
+}
+.tag--body-type {
+  --tag-seed: #b8b8b8;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

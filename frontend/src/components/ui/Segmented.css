@@ -1,0 +1,79 @@
+/**
+ * A single-choice track with a sliding thumb. Used for the theme's light/dark
+ * switch and for every appearance setting, which is why the stop count is a custom
+ * property rather than baked into the grid.
+ */
+
+.segmented {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--segment-count), minmax(0, 1fr));
+
+  padding: 2px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--radius-md);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-sunken);
+}
+
+.segmented__thumb {
+  position: absolute;
+  z-index: 0;
+  inset-block: 2px;
+  inset-inline-start: 2px;
+  inline-size: calc((100% - 4px) / var(--segment-count));
+
+  border-radius: max(0px, calc(var(--radius-md) - 2px));
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-selected);
+  box-shadow: var(--shadow-sm);
+
+  translate: calc(var(--segment-index) * 100%) 0;
+  transition: translate var(--duration) var(--ease-out);
+}
+
+.segmented__option {
+  position: relative;
+  z-index: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-block-size: 28px;
+  /* Shrinks before the track does: a stop that cannot fit its label is better
+   * than a control that pushes its container into a scrollbar. */
+  min-inline-size: 0;
+  padding-inline: var(--space-1);
+
+  border: 0;
+  background-color: transparent;
+
+  color: var(--text-muted);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  overflow: hidden;
+  white-space: nowrap;
+
+  transition: color var(--duration) var(--ease-out);
+}
+
+.segmented__option[aria-checked='true'],
+.segmented__option:hover {
+  color: var(--text-color);
+}
+
+/* The stop the setting shipped with, marked only once the reader has moved off
+ * it — a mark on every default would be noise on a menu where most settings are
+ * untouched. The same undo icon the reset button carries, so the two read as
+ * one idea: this is the value that button would restore.
+ *
+ * Absolutely positioned in the corner rather than placed in the flow, so
+ * marking a stop never changes the width of the track. */
+.segmented__default-mark {
+  position: absolute;
+  inset-block-start: 1px;
+  inset-inline-start: 2px;
+  opacity: 0.75;
+}

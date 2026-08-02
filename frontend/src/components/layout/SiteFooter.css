@@ -1,0 +1,59 @@
+.site-footer {
+  margin-block-start: var(--space-6);
+  padding: calc(var(--space-6) * 1.5) var(--space-4);
+  border-block-start: var(--border);
+  background-color: color-mix(in oklab, var(--surface-page), var(--surface) 60%);
+}
+
+.site-footer__columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, auto));
+  gap: var(--space-6) calc(var(--space-6) * 1.5);
+  /* Centred as a block rather than stretched: three short link lists across a
+   * wide viewport read as a group, not as three distant corners. */
+  inline-size: fit-content;
+  margin-inline: auto;
+}
+
+@media (width >= 40rem) {
+  .site-footer__columns {
+    grid-template-columns: repeat(3, minmax(0, auto));
+  }
+}
+
+.site-footer__title {
+  margin-block-end: var(--space-2);
+  /* Sized as a column label rather than as the `h2` it is semantically. */
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.site-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-footer__link {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.site-footer__link:hover {
+  color: var(--text-color);
+}
+
+.site-footer__link--bold {
+  color: var(--text-color);
+  font-weight: var(--weight-medium);
+}
+
+.site-footer__note {
+  margin-block-start: var(--space-6);
+  color: var(--text-subtle);
+  font-size: var(--text-xs);
+  text-align: center;
+}

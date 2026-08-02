@@ -1,0 +1,16 @@
+/* The left activity column. Hidden below the two-column breakpoint, matching
+ * Philomena's `.hide-mobile` sidebar: on a phone it would push the image grid —
+ * the reason the page exists — a full screen down. */
+.activity-sidebar {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+@media (width >= 64rem) {
+  .activity-sidebar {
+    display: flex;
+    flex-shrink: 0;
+    inline-size: var(--sidebar-w);
+  }
+}

@@ -1,0 +1,41 @@
+.comment-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+
+.comment-row__thumb {
+  flex-shrink: 0;
+  inline-size: 40px;
+  block-size: 40px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  object-fit: cover;
+}
+
+.comment-row__text {
+  flex: 1;
+  min-inline-size: 0;
+}
+
+/* The image id and author on one line, truncated rather than wrapped: a wrapped
+ * author name would push every subsequent row out of alignment. */
+.comment-row__head {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.comment-row__id {
+  font-weight: var(--weight-medium);
+}
+
+.comment-row__by {
+  color: var(--text-muted);
+}
+
+.comment-row__time {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}

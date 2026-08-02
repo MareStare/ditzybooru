@@ -1,0 +1,5 @@
+/* An author credit inside a dense activity row. Semibold rather than colored
+ * where the author is anonymous, so the two forms line up typographically. */
+.user-attribution {
+  font-weight: var(--weight-semibold);
+}

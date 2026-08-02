@@ -1,0 +1,42 @@
+/* Whole-row links. The zebra tint is on the `<li>` rather than the `<a>` so the
+ * hover state can replace it without a specificity fight. */
+.channel-row:nth-child(odd) {
+  background-color: color-mix(in oklab, var(--surface), var(--lift) 3%);
+}
+
+.channel-row:hover {
+  background-color: var(--surface-hover);
+}
+
+.channel-row__link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--text-color);
+  font-size: var(--text-sm);
+}
+
+.channel-row__link:hover {
+  color: var(--text-color);
+}
+
+.channel-row__title {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.channel-row__status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.channel-row__viewers {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}

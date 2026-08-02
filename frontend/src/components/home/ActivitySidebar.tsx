@@ -10,7 +10,7 @@ import { RecentCommentsBlock } from './RecentCommentsBlock';
  */
 export function ActivitySidebar() {
   return (
-    <aside className="hidden w-full shrink-0 flex-col gap-3 lg:flex lg:w-[330px]">
+    <aside className="activity-sidebar">
       <FeaturedImage />
       <TrendingImages />
       <LiveStreamsBlock />

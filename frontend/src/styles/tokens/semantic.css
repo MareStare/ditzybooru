@@ -1,0 +1,120 @@
+/**
+ * Semantic colors — everything the components actually name.
+ *
+ * Written ONCE for every theme, light and dark. A theme supplies at most five
+ * colors (`--base`, `--page`, `--ink`, `--link`, `--link-hover`); every value
+ * below is a `color-mix()` away from those, from the polarity constants in
+ * `_polarity.css`, or from the fixed palette.
+ *
+ * Three mechanisms carry the light/dark difference so this file never branches:
+ *
+ *   --lift    move away from the background — lighter in a dark theme, darker
+ *             in a light one. The correct direction for hover states, text
+ *             tiers and border contrast in BOTH polarities.
+ *   --sink    move toward the background. Disabled and recessed states.
+ *   --w-*     how far a derived color travels. Chrome sits 25% of the way from
+ *             `--base` to `--page` in a dark theme and 80% in a light one; the
+ *             formula is identical, only the weight differs.
+ *
+ * Two cases deliberately use literal colors rather than the direction pair:
+ *
+ *   - Raised surfaces (popovers, dropdowns) mix toward literal white, because
+ *     elevation reads as "lighter" in light and dark UI alike. In a light theme
+ *     whose surface is already white this is a no-op and shadow does the work.
+ *   - Chromatic surfaces (nav bar, panel headers, filled buttons) darken toward
+ *     literal black on hover in both polarities, because they are saturated
+ *     mid-tones rather than backgrounds.
+ */
+
+:root {
+  /* ---- Surfaces ------------------------------------------------------ */
+
+  --surface-page: var(--page);
+
+  /* Elevation is lighter in both polarities, so this mixes toward white rather
+   * than toward `--lift`. */
+  --surface: color-mix(in oklab, var(--page), #fff var(--w-elev));
+  --surface-sunken: color-mix(in oklab, var(--surface), var(--page) var(--w-recess));
+
+  --surface-hover: color-mix(in oklab, var(--surface), var(--lift) 7%);
+  --surface-selected: color-mix(in oklab, var(--surface), var(--base) 16%);
+  --surface-disabled: color-mix(in oklab, var(--surface), var(--sink) 12%);
+
+  /* ---- Chrome -------------------------------------------------------- */
+
+  /* The nav bar is painted with the theme's base color directly; everything
+   * else in this group is that color fading toward the page. */
+  --surface-nav: var(--base);
+  --surface-nav-field: color-mix(in oklab, var(--base), var(--nav-field-target) var(--w-field));
+  --surface-nav-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
+
+  /* Panel ("block" in Philomena) title strips. */
+  --surface-panel: var(--surface);
+  --surface-panel-header: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
+  --surface-panel-header-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
+
+  /* The selected tab, lifted OUT of the title strip rather than sunk into the
+   * panel below it. Mixing toward literal white in both polarities, because a
+   * selected tab has to read as the lit one — the `--lift` direction would make
+   * it darker than the strip on a light theme, which reads as pressed-in. */
+  --surface-tab-active: color-mix(in oklab, var(--surface-panel-header), #fff var(--w-tab-active));
+
+  --surface-media: color-mix(in oklab, var(--border-color), #fff var(--w-frame));
+
+  /* ---- Text ---------------------------------------------------------- */
+
+  /* The tiers are pulled much closer to `--ink` than a typical scale, because
+   * APCA is unforgiving of mid-tones on a tinted surface: the old 32/52/68 split
+   * put secondary text at Lc 45 and tertiary at Lc 26, both illegible by WCAG 3
+   * measures even though they looked fine at a glance on a bright monitor. */
+  --text-color: var(--ink);
+  --text-muted: color-mix(in oklab, var(--ink), var(--surface) 20%);
+  --text-subtle: color-mix(in oklab, var(--ink), var(--surface) 34%);
+  --text-disabled: color-mix(in oklab, var(--ink), var(--surface) 58%);
+
+  /* Dark themes reuse the normal foreground on the nav; light themes flip to
+   * white in `_polarity.css`. */
+  --text-on-nav: var(--ink);
+
+  /* ---- Links --------------------------------------------------------- */
+
+  /* `--link` and `--link-hover` are theme inputs; the rest follow.
+   *
+   * A link on the panel title strip cannot be the page link color: the strip is
+   * a saturated mid-tone, and the same blue that reads on the page scores under
+   * Lc 30 on it. Pushing it away from the strip along `--lift` fixes both
+   * polarities with one formula. */
+  --link-on-panel-header: color-mix(in oklab, var(--link), var(--lift) 34%);
+
+  /* ---- Borders ------------------------------------------------------- */
+
+  --border-color: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
+  --border-color-subtle: color-mix(in oklab, var(--border-color), var(--surface) 45%);
+  --border-color-strong: color-mix(in oklab, var(--border-color), var(--lift) 18%);
+  --border-color-input: color-mix(in oklab, var(--border-color), var(--lift) 10%);
+
+  /* ---- Status -------------------------------------------------------- */
+
+  /* `--success`, `--danger` and `--warning` are polarity constants; the button
+   * that uses them derives its own fill. `--brand` is the theme's own accent,
+   * lifted off the base so it reads against both the page and the nav. */
+  --brand: color-mix(in oklab, var(--base), var(--lift) 28%);
+
+  /* ---- Interaction icons --------------------------------------------- */
+
+  /* What actually gets painted. The palette values in `palette.css` are the
+   * identity and stay exact — they are muscle memory, and they still fill the
+   * translucent active states below — but as a 14px glyph on a dark surface the
+   * raw colors bottom out around APCA Lc 26. Lifting them off the background is
+   * the same move `--link-on-panel-header` makes, for the same reason. */
+  --score-positive: color-mix(in oklab, var(--vote-up), var(--lift) var(--w-icon-lift));
+  --score-negative: color-mix(in oklab, var(--vote-down), var(--lift) var(--w-icon-lift));
+  --fave-strong: color-mix(in oklab, var(--fave), var(--lift) var(--w-icon-lift));
+
+  /* ---- Component tuning ---------------------------------------------- */
+
+  /* Translucent fills for the active state of the interaction bar. */
+  --fave-bg: color-mix(in oklab, var(--fave) 25%, transparent);
+  --vote-up-bg: color-mix(in oklab, var(--vote-up) 25%, transparent);
+  --vote-down-bg: color-mix(in oklab, var(--vote-down) 25%, transparent);
+}

@@ -1,0 +1,152 @@
+/**
+ * Element defaults.
+ *
+ * Beyond `box-sizing` there are no `*` selectors: a blanket reset reaches into
+ * web components and other subtrees that then need `!important` to escape it.
+ * Everything here targets concrete elements, wrapped in `:where()` so it
+ * contributes zero specificity and authors never have to fight it to restyle a
+ * plain `<h2>`.
+ */
+
+/* The one blanket rule. Border-box is load-bearing for every fixed-size control
+ * in the system, and there is no element that wants the alternative. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-block-size: 100%;
+}
+
+:root {
+  background-color: var(--surface-page);
+  color: var(--text-color);
+  font-family: var(--font-sans);
+  accent-color: var(--brand);
+  scrollbar-color: var(--border-color-strong) var(--surface-page);
+}
+
+/* The document's text size is set HERE, never on `:root`.
+ *
+ * `rem` resolves against the root element's own font size, and the whole token
+ * scale — every `--text-*`, every `--space-*` — is written in `rem`. Setting
+ * `font-size: var(--text-sm)` on `:root` therefore feeds the scale back into
+ * itself: the root lands at 13px, `1rem` becomes 13px, and every token silently
+ * shrinks by another 19%. Keeping the root at the browser default anchors `rem`
+ * to 16px, which is what the scale is calibrated against. */
+body {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  margin: 0 0 var(--space-2);
+  font-weight: var(--weight-semibold);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+
+:where(h1) {
+  font-size: calc(1.5rem * var(--font-scale));
+}
+:where(h2) {
+  font-size: calc(1.375rem * var(--font-scale));
+}
+:where(h3) {
+  font-size: var(--text-xl);
+}
+:where(h4) {
+  font-size: var(--text-lg);
+}
+:where(h5, h6) {
+  font-size: var(--text-md);
+}
+
+:where(p) {
+  margin: 0 0 var(--space-3);
+  text-wrap: pretty;
+}
+
+:where(p:last-child) {
+  margin-bottom: 0;
+}
+
+/* No underline anywhere, including in running text — Derpibooru does not
+ * underline, and the link color carries it. axe's `link-in-text-block` rule is
+ * satisfied by luminance instead: `--link` is far enough from `--text-color`
+ * to clear the 3:1 the rule asks for, which the suite checks. */
+:where(a) {
+  color: var(--link);
+  text-decoration: none;
+  transition: color var(--duration) var(--ease-out);
+}
+
+:where(a):hover {
+  color: var(--link-hover);
+}
+
+:where(code, kbd, samp, pre) {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+:where(code) {
+  padding: 0.1em 0.35em;
+  border-radius: var(--radius-xs);
+  background-color: var(--surface-sunken);
+}
+
+:where(hr) {
+  block-size: 0;
+  margin: var(--space-4) 0;
+  border: 0;
+  border-top: var(--divider);
+}
+
+:where(img, svg, video, canvas) {
+  display: block;
+  max-inline-size: 100%;
+}
+
+/* Counters, scores and timestamps must not jitter as their digits change. */
+:where(time, data) {
+  font-variant-numeric: tabular-nums;
+}
+
+/* One focus style for everything. `:focus-visible`, never `:focus`, so a
+ * mouse click on a button does not leave a ring behind. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+:where(button, [role='button']):not(:disabled) {
+  cursor: pointer;
+}
+
+:where(::selection) {
+  background-color: color-mix(in oklab, var(--brand) 45%, transparent);
+}
+
+/* ---- Utilities --------------------------------------------------------- */
+
+/* Available to assistive technology, invisible on screen. Used for headings
+ * that a tablist or an icon-only control already conveys visually. */
+.visually-hidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

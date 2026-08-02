@@ -1,0 +1,26 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-3);
+}
+
+@media (width >= 64rem) {
+  .home {
+    flex-direction: row;
+    align-items: start;
+    gap: var(--space-4);
+    padding-inline: var(--space-4);
+  }
+}
+
+/* `min-inline-size: 0` so the thumbnail grid can shrink below its content's
+ * intrinsic width instead of pushing the sidebar off the viewport. */
+.home__main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-inline-size: 0;
+}

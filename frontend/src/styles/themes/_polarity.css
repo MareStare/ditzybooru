@@ -1,0 +1,121 @@
+/**
+ * Everything a theme does NOT have to say.
+ *
+ * A theme declares at most five colors per polarity (see `blue.css`).
+ * Everything else that separates a light theme from a dark one lives here, in
+ * two blocks, so adding a theme never means copying a block of derived values.
+ *
+ * Two kinds of value:
+ *
+ *  - Directions. `--lift` moves away from the background, `--sink` toward it.
+ *    Both flip with polarity, which is what lets `semantic.css` be written once
+ *    rather than once per polarity.
+ *  - Mix weights (`--w-*`). How far a derived color travels between its two
+ *    endpoints. These differ sharply by polarity — chrome sits 25% of the way
+ *    from the base color toward the page in a dark theme and 80% in a light one
+ *    — and that difference is the whole reason one formula can serve both.
+ *
+ * Selectors here are one attribute less specific than a theme's own
+ * `[data-theme-lightness][data-theme-color]`, so a theme always wins.
+ */
+
+:root[data-theme-lightness='dark'] {
+  color-scheme: dark;
+
+  --lift: #fff;
+  --sink: #000;
+
+  /* A 1px inner top highlight reads as "lit from above" against a dark
+   * surface. */
+  --edge-tint: #fff;
+  --edge-alpha: 5%;
+
+  --w-elev: 6%;
+  --w-recess: 55%;
+  /* Chrome sits further toward the page than Derpibooru's 25%: at 25% the
+   * panel title strip was light enough to drop `--ink` on it to APCA Lc 73,
+   * under the Lc 75 body-text floor. 36% keeps the tint and buys ~8 Lc. */
+  --w-chrome: 36%;
+  --w-chrome-deep: 48%;
+  --w-field: 49%;
+  --w-frame: 12%;
+
+  /* The selected tab lifts off the strip, but only far enough to read as lit —
+   * every point of lightness here is a point of contrast lost against `--ink`. */
+  --w-tab-active: 10%;
+
+  /* The nav search field is a recess in the bar, so it darkens toward the page. */
+  --nav-field-target: var(--page);
+
+  /* How far the fave/upvote/downvote colors are lifted before being painted as
+   * icons. Dark surfaces swallow all three otherwise. */
+  --w-icon-lift: 46%;
+
+  /* Status fills are dark and saturated so the normal foreground stays readable
+   * on them. Identical in every dark theme — these carry meaning, not identity,
+   * so they are not a theme's business. */
+  --success: #144714;
+  --danger: #66211f;
+  --warning: #71401f;
+
+  --tag-bg-mix: 82%;
+  --tag-border-mix: 55%;
+
+  /* How far the category seed is pushed toward white before it is used as tag
+   * text. Tuned to the worst seed in the set — the mid-tone purples and blues,
+   * which start closest to a dark wash. */
+  --tag-text-mix: 66%;
+}
+
+:root[data-theme-lightness='light'] {
+  color-scheme: light;
+
+  /* On a light background, "away from the background" means darker. */
+  --lift: #000;
+  --sink: #fff;
+
+  /* A white highlight on an already-white surface is invisible; light themes
+   * get their definition from shadow and borders instead. */
+  --edge-tint: #fff;
+  --edge-alpha: 0%;
+
+  /* Every light theme shares a page and a foreground; they differ only in their
+   * base color and their links. */
+  --page: #f8fafc;
+  --ink: #333333;
+
+  /* The nav is a saturated mid-tone here, far too dark to carry `--ink`. */
+  --text-on-nav: #ffffff;
+
+  --w-elev: 2%;
+  --w-recess: 60%;
+  --w-chrome: 80%;
+  --w-chrome-deep: 84%;
+  --w-field: 14%;
+  --w-frame: 30%;
+
+  /* The light themes' strip is already close to the page, so it takes a much
+   * bigger push toward white before the selected tab separates from it. */
+  --w-tab-active: 62%;
+
+  /* Mixing toward the page would make the field LIGHTER than the nav, which is
+   * the wrong direction for a recess and leaves white text stranded on it. */
+  --nav-field-target: #000;
+
+  --w-icon-lift: 32%;
+
+  /* Pastels, for the same reason the dark ones are dark: the foreground has to
+   * stay readable on top of them. */
+  --success: #bde9a3;
+  --danger: #ebc0bb;
+  --warning: #eee9bc;
+
+  /* Mixing 82% toward white leaves tag borders too faint to register on a white
+   * surface. Dark themes have the opposite problem. */
+  --tag-bg-mix: 80%;
+  --tag-border-mix: 42%;
+
+  /* Higher than the dark theme's: the wash here is near-white, so the label has
+   * further to travel to clear AA against it. */
+  --tag-text-mix: 60%;
+}
