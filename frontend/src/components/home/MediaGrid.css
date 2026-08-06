@@ -1,6 +1,5 @@
 /**
- * The tabbed thumbnail gallery: a `.panel` whose title bar is a tab strip and
- * whose body is a responsive grid.
+ * The thumbnail gallery: a `.panel` whose body is a responsive grid.
  */
 
 /* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
@@ -15,9 +14,17 @@
 
 /* The main listing trades column count for thumbnail size once there is enough
  * width that 150px thumbnails start looking like a contact sheet. */
-@media (width >= 1150px) {
+@media (--thumbs-roomy) {
   .media-grid--large {
     grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+  }
+}
+
+/* One column: the grid sits in a stack of blocks whose titles are all centered
+ * (`PanelHeader center`), so a start-aligned one is the odd strip out. */
+@media (--below-2xl) {
+  .media-grid__title {
+    justify-content: center;
   }
 }
 

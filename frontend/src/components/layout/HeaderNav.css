@@ -54,9 +54,8 @@
   color: var(--text-color);
 }
 
-/* The strip's contents move into the mobile drawer below this. Keep in sync
- * with the `--nav-sub-h` query in `tokens/scale.css`. */
-@media (width < 48rem) {
+/* The strip's contents move into the mobile drawer below this. */
+@media (--below-lg) {
   .nav-bar--sub {
     display: none;
   }

@@ -100,9 +100,8 @@
 }
 
 /* The secondary nav row only exists once there is room for it; below this the
- * mobile drawer carries its links instead. Keep in sync with the same query in
- * `components/layout/HeaderNav.css`. */
-@media (width >= 48rem) {
+ * mobile drawer carries its links instead. */
+@media (--lg) {
   :root {
     --nav-sub-h: calc(40px * var(--density));
   }

@@ -8,7 +8,7 @@ import { Button, ButtonGroup } from '#/components/ui/Button';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelTabs } from '#/components/ui/Panel';
 import { MediaGrid } from '#/components/home/MediaGrid';
-import { hiddenImages, images, randomImages, topAllTime, totalImages } from '#/lib/mock/data';
+import { images, totalImages } from '#/lib/mock/data';
 
 export const Route = createFileRoute('/ui/playground')({ component: UiPlayground });
 
@@ -212,7 +212,7 @@ function TagSpecimen() {
 /**
  * The home page's gallery, rendered by the component the home page renders.
  *
- * It carries the media boxes, the tab strip and the pagination controls at once,
+ * It carries the media boxes, the title bar and the pagination controls at once,
  * which is why none of those has a specimen of its own: a hand-built copy of any
  * of them would be a thing that looks like the site rather than a thing that is
  * the site, and would drift the first time the real one changed.
@@ -220,35 +220,10 @@ function TagSpecimen() {
 function MediaGridSpecimen() {
   // A page of four, not the home page's full page: this is one card among a
   // dozen, and a specimen that scrolls for a screen and a half stops being a
-  // specimen. The totals stay real so the pagination has something to count.
+  // specimen. The total stays real so the pagination has something to count.
   return (
     <Section title="Media grid" size="full">
-      <MediaGrid
-        tabs={[
-          { query: '*', label: 'Recent', icon: <Clock size={16} />, images: images.slice(0, 4), total: totalImages },
-          {
-            query: '*',
-            label: 'Top (all time)',
-            icon: <ArrowUp size={16} />,
-            images: topAllTime.slice(0, 4),
-            total: totalImages,
-          },
-          {
-            query: '*',
-            label: 'Random',
-            icon: <Dices size={16} />,
-            images: randomImages.slice(0, 4),
-            total: totalImages,
-          },
-          {
-            query: 'my:hidden',
-            label: 'Hidden',
-            icon: <EyeOff size={16} />,
-            images: hiddenImages.slice(0, 4),
-            total: hiddenImages.length,
-          },
-        ]}
-      />
+      <MediaGrid label="Recent" icon={<Clock size={16} />} images={images.slice(0, 4)} total={totalImages} />
     </Section>
   );
 }

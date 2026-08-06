@@ -178,9 +178,8 @@
 
 /* ---- Responsive -------------------------------------------------------- */
 
-/* The burger only exists while the secondary bar is folded away into it. Keep
- * in sync with the `--nav-sub-h` query in `tokens/scale.css`. */
-@media (width >= 48rem) {
+/* The burger only exists while the secondary bar is folded away into it. */
+@media (--lg) {
   .nav__burger {
     display: none;
   }
@@ -188,7 +187,7 @@
 
 /* Below this the brand wordmark, the upload shortcut and the reverse-search
  * button all lose to the search field, which is the reason the bar exists. */
-@media (width < 40rem) {
+@media (--below-md) {
   .nav-brand__name,
   .nav__compact-hidden {
     display: none;

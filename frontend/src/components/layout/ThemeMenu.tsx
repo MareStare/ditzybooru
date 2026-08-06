@@ -13,6 +13,7 @@ export function ThemeMenu() {
   return (
     <Dropdown
       align="end"
+      // Hidden on phones, where the same controls sit in the burger drawer.
       className="theme-menu-anchor"
       trigger={
         <Button variant="ghost" icon title="Appearance" aria-label="Appearance">

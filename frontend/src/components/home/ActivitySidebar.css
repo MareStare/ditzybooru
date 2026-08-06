@@ -1,16 +1,20 @@
-/* The left activity column. Hidden below the two-column breakpoint, matching
- * Philomena's `.hide-mobile` sidebar: on a phone it would push the image grid —
- * the reason the page exists — a full screen down. */
-.activity-sidebar {
-  display: none;
+/* The two halves of the activity column. Both are plain stacks of blocks
+ * wherever they land — the home page grid decides whether that is a column
+ * beside the image grid or a band above and below it (`routes/index.css`). */
+.home__spotlight,
+.home__activity {
+  display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  min-inline-size: 0;
 }
 
-@media (width >= 64rem) {
-  .activity-sidebar {
-    display: flex;
-    flex-shrink: 0;
-    inline-size: var(--sidebar-w);
+/* One column: the featured block now spans the page, and the square thumb it
+ * has in a 330px sidebar would be almost a whole phone screen of mostly
+ * letterbox. Capping the height keeps the block to a glance — the thumb is
+ * `object-fit: contain`, so nothing is cropped by it. */
+@media (--below-2xl) {
+  .featured-block .media-thumb {
+    max-block-size: 50vh;
   }
 }
