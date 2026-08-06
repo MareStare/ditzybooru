@@ -93,19 +93,12 @@
   color: var(--text-color);
 }
 
-/* Below this the header's right-hand buttons leave too little room to hang a
- * panel off the trigger at all, so it detaches and pins to the viewport's right
- * edge instead. `fixed` rather than a wider `absolute`, because the offset that
- * matters is from the screen, not from the button. */
-@media (width < 30rem) {
-  .theme-menu-anchor > .dropdown__panel {
-    position: fixed;
-    inset-block-start: var(--nav-bar-h);
-    inset-inline: var(--space-2) var(--space-2);
-  }
-
-  .theme-menu {
-    inline-size: auto;
-    max-inline-size: none;
+/* On a phone the bar has no room to hang a panel this wide off a trigger a few
+ * buttons in from the right edge, so the same controls move into the burger
+ * drawer instead (`MobileMenu.tsx`) — the same width at which the burger
+ * appears. */
+@media (--below-lg) {
+  .theme-menu-anchor {
+    display: none;
   }
 }

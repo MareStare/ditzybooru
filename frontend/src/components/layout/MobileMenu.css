@@ -112,6 +112,28 @@
   background-color: var(--border-color-subtle);
 }
 
+/* The appearance block. Padded to the same inline rhythm as the links above it
+ * so the segmented tracks line up with their left edge rather than sitting in a
+ * gutter of their own. */
+.drawer__settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-inline: var(--space-3);
+}
+
+.drawer__settings-title {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+/* The playground link is a `.drawer__link` like the rest of the menu, but it is
+ * the only one inside the already-padded settings block. */
+.drawer__settings .drawer__link {
+  padding-inline: 0;
+}
+
 .drawer__count {
   padding: 0 var(--space-1-5);
   border-radius: var(--radius-full);
@@ -129,9 +151,8 @@
   color: var(--vote-up);
 }
 
-/* The drawer only exists while the secondary bar is folded away. Keep in sync
- * with the `--nav-sub-h` query in `tokens/scale.css`. */
-@media (width >= 48rem) {
+/* The drawer only exists while the secondary bar is folded away. */
+@media (--lg) {
   .drawer {
     display: none;
   }

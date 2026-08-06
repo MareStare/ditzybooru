@@ -138,7 +138,7 @@ a.panel-footer:hover {
 
 /* The tab strip scrolls rather than wrapping once the panel is narrower than
  * its tabs — a wrapped second row would push the grid down on every phone. */
-@media (width < 30rem) {
+@media (--below-xs) {
   .panel-tabs {
     flex-wrap: nowrap;
     overflow-x: auto;

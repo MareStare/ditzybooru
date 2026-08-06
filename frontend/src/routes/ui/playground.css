@@ -13,7 +13,7 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (width >= 60rem) {
+@media (--xl) {
   .pg {
     grid-template-columns: 16rem minmax(0, 1fr);
   }
@@ -28,7 +28,7 @@
   background-color: var(--surface);
 }
 
-@media (width >= 60rem) {
+@media (--xl) {
   .pg-rail {
     position: sticky;
     inset-block-start: var(--header-h);
@@ -77,7 +77,7 @@
   grid-column: 1 / -1;
 }
 
-@media (width < 40rem) {
+@media (--below-md) {
   .pg-card--wide {
     grid-column: auto;
   }

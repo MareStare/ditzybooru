@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { Heart, LogIn, Mail, Radio, Upload, UserPlus, X } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
+import { Heart, LogIn, Mail, Paintbrush, Radio, Upload, UserPlus, X } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { primaryNav } from '#/lib/mock/site';
 import { currentUser, liveChannelCount } from '#/lib/mock/data';
+import { UiSettingsControls } from './UiSettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
   { label: 'Watched', href: '/search?q=my:watched' },
@@ -116,6 +118,20 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               </a>
             </>
           )}
+
+          <hr className="drawer__separator" />
+
+          {/* The appearance controls live here on a phone rather than in the
+              header: the bar has no room for a panel wide enough to hold them,
+              and the drawer is the one place with vertical space to spare. */}
+          <div className="drawer__settings">
+            <span className="drawer__settings-title">Appearance</span>
+            <UiSettingsControls />
+            <Link to="/ui/playground" className="drawer__link" onClick={onClose}>
+              <Paintbrush size={16} />
+              Playground
+            </Link>
+          </div>
         </div>
       </nav>
     </div>

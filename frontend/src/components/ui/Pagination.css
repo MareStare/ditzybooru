@@ -58,7 +58,7 @@
 
 /* The jump-to-end controls carry a word as well as a chevron, which is a lot of
  * bar on a phone. The numbers and Prev/Next are enough there. */
-@media (width < 34rem) {
+@media (--below-sm) {
   .page-link--edge {
     display: none;
   }

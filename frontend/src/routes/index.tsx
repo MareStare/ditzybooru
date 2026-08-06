@@ -1,54 +1,32 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { ArrowUp, Clock, Dices, EyeOff } from 'lucide-react';
+import { Clock } from 'lucide-react';
 
-import { ActivitySidebar } from '#/components/home/ActivitySidebar';
+import { ActivityFeeds, ActivitySpotlight } from '#/components/home/ActivitySidebar';
 import { MediaGrid } from '#/components/home/MediaGrid';
 import { WatchedImages } from '#/components/home/WatchedImages';
-import { currentUser, hiddenImages, images, randomImages, topAllTime, totalImages } from '#/lib/mock/data';
+import { currentUser, images, totalImages } from '#/lib/mock/data';
 
 export const Route = createFileRoute('/')({ component: Home });
 
+// Source order is the phone's reading order: featured and trending images, the
+// recent grid, watched images, then the text feeds. The two-column desktop
+// layout is a grid rearrangement of exactly this, in `index.css`.
 function Home() {
   return (
     <div className="home">
-      <ActivitySidebar />
+      <ActivitySpotlight />
       <div className="home__main">
         <MediaGrid
           headingLevel={1}
           size="large"
-          tabs={[
-            {
-              query: '*',
-              label: 'Recent',
-              icon: <Clock size={16} />,
-              images,
-              total: totalImages,
-            },
-            {
-              query: '*',
-              label: 'Top (all time)',
-              icon: <ArrowUp size={16} />,
-              images: topAllTime,
-              total: totalImages,
-            },
-            {
-              query: '*',
-              label: 'Random',
-              icon: <Dices size={16} />,
-              images: randomImages,
-              total: totalImages,
-            },
-            {
-              query: 'my:hidden',
-              label: 'Hidden',
-              icon: <EyeOff size={16} />,
-              images: hiddenImages,
-              total: hiddenImages.length,
-            },
-          ]}
+          label="Recent"
+          icon={<Clock size={16} />}
+          images={images}
+          total={totalImages}
         />
         {currentUser ? <WatchedImages /> : null}
       </div>
+      <ActivityFeeds />
     </div>
   );
 }

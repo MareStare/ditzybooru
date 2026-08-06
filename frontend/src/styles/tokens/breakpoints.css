@@ -1,0 +1,57 @@
+/**
+ * The site's breakpoints, named once.
+ *
+ * `@custom-media` is substituted at build time by `postcss-custom-media`, so
+ * these compile to plain width queries — the names exist for the source, not
+ * for the browser.
+ *
+ * Each threshold appears exactly once, as the `width >=` half. The `--below-*`
+ * name is the negation of that same name rather than a second query, so a pair
+ * cannot drift apart and leave a band of widths where neither rule applies.
+ *
+ * Every step comes in both directions because most are used from both sides in
+ * different files — the nav strip hides below `--lg` while the token that
+ * reserves its height appears above it.
+ *
+ * A component reaches for the nearest name rather than inventing a width. Add a
+ * step here only when a layout genuinely breaks at a width none of these
+ * describes — every extra threshold is another column of the responsive matrix
+ * that has to be looked at.
+ *
+ * One caveat on use: a `--below-*` name carries a `not`, which per Media
+ * Queries Level 4 cannot be combined with `and` in the same condition. Two
+ * bounds at once want a nested `@media`, not `(--lg) and (--below-2xl)`.
+ */
+
+/* 480px — a small phone. The panel tab strip starts to scroll. */
+@custom-media --xs (width >= 30rem);
+@custom-media --below-xs not (--xs);
+
+/* 544px — the pagination bar keeps its First/Last controls above this. */
+@custom-media --sm (width >= 34rem);
+@custom-media --below-sm not (--sm);
+
+/* 640px — a large phone. The header regains its wordmark and its icon
+ * shortcuts, and the footer opens to three columns. */
+@custom-media --md (width >= 40rem);
+@custom-media --below-md not (--md);
+
+/* 768px — a tablet. The header's secondary strip and appearance menu exist
+ * above this; below it, both live in the burger drawer instead. */
+@custom-media --lg (width >= 48rem);
+@custom-media --below-lg not (--lg);
+
+/* 960px — room for a fixed control rail beside the content it drives. */
+@custom-media --xl (width >= 60rem);
+@custom-media --below-xl not (--xl);
+
+/* 1024px — a laptop. The home page splits into activity column plus grid;
+ * below it, everything is one column. */
+@custom-media --2xl (width >= 64rem);
+@custom-media --below-2xl not (--2xl);
+
+/* 1150px — deliberately a pixel value rather than a step on the scale: it is
+ * the point where 150px thumbnails start looking like a contact sheet, which is
+ * a fact about the thumbnails and not about the device. */
+@custom-media --thumbs-roomy (width >= 1150px);
+@custom-media --thumbs-tight not (--thumbs-roomy);

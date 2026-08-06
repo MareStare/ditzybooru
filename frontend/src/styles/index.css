@@ -24,6 +24,10 @@
 
 @import '@fontsource-variable/inter';
 
+/* Definitions only — substituted into the `@media` rules below at build time,
+ * and contributing no CSS of its own. */
+@import './tokens/breakpoints.css';
+
 @import './tokens/ui-settings.css';
 @import './tokens/scale.css';
 @import './tokens/palette.css';

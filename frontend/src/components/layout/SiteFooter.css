@@ -15,7 +15,7 @@
   margin-inline: auto;
 }
 
-@media (width >= 40rem) {
+@media (--md) {
   .site-footer__columns {
     grid-template-columns: repeat(3, minmax(0, auto));
   }
