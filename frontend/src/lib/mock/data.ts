@@ -242,6 +242,20 @@ export const images: Array<Media> = [
   makeImage(1012, 2, { score: 43, upvotes: 47, downvotes: 4, faves: 19, commentCount: 4 }),
   makeImage(1011, 5, { score: 38, upvotes: 40, downvotes: 2, faves: 25, commentCount: 2 }),
   makeImage(1010, 6, { score: 12, upvotes: 20, downvotes: 8, faves: 6, commentCount: 0, spoilered: true }),
+
+  // Tail end, generated rather than written out: the hand-written entries above
+  // carry the interesting stats, and these only have to exist so a 50-per-page
+  // setting has a fiftieth image to show.
+  ...Array.from({ length: 35 }, (_, index) => {
+    const score = 40 - index;
+    return makeImage(1009 - index, (index % 6) + 1, {
+      score,
+      upvotes: score + 4,
+      downvotes: 4,
+      faves: Math.round(score * 0.6),
+      commentCount: index % 5,
+    });
+  }),
 ];
 
 /** The featured image shown at the top of the sidebar. */

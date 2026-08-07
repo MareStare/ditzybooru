@@ -23,7 +23,7 @@
 
 :root {
   /* Corner rounding. 0px is the default — classic Derpibooru's hard corners.
-   * Keep in sync with `DEFAULT_UI_SETTINGS` in `lib/uiSettings.ts`. */
+   * Keep in sync with `DEFAULT_APPEARANCE_SETTINGS` in `lib/appearanceSettings.ts`. */
   --radius-unit: 0px;
 
   /* Hairline weight. At 0px, panels rely on shadow and surface contrast. */

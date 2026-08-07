@@ -5,10 +5,14 @@ import {
   THEME_COLORS,
   THEME_LIGHTNESS_PREFERENCES,
 } from '#/lib/theme';
-import { DEFAULT_UI_SETTINGS, setUiSetting, UI_SETTING_CONTROLS } from '#/lib/uiSettings';
+import {
+  DEFAULT_APPEARANCE_SETTINGS,
+  setAppearanceSetting,
+  APPEARANCE_SETTING_CONTROLS,
+} from '#/lib/appearanceSettings';
 
 import type { ThemeColor, ThemeLightnessPreference, ThemeState } from '#/lib/theme';
-import type { UiSettings } from '#/lib/uiSettings';
+import type { AppearanceSettings } from '#/lib/appearanceSettings';
 
 /**
  * One descriptor per appearance control, theme and layout alike.
@@ -41,7 +45,7 @@ export interface SettingControl {
 
 export interface SettingsState {
   theme: ThemeState;
-  ui: UiSettings;
+  appearance: AppearanceSettings;
 }
 
 export const SETTING_CONTROLS: Array<SettingControl> = [
@@ -69,15 +73,15 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     },
     defaultValue: DEFAULT_THEME.color,
   },
-  ...UI_SETTING_CONTROLS.map(control => ({
+  ...APPEARANCE_SETTING_CONTROLS.map(control => ({
     id: control.key,
     label: control.label,
     widget: 'segmented' as const,
     options: control.options,
-    read: (state: SettingsState) => state.ui[control.key],
+    read: (state: SettingsState) => state.appearance[control.key],
     write: (value: string | number) => {
-      setUiSetting(control.key, Number(value));
+      setAppearanceSetting(control.key, Number(value));
     },
-    defaultValue: DEFAULT_UI_SETTINGS[control.key],
+    defaultValue: DEFAULT_APPEARANCE_SETTINGS[control.key],
   })),
 ];

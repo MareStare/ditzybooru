@@ -88,7 +88,7 @@
   /* ---- Layout ------------------------------------------------------- */
 
   /* The sticky site header's two rows. Published as tokens because anything
-   * that sticks below the header (the playground's control rails, an image
+   * that sticks below the header (the settings page's control rail, an image
    * page's sticky toolbar) has to offset itself by exactly this much, and
    * measuring it in JS would be a resize-observer for a constant. */
   --nav-bar-h: calc(56px * var(--density));

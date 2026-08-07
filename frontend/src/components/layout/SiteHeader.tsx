@@ -124,28 +124,33 @@ export function SiteHeader() {
 
   return (
     <header className="nav">
-      <div className="nav-bar">
-        <Button
-          variant="ghost"
-          icon
-          className="nav__burger"
-          aria-label="Open menu"
-          aria-expanded={mobileMenuOpen}
-          onClick={() => {
-            setMobileMenuOpen(true);
-          }}
-        >
-          <MenuIcon size={18} />
-        </Button>
+      <div className="nav-bar nav-bar--primary">
+        {/* Grouped so the bar can be three columns with the search field in the
+            middle one: centred on the viewport rather than on whatever is left
+            over between the brand and the account controls. */}
+        <div className="nav__start">
+          <Button
+            variant="ghost"
+            icon
+            className="nav__burger"
+            aria-label="Open menu"
+            aria-expanded={mobileMenuOpen}
+            onClick={() => {
+              setMobileMenuOpen(true);
+            }}
+          >
+            <MenuIcon size={18} />
+          </Button>
 
-        <a href="/" className="nav-brand" aria-label="Home">
-          <span className="nav-brand__mark">D</span>
-          <span className="nav-brand__name">Ditzybooru</span>
-        </a>
+          <a href="/" className="nav-brand" aria-label="Home">
+            <span className="nav-brand__mark">D</span>
+            <span className="nav-brand__name">Ditzybooru</span>
+          </a>
 
-        <a href="/images/new" className="nav-link nav__compact-hidden" title="Upload" aria-label="Upload">
-          <Upload size={16} />
-        </a>
+          <a href="/images/new" className="nav-link nav__compact-hidden" title="Upload" aria-label="Upload">
+            <Upload size={16} />
+          </a>
+        </div>
 
         <SearchBar />
 

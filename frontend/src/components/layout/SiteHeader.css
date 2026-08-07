@@ -84,16 +84,42 @@
   letter-spacing: var(--tracking-tight);
 }
 
+/* Three columns rather than a flex row, so the search field is centred on the
+ * viewport instead of on the space left between the brand and the account
+ * controls — which are different widths, and change width with the signed-in
+ * state. The side tracks never drop below their content, so a narrow bar takes
+ * the width out of the field rather than clipping the brand.
+ *
+ * Only the primary bar: the section strip below it (`nav-bar--sub`) is a plain
+ * row of links. */
+.nav-bar--primary {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 52rem) minmax(max-content, 1fr);
+}
+
+.nav__start {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.nav__actions {
+  justify-self: end;
+}
+
 /* ---- Search ------------------------------------------------------------ */
 
 /* The field is embedded in the bar, sitting on the nav color rather than on a
  * page surface, so it takes `--surface-nav-field` instead of `--surface-sunken`. */
 .nav-search {
   display: flex;
-  flex: 1;
   min-inline-size: 0;
   align-items: center;
   gap: var(--space-1);
+  /* Clear of the brand and the account controls even when the bar is wide
+   * enough for the field to reach its full width. */
+  margin-inline: var(--space-4);
 }
 
 .nav-search__box {
@@ -191,5 +217,11 @@
   .nav-brand__name,
   .nav__compact-hidden {
     display: none;
+  }
+
+  /* Every pixel spent on breathing room here is a pixel off the field, which on
+   * a phone is already down to a word and a half. */
+  .nav-search {
+    margin-inline: var(--space-1);
   }
 }

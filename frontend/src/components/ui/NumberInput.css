@@ -1,0 +1,63 @@
+/**
+ * A range slider with its value beside it as an editable field. The track is
+ * the native control, tinted by the `accent-color` set on `:root` — everything
+ * here is layout, size and affordance, so the browser keeps the parts it does
+ * better than a rebuilt track would (keyboard stepping, touch targets,
+ * forced-colors).
+ */
+
+.number-input {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.number-input__slider {
+  /* Sized rather than stretched: the hosts are a menu and a card title bar,
+   * neither of which gives the control a width to fill. */
+  inline-size: 9rem;
+  min-inline-size: 0;
+  margin: 0;
+  block-size: 20px;
+}
+
+/* Reads as the slider's readout until it is hovered or focused, where it turns
+ * into the field it has been all along. A permanently bordered box next to a
+ * slider reads as a second, unrelated setting. */
+.number-input__value {
+  inline-size: 3.5ch;
+  padding: 2px var(--space-1);
+
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: transparent;
+
+  color: var(--text-color);
+  font: inherit;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+
+  /* No spinners: they double the control's width for a step the slider and the
+   * arrow keys already offer. */
+  appearance: textfield;
+
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    background-color var(--duration-fast) var(--ease-out);
+}
+
+.number-input__value::-webkit-inner-spin-button,
+.number-input__value::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+.number-input__value:hover,
+.number-input__value:focus {
+  border-color: var(--border-color-input);
+  background-color: var(--surface-sunken);
+}

@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from '@tanstack/react-router';
-import { Heart, LogIn, Mail, Paintbrush, Radio, Upload, UserPlus, X } from 'lucide-react';
+import { Heart, LogIn, Mail, Radio, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { primaryNav } from '#/lib/mock/site';
 import { currentUser, liveChannelCount } from '#/lib/mock/data';
-import { UiSettingsControls } from './UiSettings';
+import { AppearanceSettingsControls } from './AppearanceSettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
   { label: 'Watched', href: '/search?q=my:watched' },
@@ -126,10 +126,10 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               and the drawer is the one place with vertical space to spare. */}
           <div className="drawer__settings">
             <span className="drawer__settings-title">Appearance</span>
-            <UiSettingsControls />
-            <Link to="/ui/playground" className="drawer__link" onClick={onClose}>
-              <Paintbrush size={16} />
-              Playground
+            <AppearanceSettingsControls />
+            <Link to="/settings/appearance" className="drawer__link" onClick={onClose}>
+              <SlidersHorizontal size={16} />
+              More settings
             </Link>
           </div>
         </div>

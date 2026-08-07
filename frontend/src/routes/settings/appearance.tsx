@@ -2,15 +2,19 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ArrowUp, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
-import { UiSettingsControls } from '#/components/layout/UiSettings';
+import { AppearanceSettingsControls } from '#/components/layout/AppearanceSettings';
 import { Badge } from '#/components/ui/Badge';
 import { Button, ButtonGroup } from '#/components/ui/Button';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
+import { ComponentSettingsControls } from '#/components/layout/ComponentSettings';
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelTabs } from '#/components/ui/Panel';
 import { MediaGrid } from '#/components/home/MediaGrid';
+import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/componentSettings';
 import { images, totalImages } from '#/lib/mock/data';
 
-export const Route = createFileRoute('/ui/playground')({ component: UiPlayground });
+import type { ComponentSettingControl } from '#/lib/componentSettings';
+
+export const Route = createFileRoute('/settings/appearance')({ component: AppearanceSettingsPage });
 
 const TAG_CATEGORIES = [
   { modifier: '', label: 'safe', count: '2.1M' },
@@ -26,30 +30,30 @@ const TAG_CATEGORIES = [
   { modifier: 'tag--body-type', label: 'anthro', count: '54k' },
 ] as const;
 
-function UiPlayground() {
+function AppearanceSettingsPage() {
   return (
-    <div className="pg">
+    <div className="appearance-page">
       {/* The rail scrolls independently, so it needs a name and a tab stop — a
           scroll container is unreachable by keyboard without one. */}
-      <aside className="pg-rail" aria-label="UI settings" tabIndex={0}>
+      <aside className="appearance-page-rail" aria-label="Site-wide settings" tabIndex={0}>
         <div>
-          <h1 className="pg-title">UI playground</h1>
-          <p className="pg-note">
-            The same controls the appearance menu in the header offers, on the same stored settings — each one writes a
-            single custom property on <code>:root</code>, so the chrome around this page re-styles with the specimens.
+          <h1 className="appearance-page-title">Appearance settings</h1>
+          <p className="appearance-page-note">
+            The rail holds the site-wide settings — the same ones the appearance menu in the header offers, on the same
+            stored values. Each writes a single custom property on <code>:root</code>, so the chrome around this page
+            re-styles with the cards.
           </p>
         </div>
 
-        <UiSettingsControls />
+        <AppearanceSettingsControls />
 
-        <p className="pg-note">
-          Try <code>Outlines: None</code> to watch panels switch from borders to depth-based separation, via a container
-          style query rather than a class.
+        <p className="appearance-page-note">
+          Settings that only make sense for one kind of component live on that component&apos;s card instead.
         </p>
       </aside>
 
       {/* A plain `div`: the page already renders inside the app shell's `main`. */}
-      <div className="pg-main">
+      <div className="appearance-page-main">
         {/* Order is layout, not taxonomy. `grid-auto-flow: dense` backfills
             gaps, but only with cards that come later in the DOM, so the
             two-column cards sit among the one-column ones that can fill in
@@ -72,22 +76,36 @@ function UiPlayground() {
  * One specimen card. `wide` takes two grid columns, for specimens that cannot be
  * read honestly at a third of the width; `full` takes every column, for page
  * chrome that is misrepresented at anything narrower.
+ *
+ * `controls` are the settings of the component the card showcases, rendered in
+ * its title bar: they are scoped to this one component, so they belong next to
+ * it rather than in the page-wide rail.
+ *
+ * `id` is what a component's own settings menu links to, so "More settings"
+ * lands on the card for that component rather than at the top of the page.
  */
 function Section({
+  id,
   title,
   size = 'normal',
+  controls = [],
   children,
 }: {
+  id?: string;
   title: string;
   size?: 'normal' | 'wide' | 'full';
+  controls?: Array<ComponentSettingControl>;
   children: React.ReactNode;
 }) {
-  const className = size === 'full' ? 'pg-card pg-card--full' : size === 'wide' ? 'pg-card pg-card--wide' : 'pg-card';
+  const modifier = size === 'normal' ? '' : ` appearance-page-card--${size}`;
 
   return (
-    <section className={className}>
-      <h2 className="pg-card-head">{title}</h2>
-      <div className="pg-card-body">{children}</div>
+    <section id={id} className={`appearance-page-card${modifier}`}>
+      <div className="appearance-page-card-head">
+        <h2>{title}</h2>
+        {controls.length > 0 ? <ComponentSettingsControls controls={controls} inline /> : null}
+      </div>
+      <div className="appearance-page-card-body">{children}</div>
     </section>
   );
 }
@@ -103,14 +121,14 @@ function PanelSpecimen() {
 
   return (
     <Section title="Panels">
-      <div className="pg-grid">
+      <div className="appearance-page-grid">
         <Panel>
           <PanelTabs label="Panel tab demo">
             {PANEL_TABS.map(t => (
               <PanelTab
                 key={t.id}
-                id={`pg-tab-${t.id}`}
-                controls="pg-tabpanel"
+                id={`demo-tab-${t.id}`}
+                controls="demo-tabpanel"
                 selected={tab === t.id}
                 onSelect={() => {
                   setTab(t.id);
@@ -121,7 +139,7 @@ function PanelSpecimen() {
               </PanelTab>
             ))}
           </PanelTabs>
-          <PanelBody id="pg-tabpanel" role="tabpanel" aria-labelledby={`pg-tab-${tab}`}>
+          <PanelBody id="demo-tabpanel" role="tabpanel" aria-labelledby={`demo-tab-${tab}`}>
             Tab bodies share the panel surface, so the selected tab reads as continuous with the content below it.
           </PanelBody>
         </Panel>
@@ -135,7 +153,7 @@ function PanelSpecimen() {
               {['Site rules discussion', 'Tag cleanup thread', 'Art critique corner'].map(item => (
                 <li key={item}>
                   <a href="#thread">{item}</a>
-                  <div className="pg-note">12 replies · 3 hours ago</div>
+                  <div className="appearance-page-note">12 replies · 3 hours ago</div>
                 </li>
               ))}
             </PanelList>
@@ -148,7 +166,7 @@ function PanelSpecimen() {
           <PanelHeader sub>Last 24 hours</PanelHeader>
           <PanelBody>
             <p>A sub-header carries a lighter tint so nested sections do not compete with the panel title.</p>
-            <p className="pg-note">Uploads 1,204 · Comments 8,930 · Faves 22,145</p>
+            <p className="appearance-page-note">Uploads 1,204 · Comments 8,930 · Faves 22,145</p>
           </PanelBody>
         </Panel>
       </div>
@@ -159,7 +177,7 @@ function PanelSpecimen() {
 function ButtonSpecimen() {
   return (
     <Section title="Buttons">
-      <div className="pg-row">
+      <div className="appearance-page-row">
         <Button>Default</Button>
         <Button variant="primary">Primary</Button>
         <Button variant="success">Success</Button>
@@ -168,7 +186,7 @@ function ButtonSpecimen() {
         <Button variant="ghost">Ghost</Button>
         <Button disabled>Disabled</Button>
       </div>
-      <div className="pg-row">
+      <div className="appearance-page-row">
         <Button size="sm">Small</Button>
         <Button>Medium</Button>
         <Button size="lg">Large</Button>
@@ -181,7 +199,7 @@ function ButtonSpecimen() {
           <Button>Wilson</Button>
         </ButtonGroup>
       </div>
-      <p className="pg-note">
+      <p className="appearance-page-note">
         Each variant sets one variable (<code>--btn-seed</code>); border, hover and active states derive from it.
       </p>
     </Section>
@@ -201,7 +219,7 @@ function TagSpecimen() {
           </li>
         ))}
       </ul>
-      <p className="pg-note">
+      <p className="appearance-page-note">
         Category colors are identical in every Derpibooru theme, so they live in the shared palette rather than in each
         theme file. Background and border derive from the one category color via <code>color-mix()</code>.
       </p>
@@ -218,12 +236,12 @@ function TagSpecimen() {
  * the site, and would drift the first time the real one changed.
  */
 function MediaGridSpecimen() {
-  // A page of four, not the home page's full page: this is one card among a
-  // dozen, and a specimen that scrolls for a screen and a half stops being a
-  // specimen. The total stays real so the pagination has something to count.
+  // The home page's own list, not a short slice of it: the page size is one of
+  // the settings on this card, and a specimen trimmed to four images would show
+  // the same four whichever stop the reader picks.
   return (
-    <Section title="Media grid" size="full">
-      <MediaGrid label="Recent" icon={<Clock size={16} />} images={images.slice(0, 4)} total={totalImages} />
+    <Section id="media-grid" title="Media grid" size="full" controls={MEDIA_GRID_SETTING_CONTROLS}>
+      <MediaGrid label="Recent" icon={<Clock size={16} />} images={images} total={totalImages} />
     </Section>
   );
 }
@@ -231,30 +249,30 @@ function MediaGridSpecimen() {
 function FormSpecimen() {
   return (
     <Section title="Forms">
-      <div className="pg-grid">
+      <div className="appearance-page-grid">
         <div className="field-group">
-          <label className="field-label" htmlFor="pg-title">
+          <label className="field-label" htmlFor="demo-title">
             Image title
           </label>
-          <input className="field" id="pg-title" placeholder="Describe the upload" />
+          <input className="field" id="demo-title" placeholder="Describe the upload" />
           <span className="field-hint">Shown above the image on its page.</span>
         </div>
 
         <div className="field-group">
-          <label className="field-label" htmlFor="pg-email">
+          <label className="field-label" htmlFor="demo-email">
             Email (invalid on blur)
           </label>
-          <input className="field" id="pg-email" type="email" required placeholder="you@example.com" />
+          <input className="field" id="demo-email" type="email" required placeholder="you@example.com" />
           <span className="field-hint">
             Uses <code>:user-invalid</code>, so it only flags after you interact.
           </span>
         </div>
 
         <div className="field-group">
-          <label className="field-label" htmlFor="pg-desc">
+          <label className="field-label" htmlFor="demo-desc">
             Description
           </label>
-          <textarea className="field" id="pg-desc" placeholder="Markdown supported" />
+          <textarea className="field" id="demo-desc" placeholder="Markdown supported" />
         </div>
 
         <div className="field-group">
@@ -266,10 +284,10 @@ function FormSpecimen() {
             <input type="checkbox" /> Autoplay animations
           </label>
           <label className="choice">
-            <input type="radio" name="pg-layout" defaultChecked /> Grid layout
+            <input type="radio" name="demo-layout" defaultChecked /> Grid layout
           </label>
           <label className="choice">
-            <input type="radio" name="pg-layout" /> List layout
+            <input type="radio" name="demo-layout" /> List layout
           </label>
           <label className="choice">
             <input className="switch" type="checkbox" defaultChecked role="switch" /> Compact mode
@@ -346,7 +364,7 @@ function FeedbackSpecimen() {
           <strong className="notice-title">Upload rejected</strong>A duplicate of this image already exists.
         </span>
       </div>
-      <div className="pg-row">
+      <div className="appearance-page-row">
         <Badge>Member</Badge>
         <Badge variant="unread">3 new</Badge>
         <Badge variant="staff">Assistant</Badge>
@@ -364,7 +382,7 @@ function MenuSpecimen() {
 
   return (
     <Section title="Menus">
-      <Menu className="pg-menu">
+      <Menu className="appearance-page-menu">
         <MenuLabel>Sort by</MenuLabel>
         {[
           { id: 'newest', label: 'Newest first', icon: <Clock size={14} /> },
@@ -386,14 +404,14 @@ function MenuSpecimen() {
         <MenuButton
           disabled
           onClick={() => {
-            /* staff-only, never enabled in the playground */
+            /* staff-only, never enabled in a specimen */
           }}
         >
           <EyeOff size={14} />
           Wilson score (staff)
         </MenuButton>
       </Menu>
-      <p className="pg-note">
+      <p className="appearance-page-note">
         The same menu surface the header's section dropdowns and user menu use — {images.length} mock images are listed
         behind it on the home page.
       </p>
@@ -413,7 +431,9 @@ function TypographySpecimen() {
         <a href="#link">the link color</a>, and hovering one reveals the signature purple that makes the palette
         recognizable rather than generic.
       </p>
-      <p className="pg-note">Muted text for timestamps and counters: posted 3 hours ago · 1,204 views · 88 faves</p>
+      <p className="appearance-page-note">
+        Muted text for timestamps and counters: posted 3 hours ago · 1,204 views · 88 faves
+      </p>
     </Section>
   );
 }

@@ -10,43 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
-import { Route as UiPlaygroundRouteImport } from './routes/ui/playground';
+import { Route as SettingsAppearanceRouteImport } from './routes/settings/appearance';
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
-const UiPlaygroundRoute = UiPlaygroundRouteImport.update({
-  id: '/ui/playground',
-  path: '/ui/playground',
+const SettingsAppearanceRoute = SettingsAppearanceRouteImport.update({
+  id: '/settings/appearance',
+  path: '/settings/appearance',
   getParentRoute: () => rootRouteImport,
 } as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
-  '/ui/playground': typeof UiPlaygroundRoute;
+  '/settings/appearance': typeof SettingsAppearanceRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
-  '/ui/playground': typeof UiPlaygroundRoute;
+  '/settings/appearance': typeof SettingsAppearanceRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
-  '/ui/playground': typeof UiPlaygroundRoute;
+  '/settings/appearance': typeof SettingsAppearanceRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/ui/playground';
+  fullPaths: '/' | '/settings/appearance';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/ui/playground';
-  id: '__root__' | '/' | '/ui/playground';
+  to: '/' | '/settings/appearance';
+  id: '__root__' | '/' | '/settings/appearance';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  UiPlaygroundRoute: typeof UiPlaygroundRoute;
+  SettingsAppearanceRoute: typeof SettingsAppearanceRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    '/ui/playground': {
-      id: '/ui/playground';
-      path: '/ui/playground';
-      fullPath: '/ui/playground';
-      preLoaderRoute: typeof UiPlaygroundRouteImport;
+    '/settings/appearance': {
+      id: '/settings/appearance';
+      path: '/settings/appearance';
+      fullPath: '/settings/appearance';
+      preLoaderRoute: typeof SettingsAppearanceRouteImport;
       parentRoute: typeof rootRouteImport;
     };
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  UiPlaygroundRoute: UiPlaygroundRoute,
+  SettingsAppearanceRoute: SettingsAppearanceRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

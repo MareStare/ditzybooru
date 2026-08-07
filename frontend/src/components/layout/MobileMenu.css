@@ -128,7 +128,7 @@
   font-weight: var(--weight-medium);
 }
 
-/* The playground link is a `.drawer__link` like the rest of the menu, but it is
+/* The settings link is a `.drawer__link` like the rest of the menu, but it is
  * the only one inside the already-padded settings block. */
 .drawer__settings .drawer__link {
   padding-inline: 0;

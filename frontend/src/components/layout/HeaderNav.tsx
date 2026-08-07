@@ -51,8 +51,8 @@ export function HeaderNav() {
       <span className="nav-sub__spacer" />
 
       <div className="nav-sub__actions">
-        {/* The UI playground lives in the appearance menu — it is a styling
-            tool, so it belongs with the styling controls. */}
+        {/* The appearance settings page lives in the appearance menu — it is a
+            styling tool, so it belongs with the styling controls. */}
         <a href="/pages/donations" className="nav-link nav-link--donate" title="Become a patron or donate">
           <Heart size={14} />
           Donate
