@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from '@tanstack/react-router';
-import { Heart, LogIn, Mail, Radio, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
+import { ChevronDown, Heart, LogIn, Mail, Radio, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
@@ -122,16 +122,22 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
           <hr className="drawer__separator" />
 
           {/* The display controls live here on a phone rather than in the
-              header: the bar has no room for a panel wide enough to hold them,
-              and the drawer is the one place with vertical space to spare. */}
-          <div className="drawer__settings">
-            <span className="drawer__settings-title">Display</span>
-            <DisplaySettingsControls />
-            <Link to="/settings/display" className="drawer__link" onClick={onClose}>
-              <SlidersHorizontal size={16} />
-              More settings
-            </Link>
-          </div>
+              header: the bar has no room for a panel wide enough to hold them.
+              Collapsed, because expanded they are taller than the navigation
+              they are appended to — which is what the drawer is for. */}
+          <details className="drawer__settings">
+            <summary className="drawer__settings-summary">
+              <span className="drawer__settings-title">Display</span>
+              <ChevronDown className="drawer__settings-chevron" size={16} aria-hidden="true" />
+            </summary>
+            <div className="drawer__settings-content">
+              <DisplaySettingsControls />
+              <Link to="/settings/display" className="drawer__link" onClick={onClose}>
+                <SlidersHorizontal size={16} />
+                More settings
+              </Link>
+            </div>
+          </details>
         </div>
       </nav>
     </div>

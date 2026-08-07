@@ -73,9 +73,11 @@
 
 @import '../components/layout/DisplaySettings.css';
 @import '../components/layout/ComponentSettings.css';
+@import '../components/layout/SearchBar.css';
 @import '../components/layout/SiteHeader.css';
 @import '../components/layout/HeaderNav.css';
 @import '../components/layout/MobileMenu.css';
+@import '../components/layout/BottomNav.css';
 @import '../components/layout/SiteFooter.css';
 @import '../components/layout/ThemeMenu.css';
 

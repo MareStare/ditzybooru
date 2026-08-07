@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import { ArrowUp, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
+import { ArrowUp, ChevronDown, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
 import { DisplaySettingsControls } from '#/components/layout/DisplaySettings';
 import { Badge } from '#/components/ui/Badge';
@@ -36,20 +36,29 @@ function DisplaySettingsPage() {
       {/* The rail scrolls independently, so it needs a name and a tab stop — a
           scroll container is unreachable by keyboard without one. */}
       <aside className="display-page-rail" aria-label="Site-wide settings" tabIndex={0}>
-        <div>
-          <h1 className="display-page-title">Display settings</h1>
-          <p className="display-page-note">
-            The rail holds the site-wide settings — the same ones the display menu in the header offers, on the same
-            stored values. Each writes a single custom property on <code>:root</code>, so the chrome around this page
-            re-styles with the cards.
-          </p>
-        </div>
+        {/* Collapsed below the rail's own column, where it sits on top of the
+            specimens and expanded would push every card off the first screen.
+            Forced open — and the summary made inert — at `--xl`. */}
+        <details className="display-page-rail-disclosure">
+          <summary className="display-page-rail-summary">
+            <h1 className="display-page-title">Display settings</h1>
+            <ChevronDown className="display-page-rail-chevron" size={16} aria-hidden="true" />
+          </summary>
 
-        <DisplaySettingsControls />
+          <div className="display-page-rail-content">
+            <p className="display-page-note">
+              The rail holds the site-wide settings — the same ones the display menu in the header offers, on the same
+              stored values. Each writes a single custom property on <code>:root</code>, so the chrome around this page
+              re-styles with the cards.
+            </p>
 
-        <p className="display-page-note">
-          Settings that only make sense for one kind of component live on that component&apos;s card instead.
-        </p>
+            <DisplaySettingsControls />
+
+            <p className="display-page-note">
+              Settings that only make sense for one kind of component live on that component&apos;s card instead.
+            </p>
+          </div>
+        </details>
       </aside>
 
       {/* A plain `div`: the page already renders inside the app shell's `main`. */}

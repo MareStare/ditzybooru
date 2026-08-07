@@ -95,6 +95,12 @@
   --nav-sub-h: 0px;
   --header-h: calc(var(--nav-bar-h) + var(--nav-sub-h));
 
+  /* The phone-only bottom navigation. The row's own height is a constant; the
+   * space the shell has to reserve for it is not — it is zero on a screen wide
+   * enough that the bar does not exist. */
+  --bottom-nav-bar-h: calc(52px * var(--density));
+  --bottom-nav-h: 0px;
+
   /* The width of the home page's activity sidebar. */
   --sidebar-w: 330px;
 }
@@ -104,5 +110,13 @@
 @media (--lg) {
   :root {
     --nav-sub-h: calc(40px * var(--density));
+  }
+}
+
+/* Below this the bottom navigation appears, and the page owes it the row plus
+ * whatever the device's home indicator takes underneath. */
+@media (--below-md) {
+  :root {
+    --bottom-nav-h: calc(var(--bottom-nav-bar-h) + env(safe-area-inset-bottom));
   }
 }

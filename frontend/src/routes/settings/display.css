@@ -46,6 +46,55 @@
   }
 }
 
+/* ---- Rail disclosure --------------------------------------------------- */
+
+.display-page-rail-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  list-style: none;
+  cursor: pointer;
+}
+
+.display-page-rail-summary::-webkit-details-marker {
+  display: none;
+}
+
+.display-page-rail-chevron {
+  color: var(--text-muted);
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.display-page-rail-disclosure[open] .display-page-rail-chevron {
+  rotate: 180deg;
+}
+
+.display-page-rail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
+}
+
+/* Once the rail has a column of its own there is nothing to collapse for: the
+ * content is forced open and the summary goes back to being a plain title. */
+@media (--xl) {
+  .display-page-rail-disclosure::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+
+  .display-page-rail-summary {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .display-page-rail-chevron {
+    display: none;
+  }
+}
+
 /* A grid rather than multicol, because cards come in three widths and multicol
  * only offers two: `column-span` takes `none | all` and nothing in between.
  *
