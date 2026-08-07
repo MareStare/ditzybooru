@@ -4,7 +4,7 @@ import { cn } from '#/lib/utils';
 
 import type { ClassValue } from '#/lib/utils';
 
-interface NumberInputProps {
+interface SliderProps {
   /** Names the pair for assistive tech; not rendered. */
   label: string;
   value: number;
@@ -28,7 +28,7 @@ interface NumberInputProps {
  * `:root`), not a rebuilt one: the browser's already carries keyboard stepping,
  * touch targets and forced-colors support that a `div` would have to re-earn.
  */
-export function NumberInput({ label, value, min, max, step = 1, onChange, className }: NumberInputProps) {
+export function Slider({ label, value, min, max, step = 1, onChange, className }: SliderProps) {
   // What is in the field while it is being typed into. A partly typed number is
   // its own state: `""` and `"4"` on the way to `"42"` are neither valid values
   // nor a reason to snap the field out from under the reader.
@@ -41,10 +41,10 @@ export function NumberInput({ label, value, min, max, step = 1, onChange, classN
   };
 
   return (
-    <div className={cn('number-input', className)} role="group" aria-label={label}>
+    <div className={cn('slider', className)} role="group" aria-label={label}>
       <input
         type="range"
-        className="number-input__slider"
+        className="slider__range"
         aria-label={`${label} slider`}
         value={value}
         min={min}
@@ -56,7 +56,7 @@ export function NumberInput({ label, value, min, max, step = 1, onChange, classN
       />
       <input
         type="number"
-        className="number-input__value"
+        className="slider__value"
         aria-label={`${label} value`}
         value={draft ?? String(value)}
         min={min}

@@ -1,11 +1,11 @@
 /**
  * Per-component settings: the choices that belong to one kind of component
- * rather than to the site's appearance as a whole.
+ * rather than to the site's display as a whole.
  *
- * Separate from `lib/appearanceSettings` on purpose. Those six are tier-1
+ * Separate from `lib/displaySettings` on purpose. Those six are tier-1
  * custom properties that every component reads; these are enumerated choices
  * scoped to a single component, offered on that component's card in
- * `/settings/appearance` rather than in the header's appearance menu.
+ * `/settings/display` rather than in the header's display menu.
  *
  * They still travel as custom properties on `:root`, because that is what lets
  * a setting reach every instance of the component without threading a prop

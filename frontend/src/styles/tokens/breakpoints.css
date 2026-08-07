@@ -36,7 +36,7 @@
 @custom-media --md (width >= 40rem);
 @custom-media --below-md not (--md);
 
-/* 768px — a tablet. The header's secondary strip and appearance menu exist
+/* 768px — a tablet. The header's secondary strip and display menu exist
  * above this; below it, both live in the burger drawer instead. */
 @custom-media --lg (width >= 48rem);
 @custom-media --below-lg not (--lg);

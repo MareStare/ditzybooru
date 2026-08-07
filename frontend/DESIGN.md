@@ -1,6 +1,6 @@
 ---
 name: Ditzybooru
-description: A modern frontend for Philomena boorus — nine accent themes and six user-owned appearance dials, all derived from a handful of seed values.
+description: A modern frontend for Philomena boorus — nine accent themes and six user-owned display dials, all derived from a handful of seed values.
 colors:
   seed-blue-dark: '#284371'
   seed-blue-light: '#2c74a9'
@@ -331,7 +331,7 @@ defined as the negation of that same name so a pair cannot drift and strand a
 band of widths. Steps: `--xs` 480px (panel tabs begin to scroll), `--sm` 544px
 (pagination keeps First/Last), `--md` 640px (header regains its wordmark and icon
 shortcuts; footer opens to three columns), `--lg` 768px (secondary nav strip and
-appearance menu exist; below, both fold into the burger drawer), `--xl` 960px
+display menu exist; below, both fold into the burger drawer), `--xl` 960px
 (room for a fixed control rail), `--2xl` 1024px (home page splits into activity
 column plus grid), `--thumbs-roomy` 1150px (thumbnails grow from 150px to 225px).
 
@@ -467,7 +467,7 @@ Two rows, as in Derpibooru.
 
 ### Segmented Control
 
-The signature control of the appearance settings: a grid of `--segment-count`
+The signature control of the display settings: a grid of `--segment-count`
 stops with an absolutely positioned thumb that translates to
 `--segment-index`. The stop a setting shipped with carries a small undo mark —
 the same glyph the reset button uses — shown only once the user has moved off it,

@@ -1,6 +1,6 @@
 /**
  * A single-choice track with a sliding thumb. Used for the theme's light/dark
- * switch and for every appearance setting, which is why the stop count is a custom
+ * switch and for every display setting, which is why the stop count is a custom
  * property rather than baked into the grid.
  */
 

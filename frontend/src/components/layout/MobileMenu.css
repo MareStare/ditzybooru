@@ -112,7 +112,7 @@
   background-color: var(--border-color-subtle);
 }
 
-/* The appearance block. Padded to the same inline rhythm as the links above it
+/* The display block. Padded to the same inline rhythm as the links above it
  * so the segmented tracks line up with their left edge rather than sitting in a
  * gutter of their own. */
 .drawer__settings {

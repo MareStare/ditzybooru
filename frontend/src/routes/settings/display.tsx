@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ArrowUp, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
-import { AppearanceSettingsControls } from '#/components/layout/AppearanceSettings';
+import { DisplaySettingsControls } from '#/components/layout/DisplaySettings';
 import { Badge } from '#/components/ui/Badge';
 import { Button, ButtonGroup } from '#/components/ui/Button';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
@@ -14,7 +14,7 @@ import { images, totalImages } from '#/lib/mock/data';
 
 import type { ComponentSettingControl } from '#/lib/componentSettings';
 
-export const Route = createFileRoute('/settings/appearance')({ component: AppearanceSettingsPage });
+export const Route = createFileRoute('/settings/display')({ component: DisplaySettingsPage });
 
 const TAG_CATEGORIES = [
   { modifier: '', label: 'safe', count: '2.1M' },
@@ -30,30 +30,30 @@ const TAG_CATEGORIES = [
   { modifier: 'tag--body-type', label: 'anthro', count: '54k' },
 ] as const;
 
-function AppearanceSettingsPage() {
+function DisplaySettingsPage() {
   return (
-    <div className="appearance-page">
+    <div className="display-page">
       {/* The rail scrolls independently, so it needs a name and a tab stop — a
           scroll container is unreachable by keyboard without one. */}
-      <aside className="appearance-page-rail" aria-label="Site-wide settings" tabIndex={0}>
+      <aside className="display-page-rail" aria-label="Site-wide settings" tabIndex={0}>
         <div>
-          <h1 className="appearance-page-title">Appearance settings</h1>
-          <p className="appearance-page-note">
-            The rail holds the site-wide settings — the same ones the appearance menu in the header offers, on the same
+          <h1 className="display-page-title">Display settings</h1>
+          <p className="display-page-note">
+            The rail holds the site-wide settings — the same ones the display menu in the header offers, on the same
             stored values. Each writes a single custom property on <code>:root</code>, so the chrome around this page
             re-styles with the cards.
           </p>
         </div>
 
-        <AppearanceSettingsControls />
+        <DisplaySettingsControls />
 
-        <p className="appearance-page-note">
+        <p className="display-page-note">
           Settings that only make sense for one kind of component live on that component&apos;s card instead.
         </p>
       </aside>
 
       {/* A plain `div`: the page already renders inside the app shell's `main`. */}
-      <div className="appearance-page-main">
+      <div className="display-page-main">
         {/* Order is layout, not taxonomy. `grid-auto-flow: dense` backfills
             gaps, but only with cards that come later in the DOM, so the
             two-column cards sit among the one-column ones that can fill in
@@ -97,15 +97,15 @@ function Section({
   controls?: Array<ComponentSettingControl>;
   children: React.ReactNode;
 }) {
-  const modifier = size === 'normal' ? '' : ` appearance-page-card--${size}`;
+  const modifier = size === 'normal' ? '' : ` display-page-card--${size}`;
 
   return (
-    <section id={id} className={`appearance-page-card${modifier}`}>
-      <div className="appearance-page-card-head">
+    <section id={id} className={`display-page-card${modifier}`}>
+      <div className="display-page-card-head">
         <h2>{title}</h2>
         {controls.length > 0 ? <ComponentSettingsControls controls={controls} inline /> : null}
       </div>
-      <div className="appearance-page-card-body">{children}</div>
+      <div className="display-page-card-body">{children}</div>
     </section>
   );
 }
@@ -121,7 +121,7 @@ function PanelSpecimen() {
 
   return (
     <Section title="Panels">
-      <div className="appearance-page-grid">
+      <div className="display-page-grid">
         <Panel>
           <PanelTabs label="Panel tab demo">
             {PANEL_TABS.map(t => (
@@ -153,7 +153,7 @@ function PanelSpecimen() {
               {['Site rules discussion', 'Tag cleanup thread', 'Art critique corner'].map(item => (
                 <li key={item}>
                   <a href="#thread">{item}</a>
-                  <div className="appearance-page-note">12 replies · 3 hours ago</div>
+                  <div className="display-page-note">12 replies · 3 hours ago</div>
                 </li>
               ))}
             </PanelList>
@@ -166,7 +166,7 @@ function PanelSpecimen() {
           <PanelHeader sub>Last 24 hours</PanelHeader>
           <PanelBody>
             <p>A sub-header carries a lighter tint so nested sections do not compete with the panel title.</p>
-            <p className="appearance-page-note">Uploads 1,204 · Comments 8,930 · Faves 22,145</p>
+            <p className="display-page-note">Uploads 1,204 · Comments 8,930 · Faves 22,145</p>
           </PanelBody>
         </Panel>
       </div>
@@ -177,7 +177,7 @@ function PanelSpecimen() {
 function ButtonSpecimen() {
   return (
     <Section title="Buttons">
-      <div className="appearance-page-row">
+      <div className="display-page-row">
         <Button>Default</Button>
         <Button variant="primary">Primary</Button>
         <Button variant="success">Success</Button>
@@ -186,7 +186,7 @@ function ButtonSpecimen() {
         <Button variant="ghost">Ghost</Button>
         <Button disabled>Disabled</Button>
       </div>
-      <div className="appearance-page-row">
+      <div className="display-page-row">
         <Button size="sm">Small</Button>
         <Button>Medium</Button>
         <Button size="lg">Large</Button>
@@ -199,7 +199,7 @@ function ButtonSpecimen() {
           <Button>Wilson</Button>
         </ButtonGroup>
       </div>
-      <p className="appearance-page-note">
+      <p className="display-page-note">
         Each variant sets one variable (<code>--btn-seed</code>); border, hover and active states derive from it.
       </p>
     </Section>
@@ -219,7 +219,7 @@ function TagSpecimen() {
           </li>
         ))}
       </ul>
-      <p className="appearance-page-note">
+      <p className="display-page-note">
         Category colors are identical in every Derpibooru theme, so they live in the shared palette rather than in each
         theme file. Background and border derive from the one category color via <code>color-mix()</code>.
       </p>
@@ -249,7 +249,7 @@ function MediaGridSpecimen() {
 function FormSpecimen() {
   return (
     <Section title="Forms">
-      <div className="appearance-page-grid">
+      <div className="display-page-grid">
         <div className="field-group">
           <label className="field-label" htmlFor="demo-title">
             Image title
@@ -364,7 +364,7 @@ function FeedbackSpecimen() {
           <strong className="notice-title">Upload rejected</strong>A duplicate of this image already exists.
         </span>
       </div>
-      <div className="appearance-page-row">
+      <div className="display-page-row">
         <Badge>Member</Badge>
         <Badge variant="unread">3 new</Badge>
         <Badge variant="staff">Assistant</Badge>
@@ -382,7 +382,7 @@ function MenuSpecimen() {
 
   return (
     <Section title="Menus">
-      <Menu className="appearance-page-menu">
+      <Menu className="display-page-menu">
         <MenuLabel>Sort by</MenuLabel>
         {[
           { id: 'newest', label: 'Newest first', icon: <Clock size={14} /> },
@@ -411,7 +411,7 @@ function MenuSpecimen() {
           Wilson score (staff)
         </MenuButton>
       </Menu>
-      <p className="appearance-page-note">
+      <p className="display-page-note">
         The same menu surface the header's section dropdowns and user menu use — {images.length} mock images are listed
         behind it on the home page.
       </p>
@@ -431,7 +431,7 @@ function TypographySpecimen() {
         <a href="#link">the link color</a>, and hovering one reveals the signature purple that makes the palette
         recognizable rather than generic.
       </p>
-      <p className="appearance-page-note">
+      <p className="display-page-note">
         Muted text for timestamps and counters: posted 3 hours ago · 1,204 views · 88 faves
       </p>
     </Section>

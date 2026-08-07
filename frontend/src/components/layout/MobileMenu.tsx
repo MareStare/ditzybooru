@@ -7,7 +7,7 @@ import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { primaryNav } from '#/lib/mock/site';
 import { currentUser, liveChannelCount } from '#/lib/mock/data';
-import { AppearanceSettingsControls } from './AppearanceSettings';
+import { DisplaySettingsControls } from './DisplaySettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
   { label: 'Watched', href: '/search?q=my:watched' },
@@ -121,13 +121,13 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
 
           <hr className="drawer__separator" />
 
-          {/* The appearance controls live here on a phone rather than in the
+          {/* The display controls live here on a phone rather than in the
               header: the bar has no room for a panel wide enough to hold them,
               and the drawer is the one place with vertical space to spare. */}
           <div className="drawer__settings">
-            <span className="drawer__settings-title">Appearance</span>
-            <AppearanceSettingsControls />
-            <Link to="/settings/appearance" className="drawer__link" onClick={onClose}>
+            <span className="drawer__settings-title">Display</span>
+            <DisplaySettingsControls />
+            <Link to="/settings/display" className="drawer__link" onClick={onClose}>
               <SlidersHorizontal size={16} />
               More settings
             </Link>

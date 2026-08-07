@@ -97,7 +97,7 @@
       {
         "name": "lg",
         "value": "48rem",
-        "purpose": "768px — the secondary nav strip and appearance menu exist above this; below, both live in the burger drawer."
+        "purpose": "768px — the secondary nav strip and display menu exist above this; below, both live in the burger drawer."
       },
       {
         "name": "xl",
@@ -486,7 +486,7 @@
       "name": "Segmented Control",
       "kind": "custom",
       "refersTo": null,
-      "description": "The signature control of the appearance settings: a grid of --segment-count stops with an absolutely positioned thumb that translates to --segment-index. The stop a setting shipped with carries a small undo mark, shown only once the user has moved off it, positioned absolutely so marking a stop never changes the track's width.",
+      "description": "The signature control of the display settings: a grid of --segment-count stops with an absolutely positioned thumb that translates to --segment-index. The stop a setting shipped with carries a small undo mark, shown only once the user has moved off it, positioned absolutely so marking a stop never changes the track's width.",
       "html": "<div class=\"ds-segmented\" role=\"radiogroup\" style=\"--segment-count: 3; --segment-index: 1;\"><span class=\"ds-segmented-thumb\"></span><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"false\">Compact</button><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"true\">Cozy</button><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"false\">Roomy</button></div>",
       "css": ".ds-segmented { position: relative; display: grid; grid-template-columns: repeat(var(--segment-count), minmax(0, 1fr)); inline-size: 16rem; padding: 2px; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); } .ds-segmented-thumb { position: absolute; z-index: 0; inset-block: 2px; inset-inline-start: 2px; inline-size: calc((100% - 4px) / var(--segment-count)); border-radius: max(0px, calc(var(--radius-md) - 2px)); corner-shape: var(--corner-shape); background-color: var(--surface-selected); box-shadow: var(--shadow-sm); translate: calc(var(--segment-index) * 100%) 0; transition: translate var(--duration) var(--ease-out); } .ds-segmented-option { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; min-block-size: 28px; min-inline-size: 0; padding-inline: calc(0.25rem * var(--density)); border: 0; background-color: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-xs); font-weight: 500; overflow: hidden; white-space: nowrap; cursor: pointer; transition: color var(--duration) var(--ease-out); } .ds-segmented-option[aria-checked='true'], .ds-segmented-option:hover { color: var(--text-color); }"
     },

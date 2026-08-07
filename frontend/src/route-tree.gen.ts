@@ -10,43 +10,43 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
-import { Route as SettingsAppearanceRouteImport } from './routes/settings/appearance';
+import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
-const SettingsAppearanceRoute = SettingsAppearanceRouteImport.update({
-  id: '/settings/appearance',
-  path: '/settings/appearance',
+const SettingsDisplayRoute = SettingsDisplayRouteImport.update({
+  id: '/settings/display',
+  path: '/settings/display',
   getParentRoute: () => rootRouteImport,
 } as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
-  '/settings/appearance': typeof SettingsAppearanceRoute;
+  '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
-  '/settings/appearance': typeof SettingsAppearanceRoute;
+  '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
-  '/settings/appearance': typeof SettingsAppearanceRoute;
+  '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/settings/appearance';
+  fullPaths: '/' | '/settings/display';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/settings/appearance';
-  id: '__root__' | '/' | '/settings/appearance';
+  to: '/' | '/settings/display';
+  id: '__root__' | '/' | '/settings/display';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
-  SettingsAppearanceRoute: typeof SettingsAppearanceRoute;
+  SettingsDisplayRoute: typeof SettingsDisplayRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +58,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    '/settings/appearance': {
-      id: '/settings/appearance';
-      path: '/settings/appearance';
-      fullPath: '/settings/appearance';
-      preLoaderRoute: typeof SettingsAppearanceRouteImport;
+    '/settings/display': {
+      id: '/settings/display';
+      path: '/settings/display';
+      fullPath: '/settings/display';
+      preLoaderRoute: typeof SettingsDisplayRouteImport;
       parentRoute: typeof rootRouteImport;
     };
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  SettingsAppearanceRoute: SettingsAppearanceRoute,
+  SettingsDisplayRoute: SettingsDisplayRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

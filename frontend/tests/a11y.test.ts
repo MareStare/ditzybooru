@@ -45,7 +45,7 @@ const PREVIEW_PORT = 4319;
 
 const LIGHTNESSES = ['dark', 'light'] as const;
 const COLORS = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'gray'] as const;
-const PATHS = ['/', '/settings/appearance'] as const;
+const PATHS = ['/', '/settings/display'] as const;
 
 type Lightness = (typeof LIGHTNESSES)[number];
 type Color = (typeof COLORS)[number];

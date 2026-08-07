@@ -38,9 +38,9 @@ interface MediaGridProps {
 
 /**
  * The grid's own settings, in its title bar rather than in the site-wide
- * appearance menu: they change this component and nothing else.
+ * display menu: they change this component and nothing else.
  *
- * The same controls the grid's card on the appearance settings page carries —
+ * The same controls the grid's card on the display settings page carries —
  * the link at the bottom goes to that card, for the rest of the page's worth of
  * context around them.
  */
@@ -60,7 +60,7 @@ function MediaGridSettings() {
 
         <hr className="menu-separator" />
 
-        <Link to="/settings/appearance" hash="media-grid" className="media-grid__settings-link">
+        <Link to="/settings/display" hash="media-grid" className="media-grid__settings-link">
           <SlidersHorizontal size={16} />
           More settings
         </Link>

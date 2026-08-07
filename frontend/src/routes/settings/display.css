@@ -1,5 +1,5 @@
 /**
- * Layout for the /settings/appearance page. Not part of the design system — it only
+ * Layout for the /settings/display page. Not part of the design system — it only
  * arranges the specimen cards and the control rail.
  *
  * The page renders inside the ordinary site chrome, so the settings it writes land
@@ -8,18 +8,18 @@
  * which is what `--header-h` is published for.
  */
 
-.appearance-page {
+.display-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
 }
 
 @media (--xl) {
-  .appearance-page {
+  .display-page {
     grid-template-columns: 16rem minmax(0, 1fr);
   }
 }
 
-.appearance-page-rail {
+.display-page-rail {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -29,7 +29,7 @@
 }
 
 @media (--xl) {
-  .appearance-page-rail {
+  .display-page-rail {
     position: sticky;
     inset-block-start: var(--header-h);
     /* Inset card rather than a full-bleed column, so the specimen area reads as
@@ -55,7 +55,7 @@
  * that fits, and `align-items: start` keeps a short card from stretching to
  * match a tall neighbour. `auto-fill` keeps the column count derived from the
  * available width, so there are still no breakpoints to keep in sync. */
-.appearance-page-main {
+.display-page-main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
   grid-auto-flow: row dense;
@@ -68,22 +68,22 @@
 /* Two columns: specimens that need the room to be read honestly — a table with
  * four columns, a thumbnail grid — but that do not want the whole page. Falls
  * back to a single column when the grid only has one to give. */
-.appearance-page-card--wide {
+.display-page-card--wide {
   grid-column: span 2;
 }
 
 /* Every column: page chrome, which is misrepresented at any smaller width. */
-.appearance-page-card--full {
+.display-page-card--full {
   grid-column: 1 / -1;
 }
 
 @media (--below-md) {
-  .appearance-page-card--wide {
+  .display-page-card--wide {
     grid-column: auto;
   }
 }
 
-.appearance-page-card {
+.display-page-card {
   display: flow-root;
   /* Cleared by the sticky header when a component's settings menu links
    * straight to this card. */
@@ -97,7 +97,7 @@
 
 /* Deliberately quieter than `.panel`: several cards contain real panels, and
  * the frame must not read as another one of them. */
-.appearance-page-card-head {
+.display-page-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -113,13 +113,13 @@
 }
 
 /* The title is a real `h2` for the outline; the head already carries its look. */
-.appearance-page-card-head h2 {
+.display-page-card-head h2 {
   font-size: inherit;
   font-weight: inherit;
   letter-spacing: inherit;
 }
 
-.appearance-page-card-body {
+.display-page-card-body {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -130,14 +130,14 @@
 /* The card's own settings sit in its title bar; the block itself is
  * `ComponentSettings.css`. */
 
-.appearance-page-row {
+.display-page-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 }
 
-.appearance-page-grid {
+.display-page-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: var(--space-3);
@@ -146,17 +146,17 @@
 
 /* ---- Control rail ------------------------------------------------------ */
 
-.appearance-page-title {
+.display-page-title {
   font-size: var(--text-xl);
 }
 
 /* ---- Specimen helpers -------------------------------------------------- */
 
-.appearance-page-note {
+.display-page-note {
   color: var(--text-subtle);
   font-size: var(--text-xs);
 }
 
-.appearance-page-menu {
+.display-page-menu {
   max-inline-size: 16rem;
 }

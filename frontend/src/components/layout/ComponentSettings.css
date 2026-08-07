@@ -1,7 +1,7 @@
 /**
  * The per-component settings block. Deliberately the same shape as
- * `.appearance-settings`, so a component's own menu and the site-wide
- * appearance menu read as two instances of one thing rather than two designs.
+ * `.display-settings`, so a component's own menu and the site-wide
+ * display menu read as two instances of one thing rather than two designs.
  */
 
 .component-settings {

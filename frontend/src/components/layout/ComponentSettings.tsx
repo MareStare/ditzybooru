@@ -1,4 +1,4 @@
-import { NumberInput } from '#/components/ui/NumberInput';
+import { Slider } from '#/components/ui/Slider';
 import { Segmented } from '#/components/ui/Segmented';
 import { useComponentSettings } from '#/hooks/useComponentSettings';
 import { DEFAULT_COMPONENT_SETTINGS, setComponentSetting } from '#/lib/componentSettings';
@@ -8,11 +8,11 @@ import type { ComponentSettingControl } from '#/lib/componentSettings';
 
 /**
  * The controls for one component's settings. The counterpart of
- * {@link AppearanceSettingsControls}: same widget, same store shape, but the
+ * {@link DisplaySettingsControls}: same widget, same store shape, but the
  * settings here belong to a single component rather than to the whole site.
  *
  * Rendered in two places for every component that has any — the component's own
- * menu, and its card on the appearance settings page — so neither owns the
+ * menu, and its card on the display settings page — so neither owns the
  * layout. `inline` is the difference between them: stacked in a menu with room
  * to spare, on one line in a card's title bar.
  */
@@ -31,7 +31,7 @@ export function ComponentSettingsControls({
         <div className="component-setting" key={control.key}>
           <span className="component-setting__label">{control.label}</span>
           {control.widget === 'slider' ? (
-            <NumberInput
+            <Slider
               label={control.label}
               value={Number(settings[control.key])}
               min={control.min}

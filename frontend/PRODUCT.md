@@ -74,7 +74,7 @@ Five things together, none of which the upstream frontend offers:
 2. **Modern look at feature parity** — the same capabilities, not a subset.
 3. **Faster and app-like** — a React SPA against a multipage Phoenix app.
 4. **Extra features upstream lacks**, on top of parity.
-5. **Deep customization** — themes and appearance settings as a product
+5. **Deep customization** — themes and display settings as a product
    feature, not a developer convenience.
 
 ## Operating Context
@@ -133,7 +133,7 @@ hyphenated phrase.
   Philomena instance.
 - **Nine accent themes × light/dark.** Every design holds up in all
   combinations; contrast is verified per theme.
-- **Six appearance settings stay functional.** `radius`, `borderWidth`,
+- **Six display settings stay functional.** `radius`, `borderWidth`,
   `shadow`, `density`, `fontScale`, `motion` are unregistered custom
   properties feeding `calc()` sitewide; nothing may hardcode past them.
   `radius: 0` by default because square corners are what Derpibooru looks
@@ -189,7 +189,7 @@ imitation: the familiar booru brought up to date.
 5. **Parity before invention.** A feature upstream has and Ditzybooru lacks is
    a defect. Extras come after, not instead.
 6. **The user owns the interface.** Every new surface survives all themes and
-   appearance settings.
+   display settings.
 7. **Speed is a feature.** Weight and jank are product bugs. A query that
    feels slow is a query the user stops refining.
 8. **Origin server is the source of truth.** The frontend presents Philomena

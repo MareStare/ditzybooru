@@ -6,14 +6,14 @@
  * forced-colors).
  */
 
-.number-input {
+.slider {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   min-inline-size: 0;
 }
 
-.number-input__slider {
+.slider__range {
   /* Sized rather than stretched: the hosts are a menu and a card title bar,
    * neither of which gives the control a width to fill. */
   inline-size: 9rem;
@@ -25,7 +25,7 @@
 /* Reads as the slider's readout until it is hovered or focused, where it turns
  * into the field it has been all along. A permanently bordered box next to a
  * slider reads as a second, unrelated setting. */
-.number-input__value {
+.slider__value {
   inline-size: 3.5ch;
   padding: 2px var(--space-1);
 
@@ -50,14 +50,14 @@
     background-color var(--duration-fast) var(--ease-out);
 }
 
-.number-input__value::-webkit-inner-spin-button,
-.number-input__value::-webkit-outer-spin-button {
+.slider__value::-webkit-inner-spin-button,
+.slider__value::-webkit-outer-spin-button {
   appearance: none;
   margin: 0;
 }
 
-.number-input__value:hover,
-.number-input__value:focus {
+.slider__value:hover,
+.slider__value:focus {
   border-color: var(--border-color-input);
   background-color: var(--surface-sunken);
 }

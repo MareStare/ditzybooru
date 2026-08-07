@@ -1,6 +1,6 @@
 /**
- * The combined appearance menu in the top bar: light/dark/system, the accent
- * color, and the link to the appearance settings page.
+ * The combined display menu in the top bar: light/dark/system, the accent
+ * color, and the link to the display settings page.
  *
  * One dropdown rather than two buttons, because the two settings are read
  * together — "which theme am I on" is the pair, not either half.
