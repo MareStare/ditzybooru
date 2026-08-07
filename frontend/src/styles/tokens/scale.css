@@ -91,7 +91,7 @@
    * that sticks below the header (the settings page's control rail, an image
    * page's sticky toolbar) has to offset itself by exactly this much, and
    * measuring it in JS would be a resize-observer for a constant. */
-  --nav-bar-h: calc(56px * var(--density));
+  --nav-bar-h: calc(48px * var(--density));
   --nav-sub-h: 0px;
   --header-h: calc(var(--nav-bar-h) + var(--nav-sub-h));
 
@@ -103,6 +103,6 @@
  * mobile drawer carries its links instead. */
 @media (--lg) {
   :root {
-    --nav-sub-h: calc(40px * var(--density));
+    --nav-sub-h: calc(34px * var(--density));
   }
 }
