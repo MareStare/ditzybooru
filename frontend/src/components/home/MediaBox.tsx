@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, EyeOff, FolderPlus, Link2, MessageSquare, MoreHorizontal, Star } from 'lucide-react';
+import { ArrowBigDown, ArrowBigUp, EyeOff, FolderPlus, Link2, MoreHorizontal, Star } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
 import { useImageInteraction } from '#/hooks/useImageInteraction';
@@ -9,6 +9,32 @@ import { cn } from '#/lib/utils';
 import { MediaThumb, imageTitle } from './MediaThumb';
 
 import type { ClassValue } from '#/lib/utils';
+
+/**
+ * Philomena's speech bubble: rounder than lucide's `MessageCircle` and tailed
+ * from the bottom-left corner rather than tapered. Drawn here because no icon
+ * in the set carries that shape.
+ *
+ * The viewBox starts at 0.74 rather than 0 because the path's ink centres at
+ * y 12.67 of 24; the offset puts the glyph on the bar's optical centre line at
+ * any size, which a CSS nudge would only do at one.
+ */
+function CommentBubble() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0.74 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z" />
+    </svg>
+  );
+}
 
 interface InteractionButtonProps {
   /** BEM modifier picking the action's accent, e.g. `media-action--fave`. */
@@ -176,7 +202,7 @@ export function MediaBox({ className, image, src = image.representations.thumb }
             title="Yay!"
             label="Upvote"
           >
-            <ArrowUp size={14} strokeWidth={interaction.vote === 'up' ? 2.75 : 2} />
+            <ArrowBigUp size={14} fill={interaction.vote === 'up' ? 'currentColor' : 'none'} />
           </InteractionButton>
           {/* Deliberately not `<Int>`: the thousands separator buys nothing on a
               3-4 digit score and its extra glyph is real width in a bar this
@@ -198,12 +224,12 @@ export function MediaBox({ className, image, src = image.representations.thumb }
             title="Neigh!"
             label="Downvote"
           >
-            <ArrowDown size={14} strokeWidth={interaction.vote === 'down' ? 2.75 : 2} />
+            <ArrowBigDown size={14} fill={interaction.vote === 'down' ? 'currentColor' : 'none'} />
           </InteractionButton>
         </span>
 
         <a href={`/images/${image.id}#comments`} title="Comments" className="media-action">
-          <MessageSquare size={14} />
+          <CommentBubble />
           <Int className="media-action__count" value={image.commentCount} />
         </a>
 
