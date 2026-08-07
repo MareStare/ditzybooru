@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Bell, Camera, ChevronDown, Filter, Menu as MenuIcon, MessageSquare, Search, Upload } from 'lucide-react';
+import { Bell, Camera, ChevronDown, Filter, Mail, Menu as MenuIcon, Search, Upload } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
@@ -87,7 +87,7 @@ function UserMenu() {
         <span className="nav-link__badge">3</span>
       </a>
       <a href="/conversations" className="nav-link" title="Conversations" aria-label="Conversations">
-        <MessageSquare size={16} />
+        <Mail size={16} />
       </a>
       <a href="/filters" className="nav-link nav__compact-hidden" title="Filters" aria-label="Filters">
         <Filter size={16} />
