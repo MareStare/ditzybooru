@@ -103,6 +103,6 @@
  * mobile drawer carries its links instead. */
 @media (--lg) {
   :root {
-    --nav-sub-h: calc(34px * var(--density));
+    --nav-sub-h: calc(40px * var(--density));
   }
 }
