@@ -2,6 +2,22 @@
  * The thumbnail gallery: a `.panel` whose body is a responsive grid.
  */
 
+/* No clipping, the same trade `.media-box` makes: the settings menu hangs out of
+ * the title bar and has to escape the panel. The title bar and the footer round
+ * their own outer corners instead. */
+.media-grid-panel {
+  --radius-inner: max(0px, calc(var(--radius-md) - var(--border-width)));
+
+  overflow: visible;
+}
+
+.media-grid__title {
+  position: relative;
+  border-start-start-radius: var(--radius-inner);
+  border-start-end-radius: var(--radius-inner);
+  corner-shape: var(--corner-shape);
+}
+
 /* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
  * number of them, which is what keeps the thumbnails a constant size — the same
  * thing Philomena's image list does. */
@@ -26,6 +42,16 @@
   .media-grid__title {
     justify-content: center;
   }
+
+  /* Taken out of the flow so the label stays on the bar's centre line rather
+   * than being pushed off it by the button's width. */
+  .media-grid__settings {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: var(--space-2);
+    align-items: center;
+    margin-inline-start: 0;
+  }
 }
 
 .media-grid__footer {
@@ -36,7 +62,56 @@
 
   padding: var(--space-2) var(--space-3);
   border-block-start: var(--divider);
+  border-end-start-radius: var(--radius-inner);
+  border-end-end-radius: var(--radius-inner);
+  corner-shape: var(--corner-shape);
   background-color: var(--surface);
+}
+
+/* ---- Settings menu ----------------------------------------------------- */
+
+/* Pushed to the trailing edge of the title bar, away from the label.
+ *
+ * The negative block margins keep the button out of the bar's height: without
+ * them a 32px control inside a 36px bar sets the height instead of the text,
+ * and this title bar stops lining up with every other panel's. */
+.media-grid__settings {
+  margin-block: calc(var(--space-1-5) * -1);
+  margin-inline-start: auto;
+}
+
+.media-grid__settings-menu {
+  inline-size: max-content;
+  /* Never wider than the viewport: the trigger sits at the right edge of the
+   * bar, so an over-wide panel runs off the left of a phone screen. */
+  max-inline-size: calc(100vw - 2 * var(--space-2));
+  padding: var(--space-2);
+
+  /* The menu is inside a `.panel-header`, which colors its own links and sets
+   * their weight — neither of which belongs on a menu surface. */
+  font-weight: var(--weight-normal);
+}
+
+/* Scoped under the menu to outrank `.panel-header a`, which colors links for
+ * the title bar this menu happens to hang from. */
+.media-grid__settings-menu .media-grid__settings-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 32px;
+  padding: var(--space-1-5) var(--space-2);
+
+  border-radius: var(--radius-inner);
+  corner-shape: var(--corner-shape);
+
+  color: var(--text-color);
+  font-size: var(--text-sm);
+  transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.media-grid__settings-menu .media-grid__settings-link:hover {
+  background-color: var(--surface-hover);
+  color: var(--text-color);
 }
 
 .media-grid__count {

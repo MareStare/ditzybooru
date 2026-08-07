@@ -123,12 +123,12 @@ export function onSystemLightnessChange(listener: (lightness: ThemeLightness) =>
 /* ---- Store -------------------------------------------------------------- */
 
 /**
- * The theme as a subscribable value, mirroring `lib/uiSettings`.
+ * The theme as a subscribable value, mirroring `lib/displaySettings`.
  *
  * A module-level store rather than component state, because the theme is one
  * global setting with more than one view of it, and because "is everything at
  * its default" — the question the reset button asks — spans the theme and the
- * UI settings together.
+ * Display settings together.
  */
 export interface ThemeState {
   preference: ThemeLightnessPreference;

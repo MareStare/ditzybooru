@@ -2,6 +2,7 @@ import { Outlet, createRootRoute } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
+import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
 
@@ -21,6 +22,7 @@ function RootComponent() {
         <Outlet />
       </main>
       <SiteFooter />
+      <BottomNav />
       <TanStackDevtools
         config={{
           position: 'bottom-right',

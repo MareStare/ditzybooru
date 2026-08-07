@@ -16,6 +16,16 @@
   color: var(--text-color);
 }
 
+/* The header blurs what is behind it; an opaque strip here would paint over
+ * that blur for the bottom half of the bar. The mix is tighter than the
+ * primary row's because this one carries ordinary body text on a page
+ * surface, which has far less contrast to spend. */
+@supports (backdrop-filter: blur(1px)) {
+  .nav-bar--sub {
+    background-color: color-mix(in oklab, var(--surface) 80%, transparent);
+  }
+}
+
 .nav-bar--sub .nav-link {
   color: var(--text-muted);
 }

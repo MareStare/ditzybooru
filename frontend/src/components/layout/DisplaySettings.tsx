@@ -3,11 +3,13 @@ import type { CSSProperties, ReactNode } from 'react';
 import { Check, Monitor, Moon, Sun, UndoDot } from 'lucide-react';
 
 import { Segmented } from '#/components/ui/Segmented';
+import { useComponentSettings } from '#/hooks/useComponentSettings';
 import { useTheme } from '#/hooks/useTheme';
-import { useUiSettings } from '#/hooks/useUiSettings';
+import { useDisplaySettings } from '#/hooks/useDisplaySettings';
 import { SETTING_CONTROLS } from '#/lib/settingControls';
+import { componentSettingsAreDefault, resetComponentSettings } from '#/lib/componentSettings';
 import { hydrateTheme, onSystemLightnessChange, resetTheme, setResolvedLightness, themeIsDefault } from '#/lib/theme';
-import { resetUiSettings, uiSettingsAreDefault } from '#/lib/uiSettings';
+import { resetDisplaySettings, displaySettingsAreDefault } from '#/lib/displaySettings';
 
 import type { SettingControl, SettingsState } from '#/lib/settingControls';
 
@@ -38,18 +40,21 @@ const PREVIEWS: Record<string, (value: string | number, label: string) => ReactN
   },
   radius: value => (
     <span
-      className="ui-setting-preview ui-setting-preview--corner"
+      className="display-setting-preview display-setting-preview--corner"
       style={{ '--preview-radius': `${value}px` } as CSSProperties}
     />
   ),
   borderWidth: value => (
     <span
-      className="ui-setting-preview ui-setting-preview--outline"
+      className="display-setting-preview display-setting-preview--outline"
       style={{ '--preview-width': `${value}px` } as CSSProperties}
     />
   ),
   fontScale: value => (
-    <span className="ui-setting-preview ui-setting-preview--text" style={{ '--preview-scale': value } as CSSProperties}>
+    <span
+      className="display-setting-preview display-setting-preview--text"
+      style={{ '--preview-scale': value } as CSSProperties}
+    >
       Aa
     </span>
   ),
@@ -67,7 +72,7 @@ function Swatches({
   lightness: string;
 }) {
   return (
-    <div className="ui-settings__hues">
+    <div className="display-settings__hues">
       {control.options.map(option => {
         const active = option.value === value;
         const isDefault = option.value === control.defaultValue;
@@ -98,18 +103,19 @@ function Swatches({
 }
 
 /**
- * Every appearance control the site has: the theme's lightness and hue, then
- * the six layout settings. Shared by the header's appearance menu and the UI
- * playground's rail — both render this; neither owns the state.
+ * Every display control the site has: the theme's lightness and hue, then
+ * the six layout settings. Shared by the header's display menu and the
+ * display settings page's rail — both render this; neither owns the state.
  *
  * There is no per-control code here: the list comes from `SETTING_CONTROLS`,
  * and the only thing this file decides is which widget draws a descriptor and
  * what a stop's preview looks like.
  */
-export function UiSettingsControls() {
-  const ui = useUiSettings();
+export function DisplaySettingsControls() {
+  const display = useDisplaySettings();
   const theme = useTheme();
-  const state: SettingsState = { theme, ui };
+  const components = useComponentSettings();
+  const state: SettingsState = { theme, display };
 
   // Adopt whatever the pre-paint script put on `<html>`; until this runs the
   // store holds the shipped defaults.
@@ -127,17 +133,20 @@ export function UiSettingsControls() {
     });
   }, [theme.preference]);
 
-  const isDefault = themeIsDefault(theme) && uiSettingsAreDefault(ui);
+  // Covers the per-component settings too, even though those are set on their
+  // own cards: this is the only reset the site has.
+  const isDefault =
+    themeIsDefault(theme) && displaySettingsAreDefault(display) && componentSettingsAreDefault(components);
 
   return (
-    <div className="ui-settings">
+    <div className="display-settings">
       {SETTING_CONTROLS.map(control => {
         const value = control.read(state);
         const preview = PREVIEWS[control.id];
 
         return (
-          <div className="ui-setting" key={control.id}>
-            {control.label ? <span className="ui-setting__label">{control.label}</span> : null}
+          <div className="display-setting" key={control.id}>
+            {control.label ? <span className="display-setting__label">{control.label}</span> : null}
             {control.widget === 'swatches' ? (
               <Swatches control={control} value={value} lightness={theme.lightness} />
             ) : (
@@ -158,11 +167,12 @@ export function UiSettingsControls() {
 
       <button
         type="button"
-        className="ui-settings__reset"
+        className="display-settings__reset"
         disabled={isDefault}
         onClick={() => {
           resetTheme();
-          resetUiSettings();
+          resetDisplaySettings();
+          resetComponentSettings();
         }}
       >
         <UndoDot size={14} />

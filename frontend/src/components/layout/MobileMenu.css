@@ -112,14 +112,41 @@
   background-color: var(--border-color-subtle);
 }
 
-/* The appearance block. Padded to the same inline rhythm as the links above it
+/* The display block. Padded to the same inline rhythm as the links above it
  * so the segmented tracks line up with their left edge rather than sitting in a
  * gutter of their own. */
 .drawer__settings {
+  padding-inline: var(--space-3);
+}
+
+.drawer__settings-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  list-style: none;
+  cursor: pointer;
+}
+
+.drawer__settings-summary::-webkit-details-marker {
+  display: none;
+}
+
+.drawer__settings-chevron {
+  color: var(--text-muted);
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.drawer__settings[open] .drawer__settings-chevron {
+  rotate: 180deg;
+}
+
+.drawer__settings-content {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding-inline: var(--space-3);
+  padding-block-end: var(--space-2);
 }
 
 .drawer__settings-title {
@@ -128,7 +155,7 @@
   font-weight: var(--weight-medium);
 }
 
-/* The playground link is a `.drawer__link` like the rest of the menu, but it is
+/* The settings link is a `.drawer__link` like the rest of the menu, but it is
  * the only one inside the already-padded settings block. */
 .drawer__settings .drawer__link {
   padding-inline: 0;

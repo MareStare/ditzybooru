@@ -4,6 +4,10 @@
   display: flex;
   flex-direction: column;
   min-block-size: 100dvh;
+  /* Clears the fixed bottom navigation, so the last thing on the page is
+   * scrollable out from under it rather than trapped behind it. Zero above
+   * `--md`, where there is no bottom navigation. */
+  padding-block-end: var(--bottom-nav-h);
 }
 
 .app-shell__main {

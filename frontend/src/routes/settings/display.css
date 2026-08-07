@@ -1,6 +1,6 @@
 /**
- * Layout for the /ui/playground page. Not part of the design system — it
- * only arranges the specimens, the control rail and the token inspector.
+ * Layout for the /settings/display page. Not part of the design system — it only
+ * arranges the specimen cards and the control rail.
  *
  * The page renders inside the ordinary site chrome, so the settings it writes land
  * on `:root` and re-style the header and footer along with the specimens. The
@@ -8,18 +8,18 @@
  * which is what `--header-h` is published for.
  */
 
-.pg {
+.display-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
 }
 
 @media (--xl) {
-  .pg {
+  .display-page {
     grid-template-columns: 16rem minmax(0, 1fr);
   }
 }
 
-.pg-rail {
+.display-page-rail {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -29,7 +29,7 @@
 }
 
 @media (--xl) {
-  .pg-rail {
+  .display-page-rail {
     position: sticky;
     inset-block-start: var(--header-h);
     /* Inset card rather than a full-bleed column, so the specimen area reads as
@@ -46,6 +46,55 @@
   }
 }
 
+/* ---- Rail disclosure --------------------------------------------------- */
+
+.display-page-rail-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  list-style: none;
+  cursor: pointer;
+}
+
+.display-page-rail-summary::-webkit-details-marker {
+  display: none;
+}
+
+.display-page-rail-chevron {
+  color: var(--text-muted);
+  transition: rotate var(--duration-fast) var(--ease-out);
+}
+
+.display-page-rail-disclosure[open] .display-page-rail-chevron {
+  rotate: 180deg;
+}
+
+.display-page-rail-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block-start: var(--space-3);
+}
+
+/* Once the rail has a column of its own there is nothing to collapse for: the
+ * content is forced open and the summary goes back to being a plain title. */
+@media (--xl) {
+  .display-page-rail-disclosure::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+
+  .display-page-rail-summary {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .display-page-rail-chevron {
+    display: none;
+  }
+}
+
 /* A grid rather than multicol, because cards come in three widths and multicol
  * only offers two: `column-span` takes `none | all` and nothing in between.
  *
@@ -55,7 +104,7 @@
  * that fits, and `align-items: start` keeps a short card from stretching to
  * match a tall neighbour. `auto-fill` keeps the column count derived from the
  * available width, so there are still no breakpoints to keep in sync. */
-.pg-main {
+.display-page-main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
   grid-auto-flow: row dense;
@@ -68,23 +117,26 @@
 /* Two columns: specimens that need the room to be read honestly — a table with
  * four columns, a thumbnail grid — but that do not want the whole page. Falls
  * back to a single column when the grid only has one to give. */
-.pg-card--wide {
+.display-page-card--wide {
   grid-column: span 2;
 }
 
 /* Every column: page chrome, which is misrepresented at any smaller width. */
-.pg-card--full {
+.display-page-card--full {
   grid-column: 1 / -1;
 }
 
 @media (--below-md) {
-  .pg-card--wide {
+  .display-page-card--wide {
     grid-column: auto;
   }
 }
 
-.pg-card {
+.display-page-card {
   display: flow-root;
+  /* Cleared by the sticky header when a component's settings menu links
+   * straight to this card. */
+  scroll-margin-block-start: calc(var(--header-h) + var(--space-3));
   min-inline-size: 0;
   border: var(--border-width) solid var(--border-color-subtle);
   border-radius: var(--radius-lg);
@@ -94,9 +146,9 @@
 
 /* Deliberately quieter than `.panel`: several cards contain real panels, and
  * the frame must not read as another one of them. */
-.pg-card-head {
+.display-page-card-head {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-3);
@@ -109,12 +161,14 @@
   text-transform: uppercase;
 }
 
-.pg-card-head--bare {
-  padding: 0;
-  border: 0;
+/* The title is a real `h2` for the outline; the head already carries its look. */
+.display-page-card-head h2 {
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
 }
 
-.pg-card-body {
+.display-page-card-body {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -122,14 +176,17 @@
   min-inline-size: 0;
 }
 
-.pg-row {
+/* The card's own settings sit in its title bar; the block itself is
+ * `ComponentSettings.css`. */
+
+.display-page-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
 }
 
-.pg-grid {
+.display-page-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
   gap: var(--space-3);
@@ -138,17 +195,17 @@
 
 /* ---- Control rail ------------------------------------------------------ */
 
-.pg-title {
+.display-page-title {
   font-size: var(--text-xl);
 }
 
 /* ---- Specimen helpers -------------------------------------------------- */
 
-.pg-note {
+.display-page-note {
   color: var(--text-subtle);
   font-size: var(--text-xs);
 }
 
-.pg-menu {
+.display-page-menu {
   max-inline-size: 16rem;
 }

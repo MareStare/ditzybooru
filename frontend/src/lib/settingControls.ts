@@ -5,13 +5,13 @@ import {
   THEME_COLORS,
   THEME_LIGHTNESS_PREFERENCES,
 } from '#/lib/theme';
-import { DEFAULT_UI_SETTINGS, setUiSetting, UI_SETTING_CONTROLS } from '#/lib/uiSettings';
+import { DEFAULT_DISPLAY_SETTINGS, setDisplaySetting, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
 
 import type { ThemeColor, ThemeLightnessPreference, ThemeState } from '#/lib/theme';
-import type { UiSettings } from '#/lib/uiSettings';
+import type { DisplaySettings } from '#/lib/displaySettings';
 
 /**
- * One descriptor per appearance control, theme and layout alike.
+ * One descriptor per display control, theme and layout alike.
  *
  * The theme's lightness and hue used to be hand-written into the menu while the
  * layout settings came from a table, which meant every change — default
@@ -41,7 +41,7 @@ export interface SettingControl {
 
 export interface SettingsState {
   theme: ThemeState;
-  ui: UiSettings;
+  display: DisplaySettings;
 }
 
 export const SETTING_CONTROLS: Array<SettingControl> = [
@@ -69,15 +69,15 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     },
     defaultValue: DEFAULT_THEME.color,
   },
-  ...UI_SETTING_CONTROLS.map(control => ({
+  ...DISPLAY_SETTING_CONTROLS.map(control => ({
     id: control.key,
     label: control.label,
     widget: 'segmented' as const,
     options: control.options,
-    read: (state: SettingsState) => state.ui[control.key],
+    read: (state: SettingsState) => state.display[control.key],
     write: (value: string | number) => {
-      setUiSetting(control.key, Number(value));
+      setDisplaySetting(control.key, Number(value));
     },
-    defaultValue: DEFAULT_UI_SETTINGS[control.key],
+    defaultValue: DEFAULT_DISPLAY_SETTINGS[control.key],
   })),
 ];

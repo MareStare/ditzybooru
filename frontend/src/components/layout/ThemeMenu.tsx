@@ -1,13 +1,14 @@
 import { Link } from '@tanstack/react-router';
-import { Paintbrush, Palette } from 'lucide-react';
+import { SlidersHorizontal, MonitorCog } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
-import { UiSettingsControls } from './UiSettings';
+import { DisplaySettingsControls } from './DisplaySettings';
 
 /**
- * The single appearance control in the top bar. Owns no state of its own — it
- * is the palette trigger, the settings block, and a way into the UI playground.
+ * The single display control in the top bar. Owns no state of its own — it
+ * is the trigger, the settings block, and a way into the display settings
+ * page.
  */
 export function ThemeMenu() {
   return (
@@ -16,19 +17,19 @@ export function ThemeMenu() {
       // Hidden on phones, where the same controls sit in the burger drawer.
       className="theme-menu-anchor"
       trigger={
-        <Button variant="ghost" icon title="Appearance" aria-label="Appearance">
-          <Palette size={16} />
+        <Button variant="ghost" icon title="Display" aria-label="Display">
+          <MonitorCog size={16} />
         </Button>
       }
     >
       <div className="menu theme-menu">
-        <UiSettingsControls />
+        <DisplaySettingsControls />
 
         <hr className="theme-menu__separator" />
 
-        <Link to="/ui/playground" className="theme-menu__link">
-          <Paintbrush size={16} />
-          Playground
+        <Link to="/settings/display" className="theme-menu__link">
+          <SlidersHorizontal size={16} />
+          More settings
         </Link>
       </div>
     </Dropdown>

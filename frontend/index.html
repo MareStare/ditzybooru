@@ -21,17 +21,19 @@
         document.documentElement.setAttribute('data-theme-color', localStorage.getItem('theme-color') ?? 'blue');
       })();
 
-      // The appearance settings, same story: applied here so the first paint is
+      // The display settings, same story: applied here so the first paint is
       // already at the saved spacing and text size rather than reflowing once
-      // React mounts. Keep in sync with `uiSettingProperties` in `lib/uiSettings.ts`.
+      // React mounts. Keep in sync with `displaySettingProperties` in
+      // `lib/displaySettings.ts`.
       //
-      // Ranges are NOT re-validated here — `lib/uiSettings.ts` clamps on the way in,
-      // and every setting has a value on `:root` in `tokens/ui-settings.css`, so the
-      // worst a corrupt entry can do is be skipped by the `typeof` guard below.
+      // Ranges are NOT re-validated here — `lib/displaySettings.ts` clamps on
+      // the way in, and every setting has a value on `:root` in
+      // `tokens/display-settings.css`, so the worst a corrupt entry can do is
+      // be skipped by the `typeof` guard below.
       (() => {
         let saved;
         try {
-          saved = JSON.parse(localStorage.getItem('ui-settings'));
+          saved = JSON.parse(localStorage.getItem('display-settings'));
         } catch {
           return;
         }
@@ -47,6 +49,22 @@
         };
         for (const [name, value] of Object.entries(properties)) {
           if (value !== null) document.documentElement.style.setProperty(name, value);
+        }
+      })();
+
+      // The per-component settings, applied pre-paint for the same reason. Keep
+      // in sync with `componentSettingProperties` in `lib/componentSettings.ts`.
+      (() => {
+        let saved;
+        try {
+          saved = JSON.parse(localStorage.getItem('component-settings'));
+        } catch {
+          return;
+        }
+        if (typeof saved !== 'object' || saved === null) return;
+
+        if (saved.mediaFit === 'cover' || saved.mediaFit === 'fit') {
+          document.documentElement.style.setProperty('--media-fit', saved.mediaFit === 'cover' ? 'cover' : 'contain');
         }
       })();
     </script>

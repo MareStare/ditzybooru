@@ -1,3 +1,4 @@
+.claude/skills
 target
 node_modules
 dist
@@ -5,3 +6,7 @@ frontend/.tanstack/tmp
 
 # Directory where our scripts install binaries with dependencies we need.
 tools
+
+# The impeccable skill rewrites this file on every live inject, so the only
+# way to keep its generated block out of the repo is to ignore the file.
+frontend/.gitignore

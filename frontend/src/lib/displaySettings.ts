@@ -1,23 +1,24 @@
 /**
- * The appearance settings: the six tier-1 custom properties a user is allowed to
+ * The display settings: the six tier-1 custom properties a user is allowed to
  * change, plus their persistence.
  *
- * Shared rather than owned by the playground, because the same six controls are
- * offered from the header's appearance menu — the playground is just a second
- * view onto them. State lives in this module rather than in either component so
- * the two stay in step while both are mounted, which they are on
- * `/ui/playground`.
+ * Shared rather than owned by the settings page, because the same six controls
+ * are offered from the header's display menu — the settings page is just a
+ * second view onto them. State lives in this module rather than in either
+ * component so the two stay in step while both are mounted, which they are on
+ * `/settings/display`.
  *
- * Values are validated on the way in. `styles/tokens/ui-settings.css` explains why
- * that matters: the settings are unregistered custom properties, so a nonsense
- * value is not rejected at parse time — it propagates into every `calc()` that
- * reads it and collapses the site's spacing rather than falling back.
+ * Values are validated on the way in. `styles/tokens/display-settings.css`
+ * explains why that matters: the settings are unregistered custom properties, so
+ * a nonsense value is not rejected at parse time — it propagates into every
+ * `calc()` that reads it and collapses the site's spacing rather than falling
+ * back.
  *
  * Applied pre-paint by the inline script in `index.html`, which must be kept in
- * sync with {@link uiSettingProperties}.
+ * sync with {@link displaySettingProperties}.
  */
 
-export interface UiSettings {
+export interface DisplaySettings {
   radius: number;
   borderWidth: number;
   shadow: number;
@@ -26,7 +27,7 @@ export interface UiSettings {
   motion: number;
 }
 
-export const DEFAULT_UI_SETTINGS: UiSettings = {
+export const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
   // Square by default: hard corners are what Derpibooru looks like, and this
   // site is a modernization of it rather than a departure from it.
   radius: 0,
@@ -37,18 +38,18 @@ export const DEFAULT_UI_SETTINGS: UiSettings = {
   motion: 1,
 };
 
-export interface UiSettingOption {
+export interface DisplaySettingOption {
   value: number;
   /** The accessible name, and the visible one where no preview is drawn. */
   label: string;
 }
 
-export interface UiSettingControl {
-  key: keyof UiSettings;
+export interface DisplaySettingControl {
+  key: keyof DisplaySettings;
   /** Plain-English name. Deliberately not the custom property it writes: the
    *  people this menu is for do not think in `--border-width`. */
   label: string;
-  options: Array<UiSettingOption>;
+  options: Array<DisplaySettingOption>;
 }
 
 /**
@@ -58,10 +59,10 @@ export interface UiSettingControl {
  * is "rounded or square", not "which of 17 pixel values" — and it cannot be
  * previewed, because there is no set of positions to draw. Discrete stops can
  * show the reader the actual corner, line weight or letter they are choosing.
- * The playground still reaches every value in between by editing the stored
- * `ui-settings` entry, which is where that precision belongs.
+ * Every value in between is still reachable by editing the stored
+ * `display-settings` entry, which is where that precision belongs.
  */
-export const UI_SETTING_CONTROLS: Array<UiSettingControl> = [
+export const DISPLAY_SETTING_CONTROLS: Array<DisplaySettingControl> = [
   {
     key: 'radius',
     label: 'Corners',
@@ -118,7 +119,7 @@ export const UI_SETTING_CONTROLS: Array<UiSettingControl> = [
   },
 ];
 
-const STORAGE_KEY = 'ui-settings';
+const STORAGE_KEY = 'display-settings';
 
 /**
  * The custom properties a set of settings writes on `:root`.
@@ -128,7 +129,7 @@ const STORAGE_KEY = 'ui-settings';
  * written in exactly the form the query uses — `0px` and `0`, never `0.0px` or
  * `calc(0px)`. `String(Number)` gives the canonical form for both.
  */
-export function uiSettingProperties(settings: UiSettings): Record<string, string> {
+export function displaySettingProperties(settings: DisplaySettings): Record<string, string> {
   return {
     '--radius-unit': `${settings.radius}px`,
     '--border-width': `${settings.borderWidth}px`,
@@ -144,13 +145,13 @@ export function uiSettingProperties(settings: UiSettings): Record<string, string
  * can never reach the stylesheet as something absurd.
  *
  * A value between two stops is kept rather than snapped: the menu only offers
- * the stops, but someone editing `ui-settings` by hand to try `--radius-unit: 3px`
+ * the stops, but someone editing `display-settings` by hand to try `--radius-unit: 3px`
  * is doing something legitimate, and rounding it away under them would make the
  * setting look broken.
  */
-function sanitize(control: UiSettingControl, value: unknown): number {
+function sanitize(control: DisplaySettingControl, value: unknown): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
-    return DEFAULT_UI_SETTINGS[control.key];
+    return DEFAULT_DISPLAY_SETTINGS[control.key];
   }
   const stops = control.options.map(option => option.value);
   const clamped = Math.min(Math.max(...stops), Math.max(Math.min(...stops), value));
@@ -159,72 +160,72 @@ function sanitize(control: UiSettingControl, value: unknown): number {
   return Number(clamped.toFixed(2));
 }
 
-export function readUiSettings(): UiSettings {
+export function readDisplaySettings(): DisplaySettings {
   if (typeof localStorage === 'undefined') {
-    return DEFAULT_UI_SETTINGS;
+    return DEFAULT_DISPLAY_SETTINGS;
   }
   const raw = localStorage.getItem(STORAGE_KEY);
   if (raw === null) {
-    return DEFAULT_UI_SETTINGS;
+    return DEFAULT_DISPLAY_SETTINGS;
   }
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return DEFAULT_UI_SETTINGS;
+    return DEFAULT_DISPLAY_SETTINGS;
   }
   if (typeof parsed !== 'object' || parsed === null) {
-    return DEFAULT_UI_SETTINGS;
+    return DEFAULT_DISPLAY_SETTINGS;
   }
 
-  const stored = parsed as Partial<Record<keyof UiSettings, unknown>>;
-  const settings = { ...DEFAULT_UI_SETTINGS };
-  for (const control of UI_SETTING_CONTROLS) {
+  const stored = parsed as Partial<Record<keyof DisplaySettings, unknown>>;
+  const settings = { ...DEFAULT_DISPLAY_SETTINGS };
+  for (const control of DISPLAY_SETTING_CONTROLS) {
     settings[control.key] = sanitize(control, stored[control.key]);
   }
   return settings;
 }
 
-function writeUiSettings(settings: UiSettings): void {
+function writeDisplaySettings(settings: DisplaySettings): void {
   const root = document.documentElement;
-  for (const [name, value] of Object.entries(uiSettingProperties(settings))) {
+  for (const [name, value] of Object.entries(displaySettingProperties(settings))) {
     root.style.setProperty(name, value);
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 }
 
 // A module-level store rather than a context: the settings are a single global
-// setting, and both views of them (the header menu and the playground rail) can
+// setting, and both views of them (the header menu and the settings rail) can
 // be on screen at once.
-let current = readUiSettings();
+let current = readDisplaySettings();
 const listeners = new Set<() => void>();
 
-export function getUiSettings(): UiSettings {
+export function getDisplaySettings(): DisplaySettings {
   return current;
 }
 
-export function subscribeUiSettings(listener: () => void): () => void {
+export function subscribeDisplaySettings(listener: () => void): () => void {
   listeners.add(listener);
   return () => {
     listeners.delete(listener);
   };
 }
 
-export function setUiSetting<TKey extends keyof UiSettings>(key: TKey, value: UiSettings[TKey]): void {
-  const control = UI_SETTING_CONTROLS.find(candidate => candidate.key === key);
+export function setDisplaySetting<TKey extends keyof DisplaySettings>(key: TKey, value: DisplaySettings[TKey]): void {
+  const control = DISPLAY_SETTING_CONTROLS.find(candidate => candidate.key === key);
   current = { ...current, [key]: control ? sanitize(control, value) : value };
-  writeUiSettings(current);
+  writeDisplaySettings(current);
   for (const listener of listeners) listener();
 }
 
-export function resetUiSettings(): void {
-  current = DEFAULT_UI_SETTINGS;
-  writeUiSettings(current);
+export function resetDisplaySettings(): void {
+  current = DEFAULT_DISPLAY_SETTINGS;
+  writeDisplaySettings(current);
   for (const listener of listeners) listener();
 }
 
 /** Whether anything has been changed from the shipped defaults. */
-export function uiSettingsAreDefault(settings: UiSettings): boolean {
-  return UI_SETTING_CONTROLS.every(control => settings[control.key] === DEFAULT_UI_SETTINGS[control.key]);
+export function displaySettingsAreDefault(settings: DisplaySettings): boolean {
+  return DISPLAY_SETTING_CONTROLS.every(control => settings[control.key] === DEFAULT_DISPLAY_SETTINGS[control.key]);
 }

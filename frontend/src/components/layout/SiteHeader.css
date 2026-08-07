@@ -19,6 +19,18 @@
   box-shadow: var(--shadow-sm);
 }
 
+/* Glass rather than a flat fill: the bar sits on top of the page and the page
+ * scrolls under it, so it may as well admit that. Gated on support, because
+ * without the blur the same translucency is just a bar you can read the page
+ * through. `--surface-nav` is a saturated mid-tone, so the mix stays high —
+ * the text on it is what sets the floor. */
+@supports (backdrop-filter: blur(1px)) {
+  .nav {
+    background-color: color-mix(in oklab, var(--surface-nav) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(1.4);
+  }
+}
+
 .nav-bar {
   display: flex;
   align-items: center;
@@ -84,50 +96,32 @@
   letter-spacing: var(--tracking-tight);
 }
 
-/* ---- Search ------------------------------------------------------------ */
+/* Three columns rather than a flex row, so the search field is centred on the
+ * viewport instead of on the space left between the brand and the account
+ * controls — which are different widths, and change width with the signed-in
+ * state. The side tracks never drop below their content, so a narrow bar takes
+ * the width out of the field rather than clipping the brand.
+ *
+ * Only the primary bar: the section strip below it (`nav-bar--sub`) is a plain
+ * row of links. */
+.nav-bar--primary {
+  display: grid;
+  grid-template-columns: minmax(max-content, 1fr) minmax(0, 52rem) minmax(max-content, 1fr);
+}
 
-/* The field is embedded in the bar, sitting on the nav color rather than on a
- * page surface, so it takes `--surface-nav-field` instead of `--surface-sunken`. */
-.nav-search {
+.nav__start {
   display: flex;
-  flex: 1;
-  min-inline-size: 0;
   align-items: center;
-  gap: var(--space-1);
-}
-
-.nav-search__box {
-  position: relative;
-  flex: 1;
+  gap: var(--space-2);
   min-inline-size: 0;
 }
 
-.nav-search__icon {
-  position: absolute;
-  inset-block-start: 50%;
-  inset-inline-start: var(--space-2);
-  translate: 0 -50%;
-  pointer-events: none;
-  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%);
+.nav__actions {
+  justify-self: end;
 }
 
-/* Height comes from `.field`; only the leading padding changes, to clear the
- * search glyph sitting inside the box. */
-.nav-search .field {
-  padding-inline-start: calc(var(--space-2) * 2 + 16px);
-  border-color: color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 12%);
-  background-color: var(--surface-nav-field);
-  color: var(--text-on-nav);
-}
-
-.nav-search .field::placeholder {
-  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%);
-}
-
-.nav-search .field:hover:not(:disabled, :read-only) {
-  border-color: color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 30%);
-  background-color: color-mix(in oklab, var(--surface-nav-field), #000 12%);
-}
+/* The field itself is `SearchBar.css` — it is shared with the bottom
+ * navigation's search sheet. */
 
 /* ---- Actions ----------------------------------------------------------- */
 
@@ -185,11 +179,27 @@
   }
 }
 
-/* Below this the brand wordmark, the upload shortcut and the reverse-search
- * button all lose to the search field, which is the reason the bar exists. */
+/* Below this the bar carries the burger, the brand mark, the filters shortcut
+ * and the account menu, and nothing else: search, notifications and
+ * conversations move to the bottom navigation, which is in thumb reach.
+ *
+ * The upload shortcut goes with them — it does not survive the width, and it
+ * is one tap away in the drawer. */
 @media (--below-md) {
-  .nav-brand__name,
-  .nav__compact-hidden {
+  .nav__compact-hidden,
+  .nav__bottom-nav-hidden {
     display: none;
+  }
+
+  /* The wordmark stays. With search gone from the bar there is room for it,
+   * and it is the only thing on a phone screen that says which site this is. */
+  .nav-brand__name {
+    font-size: var(--text-md);
+  }
+
+  /* Nothing left in the middle track to centre, so the bar collapses to the
+   * two end groups. */
+  .nav-bar--primary {
+    grid-template-columns: minmax(0, 1fr) max-content;
   }
 }

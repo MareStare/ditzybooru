@@ -28,7 +28,7 @@
  * and contributing no CSS of its own. */
 @import './tokens/breakpoints.css';
 
-@import './tokens/ui-settings.css';
+@import './tokens/display-settings.css';
 @import './tokens/scale.css';
 @import './tokens/palette.css';
 @import './tokens/semantic.css';
@@ -64,16 +64,20 @@
 @import '../components/ui/Dropdown.css';
 @import '../components/ui/Int.css';
 @import '../components/ui/Menu.css';
+@import '../components/ui/Slider.css';
 @import '../components/ui/Pagination.css';
 @import '../components/ui/Panel.css';
 @import '../components/ui/Segmented.css';
 
 /* ---- Features ---------------------------------------------------------- */
 
-@import '../components/layout/UiSettings.css';
+@import '../components/layout/DisplaySettings.css';
+@import '../components/layout/ComponentSettings.css';
+@import '../components/layout/SearchBar.css';
 @import '../components/layout/SiteHeader.css';
 @import '../components/layout/HeaderNav.css';
 @import '../components/layout/MobileMenu.css';
+@import '../components/layout/BottomNav.css';
 @import '../components/layout/SiteFooter.css';
 @import '../components/layout/ThemeMenu.css';
 
@@ -91,4 +95,4 @@
 
 @import '../routes/__root.css';
 @import '../routes/index.css';
-@import '../routes/ui/playground.css';
+@import '../routes/settings/display.css';

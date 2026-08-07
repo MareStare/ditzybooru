@@ -1,0 +1,105 @@
+/**
+ * The phone navigation bar, pinned to the bottom of the viewport. Same surface
+ * as the top bar, so the two read as one piece of chrome wrapped around the
+ * page rather than as a bar and a widget.
+ *
+ * Only exists below `--md`; above it every destination here is back on the top
+ * bar, and `--bottom-nav-h` collapses to zero so the shell stops reserving
+ * room for it.
+ */
+
+.bottom-nav {
+  position: fixed;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: 40;
+
+  background-color: var(--surface-nav);
+  color: var(--text-on-nav);
+  /* Cast upward: the bar sits over the page, and the page scrolls under it. */
+  box-shadow: 0 -2px 8px color-mix(in oklab, #000 22%, transparent);
+}
+
+/* Same glass as the top bar, so the two ends of the page match. */
+@supports (backdrop-filter: blur(1px)) {
+  .bottom-nav {
+    background-color: color-mix(in oklab, var(--surface-nav) 80%, transparent);
+    backdrop-filter: blur(12px) saturate(1.4);
+  }
+}
+
+@media (--md) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
+.bottom-nav__bar {
+  display: flex;
+  align-items: stretch;
+  block-size: var(--bottom-nav-bar-h);
+  /* The home indicator on a hardware-gesture phone, which would otherwise sit
+   * on top of the row. */
+  padding-block-end: env(safe-area-inset-bottom);
+}
+
+.bottom-nav__item {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-0-5);
+
+  border: 0;
+  background-color: transparent;
+
+  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%);
+  font: inherit;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+
+  transition:
+    background-color var(--duration) var(--ease-out),
+    color var(--duration) var(--ease-out);
+}
+
+.bottom-nav__item:hover,
+.bottom-nav__item:active {
+  background-color: color-mix(in oklab, var(--surface-nav), #000 14%);
+  color: var(--text-on-nav);
+}
+
+/* The badge rides the icon, not the whole cell, which is a label tall. */
+.bottom-nav__icon {
+  position: relative;
+  display: inline-flex;
+}
+
+.bottom-nav__badge {
+  position: absolute;
+  inset-block-start: -4px;
+  inset-inline-start: 10px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: 16px;
+  block-size: 16px;
+  padding-inline: var(--space-0-5);
+
+  border-radius: var(--radius-full);
+  background-color: var(--unread);
+
+  color: #000;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The search field, revealed above the row rather than replacing it: the row is
+ * the thing that closes the sheet again. */
+.bottom-nav__sheet {
+  padding: var(--space-2);
+  border-block-end: var(--border-width) solid color-mix(in oklab, var(--surface-nav), #000 20%);
+}

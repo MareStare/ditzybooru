@@ -1,0 +1,44 @@
+/**
+ * The per-component settings block. Deliberately the same shape as
+ * `.display-settings`, so a component's own menu and the site-wide
+ * display menu read as two instances of one thing rather than two designs.
+ */
+
+.component-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-inline-size: 0;
+}
+
+.component-setting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.component-setting__label {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+/* On one line, for a card's title bar: there is width to spare there and no
+ * vertical room at all. Wraps rather than compressing the tracks, which are the
+ * part that has to stay readable. */
+.component-settings--inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+
+  /* Cancels the uppercase run-in a card head sets for its title. */
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.component-settings--inline .component-setting {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-2);
+}
