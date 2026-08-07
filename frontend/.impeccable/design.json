@@ -1,0 +1,585 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-06T00:00:00.000Z",
+  "title": "Design System: Ditzybooru",
+  "extensions": {
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The page's <h1>. Rare — most surfaces are panel-titled rather than headed."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "<h2>, section headings within a page."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Panel headers. The panel title strip is the site's real heading system."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Everything: nav links, buttons, table cells, menu items, comment text. The one value that decides whether the site reads dense or cramped."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase menu group labels, format markers, counter badges."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "code, kbd, samp, pre."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-color",
+        "value": "color-mix(in oklab, var(--base) 22%, #000)",
+        "purpose": "The tint every shadow is built from. --base rather than --page, because it is the one theme color saturated in every theme; at 22% it lands at L 0.07-0.15 across all ten bases."
+      },
+      {
+        "name": "shadow-sm",
+        "value": "0 1px 3px color-mix(in oklab, var(--shadow-color) calc(22% * var(--shadow-force)), transparent), 0 1px 2px color-mix(in oklab, var(--shadow-color) calc(14% * var(--shadow-force)), transparent)",
+        "purpose": "Panels and the top app bar at rest. Barely there; it exists so a panel is not a flat rectangle."
+      },
+      {
+        "name": "shadow-md",
+        "value": "0 4px 12px color-mix(in oklab, var(--shadow-color) calc(24% * var(--shadow-force)), transparent), 0 1px 3px color-mix(in oklab, var(--shadow-color) calc(16% * var(--shadow-force)), transparent)",
+        "purpose": "Hover on a media card, and the panel's resting shadow when borders are switched off."
+      },
+      {
+        "name": "shadow-menu",
+        "value": "0 12px 32px color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-force)), transparent)",
+        "purpose": "The only genuinely lifted surface in the system: popovers and dropdown panels."
+      },
+      {
+        "name": "edge-highlight",
+        "value": "inset 0 var(--border-width) 0 color-mix(in oklab, var(--edge-tint) calc(var(--edge-alpha) * var(--shadow-force)), transparent)",
+        "purpose": "A 1px inner top highlight — 5% on dark themes, 0% on light. Most of what separates a panel that looks lit from one that looks like a rectangle."
+      }
+    ],
+    "motion": [
+      {
+        "name": "duration-fast",
+        "value": "calc(100ms * var(--motion-scale))",
+        "purpose": "Hover fills inside dense strips: media actions, menu items."
+      },
+      {
+        "name": "duration",
+        "value": "calc(150ms * var(--motion-scale))",
+        "purpose": "Default transition duration for color, border, shadow, translate."
+      },
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "The system's only easing curve."
+      },
+      {
+        "name": "motion-scale",
+        "value": "1",
+        "purpose": "User setting. 0 disables all transitions; prefers-reduced-motion forces it to 0."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "xs",
+        "value": "30rem",
+        "purpose": "480px — a small phone. The panel tab strip starts to scroll."
+      },
+      {
+        "name": "sm",
+        "value": "34rem",
+        "purpose": "544px — the pagination bar keeps its First/Last controls above this."
+      },
+      {
+        "name": "md",
+        "value": "40rem",
+        "purpose": "640px — the header regains its wordmark and icon shortcuts; the footer opens to three columns."
+      },
+      {
+        "name": "lg",
+        "value": "48rem",
+        "purpose": "768px — the secondary nav strip and appearance menu exist above this; below, both live in the burger drawer."
+      },
+      {
+        "name": "xl",
+        "value": "60rem",
+        "purpose": "960px — room for a fixed control rail beside the content it drives."
+      },
+      {
+        "name": "2xl",
+        "value": "64rem",
+        "purpose": "1024px — the home page splits into activity column plus grid."
+      },
+      {
+        "name": "thumbs-roomy",
+        "value": "1150px",
+        "purpose": "Where 150px thumbnails start looking like a contact sheet and grow to 225px. A fact about thumbnails, not about devices."
+      }
+    ],
+    "settings": [
+      {
+        "name": "--radius-unit",
+        "value": "0px",
+        "purpose": "Corner rounding. 0px default — classic Derpibooru's hard corners. Every radius token is a multiple of it."
+      },
+      {
+        "name": "--border-width",
+        "value": "1px",
+        "purpose": "Hairline weight. At 0px, panels rely on shadow and surface contrast instead."
+      },
+      {
+        "name": "--shadow-force",
+        "value": "1",
+        "purpose": "Depth multiplier. 0 is fully flat, 1.6 is heavy."
+      },
+      {
+        "name": "--density",
+        "value": "1",
+        "purpose": "Spacing multiplier: 0.85 compact / 1 cozy / 1.15 comfortable. Multiplies every space token and every control height."
+      },
+      {
+        "name": "--font-scale",
+        "value": "1",
+        "purpose": "Type size multiplier, applied to every --text-* token."
+      },
+      {
+        "name": "--motion-scale",
+        "value": "1",
+        "purpose": "Animation speed multiplier. 0 disables transitions."
+      },
+      {
+        "name": "--corner-shape",
+        "value": "round",
+        "purpose": "Progressive enhancement — Chromium-only today, ignored elsewhere. Accompanies every border-radius."
+      }
+    ],
+    "colorMeta": {
+      "seed-blue-dark": {
+        "role": "primary",
+        "displayName": "Twilight Navy",
+        "purpose": "Blue theme base, dark. Derpibooru’s default and Ditzybooru’s.",
+        "tonalRamp": ["#00052e", "#09234e", "#26416f", "#446192", "#6483b6", "#86a6db", "#a9caff", "#cef0ff"]
+      },
+      "seed-blue-light": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "purpose": "Blue theme base, light.",
+        "tonalRamp": ["#000535", "#002655", "#004577", "#1b669a", "#4289bf", "#66ace5", "#8ad1ff", "#aff7ff"]
+      },
+      "seed-red-dark": {
+        "role": "primary",
+        "displayName": "Oxide Red",
+        "purpose": "Red theme base, dark.",
+        "tonalRamp": ["#300000", "#540000", "#79181c", "#9e3c3b", "#c55f5b", "#ec827c", "#ffa69f", "#ffcbc4"]
+      },
+      "seed-red-light": {
+        "role": "primary",
+        "displayName": "Brick Signal",
+        "purpose": "Red theme base, light.",
+        "tonalRamp": ["#390000", "#600000", "#860003", "#ae2629", "#d64e4a", "#ff736b", "#ff988e", "#ffbeb2"]
+      },
+      "seed-orange-dark": {
+        "role": "primary",
+        "displayName": "Burnt Amber",
+        "purpose": "Orange theme base, dark.",
+        "tonalRamp": ["#220000", "#411600", "#62340d", "#85542f", "#a97550", "#ce9872", "#f4bc95", "#ffe1b9"]
+      },
+      "seed-orange-light": {
+        "role": "primary",
+        "displayName": "Kiln Orange",
+        "purpose": "Orange theme base, light.",
+        "tonalRamp": ["#2b0000", "#4d0300", "#702900", "#954a00", "#ba6c2b", "#e08f51", "#ffb375", "#ffd999"]
+      },
+      "seed-yellow-dark": {
+        "role": "primary",
+        "displayName": "Olive Brass",
+        "purpose": "Yellow theme base, dark.",
+        "tonalRamp": ["#130a00", "#2e2500", "#4b420b", "#6b622e", "#8d834f", "#b0a671", "#d4cb94", "#faf0b8"]
+      },
+      "seed-yellow-light": {
+        "role": "primary",
+        "displayName": "Antique Gold",
+        "purpose": "Yellow theme base, light.",
+        "tonalRamp": ["#1b0400", "#381f00", "#573e00", "#785e00", "#9b7f28", "#bea24f", "#e3c773", "#ffec98"]
+      },
+      "seed-green-dark": {
+        "role": "primary",
+        "displayName": "Forest Signal",
+        "purpose": "Green theme base, dark.",
+        "tonalRamp": ["#001400", "#003100", "#07501d", "#30713c", "#53945d", "#76b77e", "#99dca2", "#beffc6"]
+      },
+      "seed-green-light": {
+        "role": "primary",
+        "displayName": "Fern Green",
+        "purpose": "Green theme base, light.",
+        "tonalRamp": ["#001500", "#003300", "#00521c", "#1c733c", "#44965c", "#69ba7e", "#8ddfa1", "#b2ffc6"]
+      },
+      "seed-teal-dark": {
+        "role": "primary",
+        "displayName": "Deep Lagoon",
+        "purpose": "Teal theme base, dark.",
+        "tonalRamp": ["#001118", "#002d34", "#014b52", "#2e6c73", "#518e95", "#73b1b8", "#97d6dd", "#bcfcff"]
+      },
+      "seed-teal-light": {
+        "role": "primary",
+        "displayName": "Harbour Teal",
+        "purpose": "Teal theme base, light.",
+        "tonalRamp": ["#00121d", "#002f3a", "#004d59", "#056e7a", "#3a909c", "#60b4c0", "#85d9e6", "#aaffff"]
+      },
+      "seed-purple-dark": {
+        "role": "primary",
+        "displayName": "Ink Violet",
+        "purpose": "Purple theme base, dark.",
+        "tonalRamp": ["#110223", "#2b1c41", "#483961", "#675883", "#8979a6", "#ac9ccb", "#d0bff1", "#f5e5ff"]
+      },
+      "seed-purple-light": {
+        "role": "primary",
+        "displayName": "Orchid Plum",
+        "purpose": "Purple theme base, light.",
+        "tonalRamp": ["#1e003c", "#3a005d", "#591e80", "#7a42a4", "#9c64ca", "#c088f0", "#e5acff", "#ffd1ff"]
+      },
+      "seed-pink-dark": {
+        "role": "primary",
+        "displayName": "Mulberry",
+        "purpose": "Pink theme base, dark.",
+        "tonalRamp": ["#25000d", "#460527", "#692744", "#8c4764", "#b16885", "#d78aa8", "#feaecc", "#ffd3f2"]
+      },
+      "seed-pink-light": {
+        "role": "primary",
+        "displayName": "Raspberry Signal",
+        "purpose": "Pink theme base, light.",
+        "tonalRamp": ["#350006", "#5b001f", "#81003b", "#a8255a", "#d04c7b", "#f8719d", "#ff95c1", "#ffbbe6"]
+      },
+      "seed-gray-dark": {
+        "role": "primary",
+        "displayName": "Gunmetal",
+        "purpose": "Gray theme base, dark.",
+        "tonalRamp": ["#070c10", "#20262b", "#3d4348", "#5c6268", "#7c8389", "#9fa6ac", "#c3cad1", "#e8f0f6"]
+      },
+      "seed-gray-light": {
+        "role": "primary",
+        "displayName": "Pewter",
+        "purpose": "Gray theme base, light.",
+        "tonalRamp": ["#050c14", "#1d262f", "#39434d", "#58636d", "#79848f", "#9ba7b2", "#bfcbd7", "#e4f0fd"]
+      },
+      "page-blue-dark": {
+        "role": "neutral",
+        "displayName": "Midnight Slate",
+        "purpose": "Blue dark theme page. Each dark theme sets its own near-black, tinted toward its accent.",
+        "tonalRamp": ["#060b14", "#1f2530", "#3b424e", "#5a626e", "#7b8390", "#9da6b3", "#c1cad8", "#e6effe"]
+      },
+      "page-light": {
+        "role": "neutral",
+        "displayName": "Slate Mist",
+        "purpose": "Shared light-theme page. Every light theme uses it; they differ only in base and links.",
+        "tonalRamp": ["#0a0b0d", "#242527", "#414244", "#606163", "#818284", "#a3a5a7", "#c7c9cb", "#edeff1"]
+      },
+      "ink-dark": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "purpose": "Dark-theme foreground, shared by all nine dark themes.",
+        "tonalRamp": ["#0b0b0c", "#252526", "#424243", "#616163", "#828284", "#a5a5a7", "#c9c9cb", "#eeeef0"]
+      },
+      "ink-light": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "purpose": "Light-theme foreground.",
+        "tonalRamp": ["#0b0b0b", "#252525", "#424242", "#616161", "#828282", "#a5a5a5", "#c9c9c9", "#eeeeee"]
+      },
+      "link-blue-dark": {
+        "role": "secondary",
+        "displayName": "Sky Wash",
+        "purpose": "Blue dark theme link color. Links are never underlined; color carries them.",
+        "tonalRamp": ["#000a2b", "#00274a", "#09466b", "#30668e", "#5288b2", "#74acd7", "#98d0fd", "#bdf6ff"]
+      },
+      "link-blue-light": {
+        "role": "secondary",
+        "displayName": "Deep Harbour",
+        "purpose": "Blue light theme link color.",
+        "tonalRamp": ["#000437", "#002558", "#00457a", "#13669e", "#3e89c2", "#62ace8", "#86d1ff", "#abf7ff"]
+      },
+      "link-hover-violet": {
+        "role": "secondary",
+        "displayName": "Muted Violet",
+        "purpose": "The signature link hover. Derpibooru leaves the link’s own hue for a violet; that jump is a recognition cue. Do not normalize to a blue.",
+        "tonalRamp": ["#13002e", "#2d144d", "#4a336f", "#6a5391", "#8b74b5", "#ae97db", "#d2bbff", "#f8e0ff"]
+      },
+      "fave": {
+        "role": "tertiary",
+        "displayName": "Fave Gold",
+        "purpose": "The favourite star. Theme-invariant muscle memory; lifted at paint time as --fave-strong.",
+        "tonalRamp": ["#190600", "#352200", "#534000", "#736000", "#958215", "#b9a643", "#ddca69", "#fff08f"]
+      },
+      "vote-up": {
+        "role": "tertiary",
+        "displayName": "Upvote Green",
+        "purpose": "Upvote glyph, positive scores, donate link tint, success badges.",
+        "tonalRamp": ["#001400", "#003200", "#115200", "#357300", "#56961f", "#78ba49", "#9ce06f", "#c0ff94"]
+      },
+      "vote-down": {
+        "role": "tertiary",
+        "displayName": "Downvote Red",
+        "purpose": "Downvote glyph, negative scores, hide action, invalid fields.",
+        "tonalRamp": ["#400000", "#690000", "#910000", "#ba0000", "#e33e1e", "#ff6747", "#ff8d6c", "#ffb491"]
+      },
+      "unread": {
+        "role": "tertiary",
+        "displayName": "Unread Orange",
+        "purpose": "Notification counter and unread markers.",
+        "tonalRamp": ["#360000", "#5c0000", "#820700", "#a83700", "#cf5c00", "#f78100", "#ffa63c", "#ffcc68"]
+      },
+      "tag-general": {
+        "role": "tertiary",
+        "displayName": "Meadow Green",
+        "purpose": "Default tag category seed.",
+        "tonalRamp": ["#001600", "#003400", "#005308", "#15752e", "#40984f", "#65bc71", "#8ae194", "#afffb9"]
+      },
+      "tag-rating": {
+        "role": "tertiary",
+        "displayName": "Rating Blue",
+        "purpose": "Rating tag category seed.",
+        "tonalRamp": ["#000042", "#002064", "#004187", "#0c63ab", "#3986d1", "#5eaaf8", "#82cfff", "#a7f5ff"]
+      },
+      "tag-spoiler": {
+        "role": "tertiary",
+        "displayName": "Spoiler Ochre",
+        "purpose": "Spoiler tag category seed.",
+        "tonalRamp": ["#250000", "#451300", "#673400", "#895400", "#ad7600", "#d29937", "#f8be5f", "#ffe385"]
+      },
+      "tag-origin": {
+        "role": "tertiary",
+        "displayName": "Origin Indigo",
+        "purpose": "Origin tag category seed.",
+        "tonalRamp": ["#14004d", "#250070", "#3d2995", "#594dba", "#7870e1", "#9994ff", "#bcb9ff", "#e0deff"]
+      },
+      "tag-oc": {
+        "role": "tertiary",
+        "displayName": "OC Magenta",
+        "purpose": "Original-character tag category seed.",
+        "tonalRamp": ["#27002f", "#480050", "#6a0a71", "#8e3594", "#b359b9", "#d97cde", "#ffa0ff", "#ffc6ff"]
+      },
+      "tag-error": {
+        "role": "tertiary",
+        "displayName": "Error Rose",
+        "purpose": "Error tag category seed.",
+        "tonalRamp": ["#360000", "#5c0003", "#82001f", "#a92b3e", "#d1515d", "#f9757f", "#ff9aa2", "#ffc0c6"]
+      },
+      "tag-character": {
+        "role": "tertiary",
+        "displayName": "Character Cyan",
+        "purpose": "Character tag category seed.",
+        "tonalRamp": ["#001123", "#002e41", "#004d60", "#006e82", "#2b90a5", "#55b4c9", "#7bd9ef", "#a1ffff"]
+      },
+      "tag-content-official": {
+        "role": "tertiary",
+        "displayName": "Official Citron",
+        "purpose": "Official-content tag category seed.",
+        "tonalRamp": ["#140900", "#2e2600", "#4b4400", "#6b6500", "#8c8700", "#afaa34", "#d3cf5e", "#f8f584"]
+      },
+      "tag-content-fanmade": {
+        "role": "tertiary",
+        "displayName": "Fanmade Blush",
+        "purpose": "Fanmade-content tag category seed.",
+        "tonalRamp": ["#200016", "#400d31", "#612c50", "#844b70", "#a86c92", "#cd8fb6", "#f3b2da", "#ffd7ff"]
+      },
+      "tag-species": {
+        "role": "tertiary",
+        "displayName": "Species Terracotta",
+        "purpose": "Species tag category seed.",
+        "tonalRamp": ["#270000", "#490b00", "#6b2c11", "#8f4c32", "#b46e52", "#da9074", "#ffb497", "#ffd9bb"]
+      },
+      "tag-body-type": {
+        "role": "tertiary",
+        "displayName": "Body Type Silver",
+        "purpose": "Body-type tag category seed.",
+        "tonalRamp": ["#0b0b0b", "#252525", "#424242", "#616161", "#828282", "#a5a5a5", "#c9c9c9", "#eeeeee"]
+      },
+      "badge-staff": {
+        "role": "tertiary",
+        "displayName": "Staff Aubergine",
+        "purpose": "Staff badge seed.",
+        "tonalRamp": ["#20001f", "#3f083d", "#60295c", "#82497e", "#a66aa1", "#cb8cc5", "#f1b0ea", "#ffd5ff"]
+      }
+    }
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The default affirmative control. Sets one input — --btn-seed — and derives border, hover and active from it.",
+      "html": "<button class=\"ds-btn ds-btn-primary\">Upload</button>",
+      "css": ".ds-btn { --btn-color: var(--surface-sunken); display: inline-flex; align-items: center; justify-content: center; gap: calc(0.375rem * var(--density)); min-block-size: calc(32px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--btn-color), var(--lift) 22%); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--btn-color); box-shadow: var(--edge-highlight); color: var(--text-color); font: inherit; font-size: var(--text-sm); font-weight: 500; line-height: 1.2; white-space: nowrap; cursor: pointer; transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out); } .ds-btn-primary { --btn-color: color-mix(in oklab, var(--base), var(--page) var(--w-chrome)); } .ds-btn:hover { background-color: color-mix(in oklab, var(--btn-color), var(--lift) 12%); border-color: color-mix(in oklab, var(--btn-color), var(--lift) 34%); } .ds-btn:active { background-color: color-mix(in oklab, var(--btn-color), #000 8%); box-shadow: none; } .ds-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Text-only button for dense toolbars. Keeps the full hit area of a filled button.",
+      "html": "<button class=\"ds-btn ds-btn-ghost\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"12\" r=\"1\"/><circle cx=\"19\" cy=\"12\" r=\"1\"/><circle cx=\"5\" cy=\"12\" r=\"1\"/></svg>More</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: calc(0.375rem * var(--density)); min-block-size: calc(32px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: var(--border-width) solid transparent; border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: transparent; box-shadow: none; color: var(--text-muted); font: inherit; font-size: var(--text-sm); font-weight: 500; line-height: 1.2; white-space: nowrap; cursor: pointer; transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out); } .ds-btn-ghost:hover { background-color: var(--surface-hover); color: var(--text-color); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Field",
+      "kind": "input",
+      "refersTo": "field",
+      "description": "A native input styled as an ordinary box — keyboard handling, IME, autofill and AT semantics stay intact. Flags invalidity with :user-invalid, never :invalid.",
+      "html": "<input class=\"ds-field\" type=\"search\" placeholder=\"Search tags, e.g. safe, oc\" aria-label=\"Search\">",
+      "css": ".ds-field { inline-size: 100%; min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border: var(--border-width) solid var(--border-color-input); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); color: var(--text-color); font: inherit; font-size: var(--text-sm); transition: border-color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out); } .ds-field::placeholder { color: var(--text-subtle); } .ds-field:hover:not(:disabled, :read-only) { border-color: var(--border-color-strong); } .ds-field:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; } .ds-field:user-invalid { border-color: var(--score-negative); }"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Philomena's `.block` — the primary content container. A tinted title strip over a body, with an optional centered footer link.",
+      "html": "<section class=\"ds-panel\"><header class=\"ds-panel-header\">Recently Commented On</header><div class=\"ds-panel-body\">Panel bodies carry --space-3 of padding. A flush variant zeroes it for list bodies.</div><a class=\"ds-panel-footer\" href=\"#\">See all</a></section>",
+      "css": ".ds-panel { display: flex; flex-direction: column; overflow: hidden; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface); box-shadow: var(--shadow-sm), var(--edge-highlight); } .ds-panel-header { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); background-color: var(--surface-panel-header); color: var(--text-color); font-size: var(--text-md); font-weight: 600; line-height: 1.2; } .ds-panel-body { padding: calc(0.75rem * var(--density)); color: var(--text-color); font-size: var(--text-sm); line-height: 1.45; } .ds-panel-footer { display: block; padding: calc(0.5rem * var(--density)) calc(0.75rem * var(--density)); border-top: var(--border-width) solid var(--border-color-subtle); background-color: var(--surface); color: var(--text-muted); font-size: var(--text-xs); font-weight: 500; text-align: center; text-decoration: none; transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out); } .ds-panel-footer:hover { background-color: var(--surface-hover); color: var(--text-color); }"
+    },
+    {
+      "name": "Panel Tabs",
+      "kind": "nav",
+      "refersTo": "panel-tab-active",
+      "description": "Tabs sitting in a panel's title strip. The selected tab lifts OUT of the strip toward white rather than sinking into the body, because a selected tab must read as the lit one in both polarities.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Featured</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Trending</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Watched</button></div>",
+      "css": ".ds-tabs { display: flex; flex-wrap: wrap; gap: 1px; padding-inline: calc(0.25rem * var(--density)); background-color: var(--surface-panel-header); } .ds-tab { display: inline-flex; align-items: center; gap: calc(0.375rem * var(--density)); min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: 0; border-radius: var(--radius-sm) var(--radius-sm) 0 0; corner-shape: var(--corner-shape); background-color: transparent; color: var(--link-on-panel-header); font: inherit; font-size: var(--text-sm); font-weight: 500; cursor: pointer; transition: background-color var(--duration) var(--ease-out); } .ds-tab:hover:not([aria-selected='true']) { background-color: color-mix(in oklab, var(--surface-panel-header), #000 10%); } .ds-tab[aria-selected='true'] { background-color: var(--surface-tab-active); color: var(--text-color); } .ds-tab:focus-visible { outline: 2px solid var(--link); outline-offset: -2px; }"
+    },
+    {
+      "name": "Tag",
+      "kind": "chip",
+      "refersTo": "tag",
+      "description": "A category-coloured tag. The seed names the category and is NOT the text colour: the label is the seed pushed along --lift, and the wash and border derive from that label. An optional count rides inside, separated by a border rather than a gap.",
+      "html": "<a class=\"ds-tag ds-tag-character\" href=\"#\">twilight sparkle<span class=\"ds-tag-count\">148923</span></a>",
+      "css": ".ds-tag { --tag-seed: #4aa158; --tag-color: color-mix(in oklab, var(--tag-seed), var(--lift) var(--tag-text-mix)); display: inline-flex; align-items: center; gap: calc(0.25rem * var(--density)); min-block-size: 24px; padding: calc(0.125rem * var(--density)) calc(0.5rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-border-mix)); border-radius: var(--radius-sm); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-bg-mix)); color: var(--tag-color); font-size: var(--text-xs); font-weight: 500; line-height: 1.2; white-space: nowrap; text-decoration: none; transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out); } .ds-tag-character { --tag-seed: #4aaabf; } .ds-tag:hover { background-color: color-mix(in oklab, var(--tag-color), var(--surface) calc(var(--tag-bg-mix) - 14%)); } .ds-tag-count { padding-inline-start: calc(0.25rem * var(--density)); border-inline-start: var(--border-width) solid color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-border-mix)); color: color-mix(in oklab, var(--tag-color), var(--text-color) 40%); font-variant-numeric: tabular-nums; font-weight: 400; }"
+    },
+    {
+      "name": "Badge",
+      "kind": "chip",
+      "refersTo": "badge",
+      "description": "Pill counter or status marker. Same one-input contract as buttons: a variant sets --badge-seed and the fill and foreground derive from it. The live variant carries a pulsing dot that rides --motion-scale, so the motion setting at 0 stops it dead.",
+      "html": "<span class=\"ds-badge\"><span class=\"ds-badge-dot\"></span>Live</span>",
+      "css": ".ds-badge { --badge-color: var(--vote-up); display: inline-flex; align-items: center; gap: calc(0.25rem * var(--density)); padding: 0 calc(0.375rem * var(--density)); border-radius: 9999px; background-color: color-mix(in oklab, var(--badge-color), var(--surface) 76%); color: color-mix(in oklab, var(--badge-color), var(--text-color) 62%); font-size: var(--text-xs); font-weight: 600; line-height: 1.6; white-space: nowrap; } .ds-badge-dot { inline-size: 0.375rem; block-size: 0.375rem; border-radius: 9999px; background-color: currentcolor; animation: ds-badge-pulse calc(1400ms * var(--motion-scale)) var(--ease-out) infinite; } @keyframes ds-badge-pulse { 50% { opacity: 0.3; } }"
+    },
+    {
+      "name": "Menu",
+      "kind": "nav",
+      "refersTo": "menu-item",
+      "description": "The dropdown / popover surface — the only genuinely lifted surface in the system. Mixes toward literal white in both polarities, because elevation reads as lighter in light and dark UI alike.",
+      "html": "<ul class=\"ds-menu\"><li class=\"ds-menu-label\">Sort by</li><li><button class=\"ds-menu-item ds-menu-item-selected\">Recently uploaded</button></li><li><button class=\"ds-menu-item\">Wilson score</button></li><li><hr class=\"ds-menu-separator\"></li><li><button class=\"ds-menu-item\">Random</button></li></ul>",
+      "css": ".ds-menu { min-inline-size: 12rem; padding: calc(0.25rem * var(--density)); margin: 0; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, var(--surface), #fff 5%); box-shadow: 0 12px 32px color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-force)), transparent), var(--edge-highlight); color: var(--text-color); font-size: var(--text-sm); list-style: none; } .ds-menu-item { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); inline-size: 100%; min-block-size: calc(32px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: 0; border-radius: max(0px, calc(var(--radius-md) - var(--border-width))); corner-shape: var(--corner-shape); background-color: transparent; color: inherit; font: inherit; font-size: var(--text-sm); text-align: start; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out); } .ds-menu-item:hover, .ds-menu-item:focus-visible { background-color: var(--surface-hover); } .ds-menu-item-selected { background-color: var(--surface-selected); font-weight: 500; } .ds-menu-separator { block-size: var(--border-width); margin: calc(0.25rem * var(--density)) 0; border: 0; background-color: var(--border-color-subtle); } .ds-menu-label { padding: calc(0.25rem * var(--density)) calc(0.5rem * var(--density)); color: var(--text-subtle); font-size: var(--text-2xs); font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Media Box",
+      "kind": "card",
+      "refersTo": "media-box",
+      "description": "The densest, most repeated element on the site: a fave/vote/comment interaction bar over a square thumbnail. No overflow:hidden — the overflow menu must escape — so the bar and thumb round their own outer corners from --radius-inner. Inactive actions stay muted so the bar reads as one strip rather than a row of coloured icons.",
+      "html": "<article class=\"ds-media-box\"><div class=\"ds-media-bar\"><button class=\"ds-media-action ds-media-fave\" aria-pressed=\"true\" aria-label=\"Favourite\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 17.3l-6.2 3.7 1.7-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.5 4.8 1.7 7z\"/></svg>412</button><span class=\"ds-media-votes\"><button class=\"ds-media-action ds-media-up\" aria-label=\"Upvote\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 4l8 10h-5v6H9v-6H4z\"/></svg></button><span class=\"ds-media-score ds-media-score-positive\">1284</span><button class=\"ds-media-action ds-media-down\" aria-label=\"Downvote\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 20L4 10h5V4h6v6h5z\"/></svg></button></span><button class=\"ds-media-action\" aria-label=\"Comments\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\"><path d=\"M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z\"/></svg>37</button></div><div class=\"ds-media-thumb\"><span class=\"ds-media-format\">GIF</span></div></article>",
+      "css": ".ds-media-box { --radius-inner: max(0px, calc(var(--radius-md) - var(--border-width))); display: flex; flex-direction: column; inline-size: 200px; border: var(--border-width) solid var(--surface-media); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface); transition: border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out); } .ds-media-box:hover { border-color: color-mix(in oklab, var(--surface-media), #000 8%); box-shadow: var(--shadow-md); } .ds-media-bar { display: flex; flex-shrink: 0; align-items: stretch; justify-content: center; min-block-size: 28px; padding-inline: calc(0.125rem * var(--density)); border-start-start-radius: var(--radius-inner); border-start-end-radius: var(--radius-inner); corner-shape: var(--corner-shape); border-block-end: var(--border-width) solid var(--surface-media); background-color: color-mix(in oklab, var(--surface-panel-header), var(--surface) 50%); font-size: var(--text-xs); font-variant-numeric: tabular-nums; } .ds-media-action { --media-action-color: var(--text-muted); display: inline-flex; align-items: center; gap: calc(0.125rem * var(--density)); padding-inline: calc(0.125rem * var(--density)); border: 0; border-radius: var(--radius-xs); background-color: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-xs); cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); } .ds-media-action:hover { background-color: var(--surface-hover); color: var(--media-action-color); } .ds-media-fave { --media-action-color: var(--fave-strong); } .ds-media-fave[aria-pressed='true'] { background-color: var(--fave-bg); color: var(--fave-strong); } .ds-media-up { --media-action-color: var(--score-positive); } .ds-media-down { --media-action-color: var(--score-negative); } .ds-media-votes { display: inline-flex; align-items: stretch; } .ds-media-score { display: inline-flex; align-items: center; padding-inline: calc(0.125rem * var(--density)); color: var(--text-muted); font-weight: 500; } .ds-media-score-positive { color: var(--score-positive); } .ds-media-thumb { position: relative; aspect-ratio: 1; overflow: hidden; border-end-start-radius: var(--radius-inner); border-end-end-radius: var(--radius-inner); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); } .ds-media-format { position: absolute; inset-block-start: calc(0.25rem * var(--density)); inset-inline-end: calc(0.25rem * var(--density)); padding: calc(0.125rem * var(--density)) calc(0.375rem * var(--density)); border-radius: var(--radius-xs); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, #000 70%, transparent); color: #fff; font-size: var(--text-2xs); font-weight: 600; }"
+    },
+    {
+      "name": "Nav Bar",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "The primary app bar. Everything on it sits on --surface-nav — the theme's own base color, undiluted — so it uses --text-on-nav rather than --text-color, and hover states darken toward black rather than lifting: a saturated mid-tone is not a background.",
+      "html": "<div class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-nav-mark\">D</span><span class=\"ds-nav-name\">Ditzybooru</span></a><div class=\"ds-nav-search\"><input class=\"ds-nav-field\" type=\"search\" placeholder=\"Search\" aria-label=\"Search\"></div><a class=\"ds-nav-link\" href=\"#\">Images</a><a class=\"ds-nav-link\" href=\"#\">Forums</a></div>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); min-block-size: calc(56px * var(--density)); padding-inline: calc(0.75rem * var(--density)); background-color: var(--surface-nav); color: var(--text-on-nav); box-shadow: var(--shadow-sm); } .ds-nav-brand { display: inline-flex; flex-shrink: 0; align-items: center; gap: calc(0.5rem * var(--density)); color: var(--text-on-nav); text-decoration: none; } .ds-nav-mark { display: inline-flex; align-items: center; justify-content: center; inline-size: 32px; block-size: 32px; border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--brand); color: var(--text-on-nav); font-size: var(--text-sm); font-weight: 700; } .ds-nav-name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.011em; } .ds-nav-search { flex: 1; min-inline-size: 0; } .ds-nav-field { inline-size: 100%; min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 12%); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-nav-field); color: var(--text-on-nav); font: inherit; font-size: var(--text-sm); } .ds-nav-field::placeholder { color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%); } .ds-nav-link { display: inline-flex; align-items: center; padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: transparent; color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%); font-size: var(--text-sm); font-weight: 500; white-space: nowrap; text-decoration: none; transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out); } .ds-nav-link:hover { background-color: color-mix(in oklab, var(--surface-nav), #000 14%); color: var(--text-on-nav); }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "The signature control of the appearance settings: a grid of --segment-count stops with an absolutely positioned thumb that translates to --segment-index. The stop a setting shipped with carries a small undo mark, shown only once the user has moved off it, positioned absolutely so marking a stop never changes the track's width.",
+      "html": "<div class=\"ds-segmented\" role=\"radiogroup\" style=\"--segment-count: 3; --segment-index: 1;\"><span class=\"ds-segmented-thumb\"></span><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"false\">Compact</button><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"true\">Cozy</button><button class=\"ds-segmented-option\" role=\"radio\" aria-checked=\"false\">Roomy</button></div>",
+      "css": ".ds-segmented { position: relative; display: grid; grid-template-columns: repeat(var(--segment-count), minmax(0, 1fr)); inline-size: 16rem; padding: 2px; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); } .ds-segmented-thumb { position: absolute; z-index: 0; inset-block: 2px; inset-inline-start: 2px; inline-size: calc((100% - 4px) / var(--segment-count)); border-radius: max(0px, calc(var(--radius-md) - 2px)); corner-shape: var(--corner-shape); background-color: var(--surface-selected); box-shadow: var(--shadow-sm); translate: calc(var(--segment-index) * 100%) 0; transition: translate var(--duration) var(--ease-out); } .ds-segmented-option { position: relative; z-index: 1; display: inline-flex; align-items: center; justify-content: center; min-block-size: 28px; min-inline-size: 0; padding-inline: calc(0.25rem * var(--density)); border: 0; background-color: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-xs); font-weight: 500; overflow: hidden; white-space: nowrap; cursor: pointer; transition: color var(--duration) var(--ease-out); } .ds-segmented-option[aria-checked='true'], .ds-segmented-option:hover { color: var(--text-color); }"
+    },
+    {
+      "name": "Notice",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Inline message block. Same one-input contract as buttons: a variant sets --notice-seed. The leading edge is doubled in weight so the notice keeps its stripe even at --border-width: 0px.",
+      "html": "<div class=\"ds-notice ds-notice-warning\"><div><strong class=\"ds-notice-title\">Filter active</strong>Some images are hidden by your current filter.</div></div>",
+      "css": ".ds-notice { --notice-color: var(--link); display: flex; align-items: flex-start; gap: calc(0.5rem * var(--density)); padding: calc(0.75rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--notice-color), var(--surface) 55%); border-inline-start-width: max(3px, calc(var(--border-width) * 2)); border-inline-start-color: var(--notice-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, var(--notice-color), var(--surface) 84%); color: var(--text-color); font-size: var(--text-sm); line-height: 1.45; } .ds-notice-warning { --notice-color: #e07b27; } .ds-notice-title { display: block; margin-block-end: calc(0.125rem * var(--density)); font-weight: 600; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Tuned Instrument",
+    "overview": "Ditzybooru is not a palette; it is a machine that produces palettes. A theme declares at most five colors — --base, --page, --ink, --link, --link-hover — and every surface, border, chrome tint, text tier, panel strip, tag wash and media frame in the site is a color-mix() away from those. Six user-facing dials (radius, borderWidth, shadow, density, fontScale, motion) feed calc() sitewide as unregistered custom properties. Turn one and the site retunes: corners round, hairlines vanish, depth flattens, spacing loosens. Eighteen theme combinations exist, and none of them is hand-painted.\n\nThe mood is familiar, warm and modernized. This is Derpibooru's shape language — the two-row app bar, the tinted panel title strip, the dense interaction bar under every thumbnail, the square corners — rebuilt in material that holds up. Recognition is the point: a returning user should feel relief, not novelty. The signature purple link hover, the fave gold, the upvote green and the downvote red are muscle memory and are reproduced exactly.\n\nComponents are restrained and derived. A variant sets one seed custom property (--btn-seed, --tag-seed, --badge-seed, --notice-seed) and its fill, border and foreground follow; adding a variant costs one line. Character comes from the consistency of that derivation, never from flourish. Two anti-references are on record: the generic utility-framework look (Tailwind was removed deliberately, and its defaults — universal rounded-lg, indigo accents, stock shadow-md cards — are rejected with it), and Philomena's own contrast handling, where tag labels land between 1.7:1 and 2.5:1 against their own wash. The incumbent's shapes and colors are kept; its legibility debt is not.",
+    "keyCharacteristics": [
+      "Five color inputs per theme; every other color is derived.",
+      "Square corners by default (--radius-unit: 0px) — rounding is the user's choice, not the system's.",
+      "One formula per semantic color, written once for light and dark via the --lift / --sink direction pair.",
+      "Dense, tabular, information-first: 0.875rem body, 24–36px control heights.",
+      "Theme-tinted shadows, never neutral gray.",
+      "WCAG 2 AA verified by axe-core in all nine accents × both polarities, as a gate."
+    ],
+    "rules": [
+      {
+        "name": "The Five Inputs Rule",
+        "body": "A theme file declares --base, --page, --ink, --link, --link-hover and nothing else. Any color a new component needs is derived in tokens/semantic.css from those five, from the polarity constants, or from the fixed palette. A component that hardcodes a hex has bypassed the theme system in eighteen themes at once.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Formula Rule",
+        "body": "Semantic colors are written once, not once per polarity. Move away from the background with --lift, toward it with --sink, and vary only the mix weight (--w-*) between light and dark. If a value needs a light branch and a dark branch, the missing abstraction is a weight, not an if.",
+        "section": "colors"
+      },
+      {
+        "name": "The Muscle Memory Rule",
+        "body": "Fave gold, upvote green, downvote red and the violet link hover are reproduced exactly and are never \"modernized\". They may be lifted for legibility at paint time; their canonical values do not move.",
+        "section": "colors"
+      },
+      {
+        "name": "The Anchored Root Rule",
+        "body": "The document's font size is set on <body>, never on :root. The whole scale is written in rem, so setting font-size: var(--text-sm) on the root feeds the scale into itself and shrinks every token by another 19%. :root stays at the browser's 16px, which is what the scale is calibrated against.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Rule",
+        "body": "Anything whose digits change in place — scores, counters, timestamps, numeric table columns — takes font-variant-numeric: tabular-nums. A score that reflows as it increments is a layout bug.",
+        "section": "typography"
+      },
+      {
+        "name": "The Nearest Name Rule",
+        "body": "A component reaches for an existing breakpoint name rather than inventing a width. A new step is added only when a layout genuinely breaks where none of these describes — every threshold is another column of the responsive matrix someone has to check.",
+        "section": "layout"
+      },
+      {
+        "name": "The Shrinkable Column Rule",
+        "body": "Any grid or flex child that contains a thumbnail grid takes min-inline-size: 0. Without it the intrinsic width of the contents pushes the sidebar off the viewport.",
+        "section": "layout"
+      },
+      {
+        "name": "The Compensating Depth Rule",
+        "body": "Border weight and shadow force are independent user settings, and either can be zeroed. Components that would dissolve at zero compensate through @container style(): style(--border-width: 0px) promotes a panel from --shadow-sm to --shadow-md; style(--shadow-force: 0) restores a strong border color. Style queries compare token streams textually, so those settings must be written in exactly the canonical form the query uses (0px, 0).",
+        "section": "elevation"
+      },
+      {
+        "name": "The Square Default Rule",
+        "body": "Nothing hardcodes a radius. A component that wants rounding names a radius token; a component that wants a circle names --radius-full. Shipping a design that only looks right at a nonzero --radius-unit breaks the default appearance.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do derive every color from the five theme inputs, the --w-* weights, or the fixed palette. color-mix(in oklab, …) is the system's arithmetic.",
+      "Do write one formula for both polarities using --lift / --sink and vary only the weight.",
+      "Do give a new variant exactly one input (--btn-seed, --tag-seed, --badge-seed, --notice-seed) and derive fill, border and foreground from it.",
+      "Do multiply every spacing value by --density, every type size by --font-scale, every duration by --motion-scale, and every shadow alpha by --shadow-force.",
+      "Do name a breakpoint from tokens/breakpoints.css rather than writing a width.",
+      "Do pair every border-radius with corner-shape: var(--corner-shape).",
+      "Do verify contrast in all nine accents × both polarities. tests/a11y.test.ts runs axe-core against the built site in a real browser, and zero violations is a gate.",
+      "Do style native elements rather than reimplementing them, and use :focus-visible, :user-invalid, and :has() over JS-managed state classes.",
+      "Do add every new stylesheet to the @import list in styles/index.css — a component's CSS lives next to its .tsx, but no .tsx imports CSS.",
+      "Do use :where() for element-level defaults so component classes never have to fight base rules."
+    ],
+    "donts": [
+      "Don't hardcode a hex in a component. It is wrong in eighteen themes at once. The narrow exceptions already in the system are documented at their site (tag category seeds, status constants, the #000 overlays on media format markers).",
+      "Don't \"modernize\" the fave, upvote, downvote or link-hover colors. They are recognition, not decoration.",
+      "Don't hardcode a radius, a duration, a border width, or a raw rem gap past the settings tokens. A design that only looks right at --radius-unit: 8px is broken at the default of 0px.",
+      "Don't underline links. The color carries them, and its luminance distance from body text is what satisfies the accessibility rule.",
+      "Don't set font-size on :root. See the Anchored Root Rule.",
+      "Don't paint a raw category or interaction seed as text on a wash of itself — that is precisely Philomena's contrast failure. Push it along --lift first.",
+      "Don't use cover on a booru thumbnail. contain, always: cropping a tall comic page to a square hides the part that identifies it.",
+      "Don't reintroduce a utility CSS framework, or its default look — universal rounded-lg, stock indigo accents, neutral gray shadow-md cards. Tailwind was removed deliberately.",
+      "Don't add a * reset beyond box-sizing. A blanket reset reaches into web components and other subtrees that then need !important to escape it.",
+      "Don't let a wide table or tab strip widen the page. It scrolls inside its own box."
+    ]
+  }
+}
