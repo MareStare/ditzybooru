@@ -22,14 +22,14 @@
  *   CHROME_PATH=/path/to/chrome …      # if playwright's browser is not installed
  */
 
-import { spawn } from 'node:child_process';
-import type { ChildProcess } from 'node:child_process';
 import { readFile } from 'node:fs/promises';
 import { createRequire } from 'node:module';
 import process from 'node:process';
 
 import { chromium } from 'playwright-core';
 import type { Browser, Page } from 'playwright-core';
+import { build, preview as vitePreview } from 'vite';
+import type { PreviewServer } from 'vite';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 
 import type { AxeResults, ElementContext, RunOptions } from 'axe-core';
@@ -102,20 +102,6 @@ function summarize(results: AxeResults): Array<string> {
   );
 }
 
-async function waitForServer(url: string, timeoutMs = 30_000): Promise<void> {
-  const deadline = Date.now() + timeoutMs;
-  while (Date.now() < deadline) {
-    try {
-      const res = await fetch(url);
-      if (res.ok) return;
-    } catch {
-      // Server not up yet.
-    }
-    await new Promise(resolve => setTimeout(resolve, 250));
-  }
-  throw new Error(`Timed out waiting for ${url}`);
-}
-
 async function launchBrowser(): Promise<Browser> {
   const executablePath = process.env.CHROME_PATH;
   try {
@@ -128,7 +114,9 @@ async function launchBrowser(): Promise<Browser> {
   }
 }
 
-let preview: ChildProcess | undefined;
+const projectRoot = new URL('..', import.meta.url).pathname;
+
+let preview: PreviewServer | undefined;
 // Undefined until `beforeAll` runs, and still undefined in `afterAll` if it
 // threw on the way — which is exactly when the teardown must not itself throw.
 let browser: Browser | undefined;
@@ -166,13 +154,22 @@ async function audit(path: string, lightness: Lightness, color: Color, options: 
 beforeAll(async () => {
   axeSource = await readFile(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
 
-  baseUrl = process.env.A11Y_URL ?? `http://localhost:${PREVIEW_PORT}`;
-  if (!process.env.A11Y_URL) {
-    preview = spawn('npx', ['vite', 'preview', '--port', String(PREVIEW_PORT), '--strictPort'], {
-      cwd: new URL('..', import.meta.url).pathname,
-      stdio: 'ignore',
+  // Vite's API rather than a spawned CLI: the build has to finish before the
+  // server starts serving `dist`, and an in-process server cannot outlive the
+  // run as an orphan holding the port.
+  const externalUrl = process.env.A11Y_URL;
+  if (externalUrl) {
+    baseUrl = externalUrl;
+  } else {
+    await build({ root: projectRoot, logLevel: 'warn' });
+    preview = await vitePreview({
+      root: projectRoot,
+      logLevel: 'warn',
+      preview: { host: '127.0.0.1', port: PREVIEW_PORT, strictPort: true },
     });
-    await waitForServer(baseUrl);
+    // Literal IP, not `localhost`: the server binds v4 only, and a v6-first
+    // resolution of `localhost` would fail to connect.
+    baseUrl = `http://127.0.0.1:${PREVIEW_PORT}`;
   }
 
   browser = await launchBrowser();
@@ -181,7 +178,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   await browser?.close();
-  preview?.kill();
+  await preview?.close();
 });
 
 describe('structure', () => {
