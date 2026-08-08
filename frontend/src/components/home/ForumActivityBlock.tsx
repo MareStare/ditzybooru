@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { MessagesSquare, Pin } from 'lucide-react';
 
 import { topics } from '#/lib/mock/data';
@@ -13,21 +14,30 @@ function TopicStrip({ topic }: { topic: ForumTopic }) {
       {topic.lastPost ? (
         <>
           <UserAttribution author={topic.lastPost.author} />{' '}
-          <a
-            href={`/forums/${topic.forum.slug}/topics/${topic.slug}?post_id=${topic.lastPost.id}#post_${topic.lastPost.id}`}
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to={`/forums/${topic.forum.slug}/topics/${topic.slug}?post_id=${topic.lastPost.id}#post_${topic.lastPost.id}`}
             className="forum-topic__meta"
           >
             replied to
-          </a>{' '}
+          </Link>{' '}
         </>
       ) : null}
-      <a href={`/forums/${topic.forum.slug}/topics/${topic.slug}`} className="forum-topic__title">
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to={`/forums/${topic.forum.slug}/topics/${topic.slug}`}
+        className="forum-topic__title"
+      >
         {topic.title}
-      </a>{' '}
+      </Link>{' '}
       <span className="forum-topic__meta">in</span>{' '}
-      <a href={`/forums/${topic.forum.slug}`} className="forum-topic__meta">
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to={`/forums/${topic.forum.slug}`}
+        className="forum-topic__meta"
+      >
         {topic.forum.name}
-      </a>
+      </Link>
     </li>
   );
 }

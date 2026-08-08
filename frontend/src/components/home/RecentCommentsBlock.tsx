@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { MessageCircle } from 'lucide-react';
 
 import { comments } from '#/lib/mock/data';
@@ -13,14 +14,22 @@ function CommentStrip({ comment }: { comment: Comment }) {
 
   return (
     <li className="comment-row">
-      <a href={`/images/${imageId}`} aria-label={`Image ${imageId}`}>
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to={`/images/${imageId}`}
+        aria-label={`Image ${imageId}`}
+      >
         <img src={comment.imageThumbTiny} alt="" loading="lazy" className="comment-row__thumb" />
-      </a>
+      </Link>
       <div className="comment-row__text">
         <div className="comment-row__head">
-          <a href={`/images/${imageId}#comment_${comment.id}`} className="comment-row__id">
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to={`/images/${imageId}#comment_${comment.id}`}
+            className="comment-row__id"
+          >
             #{imageId}
-          </a>{' '}
+          </Link>{' '}
           <span className="comment-row__by">by</span> <UserAttribution author={comment.author} />
         </div>
         <div className="comment-row__time">{timeAgo(new Date(comment.createdAt))}</div>

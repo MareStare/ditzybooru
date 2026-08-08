@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { ArrowBigDown, ArrowBigUp, EyeOff, FolderPlus, Link2, MoreHorizontal, Star } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
@@ -228,10 +229,16 @@ export function MediaBox({ className, image, src = image.representations.thumb }
           </InteractionButton>
         </span>
 
-        <a href={`/images/${image.id}#comments`} title="Comments" className="media-action">
+        <Link
+          // @ts-expect-error TODO: route not built yet
+          to={`/images/${image.id}`}
+          hash="comments"
+          title="Comments"
+          className="media-action"
+        >
           <CommentBubble />
           <Int className="media-action__count" value={image.commentCount} />
-        </a>
+        </Link>
 
         <MediaBoxMenu
           image={image}

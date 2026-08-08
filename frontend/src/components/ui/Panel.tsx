@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 
 import { cn } from '#/lib/utils';
 
@@ -56,9 +57,9 @@ export function PanelFooter({
   }
 
   return (
-    <a href={href} className={cn('panel-footer', className)}>
+    <Link to={href} className={cn('panel-footer', className)}>
       {children}
-    </a>
+    </Link>
   );
 }
 

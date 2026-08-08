@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { Bell, ChevronDown, Filter, Mail, Menu as MenuIcon, Upload } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
@@ -28,38 +29,54 @@ function UserMenu() {
   if (!user) {
     return (
       <>
-        <a href="/registrations/new" className="nav-link nav__compact-hidden">
+        <Link
+          // @ts-expect-error TODO: route not built yet
+          to="/registrations/new"
+          className="nav-link nav__compact-hidden"
+        >
           Register
-        </a>
-        <a href="/sessions/new" className="nav-link">
+        </Link>
+        <Link
+          // @ts-expect-error TODO: route not built yet
+          to="/sessions/new"
+          className="nav-link"
+        >
           Login
-        </a>
+        </Link>
       </>
     );
   }
 
   return (
     <>
-      <a
-        href="/notifications"
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to="/notifications"
         className="nav-link nav-link--badged nav__bottom-nav-hidden"
         title="Notifications"
         aria-label="Notifications"
       >
         <Bell size={16} />
         <span className="nav-link__badge">3</span>
-      </a>
-      <a
-        href="/conversations"
+      </Link>
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to="/conversations"
         className="nav-link nav__bottom-nav-hidden"
         title="Conversations"
         aria-label="Conversations"
       >
         <Mail size={16} />
-      </a>
-      <a href="/filters" className="nav-link" title="Filters" aria-label="Filters">
+      </Link>
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to="/filters"
+        className="nav-link"
+        title="Filters"
+        aria-label="Filters"
+      >
         <Filter size={16} />
-      </a>
+      </Link>
 
       <Dropdown
         align="end"
@@ -110,14 +127,20 @@ export function SiteHeader() {
             <MenuIcon size={18} />
           </Button>
 
-          <a href="/" className="nav-brand" aria-label="Home">
+          <Link to="/" className="nav-brand" aria-label="Home">
             <span className="nav-brand__mark">D</span>
             <span className="nav-brand__name">Ditzybooru</span>
-          </a>
+          </Link>
 
-          <a href="/images/new" className="nav-link nav__compact-hidden" title="Upload" aria-label="Upload">
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to="/images/new"
+            className="nav-link nav__compact-hidden"
+            title="Upload"
+            aria-label="Upload"
+          >
             <Upload size={16} />
-          </a>
+          </Link>
         </div>
 
         <SearchBar className="nav-search--bar" />

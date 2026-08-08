@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { ChevronDown, Heart, Mail } from 'lucide-react';
 
 import { Dropdown } from '#/components/ui/Dropdown';
@@ -10,19 +11,19 @@ function NavEntry({ item }: { item: NavItem }) {
 
   if (children.length === 0) {
     return (
-      <a href={item.href} className="nav-link">
+      <Link to={item.href} className="nav-link">
         {item.label}
-      </a>
+      </Link>
     );
   }
 
   return (
     <Dropdown
       trigger={
-        <a href={item.href} className="nav-link">
+        <Link to={item.href} className="nav-link">
           {item.label}
           <ChevronDown className="dropdown__chevron" size={14} />
-        </a>
+        </Link>
       }
     >
       <Menu>
@@ -53,14 +54,24 @@ export function HeaderNav() {
       <div className="nav-sub__actions">
         {/* The display settings page lives in the display menu — it is a
             styling tool, so it belongs with the styling controls. */}
-        <a href="/pages/donations" className="nav-link nav-link--donate" title="Become a patron or donate">
+        <Link
+          // @ts-expect-error TODO: route not built yet
+          to="/pages/donations"
+          className="nav-link nav-link--donate"
+          title="Become a patron or donate"
+        >
           <Heart size={14} />
           Donate
-        </a>
-        <a href="/pages/contact" className="nav-link" title="Contact us">
+        </Link>
+        <Link
+          // @ts-expect-error TODO: route not built yet
+          to="/pages/contact"
+          className="nav-link"
+          title="Contact us"
+        >
           <Mail size={14} />
           Contact
-        </a>
+        </Link>
       </div>
     </nav>
   );

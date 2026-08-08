@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { EyeOff, Film } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
@@ -25,7 +26,12 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
   const spoilered = image.spoilered && !hidden;
 
   return (
-    <a href={`/images/${image.id}`} title={title} className={cn('media-thumb', className)}>
+    <Link
+      // @ts-expect-error TODO: route not built yet
+      to={`/images/${image.id}`}
+      title={title}
+      className={cn('media-thumb', className)}
+    >
       {hidden || spoilered ? (
         <div className={cn('media-overlay', spoilered && 'media-overlay--spoilered')}>
           <EyeOff size={20} />
@@ -46,7 +52,7 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
           WebM
         </span>
       ) : null}
-    </a>
+    </Link>
   );
 }
 

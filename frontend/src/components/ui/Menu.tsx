@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 
 import { cn } from '#/lib/utils';
 
@@ -40,14 +41,14 @@ export function MenuLink({
 }: MenuEntryProps & { href: string; onClick?: () => void }) {
   return (
     <li>
-      <a
-        href={href}
+      <Link
+        to={href}
         className={cn('menu-item', selected && 'menu-item--selected', className)}
         aria-current={selected ? 'true' : undefined}
         onClick={onClick}
       >
         {children}
-      </a>
+      </Link>
     </li>
   );
 }

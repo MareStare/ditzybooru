@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { Link } from '@tanstack/react-router';
 import { Bell, Mail, Search, X } from 'lucide-react';
 
 import { currentUser } from '#/lib/mock/data';
@@ -58,17 +59,25 @@ export function BottomNav() {
 
         {user ? (
           <>
-            <a href="/notifications" className="bottom-nav__item">
+            <Link
+              // @ts-expect-error TODO: route not built yet
+              to="/notifications"
+              className="bottom-nav__item"
+            >
               <span className="bottom-nav__icon">
                 <Bell size={20} />
                 <span className="bottom-nav__badge">3</span>
               </span>
               Notifications
-            </a>
-            <a href="/conversations" className="bottom-nav__item">
+            </Link>
+            <Link
+              // @ts-expect-error TODO: route not built yet
+              to="/conversations"
+              className="bottom-nav__item"
+            >
               <Mail size={20} />
               Conversations
-            </a>
+            </Link>
           </>
         ) : null}
       </div>
