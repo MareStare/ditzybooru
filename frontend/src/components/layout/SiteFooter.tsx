@@ -1,3 +1,5 @@
+import { Link } from '@tanstack/react-router';
+
 import { footerColumns } from '#/lib/mock/site';
 import { cn } from '#/lib/utils';
 
@@ -12,18 +14,23 @@ export function SiteFooter() {
                 the page, and skipping straight to h5 breaks the outline. */}
             <h2 className="site-footer__title">{column.title}</h2>
             <ul className="site-footer__list">
-              {column.links.map(link => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    target={link.external ? '_blank' : undefined}
-                    rel={link.external ? 'noreferrer' : undefined}
-                    className={cn('site-footer__link', link.bold && 'site-footer__link--bold')}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {column.links.map(link => {
+                const className = cn('site-footer__link', link.bold && 'site-footer__link--bold');
+
+                return (
+                  <li key={link.href}>
+                    {link.external ? (
+                      <a href={link.href} target="_blank" rel="noreferrer" className={className}>
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link to={link.href} className={className}>
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}

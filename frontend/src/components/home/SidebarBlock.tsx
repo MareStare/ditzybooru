@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { Link } from '@tanstack/react-router';
 
 import { Panel, PanelBody, PanelFooter, PanelHeader } from '#/components/ui/Panel';
 import { cn } from '#/lib/utils';
@@ -44,7 +45,7 @@ export function SidebarBlock({
 
   return (
     <Panel className={cn(className)}>
-      <PanelHeader center>{href === undefined ? heading : <a href={href}>{heading}</a>}</PanelHeader>
+      <PanelHeader center>{href === undefined ? heading : <Link to={href}>{heading}</Link>}</PanelHeader>
 
       <PanelBody flush={flush} className={cn(bodyClassName)}>
         {children}

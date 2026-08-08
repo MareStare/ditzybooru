@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router';
 import { Radio } from 'lucide-react';
 
 import { channels } from '#/lib/mock/data';
@@ -10,7 +11,11 @@ import { SidebarBlock } from './SidebarBlock';
 function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
   return (
     <li className="channel-row">
-      <a href={`/channels/${channel.shortName}`} className="channel-row__link">
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to={`/channels/${channel.shortName}`}
+        className="channel-row__link"
+      >
         <span className="channel-row__title">
           {channel.title}
           {channel.nsfw ? <span title="NSFW"> 🔞</span> : null}
@@ -29,7 +34,7 @@ function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
         ) : (
           <Badge variant="danger">OFF AIR</Badge>
         )}
-      </a>
+      </Link>
     </li>
   );
 }

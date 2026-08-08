@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Ref } from 'react';
+import { Link } from '@tanstack/react-router';
 import { Camera, Search } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
@@ -41,14 +42,15 @@ export function SearchBar({ className = '', inputRef }: { className?: string; in
       <Button type="submit" variant="ghost" icon title="Search" aria-label="Search">
         <Search size={16} />
       </Button>
-      <a
-        href="/search/reverse"
+      <Link
+        // @ts-expect-error TODO: route not built yet
+        to="/search/reverse"
         title="Search using an image"
         aria-label="Reverse image search"
         className="nav-link nav-search__reverse"
       >
         <Camera size={16} />
-      </a>
+      </Link>
     </form>
   );
 }

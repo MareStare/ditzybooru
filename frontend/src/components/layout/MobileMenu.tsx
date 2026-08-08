@@ -59,35 +59,55 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
         </div>
 
         <div className="drawer__body">
-          <a href="/images/new" className="drawer__link" onClick={onClose}>
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to="/images/new"
+            className="drawer__link"
+            onClick={onClose}
+          >
             <Upload size={16} />
             Upload
-          </a>
-          <a href="/channels" className="drawer__link drawer__link--live" onClick={onClose}>
+          </Link>
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to="/channels"
+            className="drawer__link drawer__link--live"
+            onClick={onClose}
+          >
             <Radio size={16} />
             Live
             <span className="drawer__count">{liveChannelCount}</span>
-          </a>
-          <a href="/pages/donations" className="drawer__link drawer__link--donate" onClick={onClose}>
+          </Link>
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to="/pages/donations"
+            className="drawer__link drawer__link--donate"
+            onClick={onClose}
+          >
             <Heart size={16} />
             Donate
-          </a>
-          <a href="/pages/contact" className="drawer__link" onClick={onClose}>
+          </Link>
+          <Link
+            // @ts-expect-error TODO: route not built yet
+            to="/pages/contact"
+            className="drawer__link"
+            onClick={onClose}
+          >
             <Mail size={16} />
             Contact
-          </a>
+          </Link>
 
           <hr className="drawer__separator" />
 
           {primaryNav.map(item => (
             <div key={item.href} className="drawer__group">
-              <a href={item.href} className="drawer__link drawer__link--section" onClick={onClose}>
+              <Link to={item.href} className="drawer__link drawer__link--section" onClick={onClose}>
                 {item.label}
-              </a>
+              </Link>
               {item.children?.map(child => (
-                <a key={child.href} href={child.href} className="drawer__link drawer__link--child" onClick={onClose}>
+                <Link key={child.href} to={child.href} className="drawer__link drawer__link--child" onClick={onClose}>
                   {child.label}
-                </a>
+                </Link>
               ))}
             </div>
           ))}
@@ -96,26 +116,41 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
 
           {user ? (
             <>
-              <a href={`/profiles/${user.slug}`} className="drawer__link drawer__link--section" onClick={onClose}>
+              <Link
+                // @ts-expect-error TODO: route not built yet
+                to={`/profiles/${user.slug}`}
+                className="drawer__link drawer__link--section"
+                onClick={onClose}
+              >
                 <Avatar name={user.name} src={user.avatarUrl} size="sm" />
                 {user.name}
-              </a>
+              </Link>
               {accountLinks.map(link => (
-                <a key={link.href} href={link.href} className="drawer__link" onClick={onClose}>
+                <Link key={link.href} to={link.href} className="drawer__link" onClick={onClose}>
                   {link.label}
-                </a>
+                </Link>
               ))}
             </>
           ) : (
             <>
-              <a href="/registrations/new" className="drawer__link" onClick={onClose}>
+              <Link
+                // @ts-expect-error TODO: route not built yet
+                to="/registrations/new"
+                className="drawer__link"
+                onClick={onClose}
+              >
                 <UserPlus size={16} />
                 Register
-              </a>
-              <a href="/sessions/new" className="drawer__link" onClick={onClose}>
+              </Link>
+              <Link
+                // @ts-expect-error TODO: route not built yet
+                to="/sessions/new"
+                className="drawer__link"
+                onClick={onClose}
+              >
                 <LogIn size={16} />
                 Login
-              </a>
+              </Link>
             </>
           )}
 
