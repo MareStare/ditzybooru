@@ -7,8 +7,8 @@ import { SearchBar } from './SearchBar';
 
 /**
  * The phone-sized navigation bar, pinned to the bottom of the viewport. It
- * carries the three destinations that are worth a thumb — search,
- * notifications, conversations — which the top bar gives up at this width.
+ * carries the three destinations that are worth a thumb - search,
+ * notifications, conversations - which the top bar gives up at this width.
  *
  * Search is a sheet rather than a link: the field it opens is the same one the
  * header renders on a wide screen, so searching stays a thing you do in place

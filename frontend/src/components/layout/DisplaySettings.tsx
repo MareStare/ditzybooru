@@ -21,8 +21,8 @@ const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, sy
  *
  * The preview IS the setting applied to a shape: the corner stops are boxes at
  * that radius, the outline stops are boxes at that border width. That is worth
- * more than a word, because it answers the question the reader actually has —
- * "how round is 'Rounded'?" — which no label can.
+ * more than a word, because it answers the question the reader actually has -
+ * "how round is 'Rounded'?" - which no label can.
  *
  * `Spacing` and `Shadows` are the exceptions. A shadow at menu scale is a few
  * pixels of blur that reads as a smudge, and spacing has nothing to be spaced
@@ -61,7 +61,7 @@ const PREVIEWS: Record<string, (value: string | number, label: string) => ReactN
 };
 
 /** The nine hue swatches. A different widget from the segmented tracks, but the
- *  same descriptor drives it — including the default marker. */
+ *  same descriptor drives it - including the default marker. */
 function Swatches({
   control,
   value,
@@ -105,7 +105,7 @@ function Swatches({
 /**
  * Every display control the site has: the theme's lightness and hue, then
  * the six layout settings. Shared by the header's display menu and the
- * display settings page's rail — both render this; neither owns the state.
+ * display settings page's rail - both render this; neither owns the state.
  *
  * There is no per-control code here: the list comes from `SETTING_CONTROLS`,
  * and the only thing this file decides is which widget draws a descriptor and
@@ -122,7 +122,7 @@ export function DisplaySettingsControls() {
   useEffect(hydrateTheme, []);
 
   // While the preference is `system`, the OS gets to change the theme out from
-  // under us — so follow it rather than only reading it once at startup.
+  // under us - so follow it rather than only reading it once at startup.
   useEffect(() => {
     if (theme.preference !== 'system') {
       return;

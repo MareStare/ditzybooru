@@ -3,7 +3,7 @@
  * {@link ThemeColor}.
  *
  * Lightness has two layers. What the user picks is a
- * {@link ThemeLightnessPreference} — `light`, `dark`, or `system` — and that is
+ * {@link ThemeLightnessPreference} - `light`, `dark`, or `system` - and that is
  * what gets persisted. What the stylesheet sees is the resolved
  * {@link ThemeLightness}, reflected on `<html>` as `data-theme-lightness`
  * alongside `data-theme-color`. Both attributes are applied pre-paint by the
@@ -90,7 +90,7 @@ export function applyThemeLightnessPreference(preference: ThemeLightnessPreferen
   document.documentElement.setAttribute('data-theme-lightness', lightness);
 
   // `system` is stored as the absence of a choice, which is also what a fresh
-  // browser has — so the pre-paint script needs no special case for it.
+  // browser has - so the pre-paint script needs no special case for it.
   if (preference === 'system') {
     localStorage.removeItem(THEME_LIGHTNESS_STORAGE_KEY);
   } else {
@@ -127,7 +127,7 @@ export function onSystemLightnessChange(listener: (lightness: ThemeLightness) =>
  *
  * A module-level store rather than component state, because the theme is one
  * global setting with more than one view of it, and because "is everything at
- * its default" — the question the reset button asks — spans the theme and the
+ * its default" - the question the reset button asks - spans the theme and the
  * Display settings together.
  */
 export interface ThemeState {

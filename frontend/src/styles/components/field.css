@@ -38,7 +38,7 @@
   cursor: not-allowed;
 }
 
-/* `:user-invalid`, not `:invalid` — do not flag a required-but-empty field
+/* `:user-invalid`, not `:invalid` - do not flag a required-but-empty field
  * before the user has touched it. */
 .field:user-invalid {
   border-color: var(--score-negative);
@@ -85,8 +85,8 @@ textarea.field {
   font-size: var(--text-sm);
 }
 
-/* `:where()` keeps this at zero specificity so `.switch` below — and any
- * other control dropped into a `.choice` — can size itself without an
+/* `:where()` keeps this at zero specificity so `.switch` below - and any
+ * other control dropped into a `.choice` - can size itself without an
  * override war. */
 .choice :where(input) {
   inline-size: 1.05em;

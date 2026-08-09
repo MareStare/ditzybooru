@@ -45,7 +45,7 @@
   gap: var(--space-1);
 }
 
-/* Donate reads as an affordance rather than another section link — the one
+/* Donate reads as an affordance rather than another section link - the one
  * tinted item in a row of neutral ones. */
 .nav-link--donate {
   border: var(--border-width) solid color-mix(in oklab, var(--vote-up), var(--surface) 62%);

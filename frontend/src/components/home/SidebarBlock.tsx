@@ -23,7 +23,7 @@ interface SidebarBlockProps {
 /**
  * A titled sidebar block, mirroring Philomena's `.block` with a
  * `.block__header--single-item` header and optional footer link. A thin
- * composition over {@link Panel} — it exists to keep the sidebar's five blocks
+ * composition over {@link Panel} - it exists to keep the sidebar's five blocks
  * from restating the same header/footer shape.
  */
 export function SidebarBlock({

@@ -1,6 +1,6 @@
 /**
  * A range slider with its value beside it as an editable field. The track is
- * the native control, tinted by the `accent-color` set on `:root` — everything
+ * the native control, tinted by the `accent-color` set on `:root` - everything
  * here is layout, size and affordance, so the browser keeps the parts it does
  * better than a rebuilt track would (keyboard stepping, touch targets,
  * forced-colors).

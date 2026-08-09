@@ -3,7 +3,7 @@
  *
  * Philomena declares ~30 button variables (primary/success/warning/danger ×
  * background/border/hover-background/hover-border) in each of its two theme
- * bases. Here a variant sets one input — `--btn-seed` — and everything else
+ * bases. Here a variant sets one input - `--btn-seed` - and everything else
  * derives. Adding a variant is one line.
  */
 

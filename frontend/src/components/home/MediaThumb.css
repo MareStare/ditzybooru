@@ -3,7 +3,7 @@
  * Philomena renders on top of it (hidden, spoilered, animated-format marker).
  */
 
-/* Rounds its own bottom corners rather than relying on the card to clip it —
+/* Rounds its own bottom corners rather than relying on the card to clip it -
  * see the note on `.media-box` about why the card cannot use `overflow`. */
 .media-thumb {
   position: relative;
@@ -17,7 +17,7 @@
 }
 
 /* The justified layout sizes the card by the image's own ratio, so the thumb
- * takes that ratio rather than a square — its height is then whatever the row's
+ * takes that ratio rather than a square - its height is then whatever the row's
  * scale factor made the card's width. `--media-box-aspect` is the ratio with
  * the interaction bar's floor already applied; see `MediaGrid.css`. */
 :root[data-media-fit='justified'] .media-grid .media-thumb {
@@ -29,7 +29,7 @@
   inset: 0;
   inline-size: 100%;
   block-size: 100%;
-  /* `contain` by default — a booru thumbnail is the whole image, and cropping a
+  /* `contain` by default - a booru thumbnail is the whole image, and cropping a
    * tall comic page to a square hides the part that identifies it. The media
    * grid's "Image fit" setting is what picks the other keyword; see
    * `lib/componentSettings.ts`. */
@@ -50,7 +50,7 @@
 }
 
 /* A real element rather than a background-image, so it survives forced-colors
- * mode. Opaque for a hidden image, near-opaque for a spoilered one — the blur
+ * mode. Opaque for a hidden image, near-opaque for a spoilered one - the blur
  * beneath still has to read as "there is an image here". */
 .media-overlay {
   position: absolute;

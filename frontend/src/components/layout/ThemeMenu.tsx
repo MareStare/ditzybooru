@@ -6,7 +6,7 @@ import { Dropdown } from '#/components/ui/Dropdown';
 import { DisplaySettingsControls } from './DisplaySettings';
 
 /**
- * The single display control in the top bar. Owns no state of its own — it
+ * The single display control in the top bar. Owns no state of its own - it
  * is the trigger, the settings block, and a way into the display settings
  * page.
  */

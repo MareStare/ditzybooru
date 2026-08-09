@@ -17,7 +17,7 @@ export default defineConfig({
     // would launch one Chromium each and race for the same preview port.
     fileParallelism: false,
     // Vitest's console interception swallows anything logged from a teardown
-    // hook, which is where the contrast summary is written — the run is over by
+    // hook, which is where the contrast summary is written - the run is over by
     // the time the reporter would flush it.
     disableConsoleIntercept: true,
   },

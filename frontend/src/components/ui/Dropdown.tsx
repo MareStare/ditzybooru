@@ -5,7 +5,7 @@ import { cn } from '#/lib/utils';
 import type { ClassValue } from '#/lib/utils';
 
 interface DropdownProps {
-  /** The control the panel hangs off — a nav link, a button, an avatar. */
+  /** The control the panel hangs off - a nav link, a button, an avatar. */
   trigger: ReactNode;
   /** Which edge of the trigger the panel aligns to. */
   align?: 'start' | 'end';

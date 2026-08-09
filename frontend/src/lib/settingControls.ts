@@ -14,8 +14,8 @@ import type { DisplaySettings } from '#/lib/displaySettings';
  * One descriptor per display control, theme and layout alike.
  *
  * The theme's lightness and hue used to be hand-written into the menu while the
- * layout settings came from a table, which meant every change — default
- * markers, the reset button, a new label — had to be made twice and was made
+ * layout settings came from a table, which meant every change - default
+ * markers, the reset button, a new label - had to be made twice and was made
  * twice differently. Here they are the same kind of thing: a label, a set of
  * stops, where the current value comes from and where a new one goes. The only
  * difference left is which widget draws them, and that is one field.

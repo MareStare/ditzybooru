@@ -9,7 +9,7 @@
       // to avoid a flash of the wrong theme. Keep in sync with `lib/theme.ts`.
       //
       // A missing `theme-lightness` means the "system" preference, which is also
-      // what a browser with no saved choice has — so there is no third value to
+      // what a browser with no saved choice has - so there is no third value to
       // handle here.
       (() => {
         const savedLightness = localStorage.getItem('theme-lightness');
@@ -26,7 +26,7 @@
       // React mounts. Keep in sync with `displaySettingProperties` in
       // `lib/displaySettings.ts`.
       //
-      // Ranges are NOT re-validated here — `lib/displaySettings.ts` clamps on
+      // Ranges are NOT re-validated here - `lib/displaySettings.ts` clamps on
       // the way in, and every setting has a value on `:root` in
       // `tokens/display-settings.css`, so the worst a corrupt entry can do is
       // be skipped by the `typeof` guard below.

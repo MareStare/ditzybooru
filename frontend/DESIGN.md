@@ -1,6 +1,6 @@
 ---
 name: Ditzybooru
-description: A modern frontend for Philomena boorus — nine accent themes and six user-owned display dials, all derived from a handful of seed values.
+description: A modern frontend for Philomena boorus - nine accent themes and six user-owned display dials, all derived from a handful of seed values.
 colors:
   seed-blue-dark: '#284371'
   seed-blue-light: '#2c74a9'
@@ -183,17 +183,17 @@ components:
 **Creative North Star: "The Tuned Instrument"**
 
 Ditzybooru is not a palette; it is a machine that produces palettes. A theme
-declares at most five colors — `--base`, `--page`, `--ink`, `--link`,
-`--link-hover` — and every surface, border, chrome tint, text tier, panel strip,
+declares at most five colors - `--base`, `--page`, `--ink`, `--link`,
+`--link-hover` - and every surface, border, chrome tint, text tier, panel strip,
 tag wash and media frame in the site is a `color-mix()` away from those. Six
 user-facing dials (`radius`, `borderWidth`, `shadow`, `density`, `fontScale`,
 `motion`) feed `calc()` sitewide as unregistered custom properties. Turn one and
 the site retunes: corners round, hairlines vanish, depth flattens, spacing
 loosens. Eighteen theme combinations exist, and none of them is hand-painted.
 
-The mood is familiar, warm and modernized. This is Derpibooru's shape language —
+The mood is familiar, warm and modernized. This is Derpibooru's shape language -
 the two-row app bar, the tinted panel title strip, the dense interaction bar
-under every thumbnail, the square corners — rebuilt in material that holds up.
+under every thumbnail, the square corners - rebuilt in material that holds up.
 Recognition is the point: a returning user should feel relief, not novelty. The
 signature purple link hover, the fave gold, the upvote green and the downvote red
 are muscle memory and are reproduced exactly.
@@ -203,15 +203,15 @@ Components are restrained and derived. A variant sets one seed custom property
 border and foreground follow; adding a variant costs one line. Character comes
 from the consistency of that derivation, never from flourish. Two anti-references
 are on record: the generic utility-framework look (Tailwind was removed
-deliberately, and its defaults — universal `rounded-lg`, indigo accents, stock
-`shadow-md` cards — are rejected with it), and Philomena's own contrast handling,
+deliberately, and its defaults - universal `rounded-lg`, indigo accents, stock
+`shadow-md` cards - are rejected with it), and Philomena's own contrast handling,
 where tag labels land between 1.7:1 and 2.5:1 against their own wash. The
 incumbent's shapes and colors are kept; its legibility debt is not.
 
 **Key Characteristics:**
 
 - Five color inputs per theme; every other color is derived.
-- Square corners by default (`--radius-unit: 0px`) — rounding is the user's choice, not the system's.
+- Square corners by default (`--radius-unit: 0px`) - rounding is the user's choice, not the system's.
 - One formula per semantic color, written once for light and dark via the `--lift` / `--sink` direction pair.
 - Dense, tabular, information-first: 0.875rem body, 24–36px control heights.
 - Theme-tinted shadows, never neutral gray.
@@ -224,7 +224,7 @@ fixed, theme-invariant palette carries the meanings that must never shift.
 
 ### Primary
 
-- **Accent Base** (`--base`, e.g. Twilight Navy `#284371` dark / Signal Blue `#2c74a9` light): the theme's identity, painted directly onto the top app bar and mixed toward the page for every piece of chrome — panel title strips, borders, the secondary nav, the primary button fill. It is the only saturated value present in every theme, which is why the shadow color derives from it rather than from the page.
+- **Accent Base** (`--base`, e.g. Twilight Navy `#284371` dark / Signal Blue `#2c74a9` light): the theme's identity, painted directly onto the top app bar and mixed toward the page for every piece of chrome - panel title strips, borders, the secondary nav, the primary button fill. It is the only saturated value present in every theme, which is why the shadow color derives from it rather than from the page.
 - **Brand** (`--brand`): the base lifted 28% away from the background, so it reads against both the page and the saturated nav. Used for accent-color on native controls, the avatar fallback, the brand mark, the switch fill, and text selection.
 
 ### Secondary
@@ -255,7 +255,7 @@ the translucent active states.
 - **Theme Page** (per-theme, e.g. `#141a24` blue, `#0c0c0c` gray): each dark theme sets its own near-black, tinted toward its accent.
 
 Text tiers are derived by fading `--ink` toward the surface: muted at 20%,
-subtle at 34%, disabled at 58%. These are far tighter than a conventional scale —
+subtle at 34%, disabled at 58%. These are far tighter than a conventional scale -
 a 32/52/68 split put secondary text at Lc 45 on a tinted surface, which looks
 fine on a bright monitor and fails measurement.
 
@@ -295,7 +295,7 @@ would compete with it. Personality lives in density and color, not in letterform
 
 ### Hierarchy
 
-- **Display** (600, `1.5rem × --font-scale`, 1.2, -0.011em): the page's `<h1>`. Rare — most surfaces are panel-titled rather than headed.
+- **Display** (600, `1.5rem × --font-scale`, 1.2, -0.011em): the page's `<h1>`. Rare - most surfaces are panel-titled rather than headed.
 - **Headline** (600, `1.375rem × --font-scale`, 1.2, -0.011em): `<h2>`, section headings within a page.
 - **Title** (600, `0.9375rem × --font-scale`, 1.2): panel headers. The panel title strip is the site's real heading system; a `<h3>` at `1.25rem` exists for prose contexts.
 - **Body** (400, `0.875rem × --font-scale`, 1.45): everything. Nav links, buttons, table cells, menu items, comment text. This one value decides whether the site reads dense or cramped.
@@ -309,8 +309,8 @@ var(--text-sm)` on the root feeds the scale into itself and shrinks every token
 by another 19%. `:root` stays at the browser's 16px, which is what the scale is
 calibrated against.
 
-**The Tabular Rule.** Anything whose digits change in place — scores, counters,
-timestamps, numeric table columns — takes `font-variant-numeric: tabular-nums`.
+**The Tabular Rule.** Anything whose digits change in place - scores, counters,
+timestamps, numeric table columns - takes `font-variant-numeric: tabular-nums`.
 A score that reflows as it increments is a layout bug.
 
 ## Layout
@@ -335,7 +335,7 @@ display menu exist; below, both fold into the burger drawer), `--xl` 960px
 (room for a fixed control rail), `--2xl` 1024px (home page splits into activity
 column plus grid), `--thumbs-roomy` 1150px (thumbnails grow from 150px to 225px).
 
-Thumbnail grids are `repeat(auto-fill, minmax(150px, 1fr))` — columns are added
+Thumbnail grids are `repeat(auto-fill, minmax(150px, 1fr))` - columns are added
 as the viewport widens rather than stretched, so thumbnail size stays constant.
 The home page is one column in source order on a phone and a
 `330px + minmax(0, 1fr)` grid above `--2xl`.
@@ -344,7 +344,7 @@ The home page is one column in source order on a phone and a
 
 **The Nearest Name Rule.** A component reaches for an existing breakpoint name
 rather than inventing a width. A new step is added only when a layout genuinely
-breaks where none of these describes — every threshold is another column of the
+breaks where none of these describes - every threshold is another column of the
 responsive matrix someone has to check.
 
 **The Shrinkable Column Rule.** Any grid or flex child that contains a
@@ -356,7 +356,7 @@ contents pushes the sidebar off the viewport.
 Depth is structural and theme-tinted. Shadows are not gray: `--shadow-color` is
 `--base` mixed 22% toward black, so every shadow carries the theme's hue and
 reads as part of the theme rather than as a generic drop shadow. `--base` is the
-input rather than `--page` because it is the one value saturated in every theme —
+input rather than `--page` because it is the one value saturated in every theme -
 the light themes' page is near-white and would carry no hue at all. At 22% the
 result lands at L 0.07–0.15 across all ten bases, and every consumer fades it
 further with an alpha.
@@ -390,8 +390,8 @@ settings must be written in exactly the canonical form the query uses (`0px`,
 
 Square by default. `--radius-unit` ships at `0px` because hard corners are what
 Derpibooru looks like, and this is a modernization of it rather than a departure.
-Every radius token is a multiple of that unit — `xs` 0.34×, `sm` 0.67×, `md` 1×,
-`lg` 1.67× — so a user who turns rounding up gets a proportional set rather than
+Every radius token is a multiple of that unit - `xs` 0.34×, `sm` 0.67×, `md` 1×,
+`lg` 1.67× - so a user who turns rounding up gets a proportional set rather than
 a uniform one. `--radius-full` (9999px) is the exception and is reserved for
 things that are conceptually circular: switches, badges, the notification
 counter, the pulsing live dot.
@@ -405,7 +405,7 @@ Borders are a single hairline token (`--border`, `--border-width` solid
 itself derived: base mixed toward the page at `--w-chrome`, with `strong`,
 `subtle` and `input` variants lifted or faded from there.
 
-`corner-shape: var(--corner-shape)` accompanies every `border-radius` —
+`corner-shape: var(--corner-shape)` accompanies every `border-radius` -
 progressive enhancement, Chromium-only today, ignored elsewhere.
 
 ### Named Rules
@@ -419,7 +419,7 @@ rounding names a radius token; a component that wants a circle names
 
 ### Buttons
 
-- **Shape:** square by default (`--radius-md`, i.e. `--radius-unit`), 32px minimum height × `--density` — comfortably clear of the 24px WCAG 2.5.8 floor and the height every other control lines up on.
+- **Shape:** square by default (`--radius-md`, i.e. `--radius-unit`), 32px minimum height × `--density` - comfortably clear of the 24px WCAG 2.5.8 floor and the height every other control lines up on.
 - **Derivation:** a variant sets `--btn-seed` and nothing else. Border is the fill mixed 22% toward `--lift`; hover mixes the fill 12% toward `--lift` and the border 34%; active darkens 8% toward black and drops the edge highlight.
 - **Variants:** `--primary` (base mixed toward page at `--w-chrome`), `--success`, `--danger`, `--warning` (polarity status constants), `--ghost` (transparent, muted text, `--surface-hover` on hover).
 - **Sizes:** `--sm` 28px / `--lg` 36px / `--icon` square via `aspect-ratio: 1` / `--block` full width.
@@ -440,7 +440,7 @@ over a body.
 - **Background:** `--surface` body, `--surface-panel-header` strip (base mixed toward the page at `--w-chrome`, 36% dark / 80% light).
 - **Shadow Strategy:** `--shadow-sm` plus `--edge-highlight` at rest; see the Compensating Depth Rule.
 - **Internal Padding:** `--space-3` body, `--space-1-5 / --space-3` header; `--flush` zeroes it for list bodies.
-- **Tabs:** sit _in_ the strip; the selected one lifts _out_ of it toward white rather than sinking into the body, because a selected tab must read as the lit one. Below `--xs` the strip scrolls rather than wrapping — a wrapped second row would push the grid down on every phone.
+- **Tabs:** sit _in_ the strip; the selected one lifts _out_ of it toward white rather than sinking into the body, because a selected tab must read as the lit one. Below `--xs` the strip scrolls rather than wrapping - a wrapped second row would push the grid down on every phone.
 - **Footer:** a full-width centered link at 0.75rem / 500 that tints on hover.
 
 **Media box** is the densest, most repeated element on the site: an interaction
@@ -451,16 +451,16 @@ hover; the image scales 1.03 under the same hover.
 
 ### Inputs / Fields
 
-- **Style:** native elements styled as boxes, never re-created — keyboard handling, IME, autofill and AT semantics stay intact. `--surface-sunken` fill, `--border-color-input` hairline, `--radius-md`, 36px × `--density`.
-- **Focus:** the site-wide ring — `2px solid var(--link)` at 2px offset, on `:focus-visible` only, so a mouse click never leaves a ring behind.
-- **Error:** `:user-invalid`, never `:invalid` — a required-but-empty field is not flagged before the user has touched it.
+- **Style:** native elements styled as boxes, never re-created - keyboard handling, IME, autofill and AT semantics stay intact. `--surface-sunken` fill, `--border-color-input` hairline, `--radius-md`, 36px × `--density`.
+- **Focus:** the site-wide ring - `2px solid var(--link)` at 2px offset, on `:focus-visible` only, so a mouse click never leaves a ring behind.
+- **Error:** `:user-invalid`, never `:invalid` - a required-but-empty field is not flagged before the user has touched it.
 - **Switch:** a pill (`--radius-full`) whose knob translates on `:checked`; fill becomes `--brand`, knob becomes `--text-on-nav`.
 
 ### Navigation
 
 Two rows, as in Derpibooru.
 
-- **Primary bar** sits on `--surface-nav` (the theme's base color, undiluted), so it uses `--text-on-nav` rather than `--text-color`, and hover states _darken toward black_ rather than lifting — a saturated mid-tone is not a background. Sticky at `z-index: 40` with `--shadow-sm`. Contains brand mark, embedded search field (on `--surface-nav-field`, a recess in the bar), and account actions.
+- **Primary bar** sits on `--surface-nav` (the theme's base color, undiluted), so it uses `--text-on-nav` rather than `--text-color`, and hover states _darken toward black_ rather than lifting - a saturated mid-tone is not a background. Sticky at `z-index: 40` with `--shadow-sm`. Contains brand mark, embedded search field (on `--surface-nav-field`, a recess in the bar), and account actions.
 - **Secondary strip** sits on a page surface instead, so it uses ordinary text tokens and lifts on hover. Below `--lg` it disappears entirely and its links move into the burger drawer.
 - **Compaction order:** below `--md` the wordmark, upload shortcut and reverse-search button all lose to the search field, which is the reason the bar exists.
 - **Donate link** is the one tinted item in a row of neutral ones: a 94%-diluted upvote-green wash with a green border and plain body text. The border and background say "donate"; the green itself would fail contrast on its own wash in the warmer themes.
@@ -469,8 +469,8 @@ Two rows, as in Derpibooru.
 
 The signature control of the display settings: a grid of `--segment-count`
 stops with an absolutely positioned thumb that translates to
-`--segment-index`. The stop a setting shipped with carries a small undo mark —
-the same glyph the reset button uses — shown only once the user has moved off it,
+`--segment-index`. The stop a setting shipped with carries a small undo mark -
+the same glyph the reset button uses - shown only once the user has moved off it,
 and positioned absolutely so marking a stop never changes the track's width.
 
 ## Do's and Don'ts
@@ -485,7 +485,7 @@ and positioned absolutely so marking a stop never changes the track's width.
 - **Do** pair every `border-radius` with `corner-shape: var(--corner-shape)`.
 - **Do** verify contrast in all nine accents × both polarities. `tests/a11y.test.ts` runs axe-core against the built site in a real browser, and zero violations is a gate.
 - **Do** style native elements rather than reimplementing them, and use `:focus-visible`, `:user-invalid`, and `:has()` over JS-managed state classes.
-- **Do** add every new stylesheet to the `@import` list in `styles/index.css` — a component's CSS lives next to its `.tsx`, but no `.tsx` imports CSS.
+- **Do** add every new stylesheet to the `@import` list in `styles/index.css` - a component's CSS lives next to its `.tsx`, but no `.tsx` imports CSS.
 - **Do** use `:where()` for element-level defaults so component classes never have to fight base rules.
 
 ### Don't:
@@ -495,8 +495,8 @@ and positioned absolutely so marking a stop never changes the track's width.
 - **Don't** hardcode a radius, a duration, a border width, or a raw `rem` gap past the settings tokens. A design that only looks right at `--radius-unit: 8px` is broken at the default of `0px`.
 - **Don't** underline links. The color carries them, and its luminance distance from body text is what satisfies the accessibility rule.
 - **Don't** set `font-size` on `:root`. See the Anchored Root Rule.
-- **Don't** paint a raw category or interaction seed as text on a wash of itself — that is precisely Philomena's contrast failure. Push it along `--lift` first.
+- **Don't** paint a raw category or interaction seed as text on a wash of itself - that is precisely Philomena's contrast failure. Push it along `--lift` first.
 - **Don't** use `cover` on a booru thumbnail. `contain`, always: cropping a tall comic page to a square hides the part that identifies it.
-- **Don't** reintroduce a utility CSS framework, or its default look — universal `rounded-lg`, stock indigo accents, neutral gray `shadow-md` cards. Tailwind was removed deliberately.
+- **Don't** reintroduce a utility CSS framework, or its default look - universal `rounded-lg`, stock indigo accents, neutral gray `shadow-md` cards. Tailwind was removed deliberately.
 - **Don't** add a `*` reset beyond `box-sizing`. A blanket reset reaches into web components and other subtrees that then need `!important` to escape it.
 - **Don't** let a wide table or tab strip widen the page. It scrolls inside its own box.

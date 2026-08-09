@@ -14,7 +14,7 @@ import { RecentCommentsBlock } from './RecentCommentsBlock';
  * back into a single column.
  */
 
-/** Featured and trending images — the picture half of the column. */
+/** Featured and trending images - the picture half of the column. */
 export function ActivitySpotlight() {
   return (
     <aside className="home__spotlight" aria-label="Featured and trending">
@@ -24,7 +24,7 @@ export function ActivitySpotlight() {
   );
 }
 
-/** Streams, forum and comment feeds — the text half of the column. */
+/** Streams, forum and comment feeds - the text half of the column. */
 export function ActivityFeeds() {
   return (
     <aside className="home__activity" aria-label="Site activity">

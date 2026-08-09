@@ -1,9 +1,9 @@
 /**
- * Ditzybooru design system — raw CSS, no framework.
+ * Ditzybooru design system - raw CSS, no framework.
  *
  * The single stylesheet entry point. A component's rules live next to its
  * `.tsx`, so a component is one directory entry rather than two, but no `.tsx`
- * imports CSS — every file is pulled in here instead, so the whole site
+ * imports CSS - every file is pulled in here instead, so the whole site
  * compiles to one stylesheet with an order this file states outright.
  *
  * Adding a component means adding its `@import` below. Forgetting to is the one
@@ -24,7 +24,7 @@
 
 @import '@fontsource-variable/inter';
 
-/* Definitions only — substituted into the `@media` rules below at build time,
+/* Definitions only - substituted into the `@media` rules below at build time,
  * and contributing no CSS of its own. */
 @import './tokens/breakpoints.css';
 
@@ -33,7 +33,7 @@
 @import './tokens/palette.css';
 @import './tokens/semantic.css';
 
-/* Must precede the individual themes — one attribute less specific, and the
+/* Must precede the individual themes - one attribute less specific, and the
  * light block supplies the `--page`/`--ink` a light theme does not restate. */
 @import './themes/_polarity.css';
 
@@ -52,7 +52,7 @@
 /* ---- Primitives -------------------------------------------------------- */
 
 /* Those with no owning component yet stay here; when one grows a `.tsx`, its
- * rules move next to it — see `components/ui/Button.css`. */
+ * rules move next to it - see `components/ui/Button.css`. */
 @import './components/field.css';
 @import './components/tag.css';
 @import './components/notice.css';

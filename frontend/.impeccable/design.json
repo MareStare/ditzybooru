@@ -6,7 +6,7 @@
     "typographyMeta": {
       "display": {
         "displayName": "Display",
-        "purpose": "The page's <h1>. Rare — most surfaces are panel-titled rather than headed."
+        "purpose": "The page's <h1>. Rare - most surfaces are panel-titled rather than headed."
       },
       "headline": {
         "displayName": "Headline",
@@ -53,7 +53,7 @@
       {
         "name": "edge-highlight",
         "value": "inset 0 var(--border-width) 0 color-mix(in oklab, var(--edge-tint) calc(var(--edge-alpha) * var(--shadow-force)), transparent)",
-        "purpose": "A 1px inner top highlight — 5% on dark themes, 0% on light. Most of what separates a panel that looks lit from one that looks like a rectangle."
+        "purpose": "A 1px inner top highlight - 5% on dark themes, 0% on light. Most of what separates a panel that looks lit from one that looks like a rectangle."
       }
     ],
     "motion": [
@@ -82,32 +82,32 @@
       {
         "name": "xs",
         "value": "30rem",
-        "purpose": "480px — a small phone. The panel tab strip starts to scroll."
+        "purpose": "480px - a small phone. The panel tab strip starts to scroll."
       },
       {
         "name": "sm",
         "value": "34rem",
-        "purpose": "544px — the pagination bar keeps its First/Last controls above this."
+        "purpose": "544px - the pagination bar keeps its First/Last controls above this."
       },
       {
         "name": "md",
         "value": "40rem",
-        "purpose": "640px — the header regains its wordmark and icon shortcuts; the footer opens to three columns."
+        "purpose": "640px - the header regains its wordmark and icon shortcuts; the footer opens to three columns."
       },
       {
         "name": "lg",
         "value": "48rem",
-        "purpose": "768px — the secondary nav strip and display menu exist above this; below, both live in the burger drawer."
+        "purpose": "768px - the secondary nav strip and display menu exist above this; below, both live in the burger drawer."
       },
       {
         "name": "xl",
         "value": "60rem",
-        "purpose": "960px — room for a fixed control rail beside the content it drives."
+        "purpose": "960px - room for a fixed control rail beside the content it drives."
       },
       {
         "name": "2xl",
         "value": "64rem",
-        "purpose": "1024px — the home page splits into activity column plus grid."
+        "purpose": "1024px - the home page splits into activity column plus grid."
       },
       {
         "name": "thumbs-roomy",
@@ -119,7 +119,7 @@
       {
         "name": "--radius-unit",
         "value": "0px",
-        "purpose": "Corner rounding. 0px default — classic Derpibooru's hard corners. Every radius token is a multiple of it."
+        "purpose": "Corner rounding. 0px default - classic Derpibooru's hard corners. Every radius token is a multiple of it."
       },
       {
         "name": "--border-width",
@@ -149,7 +149,7 @@
       {
         "name": "--corner-shape",
         "value": "round",
-        "purpose": "Progressive enhancement — Chromium-only today, ignored elsewhere. Accompanies every border-radius."
+        "purpose": "Progressive enhancement - Chromium-only today, ignored elsewhere. Accompanies every border-radius."
       }
     ],
     "colorMeta": {
@@ -406,7 +406,7 @@
       "name": "Primary Button",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "The default affirmative control. Sets one input — --btn-seed — and derives border, hover and active from it.",
+      "description": "The default affirmative control. Sets one input - --btn-seed - and derives border, hover and active from it.",
       "html": "<button class=\"ds-btn ds-btn-primary\">Upload</button>",
       "css": ".ds-btn { --btn-color: var(--surface-sunken); display: inline-flex; align-items: center; justify-content: center; gap: calc(0.375rem * var(--density)); min-block-size: calc(32px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--btn-color), var(--lift) 22%); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--btn-color); box-shadow: var(--edge-highlight); color: var(--text-color); font: inherit; font-size: var(--text-sm); font-weight: 500; line-height: 1.2; white-space: nowrap; cursor: pointer; transition: background-color var(--duration) var(--ease-out), border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out); } .ds-btn-primary { --btn-color: color-mix(in oklab, var(--base), var(--page) var(--w-chrome)); } .ds-btn:hover { background-color: color-mix(in oklab, var(--btn-color), var(--lift) 12%); border-color: color-mix(in oklab, var(--btn-color), var(--lift) 34%); } .ds-btn:active { background-color: color-mix(in oklab, var(--btn-color), #000 8%); box-shadow: none; } .ds-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }"
     },
@@ -422,7 +422,7 @@
       "name": "Search Field",
       "kind": "input",
       "refersTo": "field",
-      "description": "A native input styled as an ordinary box — keyboard handling, IME, autofill and AT semantics stay intact. Flags invalidity with :user-invalid, never :invalid.",
+      "description": "A native input styled as an ordinary box - keyboard handling, IME, autofill and AT semantics stay intact. Flags invalidity with :user-invalid, never :invalid.",
       "html": "<input class=\"ds-field\" type=\"search\" placeholder=\"Search tags, e.g. safe, oc\" aria-label=\"Search\">",
       "css": ".ds-field { inline-size: 100%; min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border: var(--border-width) solid var(--border-color-input); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); color: var(--text-color); font: inherit; font-size: var(--text-sm); transition: border-color var(--duration) var(--ease-out), background-color var(--duration) var(--ease-out); } .ds-field::placeholder { color: var(--text-subtle); } .ds-field:hover:not(:disabled, :read-only) { border-color: var(--border-color-strong); } .ds-field:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; } .ds-field:user-invalid { border-color: var(--score-negative); }"
     },
@@ -430,7 +430,7 @@
       "name": "Panel",
       "kind": "card",
       "refersTo": "panel",
-      "description": "Philomena's `.block` — the primary content container. A tinted title strip over a body, with an optional centered footer link.",
+      "description": "Philomena's `.block` - the primary content container. A tinted title strip over a body, with an optional centered footer link.",
       "html": "<section class=\"ds-panel\"><header class=\"ds-panel-header\">Recently Commented On</header><div class=\"ds-panel-body\">Panel bodies carry --space-3 of padding. A flush variant zeroes it for list bodies.</div><a class=\"ds-panel-footer\" href=\"#\">See all</a></section>",
       "css": ".ds-panel { display: flex; flex-direction: column; overflow: hidden; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface); box-shadow: var(--shadow-sm), var(--edge-highlight); } .ds-panel-header { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); background-color: var(--surface-panel-header); color: var(--text-color); font-size: var(--text-md); font-weight: 600; line-height: 1.2; } .ds-panel-body { padding: calc(0.75rem * var(--density)); color: var(--text-color); font-size: var(--text-sm); line-height: 1.45; } .ds-panel-footer { display: block; padding: calc(0.5rem * var(--density)) calc(0.75rem * var(--density)); border-top: var(--border-width) solid var(--border-color-subtle); background-color: var(--surface); color: var(--text-muted); font-size: var(--text-xs); font-weight: 500; text-align: center; text-decoration: none; transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out); } .ds-panel-footer:hover { background-color: var(--surface-hover); color: var(--text-color); }"
     },
@@ -462,7 +462,7 @@
       "name": "Menu",
       "kind": "nav",
       "refersTo": "menu-item",
-      "description": "The dropdown / popover surface — the only genuinely lifted surface in the system. Mixes toward literal white in both polarities, because elevation reads as lighter in light and dark UI alike.",
+      "description": "The dropdown / popover surface - the only genuinely lifted surface in the system. Mixes toward literal white in both polarities, because elevation reads as lighter in light and dark UI alike.",
       "html": "<ul class=\"ds-menu\"><li class=\"ds-menu-label\">Sort by</li><li><button class=\"ds-menu-item ds-menu-item-selected\">Recently uploaded</button></li><li><button class=\"ds-menu-item\">Wilson score</button></li><li><hr class=\"ds-menu-separator\"></li><li><button class=\"ds-menu-item\">Random</button></li></ul>",
       "css": ".ds-menu { min-inline-size: 12rem; padding: calc(0.25rem * var(--density)); margin: 0; border: var(--border-width) solid var(--border-color); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, var(--surface), #fff 5%); box-shadow: 0 12px 32px color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-force)), transparent), var(--edge-highlight); color: var(--text-color); font-size: var(--text-sm); list-style: none; } .ds-menu-item { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); inline-size: 100%; min-block-size: calc(32px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.75rem * var(--density)); border: 0; border-radius: max(0px, calc(var(--radius-md) - var(--border-width))); corner-shape: var(--corner-shape); background-color: transparent; color: inherit; font: inherit; font-size: var(--text-sm); text-align: start; cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out); } .ds-menu-item:hover, .ds-menu-item:focus-visible { background-color: var(--surface-hover); } .ds-menu-item-selected { background-color: var(--surface-selected); font-weight: 500; } .ds-menu-separator { block-size: var(--border-width); margin: calc(0.25rem * var(--density)) 0; border: 0; background-color: var(--border-color-subtle); } .ds-menu-label { padding: calc(0.25rem * var(--density)) calc(0.5rem * var(--density)); color: var(--text-subtle); font-size: var(--text-2xs); font-weight: 600; letter-spacing: 0.02em; text-transform: uppercase; }"
     },
@@ -470,7 +470,7 @@
       "name": "Media Box",
       "kind": "card",
       "refersTo": "media-box",
-      "description": "The densest, most repeated element on the site: a fave/vote/comment interaction bar over a square thumbnail. No overflow:hidden — the overflow menu must escape — so the bar and thumb round their own outer corners from --radius-inner. Inactive actions stay muted so the bar reads as one strip rather than a row of coloured icons.",
+      "description": "The densest, most repeated element on the site: a fave/vote/comment interaction bar over a square thumbnail. No overflow:hidden - the overflow menu must escape - so the bar and thumb round their own outer corners from --radius-inner. Inactive actions stay muted so the bar reads as one strip rather than a row of coloured icons.",
       "html": "<article class=\"ds-media-box\"><div class=\"ds-media-bar\"><button class=\"ds-media-action ds-media-fave\" aria-pressed=\"true\" aria-label=\"Favourite\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 17.3l-6.2 3.7 1.7-7L2 9.2l7.1-.6L12 2l2.9 6.6 7.1.6-5.5 4.8 1.7 7z\"/></svg>412</button><span class=\"ds-media-votes\"><button class=\"ds-media-action ds-media-up\" aria-label=\"Upvote\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 4l8 10h-5v6H9v-6H4z\"/></svg></button><span class=\"ds-media-score ds-media-score-positive\">1284</span><button class=\"ds-media-action ds-media-down\" aria-label=\"Downvote\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"currentColor\"><path d=\"M12 20L4 10h5V4h6v6h5z\"/></svg></button></span><button class=\"ds-media-action\" aria-label=\"Comments\"><svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linejoin=\"round\"><path d=\"M21 12a8 8 0 0 1-8 8H4l2-3a8 8 0 1 1 15-5z\"/></svg>37</button></div><div class=\"ds-media-thumb\"><span class=\"ds-media-format\">GIF</span></div></article>",
       "css": ".ds-media-box { --radius-inner: max(0px, calc(var(--radius-md) - var(--border-width))); display: flex; flex-direction: column; inline-size: 200px; border: var(--border-width) solid var(--surface-media); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface); transition: border-color var(--duration) var(--ease-out), box-shadow var(--duration) var(--ease-out); } .ds-media-box:hover { border-color: color-mix(in oklab, var(--surface-media), #000 8%); box-shadow: var(--shadow-md); } .ds-media-bar { display: flex; flex-shrink: 0; align-items: stretch; justify-content: center; min-block-size: 28px; padding-inline: calc(0.125rem * var(--density)); border-start-start-radius: var(--radius-inner); border-start-end-radius: var(--radius-inner); corner-shape: var(--corner-shape); border-block-end: var(--border-width) solid var(--surface-media); background-color: color-mix(in oklab, var(--surface-panel-header), var(--surface) 50%); font-size: var(--text-xs); font-variant-numeric: tabular-nums; } .ds-media-action { --media-action-color: var(--text-muted); display: inline-flex; align-items: center; gap: calc(0.125rem * var(--density)); padding-inline: calc(0.125rem * var(--density)); border: 0; border-radius: var(--radius-xs); background-color: transparent; color: var(--text-muted); font: inherit; font-size: var(--text-xs); cursor: pointer; transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out); } .ds-media-action:hover { background-color: var(--surface-hover); color: var(--media-action-color); } .ds-media-fave { --media-action-color: var(--fave-strong); } .ds-media-fave[aria-pressed='true'] { background-color: var(--fave-bg); color: var(--fave-strong); } .ds-media-up { --media-action-color: var(--score-positive); } .ds-media-down { --media-action-color: var(--score-negative); } .ds-media-votes { display: inline-flex; align-items: stretch; } .ds-media-score { display: inline-flex; align-items: center; padding-inline: calc(0.125rem * var(--density)); color: var(--text-muted); font-weight: 500; } .ds-media-score-positive { color: var(--score-positive); } .ds-media-thumb { position: relative; aspect-ratio: 1; overflow: hidden; border-end-start-radius: var(--radius-inner); border-end-end-radius: var(--radius-inner); corner-shape: var(--corner-shape); background-color: var(--surface-sunken); } .ds-media-format { position: absolute; inset-block-start: calc(0.25rem * var(--density)); inset-inline-end: calc(0.25rem * var(--density)); padding: calc(0.125rem * var(--density)) calc(0.375rem * var(--density)); border-radius: var(--radius-xs); corner-shape: var(--corner-shape); background-color: color-mix(in oklab, #000 70%, transparent); color: #fff; font-size: var(--text-2xs); font-weight: 600; }"
     },
@@ -478,7 +478,7 @@
       "name": "Nav Bar",
       "kind": "nav",
       "refersTo": "nav-link",
-      "description": "The primary app bar. Everything on it sits on --surface-nav — the theme's own base color, undiluted — so it uses --text-on-nav rather than --text-color, and hover states darken toward black rather than lifting: a saturated mid-tone is not a background.",
+      "description": "The primary app bar. Everything on it sits on --surface-nav - the theme's own base color, undiluted - so it uses --text-on-nav rather than --text-color, and hover states darken toward black rather than lifting: a saturated mid-tone is not a background.",
       "html": "<div class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-nav-mark\">D</span><span class=\"ds-nav-name\">Ditzybooru</span></a><div class=\"ds-nav-search\"><input class=\"ds-nav-field\" type=\"search\" placeholder=\"Search\" aria-label=\"Search\"></div><a class=\"ds-nav-link\" href=\"#\">Images</a><a class=\"ds-nav-link\" href=\"#\">Forums</a></div>",
       "css": ".ds-nav { display: flex; align-items: center; gap: calc(0.5rem * var(--density)); min-block-size: calc(56px * var(--density)); padding-inline: calc(0.75rem * var(--density)); background-color: var(--surface-nav); color: var(--text-on-nav); box-shadow: var(--shadow-sm); } .ds-nav-brand { display: inline-flex; flex-shrink: 0; align-items: center; gap: calc(0.5rem * var(--density)); color: var(--text-on-nav); text-decoration: none; } .ds-nav-mark { display: inline-flex; align-items: center; justify-content: center; inline-size: 32px; block-size: 32px; border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--brand); color: var(--text-on-nav); font-size: var(--text-sm); font-weight: 700; } .ds-nav-name { font-size: var(--text-lg); font-weight: 600; letter-spacing: -0.011em; } .ds-nav-search { flex: 1; min-inline-size: 0; } .ds-nav-field { inline-size: 100%; min-block-size: calc(36px * var(--density)); padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border: var(--border-width) solid color-mix(in oklab, var(--surface-nav-field), var(--text-on-nav) 12%); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: var(--surface-nav-field); color: var(--text-on-nav); font: inherit; font-size: var(--text-sm); } .ds-nav-field::placeholder { color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav-field) 45%); } .ds-nav-link { display: inline-flex; align-items: center; padding: calc(0.375rem * var(--density)) calc(0.5rem * var(--density)); border-radius: var(--radius-md); corner-shape: var(--corner-shape); background-color: transparent; color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%); font-size: var(--text-sm); font-weight: 500; white-space: nowrap; text-decoration: none; transition: background-color var(--duration) var(--ease-out), color var(--duration) var(--ease-out); } .ds-nav-link:hover { background-color: color-mix(in oklab, var(--surface-nav), #000 14%); color: var(--text-on-nav); }"
     },
@@ -501,10 +501,10 @@
   ],
   "narrative": {
     "northStar": "The Tuned Instrument",
-    "overview": "Ditzybooru is not a palette; it is a machine that produces palettes. A theme declares at most five colors — --base, --page, --ink, --link, --link-hover — and every surface, border, chrome tint, text tier, panel strip, tag wash and media frame in the site is a color-mix() away from those. Six user-facing dials (radius, borderWidth, shadow, density, fontScale, motion) feed calc() sitewide as unregistered custom properties. Turn one and the site retunes: corners round, hairlines vanish, depth flattens, spacing loosens. Eighteen theme combinations exist, and none of them is hand-painted.\n\nThe mood is familiar, warm and modernized. This is Derpibooru's shape language — the two-row app bar, the tinted panel title strip, the dense interaction bar under every thumbnail, the square corners — rebuilt in material that holds up. Recognition is the point: a returning user should feel relief, not novelty. The signature purple link hover, the fave gold, the upvote green and the downvote red are muscle memory and are reproduced exactly.\n\nComponents are restrained and derived. A variant sets one seed custom property (--btn-seed, --tag-seed, --badge-seed, --notice-seed) and its fill, border and foreground follow; adding a variant costs one line. Character comes from the consistency of that derivation, never from flourish. Two anti-references are on record: the generic utility-framework look (Tailwind was removed deliberately, and its defaults — universal rounded-lg, indigo accents, stock shadow-md cards — are rejected with it), and Philomena's own contrast handling, where tag labels land between 1.7:1 and 2.5:1 against their own wash. The incumbent's shapes and colors are kept; its legibility debt is not.",
+    "overview": "Ditzybooru is not a palette; it is a machine that produces palettes. A theme declares at most five colors - --base, --page, --ink, --link, --link-hover - and every surface, border, chrome tint, text tier, panel strip, tag wash and media frame in the site is a color-mix() away from those. Six user-facing dials (radius, borderWidth, shadow, density, fontScale, motion) feed calc() sitewide as unregistered custom properties. Turn one and the site retunes: corners round, hairlines vanish, depth flattens, spacing loosens. Eighteen theme combinations exist, and none of them is hand-painted.\n\nThe mood is familiar, warm and modernized. This is Derpibooru's shape language - the two-row app bar, the tinted panel title strip, the dense interaction bar under every thumbnail, the square corners - rebuilt in material that holds up. Recognition is the point: a returning user should feel relief, not novelty. The signature purple link hover, the fave gold, the upvote green and the downvote red are muscle memory and are reproduced exactly.\n\nComponents are restrained and derived. A variant sets one seed custom property (--btn-seed, --tag-seed, --badge-seed, --notice-seed) and its fill, border and foreground follow; adding a variant costs one line. Character comes from the consistency of that derivation, never from flourish. Two anti-references are on record: the generic utility-framework look (Tailwind was removed deliberately, and its defaults - universal rounded-lg, indigo accents, stock shadow-md cards - are rejected with it), and Philomena's own contrast handling, where tag labels land between 1.7:1 and 2.5:1 against their own wash. The incumbent's shapes and colors are kept; its legibility debt is not.",
     "keyCharacteristics": [
       "Five color inputs per theme; every other color is derived.",
-      "Square corners by default (--radius-unit: 0px) — rounding is the user's choice, not the system's.",
+      "Square corners by default (--radius-unit: 0px) - rounding is the user's choice, not the system's.",
       "One formula per semantic color, written once for light and dark via the --lift / --sink direction pair.",
       "Dense, tabular, information-first: 0.875rem body, 24–36px control heights.",
       "Theme-tinted shadows, never neutral gray.",
@@ -533,12 +533,12 @@
       },
       {
         "name": "The Tabular Rule",
-        "body": "Anything whose digits change in place — scores, counters, timestamps, numeric table columns — takes font-variant-numeric: tabular-nums. A score that reflows as it increments is a layout bug.",
+        "body": "Anything whose digits change in place - scores, counters, timestamps, numeric table columns - takes font-variant-numeric: tabular-nums. A score that reflows as it increments is a layout bug.",
         "section": "typography"
       },
       {
         "name": "The Nearest Name Rule",
-        "body": "A component reaches for an existing breakpoint name rather than inventing a width. A new step is added only when a layout genuinely breaks where none of these describes — every threshold is another column of the responsive matrix someone has to check.",
+        "body": "A component reaches for an existing breakpoint name rather than inventing a width. A new step is added only when a layout genuinely breaks where none of these describes - every threshold is another column of the responsive matrix someone has to check.",
         "section": "layout"
       },
       {
@@ -566,7 +566,7 @@
       "Do pair every border-radius with corner-shape: var(--corner-shape).",
       "Do verify contrast in all nine accents × both polarities. tests/a11y.test.ts runs axe-core against the built site in a real browser, and zero violations is a gate.",
       "Do style native elements rather than reimplementing them, and use :focus-visible, :user-invalid, and :has() over JS-managed state classes.",
-      "Do add every new stylesheet to the @import list in styles/index.css — a component's CSS lives next to its .tsx, but no .tsx imports CSS.",
+      "Do add every new stylesheet to the @import list in styles/index.css - a component's CSS lives next to its .tsx, but no .tsx imports CSS.",
       "Do use :where() for element-level defaults so component classes never have to fight base rules."
     ],
     "donts": [
@@ -575,9 +575,9 @@
       "Don't hardcode a radius, a duration, a border width, or a raw rem gap past the settings tokens. A design that only looks right at --radius-unit: 8px is broken at the default of 0px.",
       "Don't underline links. The color carries them, and its luminance distance from body text is what satisfies the accessibility rule.",
       "Don't set font-size on :root. See the Anchored Root Rule.",
-      "Don't paint a raw category or interaction seed as text on a wash of itself — that is precisely Philomena's contrast failure. Push it along --lift first.",
+      "Don't paint a raw category or interaction seed as text on a wash of itself - that is precisely Philomena's contrast failure. Push it along --lift first.",
       "Don't use cover on a booru thumbnail. contain, always: cropping a tall comic page to a square hides the part that identifies it.",
-      "Don't reintroduce a utility CSS framework, or its default look — universal rounded-lg, stock indigo accents, neutral gray shadow-md cards. Tailwind was removed deliberately.",
+      "Don't reintroduce a utility CSS framework, or its default look - universal rounded-lg, stock indigo accents, neutral gray shadow-md cards. Tailwind was removed deliberately.",
       "Don't add a * reset beyond box-sizing. A blanket reset reaches into web components and other subtrees that then need !important to escape it.",
       "Don't let a wide table or tab strip widen the page. It scrolls inside its own box."
     ]

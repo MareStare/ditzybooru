@@ -1,5 +1,5 @@
 /**
- * Tier 1 scales — everything that is not a color. Theme-independent: these
+ * Tier 1 scales - everything that is not a color. Theme-independent: these
  * values are identical in every theme and derive only from the settings.
  */
 
@@ -26,7 +26,7 @@
    * theme rather than as a generic drop shadow.
    *
    * `--base` is the input rather than `--page`, because it is the one theme
-   * color that is saturated in every theme — the page is near-white on light
+   * color that is saturated in every theme - the page is near-white on light
    * themes, so darkening it would carry no hue at all. At 22% the result lands
    * at L 0.07-0.15 across all ten themes, which is the depth a shadow wants,
    * and every consumer below fades it further with an alpha. */
@@ -57,7 +57,7 @@
 
   /* ---- Typography --------------------------------------------------- */
 
-  /* Anchored to a 16px root — see the note in `base.css` about why the root's
+  /* Anchored to a 16px root - see the note in `base.css` about why the root's
    * own font size must stay there. `--text-sm` is the workhorse: body copy, nav
    * links, buttons, table cells and menu items all sit on it, so it is the one
    * value that decides whether the site reads dense or cramped. */
@@ -96,7 +96,7 @@
   --header-h: calc(var(--nav-bar-h) + var(--nav-sub-h));
 
   /* The phone-only bottom navigation. The row's own height is a constant; the
-   * space the shell has to reserve for it is not — it is zero on a screen wide
+   * space the shell has to reserve for it is not - it is zero on a screen wide
    * enough that the bar does not exist. */
   --bottom-nav-bar-h: calc(52px * var(--density));
   --bottom-nav-h: 0px;

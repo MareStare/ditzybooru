@@ -1,5 +1,5 @@
 /**
- * Layout for the /settings/display page. Not part of the design system — it only
+ * Layout for the /settings/display page. Not part of the design system - it only
  * arranges the specimen cards and the control rail.
  *
  * The page renders inside the ordinary site chrome, so the settings it writes land
@@ -114,8 +114,8 @@
   min-inline-size: 0;
 }
 
-/* Two columns: specimens that need the room to be read honestly — a table with
- * four columns, a thumbnail grid — but that do not want the whole page. Falls
+/* Two columns: specimens that need the room to be read honestly - a table with
+ * four columns, a thumbnail grid - but that do not want the whole page. Falls
  * back to a single column when the grid only has one to give. */
 .display-page-card--wide {
   grid-column: span 2;

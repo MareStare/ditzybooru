@@ -1,5 +1,5 @@
 /**
- * Semantic colors — everything the components actually name.
+ * Semantic colors - everything the components actually name.
  *
  * Written ONCE for every theme, light and dark. A theme supplies at most five
  * colors (`--base`, `--page`, `--ink`, `--link`, `--link-hover`); every value
@@ -8,7 +8,7 @@
  *
  * Three mechanisms carry the light/dark difference so this file never branches:
  *
- *   --lift    move away from the background — lighter in a dark theme, darker
+ *   --lift    move away from the background - lighter in a dark theme, darker
  *             in a light one. The correct direction for hover states, text
  *             tiers and border contrast in BOTH polarities.
  *   --sink    move toward the background. Disabled and recessed states.
@@ -56,7 +56,7 @@
 
   /* The selected tab, lifted OUT of the title strip rather than sunk into the
    * panel below it. Mixing toward literal white in both polarities, because a
-   * selected tab has to read as the lit one — the `--lift` direction would make
+   * selected tab has to read as the lit one - the `--lift` direction would make
    * it darker than the strip on a light theme, which reads as pressed-in. */
   --surface-tab-active: color-mix(in oklab, var(--surface-panel-header), #fff var(--w-tab-active));
 
@@ -104,8 +104,8 @@
   /* ---- Interaction icons --------------------------------------------- */
 
   /* What actually gets painted. The palette values in `palette.css` are the
-   * identity and stay exact — they are muscle memory, and they still fill the
-   * translucent active states below — but as a 14px glyph on a dark surface the
+   * identity and stay exact - they are muscle memory, and they still fill the
+   * translucent active states below - but as a 14px glyph on a dark surface the
    * raw colors bottom out around APCA Lc 26. Lifting them off the background is
    * the same move `--link-on-panel-header` makes, for the same reason. */
   --score-positive: color-mix(in oklab, var(--vote-up), var(--lift) var(--w-icon-lift));

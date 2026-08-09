@@ -1,7 +1,7 @@
 /**
  * Theme-invariant colors used by more than one component.
  *
- * Byte-identical across all of Derpibooru's themes — dark-blue, dark-red,
+ * Byte-identical across all of Derpibooru's themes - dark-blue, dark-red,
  * light-blue, the lot. Philomena redeclares them in each of its 18 theme files.
  *
  * Anything only one component needs lives in that component instead; the tag

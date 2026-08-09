@@ -10,11 +10,11 @@ web
 
 **Newcomers and casual visitors** are the primary focus. They don't know how a
 booru works, so the design must teach tags, search queries, filters, watched
-tags, complex queries, and faves — including how a fave differs from an
+tags, complex queries, and faves - including how a fave differs from an
 upvote. The tag and search vocabulary is the steepest part of that climb and
 the most valuable thing to reach the top of.
 
-**Taggers** — anyone correcting or completing an image's tags — are the users
+**Taggers** - anyone correcting or completing an image's tags - are the users
 the whole corpus depends on. Tagging is open: any visitor, signed in or not,
 may edit the tags on any image. Tag editing is therefore not an admin tool
 tucked behind a permission check; it is a primary, always-available action
@@ -35,9 +35,9 @@ instance (https://ditzybooru.org) is backed by Derpibooru.
 
 **What makes a booru worth using is its search, and what makes its search
 worth using is its tags.** This is the product's centre of gravity. A
-Philomena corpus is exhaustively tagged — artist, character, species, rating,
+Philomena corpus is exhaustively tagged - artist, character, species, rating,
 origin, content source, body type, and free-form descriptive tags, dozens per
-image — and it stays that way because tagging is open to everyone, including
+image - and it stays that way because tagging is open to everyone, including
 unauthenticated visitors, on every image. That corpus feeds a query language
 that goes far past keyword matching: boolean operators, negation,
 parenthesised nesting to arbitrary depth, field-qualified terms over numeric
@@ -71,10 +71,10 @@ Five things together, none of which the upstream frontend offers:
    query language and the tag corpus are the platform's outstanding assets and
    its most under-served ones: upstream exposes them through a plain text
    input and a plain text area. Ditzybooru treats them as the product.
-2. **Modern look at feature parity** — the same capabilities, not a subset.
-3. **Faster and app-like** — a React SPA against a multipage Phoenix app.
+2. **Modern look at feature parity** - the same capabilities, not a subset.
+3. **Faster and app-like** - a React SPA against a multipage Phoenix app.
 4. **Extra features upstream lacks**, on top of parity.
-5. **Deep customization** — themes and display settings as a product
+5. **Deep customization** - themes and display settings as a product
    feature, not a developer convenience.
 
 ## Operating Context
@@ -84,7 +84,7 @@ watched images plus forum and comment activity; thumbnail grids; image pages;
 tag search and filters; forums and comments.
 
 **Search and tagging run through all of it.** A query is not a one-off action
-at the top of a results page — it is state the user refines over a session,
+at the top of a results page - it is state the user refines over a session,
 saves as a watched tag, and reuses as a filter. Tags appear on every image
 page as the primary metadata, are clickable into a query from anywhere they
 render, and are editable in place. The two are one loop: better tags make
@@ -94,7 +94,7 @@ defect the searcher is positioned to fix.
 Query complexity has a long tail. Most sessions are one or two tags; a
 meaningful minority are deeply nested expressions mixing negation, grouped
 alternatives, and metadata bounds, typed by users who know exactly what they
-want. Both ends must be served by the same surface — the simple case may not
+want. Both ends must be served by the same surface - the simple case may not
 be taxed to support the complex one, and the complex one may not be
 amputated to keep the simple one tidy.
 
@@ -112,8 +112,8 @@ hyphenated phrase.
   better domain terms where the new design establishes them intentionally.
 - **Philomena's search grammar is authoritative.** The query language belongs
   to the origin server, which parses and executes it. Ditzybooru may build any
-  interface on top — a structured builder, inline hints, live validation,
-  visualised nesting — but every query it produces must be expressible as the
+  interface on top - a structured builder, inline hints, live validation,
+  visualised nesting - but every query it produces must be expressible as the
   plain text string Philomena accepts, and a user who types that string by
   hand must never be worse off than one using the builder. The frontend does
   not invent operators or a dialect of its own.
@@ -142,7 +142,7 @@ hyphenated phrase.
 - **Stack:** React 19, TanStack Router, Vite, raw CSS with a token layer
   (`src/styles/tokens/`, `src/styles/themes/`). Tailwind was removed
   deliberately; do not reintroduce a utility framework. TypeScript only.
-- **Planned, not built:** SSR. Real API wiring — the home page renders from
+- **Planned, not built:** SSR. Real API wiring - the home page renders from
   `src/lib/mock/`. Search, the image page, tag editing, forums and upload do
   not exist yet in any form beyond the header's placeholder field. The search
   and tagging surfaces are the product's defining feature and its largest
@@ -161,7 +161,7 @@ imitation: the familiar booru brought up to date.
   token and component system (`src/components/`, `src/styles/`).
 - Mock data at `src/lib/mock/`, shaped like Philomena API responses, with
   thumbnails from the public Derpibooru CDN (Philomena's development seeds).
-- Accessibility suite at `tests/a11y.test.ts` — axe-core against the built
+- Accessibility suite at `tests/a11y.test.ts` - axe-core against the built
   site in a real browser, run across every theme.
 - No search, tag-editing, or image-page code exists yet. The header's search
   field is a placeholder that submits nowhere, and the tag component
@@ -205,5 +205,5 @@ Search and tag editing raise the bar rather than lower it. A nested query is
 structured content: whatever visual treatment expresses its nesting must also
 be conveyed to assistive technology, and the query must remain fully editable
 from the keyboard alone. Tag category colour is never the only carrier of
-meaning — the category is available as text. Autocomplete, if it exists,
+meaning - the category is available as text. Autocomplete, if it exists,
 follows the combobox pattern properly or does not ship.

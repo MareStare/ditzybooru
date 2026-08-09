@@ -10,7 +10,7 @@
 import type { LiveStreamChannel, Comment, Forum, Media, MimeType, MediaReprs, ForumTopic, User } from '#/lib/types';
 
 /**
- * Origin that serves the mock media files — the Derpibooru CDN, as referenced
+ * Origin that serves the mock media files - the Derpibooru CDN, as referenced
  * by Philomena's development seeds. Swap for the real Ditzybooru media proxy
  * once the backend exists.
  */
@@ -224,7 +224,7 @@ function makeImage(id: number, seedId: number, stats: ImageStats): Media {
   };
 }
 
-// The main image list. Real thumbnails, fabricated stats — cycles through the
+// The main image list. Real thumbnails, fabricated stats - cycles through the
 // available seeds so the grid looks full.
 export const images: Array<Media> = [
   makeImage(1024, 2, { score: 412, upvotes: 430, downvotes: 18, faves: 268, commentCount: 24 }),
@@ -267,7 +267,7 @@ export const featuredImage: Media = makeImage(1020, 1, {
   commentCount: 132,
 });
 
-/** "Trending Images" — top scoring images from the last 3 days. */
+/** "Trending Images" - top scoring images from the last 3 days. */
 export const topScoring: Array<Media> = [
   makeImage(2004, 2, { score: 1204, upvotes: 1230, downvotes: 26, faves: 812, commentCount: 44 }),
   makeImage(2003, 5, { score: 1096, upvotes: 1120, downvotes: 24, faves: 733, commentCount: 31 }),

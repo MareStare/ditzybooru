@@ -11,9 +11,9 @@
  *    Both flip with polarity, which is what lets `semantic.css` be written once
  *    rather than once per polarity.
  *  - Mix weights (`--w-*`). How far a derived color travels between its two
- *    endpoints. These differ sharply by polarity — chrome sits 25% of the way
+ *    endpoints. These differ sharply by polarity - chrome sits 25% of the way
  *    from the base color toward the page in a dark theme and 80% in a light one
- *    — and that difference is the whole reason one formula can serve both.
+ *    - and that difference is the whole reason one formula can serve both.
  *
  * Selectors here are one attribute less specific than a theme's own
  * `[data-theme-lightness][data-theme-color]`, so a theme always wins.
@@ -40,7 +40,7 @@
   --w-field: 49%;
   --w-frame: 12%;
 
-  /* The selected tab lifts off the strip, but only far enough to read as lit —
+  /* The selected tab lifts off the strip, but only far enough to read as lit -
    * every point of lightness here is a point of contrast lost against `--ink`. */
   --w-tab-active: 10%;
 
@@ -55,7 +55,7 @@
   --w-icon-lift: 46%;
 
   /* Status fills are dark and saturated so the normal foreground stays readable
-   * on them. Identical in every dark theme — these carry meaning, not identity,
+   * on them. Identical in every dark theme - these carry meaning, not identity,
    * so they are not a theme's business. */
   --success: #144714;
   --danger: #66211f;
@@ -65,7 +65,7 @@
   --tag-border-mix: 55%;
 
   /* How far the category seed is pushed toward white before it is used as tag
-   * text. Tuned to the worst seed in the set — the mid-tone purples and blues,
+   * text. Tuned to the worst seed in the set - the mid-tone purples and blues,
    * which start closest to a dark wash. */
   --tag-text-mix: 66%;
 }
@@ -91,7 +91,7 @@
   --text-on-nav: #ffffff;
 
   /* The bar is translucent, so the near-white page shows through it and lifts
-   * the effective background — white on the raw base composites to 3.3:1 in the
+   * the effective background - white on the raw base composites to 3.3:1 in the
    * worst accent. 20% is what the darkest of the nine (gray) needs to clear
    * 4.5:1 through the glass; the rest gain margin from the same figure. */
   --w-nav-darken: 20%;

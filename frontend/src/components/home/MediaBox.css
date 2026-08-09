@@ -1,6 +1,6 @@
 /**
  * The thumbnail card and its interaction bar (fave / upvote / score / downvote
- * / comments / hide). The densest, most repeated element on the site — it is
+ * / comments / hide). The densest, most repeated element on the site - it is
  * the one place where a few extra pixels of padding cost real images per screen.
  */
 
@@ -28,7 +28,7 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Borderless variant, for a box that is already inside a frame of its own —
+/* Borderless variant, for a box that is already inside a frame of its own -
  * the featured image sitting alone in a sidebar panel. */
 .media-box--bare {
   --radius-inner: 0px;
@@ -39,7 +39,7 @@
 
 /* Controls sit tight against each other, the way Derpibooru's do: the bar is a
  * single dense readout, not six spaced-out buttons. The spacing is fixed rather
- * than responsive — a card whose controls shift position as the grid resizes is
+ * than responsive - a card whose controls shift position as the grid resizes is
  * harder to use than one whose controls are always in the same place. */
 .media-box-bar {
   display: flex;
@@ -142,13 +142,13 @@
   color: var(--media-action-color);
 }
 
-/* Upvote / score / downvote are one control, not three — no gap between them. */
+/* Upvote / score / downvote are one control, not three - no gap between them. */
 .media-box__votes {
   display: inline-flex;
   align-items: stretch;
 }
 
-/* Green up, red down, as on Derpibooru — the sign of the score is the one thing
+/* Green up, red down, as on Derpibooru - the sign of the score is the one thing
  * a reader scanning a grid actually wants from it, and color carries that
  * faster than the minus sign does. A score of exactly 0 stays muted: there is
  * no direction to signal. */
@@ -176,7 +176,7 @@
 }
 
 /* Lifted above the media boxes that follow it in the grid, which would
- * otherwise paint over it — they come later in the DOM at the same z-index. */
+ * otherwise paint over it - they come later in the DOM at the same z-index. */
 .media-box__menu {
   position: absolute;
   inset-block-start: calc(100% + var(--space-1));

@@ -6,7 +6,7 @@ import { cn } from '#/lib/utils';
 import type { ClassValue } from '#/lib/utils';
 
 /**
- * Panel — Philomena's `.block`. The primary content container: a tinted title
+ * Panel - Philomena's `.block`. The primary content container: a tinted title
  * strip over a body, optionally with tabs and a footer link.
  */
 export function Panel({
@@ -63,7 +63,7 @@ export function PanelFooter({
   );
 }
 
-/** Rows inside a flush panel body — comment lists, activity feeds. */
+/** Rows inside a flush panel body - comment lists, activity feeds. */
 export function PanelList({
   className,
   ...props
