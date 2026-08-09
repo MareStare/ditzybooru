@@ -17,7 +17,7 @@ import { MediaBox } from './MediaBox';
 
 /** Thumbnail grid sizing presets. */
 type MediaGridSize =
-  /** Fixed ~150px thumbnails — used for compact lists like watched images. */
+  /** Fixed ~150px thumbnails - used for compact lists like watched images. */
   | 'small'
   /** ~150px thumbnails that grow to ~225px on wide viewports (Philomena's main list). */
   | 'large';
@@ -40,7 +40,7 @@ interface MediaGridProps {
  * The grid's own settings, in its title bar rather than in the site-wide
  * display menu: they change this component and nothing else.
  *
- * The same controls the grid's card on the display settings page carries —
+ * The same controls the grid's card on the display settings page carries -
  * the link at the bottom goes to that card, for the rest of the page's worth of
  * context around them.
  */

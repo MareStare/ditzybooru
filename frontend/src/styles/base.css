@@ -33,7 +33,7 @@ body,
 /* The document's text size is set HERE, never on `:root`.
  *
  * `rem` resolves against the root element's own font size, and the whole token
- * scale — every `--text-*`, every `--space-*` — is written in `rem`. Setting
+ * scale - every `--text-*`, every `--space-*` - is written in `rem`. Setting
  * `font-size: var(--text-sm)` on `:root` therefore feeds the scale back into
  * itself: the root lands at 13px, `1rem` becomes 13px, and every token silently
  * shrinks by another 19%. Keeping the root at the browser default anchors `rem`
@@ -77,7 +77,7 @@ body {
   margin-bottom: 0;
 }
 
-/* No underline anywhere, including in running text — Derpibooru does not
+/* No underline anywhere, including in running text - Derpibooru does not
  * underline, and the link color carries it. axe's `link-in-text-block` rule is
  * satisfied by luminance instead: `--link` is far enough from `--text-color`
  * to clear the 3:1 the rule asks for, which the suite checks. */

@@ -26,7 +26,7 @@ interface ImageInteraction extends ImageInteractionState {
 /**
  * Client-side, optimistic image interactions (fave / upvote / downvote / hide / gallery),
  * mirroring the behaviour of Philomena's thumbnail interaction bar. There is no
- * backend yet, so state is kept locally and never persisted — clicking simply
+ * backend yet, so state is kept locally and never persisted - clicking simply
  * updates the on-screen counters the way the real API eventually will.
  */
 export function useImageInteraction(image: Media): ImageInteraction {

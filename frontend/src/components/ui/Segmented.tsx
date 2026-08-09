@@ -10,9 +10,9 @@ export interface SegmentedOption<TValue> {
   value: TValue;
   /** The accessible name. Also the visible one unless `preview` is given. */
   label: string;
-  /** What the stop does, for its tooltip — a label like "Crop" cannot say it. */
+  /** What the stop does, for its tooltip - a label like "Crop" cannot say it. */
   description?: string;
-  /** Drawn in place of the label — a corner, a line weight, an `Aa`. */
+  /** Drawn in place of the label - a corner, a line weight, an `Aa`. */
   preview?: ReactNode;
 }
 
@@ -63,7 +63,7 @@ export function Segmented<TValue extends string | number>({
         // text it does show. The description rides along in the name rather
         // than in `title` alone, which assistive tech drops next to a label.
         const name = isDefault ? `${option.label} (default)` : option.label;
-        const title = option.description === undefined ? name : `${name} — ${option.description}`;
+        const title = option.description === undefined ? name : `${name} - ${option.description}`;
         return (
           <button
             key={String(option.value)}

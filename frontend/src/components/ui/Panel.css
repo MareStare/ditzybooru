@@ -1,5 +1,5 @@
 /**
- * Panels — Philomena's `.block`. The primary content container: a tinted title
+ * Panels - Philomena's `.block`. The primary content container: a tinted title
  * strip over a body, optionally with tabs and a footer link.
  */
 
@@ -41,7 +41,7 @@
 }
 
 /* The header is a flex row, but a linked title puts its icon and text inside an
- * anchor — which is not, so the block-level `<svg>` would break the line. */
+ * anchor - which is not, so the block-level `<svg>` would break the line. */
 .panel-header a {
   display: inline-flex;
   align-items: center;
@@ -80,7 +80,7 @@ a.panel-footer:hover {
   color: var(--text-color);
 }
 
-/* Rows inside a flush panel body — comment lists, activity feeds. Doubles as a
+/* Rows inside a flush panel body - comment lists, activity feeds. Doubles as a
  * list reset so callers never have to zero the `<ul>` themselves. */
 .panel-list {
   margin: 0;
@@ -137,7 +137,7 @@ a.panel-footer:hover {
 }
 
 /* The tab strip scrolls rather than wrapping once the panel is narrower than
- * its tabs — a wrapped second row would push the grid down on every phone. */
+ * its tabs - a wrapped second row would push the grid down on every phone. */
 @media (--below-xs) {
   .panel-tabs {
     flex-wrap: nowrap;

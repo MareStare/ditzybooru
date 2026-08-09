@@ -3,8 +3,8 @@
  * search field and account controls, and a secondary strip of section links
  * (`HeaderNav.css`).
  *
- * Everything on the primary bar sits on `--surface-nav` — the theme's own base
- * color — so it uses `--text-on-nav` rather than `--text-color`, and hover
+ * Everything on the primary bar sits on `--surface-nav` - the theme's own base
+ * color - so it uses `--text-on-nav` rather than `--text-color`, and hover
  * states darken toward black rather than lifting, because a saturated mid-tone
  * is not a background.
  */
@@ -22,7 +22,7 @@
 /* Glass rather than a flat fill: the bar sits on top of the page and the page
  * scrolls under it, so it may as well admit that. Gated on support, because
  * without the blur the same translucency is just a bar you can read the page
- * through. `--surface-nav` is a saturated mid-tone, so the mix stays high —
+ * through. `--surface-nav` is a saturated mid-tone, so the mix stays high -
  * the text on it is what sets the floor. */
 @supports (backdrop-filter: blur(1px)) {
   .nav {
@@ -98,7 +98,7 @@
 
 /* Three columns rather than a flex row, so the search field is centred on the
  * viewport instead of on the space left between the brand and the account
- * controls — which are different widths, and change width with the signed-in
+ * controls - which are different widths, and change width with the signed-in
  * state. The side tracks never drop below their content, so a narrow bar takes
  * the width out of the field rather than clipping the brand.
  *
@@ -120,7 +120,7 @@
   justify-self: end;
 }
 
-/* The field itself is `SearchBar.css` — it is shared with the bottom
+/* The field itself is `SearchBar.css` - it is shared with the bottom
  * navigation's search sheet. */
 
 /* ---- Actions ----------------------------------------------------------- */
@@ -183,7 +183,7 @@
  * and the account menu, and nothing else: search, notifications and
  * conversations move to the bottom navigation, which is in thumb reach.
  *
- * The upload shortcut goes with them — it does not survive the width, and it
+ * The upload shortcut goes with them - it does not survive the width, and it
  * is one tap away in the drawer. */
 @media (--below-md) {
   .nav__compact-hidden,

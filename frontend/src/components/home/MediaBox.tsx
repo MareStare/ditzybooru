@@ -69,7 +69,7 @@ function InteractionButton({ modifier, onClick, active = false, title, label, ch
  * a permanent slot in a bar this dense.
  *
  * Click-to-open rather than the hover-revealed {@link Dropdown} used in the
- * header — a grid is dozens of these, and sweeping the pointer across it would
+ * header - a grid is dozens of these, and sweeping the pointer across it would
  * flick menus open the whole way.
  */
 function MediaBoxMenu({

@@ -1,5 +1,5 @@
 /* Two thumbnails per row at the sidebar's width, which lands each box at roughly
- * Philomena's `thumb_small` — the representation this block requests. `auto-fill`
+ * Philomena's `thumb_small` - the representation this block requests. `auto-fill`
  * rather than a fixed pair, so the block widening to the full page on a phone
  * adds columns instead of blowing the thumbnails up past their source size.
  *

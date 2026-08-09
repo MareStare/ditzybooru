@@ -19,8 +19,8 @@ interface SliderProps {
  * A number picked from a range: a slider for the rough answer, and the readout
  * beside it as a field for the exact one.
  *
- * Two controls rather than one because the two questions are different — "a bit
- * more than that" is a drag, "exactly 37" is four keystrokes — and either alone
+ * Two controls rather than one because the two questions are different - "a bit
+ * more than that" is a drag, "exactly 37" is four keystrokes - and either alone
  * makes the other tedious. They are one `group` to assistive tech, so it reads
  * as one setting offered two ways.
  *

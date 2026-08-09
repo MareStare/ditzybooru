@@ -52,7 +52,7 @@ export function HeaderNav() {
       <span className="nav-sub__spacer" />
 
       <div className="nav-sub__actions">
-        {/* The display settings page lives in the display menu — it is a
+        {/* The display settings page lives in the display menu - it is a
             styling tool, so it belongs with the styling controls. */}
         <Link
           // @ts-expect-error TODO: route not built yet

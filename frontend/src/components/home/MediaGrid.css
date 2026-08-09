@@ -19,7 +19,7 @@
 }
 
 /* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
- * number of them, which is what keeps the thumbnails a constant size — the same
+ * number of them, which is what keeps the thumbnails a constant size - the same
  * thing Philomena's image list does. */
 .media-grid {
   --media-track: 150px;
@@ -47,7 +47,7 @@
 
 /* Cards take their image's own shape instead of letterboxing it into a square,
  * and each row is stretched to fill the panel edge to edge. Rows are a flex
- * wrap rather than grid tracks — cards of a row all differ in width, so there
+ * wrap rather than grid tracks - cards of a row all differ in width, so there
  * are no columns for them to line up on. */
 :root[data-media-fit='justified'] .media-grid {
   display: flex;
@@ -57,7 +57,7 @@
 /* A row is packed at the track height and then grown to fill the leftover.
  * A grow factor equal to the basis is what keeps that honest: every card on the
  * row scales by the same factor, so aspect ratios survive and the row lands on
- * one height. That factor is at least 1 and less than 2 — a row stops taking
+ * one height. That factor is at least 1 and less than 2 - a row stops taking
  * cards when the next one would overflow, so the leftover it has to absorb is
  * smaller than one card. Rows that hold more cards spread it thinner and land
  * closer to the track.
@@ -78,7 +78,7 @@
 }
 
 /* The bound above comes from the card that did not fit; the last row has no
- * such card, and would stretch its one or two members across the whole panel —
+ * such card, and would stretch its one or two members across the whole panel -
  * several times the height of every row over it. This zero-width item takes
  * that leftover instead, leaving the last row at the track height and ending
  * early, the way every justified gallery does. The negative margin cancels the
@@ -148,7 +148,7 @@
   padding: var(--space-2);
 
   /* The menu is inside a `.panel-header`, which colors its own links and sets
-   * their weight — neither of which belongs on a menu surface. */
+   * their weight - neither of which belongs on a menu surface. */
   font-weight: var(--weight-normal);
 }
 

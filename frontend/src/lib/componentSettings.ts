@@ -115,7 +115,7 @@ function sanitize<TKey extends keyof ComponentSettings>(
   const clamped = Math.min(control.max, Math.max(control.min, value));
   const snapped = control.min + Math.round((clamped - control.min) / control.step) * control.step;
   // A slider's stops are numbers, so only a number-valued setting can carry one
-  // — which the control descriptors above are what guarantee.
+  // - which the control descriptors above are what guarantee.
   return snapped as ComponentSettings[TKey];
 }
 
@@ -180,7 +180,7 @@ export function subscribeComponentSettings(listener: () => void): () => void {
 }
 
 /* Takes the control rather than its key, and the widened value the widget hands
- * back — which is sound because the only values a widget can produce are the
+ * back - which is sound because the only values a widget can produce are the
  * ones its own descriptor offers. */
 export function setComponentSetting<TKey extends keyof ComponentSettings>(
   control: ComponentSettingControl<TKey>,

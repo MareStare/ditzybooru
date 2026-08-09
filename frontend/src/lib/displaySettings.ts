@@ -3,14 +3,14 @@
  * change, plus their persistence.
  *
  * Shared rather than owned by the settings page, because the same six controls
- * are offered from the header's display menu — the settings page is just a
+ * are offered from the header's display menu - the settings page is just a
  * second view onto them. State lives in this module rather than in either
  * component so the two stay in step while both are mounted, which they are on
  * `/settings/display`.
  *
  * Values are validated on the way in. `styles/tokens/display-settings.css`
  * explains why that matters: the settings are unregistered custom properties, so
- * a nonsense value is not rejected at parse time — it propagates into every
+ * a nonsense value is not rejected at parse time - it propagates into every
  * `calc()` that reads it and collapses the site's spacing rather than falling
  * back.
  *
@@ -55,8 +55,8 @@ export interface DisplaySettingControl {
 /**
  * Three or four named stops per setting, not a continuous slider.
  *
- * A slider offers a precision nobody wants from a settings menu — the question
- * is "rounded or square", not "which of 17 pixel values" — and it cannot be
+ * A slider offers a precision nobody wants from a settings menu - the question
+ * is "rounded or square", not "which of 17 pixel values" - and it cannot be
  * previewed, because there is no set of positions to draw. Discrete stops can
  * show the reader the actual corner, line weight or letter they are choosing.
  * Every value in between is still reachable by editing the stored
@@ -126,7 +126,7 @@ const STORAGE_KEY = 'display-settings';
  *
  * `--border-width` and `--shadow-force` are read by `@container style()` queries
  * in `Panel.css`, which compare token streams TEXTUALLY. Those two must be
- * written in exactly the form the query uses — `0px` and `0`, never `0.0px` or
+ * written in exactly the form the query uses - `0px` and `0`, never `0.0px` or
  * `calc(0px)`. `String(Number)` gives the canonical form for both.
  */
 export function displaySettingProperties(settings: DisplaySettings): Record<string, string> {

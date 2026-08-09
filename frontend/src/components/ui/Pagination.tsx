@@ -34,7 +34,7 @@ function pageWindow(page: number, pageCount: number): Array<number> {
 
 /**
  * A page navigator: jump-to-end controls around a sliding window of numbered
- * pages. Purely presentational — it reports clicks via
+ * pages. Purely presentational - it reports clicks via
  * {@link PaginationProps.onPageChange} so each caller keeps its own page state.
  */
 export function Pagination({ page, pageCount, onPageChange, label, className }: PaginationProps) {

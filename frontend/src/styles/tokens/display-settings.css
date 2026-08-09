@@ -1,5 +1,5 @@
 /**
- * Tier 1 settings — the values a user is allowed to change from the site settings.
+ * Tier 1 settings - the values a user is allowed to change from the site settings.
  *
  * Deliberately NOT registered with `@property`, to keep the browser floor low.
  * That makes them plain token streams, with two consequences to write code
@@ -8,8 +8,8 @@
  *  1. An invalid value is not rejected at parse time. It propagates into every
  *     `calc()` that reads the setting and makes those declarations invalid at
  *     computed-value time, so `--density: banana` collapses spacing site-wide
- *     rather than falling back to 1. Whatever writes these — the settings UI,
- *     a localStorage rehydration — is responsible for emitting valid values.
+ *     rather than falling back to 1. Whatever writes these - the settings UI,
+ *     a localStorage rehydration - is responsible for emitting valid values.
  *
  *  2. `@container style()` compares token streams TEXTUALLY, not by computed
  *     value. `--border-width: 0.0px` and `calc(0px)` do NOT match a
@@ -22,7 +22,7 @@
  */
 
 :root {
-  /* Corner rounding. 0px is the default — classic Derpibooru's hard corners.
+  /* Corner rounding. 0px is the default - classic Derpibooru's hard corners.
    * Keep in sync with `DEFAULT_DISPLAY_SETTINGS` in `lib/displaySettings.ts`. */
   --radius-unit: 0px;
 
@@ -45,7 +45,7 @@
   /* Animation speed multiplier. 0 disables transitions. */
   --motion-scale: 1;
 
-  /* Progressive enhancement — Chromium-only today, ignored elsewhere. */
+  /* Progressive enhancement - Chromium-only today, ignored elsewhere. */
   --corner-shape: round;
 }
 

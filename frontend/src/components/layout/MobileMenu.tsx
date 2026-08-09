@@ -159,7 +159,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
           {/* The display controls live here on a phone rather than in the
               header: the bar has no room for a panel wide enough to hold them.
               Collapsed, because expanded they are taller than the navigation
-              they are appended to — which is what the drawer is for. */}
+              they are appended to - which is what the drawer is for. */}
           <details className="drawer__settings">
             <summary className="drawer__settings-summary">
               <span className="drawer__settings-title">Display</span>
@@ -178,7 +178,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
     </div>
   );
 
-  // Portal to <body> so the overlay escapes the header's stacking context —
+  // Portal to <body> so the overlay escapes the header's stacking context -
   // otherwise the fixed positioning would be trapped inside the sticky header
   // and sit below the page content.
   return typeof document === 'undefined' ? overlay : createPortal(overlay, document.body);

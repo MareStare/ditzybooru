@@ -1,5 +1,5 @@
 /* The two halves of the activity column. Both are plain stacks of blocks
- * wherever they land — the home page grid decides whether that is a column
+ * wherever they land - the home page grid decides whether that is a column
  * beside the image grid or a band above and below it (`routes/index.css`). */
 .home__spotlight,
 .home__activity {
@@ -11,7 +11,7 @@
 
 /* One column: the featured block now spans the page, and the square thumb it
  * has in a 330px sidebar would be almost a whole phone screen of mostly
- * letterbox. Capping the height keeps the block to a glance — the thumb is
+ * letterbox. Capping the height keeps the block to a glance - the thumb is
  * `object-fit: contain`, so nothing is cropped by it. */
 @media (--below-2xl) {
   .featured-block .media-thumb {

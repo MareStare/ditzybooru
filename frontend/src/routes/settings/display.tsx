@@ -33,12 +33,12 @@ const TAG_CATEGORIES = [
 function DisplaySettingsPage() {
   return (
     <div className="display-page">
-      {/* The rail scrolls independently, so it needs a name and a tab stop — a
+      {/* The rail scrolls independently, so it needs a name and a tab stop - a
           scroll container is unreachable by keyboard without one. */}
       <aside className="display-page-rail" aria-label="Site-wide settings" tabIndex={0}>
         {/* Collapsed below the rail's own column, where it sits on top of the
             specimens and expanded would push every card off the first screen.
-            Forced open — and the summary made inert — at `--xl`. */}
+            Forced open - and the summary made inert - at `--xl`. */}
         <details className="display-page-rail-disclosure">
           <summary className="display-page-rail-summary">
             <h1 className="display-page-title">Display settings</h1>
@@ -47,7 +47,7 @@ function DisplaySettingsPage() {
 
           <div className="display-page-rail-content">
             <p className="display-page-note">
-              The rail holds the site-wide settings — the same ones the display menu in the header offers, on the same
+              The rail holds the site-wide settings - the same ones the display menu in the header offers, on the same
               stored values. Each writes a single custom property on <code>:root</code>, so the chrome around this page
               re-styles with the cards.
             </p>
@@ -421,7 +421,7 @@ function MenuSpecimen() {
         </MenuButton>
       </Menu>
       <p className="display-page-note">
-        The same menu surface the header's section dropdowns and user menu use — {images.length} mock images are listed
+        The same menu surface the header's section dropdowns and user menu use - {images.length} mock images are listed
         behind it on the home page.
       </p>
     </Section>

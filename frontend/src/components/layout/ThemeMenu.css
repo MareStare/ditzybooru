@@ -3,14 +3,14 @@
  * color, and the link to the display settings page.
  *
  * One dropdown rather than two buttons, because the two settings are read
- * together — "which theme am I on" is the pair, not either half.
+ * together - "which theme am I on" is the pair, not either half.
  */
 
 .theme-menu {
   inline-size: max-content;
   /* Never wider than the viewport it has to fit inside. The panel hangs off a
    * trigger that is itself a few buttons in from the right edge, so on a phone
-   * a `max-content` menu runs off the LEFT of the screen — where there is no
+   * a `max-content` menu runs off the LEFT of the screen - where there is no
    * scrollbar to recover it. */
   max-inline-size: calc(100vw - 2 * var(--space-2));
   padding: var(--space-2);
@@ -95,7 +95,7 @@
 
 /* On a phone the bar has no room to hang a panel this wide off a trigger a few
  * buttons in from the right edge, so the same controls move into the burger
- * drawer instead (`MobileMenu.tsx`) — the same width at which the burger
+ * drawer instead (`MobileMenu.tsx`) - the same width at which the burger
  * appears. */
 @media (--below-lg) {
   .theme-menu-anchor {
