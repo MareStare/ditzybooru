@@ -10,6 +10,8 @@ export interface SegmentedOption<TValue> {
   value: TValue;
   /** The accessible name. Also the visible one unless `preview` is given. */
   label: string;
+  /** What the stop does, for its tooltip — a label like "Crop" cannot say it. */
+  description?: string;
   /** Drawn in place of the label — a corner, a line weight, an `Aa`. */
   preview?: ReactNode;
 }
@@ -56,17 +58,20 @@ export function Segmented<TValue extends string | number>({
       <span className="segmented__thumb" style={{ '--segment-index': Math.max(index, 0) } as CSSProperties} />
       {options.map(option => {
         const isDefault = changed && option.value === defaultValue;
+        // Always named explicitly: a stop showing only a preview has no text to
+        // be named by, and one that is the default has more to say than the
+        // text it does show. The description rides along in the name rather
+        // than in `title` alone, which assistive tech drops next to a label.
+        const name = isDefault ? `${option.label} (default)` : option.label;
+        const title = option.description === undefined ? name : `${name} — ${option.description}`;
         return (
           <button
             key={String(option.value)}
             type="button"
             role="radio"
             aria-checked={option.value === value}
-            // Always named explicitly: a stop showing only a preview has no text
-            // to be named by, and one that is the default has more to say than
-            // the text it does show.
-            title={isDefault ? `${option.label} (default)` : option.label}
-            aria-label={isDefault ? `${option.label} (default)` : option.label}
+            title={title}
+            aria-label={title}
             className="segmented__option"
             onClick={() => {
               onChange(option.value);

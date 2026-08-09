@@ -104,6 +104,9 @@ export function MediaGrid({ label, images, total, icon, headingLevel = 2, size =
         {shown.map(image => (
           <MediaBox key={image.id} image={image} />
         ))}
+
+        {/* Soaks up the justified layout's last-row slack; see `MediaGrid.css`. */}
+        <span className="media-grid__filler" />
       </div>
 
       <footer className="media-grid__footer">

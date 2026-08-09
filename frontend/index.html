@@ -53,7 +53,7 @@
       })();
 
       // The per-component settings, applied pre-paint for the same reason. Keep
-      // in sync with `componentSettingProperties` in `lib/componentSettings.ts`.
+      // in sync with `componentSettingAttributes` in `lib/componentSettings.ts`.
       (() => {
         let saved;
         try {
@@ -63,8 +63,8 @@
         }
         if (typeof saved !== 'object' || saved === null) return;
 
-        if (saved.mediaFit === 'cover' || saved.mediaFit === 'fit') {
-          document.documentElement.style.setProperty('--media-fit', saved.mediaFit === 'cover' ? 'cover' : 'contain');
+        if (saved.mediaFit === 'crop' || saved.mediaFit === 'contain' || saved.mediaFit === 'justified') {
+          document.documentElement.setAttribute('data-media-fit', saved.mediaFit);
         }
       })();
     </script>

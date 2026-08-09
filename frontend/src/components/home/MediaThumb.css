@@ -16,6 +16,14 @@
   background-color: var(--surface-sunken);
 }
 
+/* The justified layout sizes the card by the image's own ratio, so the thumb
+ * takes that ratio rather than a square — its height is then whatever the row's
+ * scale factor made the card's width. `--media-box-aspect` is the ratio with
+ * the interaction bar's floor already applied; see `MediaGrid.css`. */
+:root[data-media-fit='justified'] .media-grid .media-thumb {
+  aspect-ratio: var(--media-box-aspect);
+}
+
 .media-thumb__image {
   position: absolute;
   inset: 0;
@@ -23,10 +31,14 @@
   block-size: 100%;
   /* `contain` by default — a booru thumbnail is the whole image, and cropping a
    * tall comic page to a square hides the part that identifies it. The media
-   * grid's "Image fit" setting writes the other keyword; see
+   * grid's "Image fit" setting is what picks the other keyword; see
    * `lib/componentSettings.ts`. */
-  object-fit: var(--media-fit, contain);
+  object-fit: contain;
   transition: scale calc(var(--duration) * 1.3) var(--ease-out);
+}
+
+:root[data-media-fit='crop'] .media-thumb__image {
+  object-fit: cover;
 }
 
 .media-thumb:hover .media-thumb__image {

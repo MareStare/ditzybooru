@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { CSSProperties } from 'react';
 import { Link } from '@tanstack/react-router';
 import { ArrowBigDown, ArrowBigUp, EyeOff, FolderPlus, Link2, MoreHorizontal, Star } from 'lucide-react';
 
@@ -182,7 +183,12 @@ export function MediaBox({ className, image, src = image.representations.thumb }
   const interaction = useImageInteraction(image);
 
   return (
-    <article className={cn('media-box', className)}>
+    /* The aspect ratio is what the justified layout sizes the card by; the
+     * square layouts ignore it. */
+    <article
+      className={cn('media-box', className)}
+      style={{ '--media-aspect': image.width / image.height } as CSSProperties}
+    >
       <div className="media-box-bar">
         <InteractionButton
           modifier="media-action--fave"
