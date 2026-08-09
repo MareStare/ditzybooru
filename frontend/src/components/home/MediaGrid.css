@@ -22,8 +22,14 @@
  * number of them, which is what keeps the thumbnails a constant size — the same
  * thing Philomena's image list does. */
 .media-grid {
+  --media-track: 150px;
+  /* The interaction bar's own width as a share of the track: the justified
+   * layout refuses to draw a card narrower than its controls, and this is that
+   * floor expressed as an aspect ratio (the bar's min-content is ~152px). */
+  --media-min-aspect: 1;
+
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--media-track), 1fr));
   gap: var(--space-2);
   padding: var(--space-2);
 }
@@ -32,8 +38,62 @@
  * width that 150px thumbnails start looking like a contact sheet. */
 @media (--thumbs-roomy) {
   .media-grid--large {
-    grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+    --media-track: 225px;
+    --media-min-aspect: 0.68;
   }
+}
+
+/* ---- Justified layout -------------------------------------------------- */
+
+/* Cards take their image's own shape instead of letterboxing it into a square,
+ * and each row is stretched to fill the panel edge to edge. Rows are a flex
+ * wrap rather than grid tracks — cards of a row all differ in width, so there
+ * are no columns for them to line up on. */
+:root[data-media-fit='justified'] .media-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* A row is packed at the track height and then grown to fill the leftover.
+ * A grow factor equal to the basis is what keeps that honest: every card on the
+ * row scales by the same factor, so aspect ratios survive and the row lands on
+ * one height. That factor is at least 1 and less than 2 — a row stops taking
+ * cards when the next one would overflow, so the leftover it has to absorb is
+ * smaller than one card. Rows that hold more cards spread it thinner and land
+ * closer to the track.
+ *
+ * The floor on the ratio is the interaction bar: a tall comic page would
+ * otherwise come out as a sliver too narrow to hold its own controls. Such a
+ * card letterboxes, which is the lesser of the two. */
+:root[data-media-fit='justified'] .media-grid .media-box {
+  --media-box-aspect: max(var(--media-aspect), var(--media-min-aspect));
+  --media-box-basis: calc(var(--media-track) * var(--media-box-aspect));
+
+  flex: var(--media-box-aspect) 0 var(--media-box-basis);
+  /* Never wider than the row, for a panorama on a phone. */
+  max-inline-size: 100%;
+  /* Only bites if the bar outgrows `--media-min-aspect`, which a large enough
+   * text scale can do; the card is then taller than its row-mates. */
+  min-inline-size: min-content;
+}
+
+/* The bound above comes from the card that did not fit; the last row has no
+ * such card, and would stretch its one or two members across the whole panel —
+ * several times the height of every row over it. This zero-width item takes
+ * that leftover instead, leaving the last row at the track height and ending
+ * early, the way every justified gallery does. The negative margin cancels the
+ * flex gap the item would otherwise add to the row.
+ *
+ * A grid of a single row is all "last row", so it never fills: nothing in CSS
+ * separates the two cases. */
+.media-grid__filler {
+  display: none;
+}
+
+:root[data-media-fit='justified'] .media-grid .media-grid__filler {
+  display: block;
+  flex: 999 0 0;
+  margin-inline-start: calc(var(--space-2) * -1);
 }
 
 /* One column: the grid sits in a stack of blocks whose titles are all centered

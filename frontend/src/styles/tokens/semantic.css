@@ -42,9 +42,10 @@
 
   /* ---- Chrome -------------------------------------------------------- */
 
-  /* The nav bar is painted with the theme's base color directly; everything
-   * else in this group is that color fading toward the page. */
-  --surface-nav: var(--base);
+  /* The nav bar is the theme's base color, darkened by whatever headroom the
+   * polarity needs for the text on it; everything else in this group is that
+   * base color fading toward the page. */
+  --surface-nav: color-mix(in oklab, var(--base), #000 var(--w-nav-darken));
   --surface-nav-field: color-mix(in oklab, var(--base), var(--nav-field-target) var(--w-field));
   --surface-nav-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
 

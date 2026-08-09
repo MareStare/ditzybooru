@@ -47,6 +47,9 @@
   /* The nav search field is a recess in the bar, so it darkens toward the page. */
   --nav-field-target: var(--page);
 
+  /* The dark bases already carry `--ink` with room to spare. */
+  --w-nav-darken: 0%;
+
   /* How far the fave/upvote/downvote colors are lifted before being painted as
    * icons. Dark surfaces swallow all three otherwise. */
   --w-icon-lift: 46%;
@@ -86,6 +89,12 @@
 
   /* The nav is a saturated mid-tone here, far too dark to carry `--ink`. */
   --text-on-nav: #ffffff;
+
+  /* The bar is translucent, so the near-white page shows through it and lifts
+   * the effective background — white on the raw base composites to 3.3:1 in the
+   * worst accent. 20% is what the darkest of the nine (gray) needs to clear
+   * 4.5:1 through the glass; the rest gain margin from the same figure. */
+  --w-nav-darken: 20%;
 
   --w-elev: 2%;
   --w-recess: 60%;

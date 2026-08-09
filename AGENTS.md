@@ -1,6 +1,7 @@
 - Never touch git index, never `git rm`. Leave changes unstaged for human to review/stage.
 - Developer may already run `npm run dev` server. Never kill it, reuse it.
 - Project unreleased: make breaking changes freely for clean code. No backwards compatibility, no deprecations.
+- Use regular dash instead of em-dash everywhere.
 
 ## Comments
 

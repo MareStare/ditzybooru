@@ -7,16 +7,17 @@
  * scoped to a single component, offered on that component's card in
  * `/settings/display` rather than in the header's display menu.
  *
- * They still travel as custom properties on `:root`, because that is what lets
- * a setting reach every instance of the component without threading a prop
+ * They still travel as attributes on `:root`, because that is what lets a
+ * setting reach every instance of the component without threading a prop
  * through the pages that render it.
  *
  * Applied pre-paint by the inline script in `index.html`, which must be kept in
- * sync with {@link componentSettingProperties}.
+ * sync with {@link componentSettingAttributes}.
  */
 
-/** How a thumbnail fills its media box. */
-export type MediaFit = 'fit' | 'cover';
+/** How a thumbnail fills its media box; each mode is described on its own stop
+ *  in {@link MEDIA_GRID_SETTING_CONTROLS}. */
+export type MediaFit = 'contain' | 'crop' | 'justified';
 
 export interface ComponentSettings {
   mediaPerPage: number;
@@ -27,7 +28,7 @@ export const DEFAULT_COMPONENT_SETTINGS: ComponentSettings = {
   mediaPerPage: 15,
   // The whole image, letterboxed: a booru thumbnail identifies the upload, and
   // cropping a tall comic page to a square hides the part that does it.
-  mediaFit: 'fit',
+  mediaFit: 'contain',
 };
 
 interface BaseSettingControl<TKey extends keyof ComponentSettings> {
@@ -39,7 +40,7 @@ interface BaseSettingControl<TKey extends keyof ComponentSettings> {
 /** A handful of named values, drawn as a segmented track. */
 interface StopsSettingControl<TKey extends keyof ComponentSettings> extends BaseSettingControl<TKey> {
   widget: 'segmented';
-  options: Array<{ value: ComponentSettings[TKey]; label: string }>;
+  options: Array<{ value: ComponentSettings[TKey]; label: string; description?: string }>;
 }
 
 /** A number out of a range, drawn as a slider. */
@@ -68,8 +69,13 @@ export const MEDIA_GRID_SETTING_CONTROLS: Array<ComponentSettingControl> = [
     label: 'Image fit',
     widget: 'segmented',
     options: [
-      { value: 'fit', label: 'Fit' },
-      { value: 'cover', label: 'Cover' },
+      { value: 'contain', label: 'Contain', description: 'The whole image, letterboxed into a square cell.' },
+      { value: 'crop', label: 'Crop', description: 'The image cropped to fill a square cell.' },
+      {
+        value: 'justified',
+        label: 'Justified',
+        description: "Whole images at their own shape, in rows stretched to the panel's width.",
+      },
     ],
   },
 ];
@@ -80,14 +86,15 @@ const ALL_CONTROLS: Array<ComponentSettingControl> = [...MEDIA_GRID_SETTING_CONT
 const STORAGE_KEY = 'component-settings';
 
 /**
- * The custom properties a set of settings writes on `:root`.
+ * The attributes a set of settings writes on `:root`.
  *
- * `--media-fit` is an `object-fit` keyword, so the mapping from the setting's
- * plain-English value happens here rather than in the stylesheet.
+ * An attribute rather than a custom property because "justified" is a layout
+ * mode, not a value: it swaps the grid for a flex row wrap, which no single
+ * property can carry.
  */
-export function componentSettingProperties(settings: ComponentSettings): Record<string, string> {
+export function componentSettingAttributes(settings: ComponentSettings): Record<string, string> {
   return {
-    '--media-fit': settings.mediaFit === 'cover' ? 'cover' : 'contain',
+    'data-media-fit': settings.mediaFit,
   };
 }
 
@@ -152,8 +159,8 @@ export function readComponentSettings(): ComponentSettings {
 
 function writeComponentSettings(settings: ComponentSettings): void {
   const root = document.documentElement;
-  for (const [name, value] of Object.entries(componentSettingProperties(settings))) {
-    root.style.setProperty(name, value);
+  for (const [name, value] of Object.entries(componentSettingAttributes(settings))) {
+    root.setAttribute(name, value);
   }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 }
