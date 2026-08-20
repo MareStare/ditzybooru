@@ -5,6 +5,14 @@
   "workspaces": [
     "frontend"
   ],
+  "intent": {
+    "skills": [
+      "@tanstack/*"
+    ]
+  },
+  "engines": {
+    "node": "^24"
+  },
   "scripts": {
     "dev": "npm run dev --workspace frontend",
     "build": "npm run build --workspace frontend",
@@ -14,7 +22,8 @@
     "check:a11y": "npm run check:a11y --workspace frontend",
     "lint": "eslint",
     "fmt": "prettier --write .",
-    "fmt:check": "prettier --check ."
+    "fmt:check": "prettier --check .",
+    "bootstrap-claude": "./scripts/bootstrap-claude.sh"
   },
   "devDependencies": {
     "typescript": "^6.0",

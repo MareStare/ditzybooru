@@ -22,6 +22,12 @@ Ideally, an equivalent or similar API will be exposed by Philomena natively, and
 
 ## Development
 
+Run this if you are using Claude Code:
+
+```bash
+npm run bootstrap-claude
+```
+
 Recommended VSCode settings:
 
 ```json
