@@ -9,6 +9,17 @@
   --radius-inner: max(0px, calc(var(--radius-md) - var(--border-width)));
 
   overflow: visible;
+
+  /* Where pagination lands the reader: the title bar, clear of the sticky
+   * header. Read back by `scrollToTopOf` in `lib/motion.ts`. */
+  scroll-margin-block-start: calc(var(--header-h) + var(--space-3));
+}
+
+/* The panel is focus target as well as scroll target, so a navigation that
+ * replaces the grid has somewhere to hand focus. It is never tabbed to, so it
+ * gets no ring. */
+.media-grid-panel:focus {
+  outline: none;
 }
 
 .media-grid__title {

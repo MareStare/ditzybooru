@@ -14,6 +14,12 @@
   inset-block-start: 0;
   z-index: 40;
 
+  /* Its own snapshot during a view transition. Without one it joins the root's,
+   * and the transitioning grid - which paints in the top layer, above every
+   * `z-index` on the page - slides straight over the bar. Kept on top of the
+   * other groups by `styles/view-transitions.css`. */
+  view-transition-name: site-header;
+
   background-color: var(--surface-nav);
   color: var(--text-on-nav);
   box-shadow: var(--shadow-sm);
