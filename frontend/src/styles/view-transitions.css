@@ -1,0 +1,65 @@
+/**
+ * Cross-route view transitions.
+ *
+ * The only pair today is the media grid: `SEARCH_RESULTS_TRANSITION` names the
+ * home page's grid and the search page's, so paging from one to the other morphs
+ * the panel into its new place instead of cutting to it.
+ *
+ * The pseudo-element tree hangs off the root element, so it inherits
+ * `--motion-scale` and the "Animations" setting reaches it. The router skips
+ * `startViewTransition` outright when that setting is off - see
+ * `animationsEnabled` in `lib/motion.ts` - and this is the belt to its braces.
+ */
+
+::view-transition-group(*),
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: calc(100ms * var(--motion-scale));
+  animation-timing-function: var(--ease-out);
+}
+
+/* Groups paint in the DOM order of the elements they came from, which puts the
+ * header under the grid. The bar outranks anything moving beneath it, so it is
+ * lifted back to the front by hand. */
+::view-transition-group(site-header) {
+  z-index: 1;
+}
+
+/* The grid is wider and shorter on the search page than on the home page, so
+ * its two snapshots have different aspect ratios. Left alone each is stretched
+ * to the morphing box and the thumbnails visibly squash; anchoring them at their
+ * own size to the top edge crops instead, which nothing about the panel's own
+ * top-down layout makes noticeable. */
+::view-transition-old(search-results),
+::view-transition-new(search-results) {
+  block-size: 100%;
+  object-fit: none;
+  object-position: top center;
+  overflow: clip;
+}
+
+/* An even cross-fade spends its middle at half opacity on both layers, which
+ * reads as a flicker over a busy thumbnail grid. Retiring the outgoing snapshot
+ * early leaves the incoming one to resolve against the page instead. */
+::view-transition-old(search-results) {
+  animation-name: view-transition-fade-out;
+  animation-duration: calc(90ms * var(--motion-scale));
+  animation-fill-mode: both;
+}
+
+::view-transition-new(search-results) {
+  animation-name: view-transition-fade-in;
+  animation-fill-mode: both;
+}
+
+@keyframes view-transition-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+}

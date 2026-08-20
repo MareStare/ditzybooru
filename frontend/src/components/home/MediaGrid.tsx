@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { Link } from '@tanstack/react-router';
 import { MonitorCog, SlidersHorizontal } from 'lucide-react';
 
@@ -22,6 +22,23 @@ type MediaGridSize =
   /** ~150px thumbnails that grow to ~225px on wide viewports (Philomena's main list). */
   | 'large';
 
+/**
+ * The `view-transition-name` shared by the home page's grid and the search
+ * page's, so paging from one to the other morphs the panel rather than cutting.
+ * At most one element per page may carry it - two cancel the transition.
+ */
+export const SEARCH_RESULTS_TRANSITION = 'search-results';
+
+/**
+ * Who owns the page number. Omitted, the grid keeps its own and pages in place,
+ * which is what a side block or a settings specimen wants; given, the caller
+ * owns it and the grid only reports clicks.
+ */
+interface MediaGridPaging {
+  page: number;
+  onPageChange: (page: number) => void;
+}
+
 interface MediaGridProps {
   /** Human-readable label, rendered as the panel's title. */
   label: string;
@@ -34,6 +51,12 @@ interface MediaGridProps {
   headingLevel?: 1 | 2;
   /** Thumbnail grid sizing preset. */
   size?: MediaGridSize;
+  paging?: MediaGridPaging;
+  /** Set to {@link SEARCH_RESULTS_TRANSITION} on the grid that morphs across a
+   *  search navigation. */
+  viewTransitionName?: string;
+  /** The panel element, for callers that scroll the reader back up to it. */
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -74,9 +97,22 @@ function MediaGridSettings() {
  * footer with pagination and the result count. Mirrors Philomena's image
  * `index`.
  */
-export function MediaGrid({ label, images, total, icon, headingLevel = 2, size = 'large' }: MediaGridProps) {
-  const [requestedPage, setPage] = useState(1);
+export function MediaGrid({
+  label,
+  images,
+  total,
+  icon,
+  headingLevel = 2,
+  size = 'large',
+  paging,
+  viewTransitionName,
+  ref,
+}: MediaGridProps) {
+  const [ownPage, setOwnPage] = useState(1);
   const { mediaPerPage } = useComponentSettings();
+
+  const requestedPage = paging?.page ?? ownPage;
+  const setPage = paging?.onPageChange ?? setOwnPage;
 
   // Fabricated in this mockup: the API does not report a page count yet, so it
   // is inferred from the total and the page size the reader asked for.
@@ -91,7 +127,9 @@ export function MediaGrid({ label, images, total, icon, headingLevel = 2, size =
   const Heading = `h${headingLevel}` as const;
 
   return (
-    <Panel className="media-grid-panel">
+    // Focusable, but not tabbable: a navigation that replaces the grid has
+    // nowhere to put focus otherwise, and drops it to the document.
+    <Panel ref={ref} tabIndex={-1} className="media-grid-panel" style={{ viewTransitionName }}>
       <Heading className="visually-hidden">{label}</Heading>
 
       <PanelHeader className="media-grid__title">

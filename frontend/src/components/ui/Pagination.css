@@ -31,7 +31,7 @@
     border-color var(--duration) var(--ease-out);
 }
 
-.page-link:hover:not([aria-current='page'], :disabled) {
+.page-link:hover:not([aria-current='page']) {
   border-color: var(--border-color-strong);
   background-color: var(--surface-hover);
 }
@@ -40,15 +40,6 @@
   border-color: var(--brand);
   background-color: var(--surface-selected);
   color: var(--text-color);
-}
-
-/* First/Prev at page one, Next/Last at the end. Kept in the DOM rather than
- * removed, so the control's width does not jump as the user pages through. */
-.page-link:disabled {
-  background-color: var(--surface-disabled);
-  border-color: var(--border-color-subtle);
-  color: var(--text-disabled);
-  cursor: not-allowed;
 }
 
 .page-gap {

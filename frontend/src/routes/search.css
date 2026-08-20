@@ -1,0 +1,13 @@
+/* The search listing: one grid, full width, no sidebars. */
+.search-page {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-3);
+}
+
+@media (--2xl) {
+  .search-page {
+    gap: var(--space-4);
+    padding-inline: var(--space-4);
+  }
+}

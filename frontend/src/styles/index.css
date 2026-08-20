@@ -48,6 +48,7 @@
 @import './themes/gray.css';
 
 @import './base.css';
+@import './view-transitions.css';
 
 /* ---- Primitives -------------------------------------------------------- */
 
@@ -95,4 +96,5 @@
 
 @import '../routes/__root.css';
 @import '../routes/index.css';
+@import '../routes/search.css';
 @import '../routes/settings/display.css';

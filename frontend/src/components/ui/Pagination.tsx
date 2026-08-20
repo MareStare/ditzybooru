@@ -46,28 +46,30 @@ export function Pagination({ page, pageCount, onPageChange, label, className }: 
 
   return (
     <nav className={cn('pagination', className)} aria-label={`${label} pages`}>
-      <button
-        type="button"
-        className="page-link page-link--edge"
-        disabled={atStart}
-        aria-label="First page"
-        onClick={() => {
-          onPageChange(1);
-        }}
-      >
-        « First
-      </button>
-      <button
-        type="button"
-        className="page-link"
-        disabled={atStart}
-        aria-label="Previous page"
-        onClick={() => {
-          onPageChange(page - 1);
-        }}
-      >
-        ‹ Prev
-      </button>
+      {atStart ? null : (
+        <>
+          <button
+            type="button"
+            className="page-link page-link--edge"
+            aria-label="First page"
+            onClick={() => {
+              onPageChange(1);
+            }}
+          >
+            « First
+          </button>
+          <button
+            type="button"
+            className="page-link"
+            aria-label="Previous page"
+            onClick={() => {
+              onPageChange(page - 1);
+            }}
+          >
+            ‹ Prev
+          </button>
+        </>
+      )}
 
       {firstShown > 1 ? <span className="page-gap">…</span> : null}
 
@@ -88,28 +90,30 @@ export function Pagination({ page, pageCount, onPageChange, label, className }: 
 
       {lastShown < pageCount ? <span className="page-gap">…</span> : null}
 
-      <button
-        type="button"
-        className="page-link"
-        disabled={atEnd}
-        aria-label="Next page"
-        onClick={() => {
-          onPageChange(page + 1);
-        }}
-      >
-        Next ›
-      </button>
-      <button
-        type="button"
-        className="page-link page-link--edge"
-        disabled={atEnd}
-        aria-label="Last page"
-        onClick={() => {
-          onPageChange(pageCount);
-        }}
-      >
-        Last »
-      </button>
+      {atEnd ? null : (
+        <>
+          <button
+            type="button"
+            className="page-link"
+            aria-label="Next page"
+            onClick={() => {
+              onPageChange(page + 1);
+            }}
+          >
+            Next ›
+          </button>
+          <button
+            type="button"
+            className="page-link page-link--edge"
+            aria-label="Last page"
+            onClick={() => {
+              onPageChange(pageCount);
+            }}
+          >
+            Last »
+          </button>
+        </>
+      )}
     </nav>
   );
 }

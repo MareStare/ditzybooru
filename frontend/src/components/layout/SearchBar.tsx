@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Ref } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { Camera, Search } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
@@ -12,13 +12,14 @@ import { Button } from '#/components/ui/Button';
  */
 export function SearchBar({ className = '', inputRef }: { className?: string; inputRef?: Ref<HTMLInputElement> }) {
   const [query, setQuery] = useState('');
+  const navigate = useNavigate();
 
   return (
     <form
-      // The /search route does not exist in this single-page mockup, so keep
-      // the submit on-page. Wire this to the router/API once search lands.
       onSubmit={event => {
         event.preventDefault();
+        // An empty field means the default listing, not a search for "".
+        void navigate({ to: '/search', search: { q: query.trim() || '*', page: 1 } });
       }}
       className={`nav-search ${className}`}
       role="search"
