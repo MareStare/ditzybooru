@@ -124,15 +124,15 @@ const STORAGE_KEY = 'display-settings';
 /**
  * The custom properties a set of settings writes on `:root`.
  *
- * `--border-width` and `--shadow-force` are read by `@container style()` queries
- * in `Panel.css`, which compare token streams TEXTUALLY. Those two must be
- * written in exactly the form the query uses - `0px` and `0`, never `0.0px` or
- * `calc(0px)`. `String(Number)` gives the canonical form for both.
+ * `--border-force` is the outline setting again as a plain 0 or 1, because a
+ * width is a length and CSS cannot turn one into the multiplier that panels
+ * scale their compensating shadow by. See `Panel.css`.
  */
 export function displaySettingProperties(settings: DisplaySettings): Record<string, string> {
   return {
     '--radius-unit': `${settings.radius}px`,
     '--border-width': `${settings.borderWidth}px`,
+    '--border-force': settings.borderWidth === 0 ? '0' : '1',
     '--shadow-force': String(settings.shadow),
     '--density': String(settings.density),
     '--font-scale': String(settings.fontScale),

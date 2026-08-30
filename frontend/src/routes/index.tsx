@@ -32,8 +32,10 @@ function Home() {
           viewTransitionName={SEARCH_RESULTS_TRANSITION}
           paging={{
             // The home grid is only ever the first page. Asking for a second one
-            // is asking for the full listing, which lives on /search.
+            // is asking for the full listing, which lives on /search, so it
+            // carries the way onwards and nothing pointing back.
             page: 1,
+            steps: 'forward',
             onPageChange: page => {
               // The transition carries the grid all the way from wherever the
               // reader clicked to the search page's top; the search route's own

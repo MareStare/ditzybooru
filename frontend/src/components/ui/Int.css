@@ -1,8 +1,0 @@
-/* Thousands are separated with a real space, which at body size reads wider
- * than the digit gaps around it. Pulling the word spacing back in makes the
- * groups cohere without resorting to a narrow-space character that not every
- * font ships. `pre` keeps the separator from collapsing or wrapping. */
-.int {
-  word-spacing: -1px;
-  white-space: pre;
-}

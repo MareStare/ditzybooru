@@ -1,9 +1,26 @@
+import { useEffect, useLayoutEffect, useReducer, useRef, useState } from 'react';
+import { ChevronDown } from 'lucide-react';
+
+import { Button } from '#/components/ui/Button';
+import { Int, formatInt } from '#/components/ui/Int';
 import { cn } from '#/lib/utils';
 
+import type { CSSProperties, KeyboardEvent, MouseEvent, SyntheticEvent } from 'react';
 import type { ClassValue } from '#/lib/utils';
 
-/** How many numbered page links surround the current one. */
-const WINDOW_SIZE = 5;
+/** Pages rendered either side of the current one: more than the window shows. */
+const RUN = 12;
+
+/**
+ * Which step controls a row carries: the pair that moves by one page, and the
+ * pair that moves to an end of the range.
+ */
+export type PageSteps =
+  /** None: the numbers alone, for a grid that is one block among many. */
+  | 'none'
+  /** Forward only, for a grid that is always the first page of a longer list. */
+  | 'forward'
+  | 'both';
 
 interface PaginationProps {
   /** The currently active page, 1-based. */
@@ -17,103 +34,313 @@ interface PaginationProps {
    * to anyone navigating by landmark.
    */
   label: string;
+  steps?: PageSteps;
   className?: ClassValue;
 }
 
 /**
- * Returns the run of numbered pages to render: `WINDOW_SIZE` of them centred on
- * the current page, slid back inside the range at either end rather than
- * truncated, so the control keeps a constant width while paging.
- */
-function pageWindow(page: number, pageCount: number): Array<number> {
-  const size = Math.min(WINDOW_SIZE, pageCount);
-  const start = Math.min(Math.max(page - Math.floor(size / 2), 1), pageCount - size + 1);
-
-  return Array.from({ length: size }, (_, i) => start + i);
-}
-
-/**
- * A page navigator: jump-to-end controls around a sliding window of numbered
- * pages. Purely presentational - it reports clicks via
+ * A page navigator: step controls around a window on the numbered pages.
+ *
+ * The window is a fixed width and scrolls its numbers under itself rather than
+ * resizing, so the steps either side hold their place while paging and the
+ * number that only half fits shows half of itself. The ellipsis marking what is
+ * held back opens a field to type a page into, which is the way across a range
+ * too long to walk. A screen too narrow for a window of numbers keeps the page
+ * the reader is on and the steps either side of it, and nothing else.
+ *
+ * Purely presentational - it reports changes via
  * {@link PaginationProps.onPageChange} so each caller keeps its own page state.
  */
-export function Pagination({ page, pageCount, onPageChange, label, className }: PaginationProps) {
-  const pages = pageWindow(page, pageCount);
-  const firstShown = pages[0] ?? 1;
-  const lastShown = pages[pages.length - 1] ?? pageCount;
-  const atStart = page <= 1;
-  const atEnd = page >= pageCount;
+export function Pagination({ page, pageCount, onPageChange, label, steps = 'none', className }: PaginationProps) {
+  const navRef = useRef<HTMLElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const currentRef = useRef<HTMLSpanElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const restoreRef = useRef(false);
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState('');
+  const [more, setMore] = useState({ start: false, end: false });
+  const [, remeasure] = useReducer((count: number) => count + 1, 0);
+
+  const first = Math.max(1, page - RUN);
+  const run = Array.from({ length: Math.min(pageCount, page + RUN) - first + 1 }, (_, i) => first + i);
+
+  // Asking for the current page to be centred is asking for past the run at
+  // either end of it, and scrolling hands back as much of it as there is.
+  useLayoutEffect(() => {
+    const strip = stripRef.current;
+    const current = currentRef.current;
+
+    if (!strip || !current) {
+      return;
+    }
+
+    const view = strip.getBoundingClientRect();
+    const box = current.getBoundingClientRect();
+
+    strip.scrollLeft += box.left + box.width / 2 - (view.left + view.width / 2);
+
+    // A number the window cuts off entirely is scenery, and nothing a pointer or
+    // a screen reader should find. Focus on the way out goes to the current
+    // page rather than dropping to the document.
+    for (const slot of strip.querySelectorAll<HTMLElement>('.page-link')) {
+      const slotBox = slot.getBoundingClientRect();
+      const clipped = slotBox.right <= view.left || slotBox.left >= view.right;
+
+      if (clipped && slot === document.activeElement) {
+        current.focus();
+      }
+
+      slot.toggleAttribute('inert', clipped);
+    }
+
+    const ends = {
+      start: strip.scrollLeft > 1,
+      end: strip.scrollLeft < strip.scrollWidth - strip.clientWidth - 1,
+    };
+
+    setMore(prev => (prev.start === ends.start && prev.end === ends.end ? prev : ends));
+
+    if (restoreRef.current) {
+      restoreRef.current = false;
+      triggerRef.current?.focus();
+    }
+  });
+
+  // How wide the window is answers to the font and to the viewport, and neither
+  // of those goes through a render of its own.
+  useLayoutEffect(() => {
+    const observer = new ResizeObserver(remeasure);
+
+    if (navRef.current) {
+      observer.observe(navRef.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (open) {
+      inputRef.current?.focus();
+    }
+  }, [open]);
+
+  // A press anywhere else is the reader done with the panel. Pointer-down rather
+  // than click, so it closes on the way to whatever they are reaching for.
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    const dismiss = (event: PointerEvent) => {
+      if (event.target instanceof Node && navRef.current?.contains(event.target) !== true) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', dismiss);
+
+    return () => {
+      document.removeEventListener('pointerdown', dismiss);
+    };
+  }, [open]);
+
+  function toggle(event: MouseEvent<HTMLButtonElement>) {
+    triggerRef.current = event.currentTarget;
+    setOpen(!open);
+  }
+
+  function close() {
+    restoreRef.current = true;
+    setDraft('');
+    setOpen(false);
+  }
+
+  function commit() {
+    const next = Number.parseInt(draft, 10);
+
+    close();
+
+    if (Number.isFinite(next)) {
+      onPageChange(Math.min(Math.max(next, 1), pageCount));
+    }
+  }
+
+  /* One of first, prev, next, last. Both halves of the label, because the word
+   * is a lot of row on a narrow screen and the chevron carries the step on its
+   * own there. */
+  function stepButton(target: number, name: string, says: string, chevron: string, marks?: ClassValue) {
+    const disabled = target === page;
+
+    return (
+      <button
+        type="button"
+        className={cn('page-link', marks)}
+        aria-label={says}
+        disabled={disabled}
+        onClick={() => {
+          onPageChange(target);
+        }}
+      >
+        {chevron === '«' || chevron === '‹' ? (
+          <>
+            {chevron}
+            <span className="page-word">{name}</span>
+          </>
+        ) : (
+          <>
+            <span className="page-word">{name}</span>
+            {chevron}
+          </>
+        )}
+      </button>
+    );
+  }
+
+  /* The pages the window is holding back, and the way to any of them. Comes out
+   * of the window's own width, so the row around it never moves. */
+  function gap() {
+    return (
+      <button
+        type="button"
+        className="page-gap"
+        aria-expanded={open}
+        aria-label={`Page ${page} of ${pageCount}, go to another page`}
+        onClick={toggle}
+      >
+        …
+      </button>
+    );
+  }
 
   return (
-    <nav className={cn('pagination', className)} aria-label={`${label} pages`}>
-      {atStart ? null : (
+    <nav
+      ref={navRef}
+      className={cn('pagination', steps !== 'none' && 'pagination--steps', className)}
+      // The window is sized for the widest page number in the range, so that it
+      // is never too narrow to show the one the reader is on. Its separators
+      // count as a digit each, which is a hair over what they take.
+      style={{ '--page-chars': formatInt(pageCount).length } as CSSProperties}
+      aria-label={`${label} pages`}
+      onKeyDown={(event: KeyboardEvent) => {
+        if (open && event.key === 'Escape') {
+          close();
+        }
+      }}
+    >
+      {/* A grid that is only ever its own first page has nothing to go back to,
+       * and says so with a disabled pair rather than a gap in the row - but only
+       * where the row is the reader's whole way around, which is the phone. */}
+      {steps === 'none' ? null : (
         <>
-          <button
-            type="button"
-            className="page-link page-link--edge"
-            aria-label="First page"
-            onClick={() => {
-              onPageChange(1);
-            }}
-          >
-            « First
-          </button>
-          <button
-            type="button"
-            className="page-link"
-            aria-label="Previous page"
-            onClick={() => {
-              onPageChange(page - 1);
-            }}
-          >
-            ‹ Prev
-          </button>
+          {stepButton(1, 'First', 'First page', '«', steps === 'forward' && 'page-link--compact')}
+          {stepButton(Math.max(page - 1, 1), 'Prev', 'Previous page', '‹', steps === 'forward' && 'page-link--compact')}
         </>
       )}
 
-      {firstShown > 1 ? <span className="page-gap">…</span> : null}
-
-      {pages.map(p => (
+      {/* All the window is worth on a screen with no room for one. */}
+      {steps === 'none' ? null : (
         <button
-          key={p}
           type="button"
-          className="page-link"
-          aria-current={p === page ? 'page' : undefined}
-          aria-label={`Page ${p}`}
-          onClick={() => {
-            onPageChange(p);
+          className="page-link page-link--current page-link--compact"
+          aria-current="page"
+          aria-expanded={open}
+          aria-label={`Page ${page} of ${pageCount}, go to another page`}
+          onClick={toggle}
+        >
+          <Int value={page} />
+          <ChevronDown className="page-link__caret" size={12} aria-hidden />
+        </button>
+      )}
+
+      <div className="pagination__window">
+        {steps === 'both' && more.start ? gap() : null}
+
+        <div
+          ref={stripRef}
+          className={cn(
+            'pagination__strip',
+            more.start && 'pagination__strip--cut-start',
+            more.end && 'pagination__strip--cut-end',
+          )}
+        >
+          <div className="pagination__pages">
+            {run.map((p, index) =>
+              // Keyed by its place in the run rather than by its number, so that
+              // paging renumbers the strip where it stands instead of moving the
+              // current page's box out from under its own highlight.
+              p === page ? (
+                // Not a control: it is where the reader already is. Focusable all
+                // the same, for the pass below to hand focus back to.
+                <span
+                  key={index}
+                  ref={currentRef}
+                  className="page-link page-link--current"
+                  tabIndex={-1}
+                  aria-current="page"
+                >
+                  <Int value={p} />
+                </span>
+              ) : (
+                <button
+                  key={index}
+                  type="button"
+                  className="page-link"
+                  aria-label={`Page ${p}`}
+                  onClick={() => {
+                    onPageChange(p);
+                  }}
+                >
+                  <Int value={p} />
+                </button>
+              ),
+            )}
+          </div>
+        </div>
+
+        {steps !== 'none' && more.end ? gap() : null}
+      </div>
+
+      {steps === 'none' ? null : (
+        <>
+          {stepButton(Math.min(page + 1, pageCount), 'Next', 'Next page', '›')}
+          {stepButton(pageCount, 'Last', 'Last page', '»')}
+        </>
+      )}
+
+      {open ? (
+        <form
+          className="menu pagination__jump"
+          // The field's own bounds are for the spinner and for anyone reading it
+          // out; a number past them is clamped here rather than refused.
+          noValidate
+          onSubmit={(event: SyntheticEvent) => {
+            event.preventDefault();
+            commit();
           }}
         >
-          {p}
-        </button>
-      ))}
-
-      {lastShown < pageCount ? <span className="page-gap">…</span> : null}
-
-      {atEnd ? null : (
-        <>
-          <button
-            type="button"
-            className="page-link"
-            aria-label="Next page"
-            onClick={() => {
-              onPageChange(page + 1);
+          <input
+            ref={inputRef}
+            type="number"
+            className="pagination__jump-input"
+            inputMode="numeric"
+            min={1}
+            max={pageCount}
+            placeholder={`Page number: 1 - ${pageCount}`}
+            aria-label={`Go to page, 1 to ${pageCount}`}
+            value={draft}
+            onChange={event => {
+              setDraft(event.target.value);
             }}
-          >
-            Next ›
-          </button>
-          <button
-            type="button"
-            className="page-link page-link--edge"
-            aria-label="Last page"
-            onClick={() => {
-              onPageChange(pageCount);
-            }}
-          >
-            Last »
-          </button>
-        </>
-      )}
+          />
+          <Button type="submit" size="sm" variant="primary">
+            Go
+          </Button>
+        </form>
+      ) : null}
     </nav>
   );
 }

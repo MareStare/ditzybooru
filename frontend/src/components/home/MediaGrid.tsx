@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { MonitorCog, SlidersHorizontal } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
+import type { PageSteps } from '#/components/ui/Pagination';
 import { ComponentSettingsControls } from '#/components/layout/ComponentSettings';
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
@@ -37,6 +38,11 @@ export const SEARCH_RESULTS_TRANSITION = 'search-results';
 interface MediaGridPaging {
   page: number;
   onPageChange: (page: number) => void;
+  /**
+   * Which step controls the pagination carries. The full listing wants them
+   * all; a grid that is only ever a first page wants the forward half.
+   */
+  steps?: PageSteps;
 }
 
 interface MediaGridProps {
@@ -148,7 +154,7 @@ export function MediaGrid({
       </div>
 
       <footer className="media-grid__footer">
-        <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} />
+        <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} steps={paging?.steps} />
         <span className="media-grid__count">
           Showing{' '}
           <strong>
