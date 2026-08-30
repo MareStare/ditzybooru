@@ -48,9 +48,6 @@
     "tim-koehler.helm-intellisense",
 
     // Kubernetes UI and Helm syntax highlighting
-    "ms-kubernetes-tools.vscode-kubernetes-tools",
-
-    // Tailwind LSP
-    "bradlc.vscode-tailwindcss"
+    "ms-kubernetes-tools.vscode-kubernetes-tools"
   ]
 }
