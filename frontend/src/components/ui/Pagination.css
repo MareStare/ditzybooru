@@ -235,26 +235,25 @@
 
 /* No room for a window of numbers on a phone, and no need for one either: the
  * page the reader is on says where they are, and the steps around it are every
- * move there is to make. Only where those are there, though - a grid carrying
- * the numbers alone has nothing else to page with. */
+ * move there is to make. */
 @media (--below-sm) {
-  .pagination--steps .pagination__window {
+  .pagination .pagination__window {
     display: none;
   }
 
-  .pagination--steps .page-link--compact {
+  .pagination .page-link--compact {
     display: inline-flex;
   }
 
   /* A row of its own, filled edge to edge: what is beside it in the footer has
    * a line to itself below, and a phone has no use for the leftover width. */
-  .pagination--steps {
+  .pagination {
     flex: 1 0 100%;
   }
 
   /* Grown from their own width rather than from nothing, so a row that cannot
    * hold them all still wraps instead of running them into each other. */
-  .pagination--steps .page-link {
+  .pagination .page-link {
     flex: 1 1 auto;
   }
 }

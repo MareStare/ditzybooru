@@ -60,7 +60,6 @@ function SearchPage() {
         viewTransitionName={SEARCH_RESULTS_TRANSITION}
         paging={{
           page,
-          steps: 'both',
           onPageChange: nextPage => {
             // `resetScroll` off because the effect above owns where the reader
             // lands, and the router's jump to 0 would fight it.

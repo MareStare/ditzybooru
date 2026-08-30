@@ -14,17 +14,6 @@ const RUN = 12;
 /** Room the go-to-page panel needs under its trigger before it flips over it. */
 const PANEL_ROOM = 80;
 
-/**
- * Which step controls a row carries: the pair that moves by one page, and the
- * pair that moves to an end of the range.
- */
-export type PageSteps =
-  /** None: the numbers alone, for a grid that is one block among many. */
-  | 'none'
-  /** Forward only, for a grid that is always the first page of a longer list. */
-  | 'forward'
-  | 'both';
-
 interface PaginationProps {
   /** The currently active page, 1-based. */
   page: number;
@@ -37,7 +26,11 @@ interface PaginationProps {
    * to anyone navigating by landmark.
    */
   label: string;
-  steps?: PageSteps;
+  /**
+   * Whether the row carries the steps that go back. A grid pinned to its own
+   * first page has nothing behind it, and any step forward leaves it anyway.
+   */
+  back?: boolean;
   className?: ClassValue;
 }
 
@@ -54,7 +47,7 @@ interface PaginationProps {
  * Purely presentational - it reports changes via
  * {@link PaginationProps.onPageChange} so each caller keeps its own page state.
  */
-export function Pagination({ page, pageCount, onPageChange, label, steps = 'none', className }: PaginationProps) {
+export function Pagination({ page, pageCount, onPageChange, label, back = true, className }: PaginationProps) {
   const navRef = useRef<HTMLElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
   const currentRef = useRef<HTMLSpanElement>(null);
@@ -186,13 +179,13 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
   /* One of first, prev, next, last. Both halves of the label, because the word
    * is a lot of row on a narrow screen and the chevron carries the step on its
    * own there. */
-  function stepButton(target: number, name: string, says: string, chevron: string, marks?: ClassValue) {
+  function stepButton(target: number, name: string, says: string, chevron: string) {
     const disabled = target === page;
 
     return (
       <button
         type="button"
-        className={cn('page-link', marks)}
+        className="page-link"
         aria-label={says}
         disabled={disabled}
         onClick={() => {
@@ -233,7 +226,7 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
   return (
     <nav
       ref={navRef}
-      className={cn('pagination', steps !== 'none' && 'pagination--steps', className)}
+      className={cn('pagination', className)}
       // The window is sized for the widest page number in the range, so that it
       // is never too narrow to show the one the reader is on. Its separators
       // count as a digit each, which is a hair over what they take.
@@ -245,33 +238,28 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
         }
       }}
     >
-      {/* A grid that is only ever its own first page has nothing to go back to,
-       * and says so with a disabled pair rather than a gap in the row - but only
-       * where the row is the reader's whole way around, which is the phone. */}
-      {steps === 'none' ? null : (
+      {back ? (
         <>
-          {stepButton(1, 'First', 'First page', '«', steps === 'forward' && 'page-link--compact')}
-          {stepButton(Math.max(page - 1, 1), 'Prev', 'Previous page', '‹', steps === 'forward' && 'page-link--compact')}
+          {stepButton(1, 'First', 'First page', '«')}
+          {stepButton(Math.max(page - 1, 1), 'Prev', 'Previous page', '‹')}
         </>
-      )}
+      ) : null}
 
       {/* All the window is worth on a screen with no room for one. */}
-      {steps === 'none' ? null : (
-        <button
-          type="button"
-          className="page-link page-link--current page-link--compact"
-          aria-current="page"
-          aria-expanded={open}
-          aria-label={`Page ${page} of ${pageCount}, go to another page`}
-          onClick={toggle}
-        >
-          <Int value={page} />
-          <ChevronDown className="page-link__caret" size={12} aria-hidden />
-        </button>
-      )}
+      <button
+        type="button"
+        className="page-link page-link--current page-link--compact"
+        aria-current="page"
+        aria-expanded={open}
+        aria-label={`Page ${page} of ${pageCount}, go to another page`}
+        onClick={toggle}
+      >
+        <Int value={page} />
+        <ChevronDown className="page-link__caret" size={12} aria-hidden />
+      </button>
 
       <div className="pagination__window">
-        {steps === 'both' && more.start ? gap() : null}
+        {more.start ? gap() : null}
 
         <div
           ref={stripRef}
@@ -315,15 +303,11 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
           </div>
         </div>
 
-        {steps !== 'none' && more.end ? gap() : null}
+        {more.end ? gap() : null}
       </div>
 
-      {steps === 'none' ? null : (
-        <>
-          {stepButton(Math.min(page + 1, pageCount), 'Next', 'Next page', '›')}
-          {stepButton(pageCount, 'Last', 'Last page', '»')}
-        </>
-      )}
+      {stepButton(Math.min(page + 1, pageCount), 'Next', 'Next page', '›')}
+      {stepButton(pageCount, 'Last', 'Last page', '»')}
 
       {open ? (
         <form

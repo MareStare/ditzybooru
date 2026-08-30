@@ -4,7 +4,6 @@ import { Link } from '@tanstack/react-router';
 import { MonitorCog, SlidersHorizontal } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
-import type { PageSteps } from '#/components/ui/Pagination';
 import { ComponentSettingsControls } from '#/components/layout/ComponentSettings';
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
@@ -39,10 +38,10 @@ interface MediaGridPaging {
   page: number;
   onPageChange: (page: number) => void;
   /**
-   * Which step controls the pagination carries. The full listing wants them
-   * all; a grid that is only ever a first page wants the forward half.
+   * Whether the pagination carries the steps that go back. A grid pinned to its
+   * own first page has nothing behind it.
    */
-  steps?: PageSteps;
+  back?: boolean;
 }
 
 interface MediaGridProps {
@@ -153,21 +152,25 @@ export function MediaGrid({
         <span className="media-grid__filler" />
       </div>
 
-      <footer className="media-grid__footer">
-        <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} steps={paging?.steps} />
-        <span className="media-grid__count">
-          Showing{' '}
-          <strong>
-            1&ndash;
-            {shown.length}
-          </strong>{' '}
-          of{' '}
-          <strong>
-            <Int value={total} />
-          </strong>{' '}
-          total
-        </span>
-      </footer>
+      {/* A single page has nowhere to page to, and a count that only repeats
+       * what is on screen. */}
+      {pageCount > 1 ? (
+        <footer className="media-grid__footer">
+          <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} back={paging?.back} />
+          <span className="media-grid__count">
+            Showing{' '}
+            <strong>
+              1&ndash;
+              {shown.length}
+            </strong>{' '}
+            of{' '}
+            <strong>
+              <Int value={total} />
+            </strong>{' '}
+            total
+          </span>
+        </footer>
+      ) : null}
     </Panel>
   );
 }
