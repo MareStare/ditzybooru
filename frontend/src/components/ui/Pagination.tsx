@@ -11,6 +11,9 @@ import type { ClassValue } from '#/lib/utils';
 /** Pages rendered either side of the current one: more than the window shows. */
 const RUN = 12;
 
+/** Room the go-to-page panel needs under its trigger before it flips over it. */
+const PANEL_ROOM = 80;
+
 /**
  * Which step controls a row carries: the pair that moves by one page, and the
  * pair that moves to an end of the range.
@@ -60,6 +63,9 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
   const restoreRef = useRef(false);
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState('');
+  // Where the panel hangs from: the middle of whichever control opened it, in
+  // the row's own coordinates, and which side of that control it opens on.
+  const [anchor, setAnchor] = useState({ x: 0, above: false });
   const [more, setMore] = useState({ start: false, end: false });
   const [, remeasure] = useReducer((count: number) => count + 1, 0);
 
@@ -149,7 +155,15 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
   }, [open]);
 
   function toggle(event: MouseEvent<HTMLButtonElement>) {
-    triggerRef.current = event.currentTarget;
+    const trigger = event.currentTarget;
+    const row = navRef.current?.getBoundingClientRect();
+    const box = trigger.getBoundingClientRect();
+
+    triggerRef.current = trigger;
+    setAnchor({
+      x: row ? box.left + box.width / 2 - row.left : 0,
+      above: window.innerHeight - box.bottom < PANEL_ROOM,
+    });
     setOpen(!open);
   }
 
@@ -313,7 +327,8 @@ export function Pagination({ page, pageCount, onPageChange, label, steps = 'none
 
       {open ? (
         <form
-          className="menu pagination__jump"
+          className={cn('menu', 'pagination__jump', anchor.above && 'pagination__jump--above')}
+          style={{ '--jump-x': `${anchor.x}px` } as CSSProperties}
           // The field's own bounds are for the spinner and for anyone reading it
           // out; a number past them is clamped here rather than refused.
           noValidate

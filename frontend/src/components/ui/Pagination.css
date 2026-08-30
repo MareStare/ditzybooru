@@ -141,16 +141,35 @@
 
 /* Over the row rather than under it: pagination sits at the foot of a panel,
  * where the room is above. */
+/* Hangs under whatever opened it, centred on it and held inside the row: at
+ * either end of a long range the panel would otherwise run off the side. */
 .pagination__jump {
+  --jump-width: min(18rem, 100%);
+
   position: absolute;
-  inset-block-end: calc(100% + var(--space-1));
-  inset-inline-start: 0;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-start: clamp(0px, calc(var(--jump-x, 50%) - var(--jump-width) / 2), calc(100% - var(--jump-width)));
   z-index: 30;
 
   display: flex;
   gap: var(--space-1);
-  inline-size: min(15rem, 100%);
+  inline-size: var(--jump-width);
   padding: var(--space-2);
+}
+
+/* The panel hangs outside the block it pages, and a block after that one would
+ * otherwise paint over it: `view-transition-name` on the grid makes a stacking
+ * context, so the panel's own `z-index` cannot reach past its own panel. Lifting
+ * the whole panel while it is open is what gets it over the next one. */
+.panel:has(.pagination__jump) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Over the trigger instead, where the row is at the bottom of the window. */
+.pagination__jump--above {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + var(--space-1));
 }
 
 .pagination__jump-input {
