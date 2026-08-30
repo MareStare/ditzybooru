@@ -37,6 +37,11 @@ export const SEARCH_RESULTS_TRANSITION = 'search-results';
 interface MediaGridPaging {
   page: number;
   onPageChange: (page: number) => void;
+  /**
+   * Whether the pagination carries the steps that go back. A grid pinned to its
+   * own first page has nothing behind it.
+   */
+  back?: boolean;
 }
 
 interface MediaGridProps {
@@ -147,21 +152,25 @@ export function MediaGrid({
         <span className="media-grid__filler" />
       </div>
 
-      <footer className="media-grid__footer">
-        <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} />
-        <span className="media-grid__count">
-          Showing{' '}
-          <strong>
-            1&ndash;
-            {shown.length}
-          </strong>{' '}
-          of{' '}
-          <strong>
-            <Int value={total} />
-          </strong>{' '}
-          total
-        </span>
-      </footer>
+      {/* A single page has nowhere to page to, and a count that only repeats
+       * what is on screen. */}
+      {pageCount > 1 ? (
+        <footer className="media-grid__footer">
+          <Pagination label={label} page={page} pageCount={pageCount} onPageChange={setPage} back={paging?.back} />
+          <span className="media-grid__count">
+            Showing{' '}
+            <strong>
+              1&ndash;
+              {shown.length}
+            </strong>{' '}
+            of{' '}
+            <strong>
+              <Int value={total} />
+            </strong>{' '}
+            total
+          </span>
+        </footer>
+      ) : null}
     </Panel>
   );
 }

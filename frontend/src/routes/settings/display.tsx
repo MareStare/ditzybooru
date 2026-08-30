@@ -5,6 +5,7 @@ import { ArrowUp, ChevronDown, Clock, Dices, EyeOff, Image as ImageIcon, Search 
 import { DisplaySettingsControls } from '#/components/layout/DisplaySettings';
 import { Badge } from '#/components/ui/Badge';
 import { Button, ButtonGroup } from '#/components/ui/Button';
+import { Int } from '#/components/ui/Int';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
 import { ComponentSettingsControls } from '#/components/layout/ComponentSettings';
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelTabs } from '#/components/ui/Panel';
@@ -337,7 +338,9 @@ function TableSpecimen() {
                   <a href="#tag">{r.tag}</a>
                 </td>
                 <td>{r.category}</td>
-                <td>{r.images.toLocaleString()}</td>
+                <td>
+                  <Int value={r.images} />
+                </td>
               </tr>
             ))}
           </tbody>

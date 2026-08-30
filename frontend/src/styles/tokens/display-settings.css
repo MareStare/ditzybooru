@@ -11,12 +11,10 @@
  *     rather than falling back to 1. Whatever writes these - the settings UI,
  *     a localStorage rehydration - is responsible for emitting valid values.
  *
- *  2. `@container style()` compares token streams TEXTUALLY, not by computed
- *     value. `--border-width: 0.0px` and `calc(0px)` do NOT match a
- *     `style(--border-width: 0px)` query even though they compute to the same
- *     length. Only `--border-width` and `--shadow-force` are style-queried
- *     (see `components/ui/Panel.css`), so those two must be written in exactly
- *     the canonical form the query uses: `0px` and `0`.
+ *  2. Nothing here is matched as a value - every setting is read as a length or
+ *     a multiplier and folded into a `calc()`. Compensating for a setting being
+ *     off is arithmetic on it, never a query about it, which keeps the whole
+ *     mechanism inside plain custom properties.
  *
  * Every setting is given a value on `:root` below, so none of them is ever unset.
  */
@@ -28,6 +26,11 @@
 
   /* Hairline weight. At 0px, panels rely on shadow and surface contrast. */
   --border-width: 1px;
+
+  /* The same setting as a multiplier: 0 with outlines off, 1 with any weight
+   * of them. A length cannot be read as one, and this is what the panel's
+   * compensating shadow scales by. */
+  --border-force: 1;
 
   /* Depth multiplier. 0 is fully flat, 1.6 is heavy. */
   --shadow-force: 1;

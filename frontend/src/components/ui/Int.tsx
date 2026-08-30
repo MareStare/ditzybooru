@@ -9,9 +9,10 @@ interface Props {
 
 /**
  * Formats an integer separating thousands with spaces, e.g. `2147483` → `2 147 483`.
+ *
+ * Not using `Intl`, because it depends on the ICU package availability on node.
  */
-export function Int({ className, value }: Props) {
-  // Not using `Intl` impl, because it depends on the ICU package availability on node.
+export function formatInt(value: number): string {
   // eslint-disable-next-line @typescript-eslint/no-misused-spread
   const chars = [...value.toString()];
 
@@ -19,11 +20,16 @@ export function Int({ className, value }: Props) {
     chars.splice(i, 0, ' ');
   }
 
+  return chars.join('');
+}
+
+/** An integer, {@link formatInt}-separated. */
+export function Int({ className, value }: Props) {
   return (
     // Wrapping in a `<data>` element just in case some custom CSS or user scripts
     // need the machine-readable value.
     <data value={value} className={cn('int', className)}>
-      {chars.join('')}
+      {formatInt(value)}
     </data>
   );
 }

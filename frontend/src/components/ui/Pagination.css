@@ -1,19 +1,92 @@
+/* A fixed window on a run of page numbers, with the steps - first, prev, next,
+ * last - either side of it. The window never resizes, so the steps hold their
+ * place while paging, and the number that only half fits shows half of itself.
+ * `--page-chars` comes from the component. */
 .pagination {
+  --page-pad: var(--space-2);
+  --page-frame: calc(var(--page-chars, 1) * 1ch + (var(--page-pad) + var(--border-width)) * 2);
+  --page-window: 5;
+  --page-strip: calc(var(--page-window) * var(--page-frame) + (var(--page-window) - 1) * var(--space-1));
+
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: var(--space-1);
+
+  /* Lets the row give ground on a narrow screen, which the window then takes
+   * out of how many numbers it shows rather than out of the steps. */
+  min-inline-size: 0;
+
   font-size: var(--text-sm);
+  /* One weight for the row: the width of the window is measured in `ch`. */
+  font-weight: var(--weight-medium);
   font-variant-numeric: tabular-nums;
+}
+
+/* Everything the window is worth, ellipses included: a fixed width, so what the
+ * numbers give up when one appears is what the ellipsis takes, and the steps
+ * either side of it never move. */
+.pagination__window {
+  display: flex;
+  flex: 0 1 var(--page-strip);
+  gap: var(--space-1);
+  align-items: center;
+
+  /* Never narrower than the widest page number the range holds: whatever else
+   * the window gives up, it shows the page the reader is on. Spelled out rather
+   * than left to `auto`, which for a scrolling flex child is the whole run. */
+  min-inline-size: var(--page-frame);
+}
+
+/* Whatever the ellipses leave of the window. A scrollbar under it would be a
+ * second row of furniture. */
+.pagination__strip {
+  flex: 1;
+  min-inline-size: 0;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+
+  /* A number the window has cut in half dissolves at the edge rather than being
+   * sliced through. Both stops sit at the edge until there is something out
+   * there to fade, so an end of the range is not dimmed for no reason. */
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black var(--page-cut-start, 0px),
+    black calc(100% - var(--page-cut-end, 0px)),
+    transparent
+  );
+}
+
+.pagination__strip--cut-start {
+  --page-cut-start: 3ch;
+}
+
+.pagination__strip--cut-end {
+  --page-cut-end: 3ch;
+}
+
+.pagination__strip::-webkit-scrollbar {
+  display: none;
+}
+
+.pagination__pages {
+  display: flex;
+  gap: var(--space-1);
+  inline-size: max-content;
 }
 
 .page-link {
   display: inline-flex;
+  flex: none;
+  gap: var(--space-1);
   align-items: center;
   justify-content: center;
   min-inline-size: 28px;
   min-block-size: 28px;
-  padding-inline: var(--space-2);
+  padding-inline: var(--page-pad);
 
   border: var(--border);
   border-radius: var(--radius-sm);
@@ -21,9 +94,12 @@
   background-color: var(--surface);
 
   color: var(--link);
-  font: inherit;
+  font-family: inherit;
   font-size: var(--text-sm);
   font-weight: var(--weight-medium);
+  /* A button's own UA font rule drops `tabular-nums`, and these numbers change
+   * under the reader on every page. */
+  font-variant-numeric: inherit;
   white-space: nowrap;
 
   transition:
@@ -31,26 +107,153 @@
     border-color var(--duration) var(--ease-out);
 }
 
-.page-link:hover:not([aria-current='page']) {
+.page-link:hover:not(:disabled, [aria-current='page']) {
   border-color: var(--border-color-strong);
   background-color: var(--surface-hover);
 }
 
-.page-link[aria-current='page'] {
+/* Kept in the row at the ends of the range rather than dropped from it: a step
+ * is only in its place from one page to the next if it stays in the row. */
+.page-link:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+/* The page the reader is on. Not a control in the window - it is where the
+ * reader already is - and no wider than the numbers either side of it. */
+.page-link--current {
   border-color: var(--brand);
   background-color: var(--surface-selected);
   color: var(--text-color);
 }
 
-.page-gap {
-  padding-inline: var(--space-1);
-  color: var(--text-subtle);
+/* Only in the compact row: the page the reader is on, standing in for a window
+ * there is no room for, and any step the wider row leaves out. */
+.page-link--compact {
+  display: none;
 }
 
-/* The jump-to-end controls carry a word as well as a chevron, which is a lot of
- * bar on a phone. The numbers and Prev/Next are enough there. */
+/* Says the number opens something - subdued, on a control the reader has
+ * already found by its highlight. */
+.page-link__caret {
+  opacity: 0.6;
+}
+
+/* Over the row rather than under it: pagination sits at the foot of a panel,
+ * where the room is above. */
+/* Hangs under whatever opened it, centred on it and held inside the row: at
+ * either end of a long range the panel would otherwise run off the side. */
+.pagination__jump {
+  --jump-width: min(18rem, 100%);
+
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-1));
+  inset-inline-start: clamp(0px, calc(var(--jump-x, 50%) - var(--jump-width) / 2), calc(100% - var(--jump-width)));
+  z-index: 30;
+
+  display: flex;
+  gap: var(--space-1);
+  inline-size: var(--jump-width);
+  padding: var(--space-2);
+}
+
+/* The panel hangs outside the block it pages, and a block after that one would
+ * otherwise paint over it: `view-transition-name` on the grid makes a stacking
+ * context, so the panel's own `z-index` cannot reach past its own panel. Lifting
+ * the whole panel while it is open is what gets it over the next one. */
+.panel:has(.pagination__jump) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Over the trigger instead, where the row is at the bottom of the window. */
+.pagination__jump--above {
+  inset-block-start: auto;
+  inset-block-end: calc(100% + var(--space-1));
+}
+
+.pagination__jump-input {
+  flex: 1;
+  min-inline-size: 0;
+  padding: var(--space-1) var(--space-2);
+
+  border: var(--border-width) solid var(--border-color-input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--surface-sunken);
+
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-variant-numeric: inherit;
+
+  /* No spinners: a long range is typed into, not stepped through, and they cost
+   * the field the room to show what it will take. */
+  appearance: textfield;
+}
+
+.pagination__jump-input::-webkit-inner-spin-button,
+.pagination__jump-input::-webkit-outer-spin-button {
+  appearance: none;
+  margin: 0;
+}
+
+/* Marks the numbers the window is holding back, and opens the way to them. */
+.page-gap {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  padding-inline: var(--space-1);
+
+  border: 0;
+  background-color: transparent;
+
+  color: var(--text-subtle);
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+
+  transition: color var(--duration) var(--ease-out);
+}
+
+.page-gap:hover {
+  color: var(--text-color);
+}
+
+/* Tighter boxes rather than shorter labels: four steps and a page number is
+ * more row than the narrowest screen has, and the words are what they read by.
+ * Where even that is too much, the row wraps rather than running off the side. */
+@media (--below-xs) {
+  .pagination {
+    --page-pad: var(--space-1);
+
+    flex-wrap: wrap;
+  }
+}
+
+/* No room for a window of numbers on a phone, and no need for one either: the
+ * page the reader is on says where they are, and the steps around it are every
+ * move there is to make. */
 @media (--below-sm) {
-  .page-link--edge {
+  .pagination .pagination__window {
     display: none;
+  }
+
+  .pagination .page-link--compact {
+    display: inline-flex;
+  }
+
+  /* A row of its own, filled edge to edge: what is beside it in the footer has
+   * a line to itself below, and a phone has no use for the leftover width. */
+  .pagination {
+    flex: 1 0 100%;
+  }
+
+  /* Grown from their own width rather than from nothing, so a row that cannot
+   * hold them all still wraps instead of running them into each other. */
+  .pagination .page-link {
+    flex: 1 1 auto;
   }
 }

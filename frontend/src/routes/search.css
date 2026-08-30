@@ -1,6 +1,9 @@
 /* The search listing: one grid, full width, no sidebars. */
 .search-page {
   display: grid;
+  /* `minmax(0, …)`, so a child too wide for the screen (the pagination window)
+   * gives way rather than widening the page under everything else. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
   padding: var(--space-4) var(--space-3);
 }

@@ -29,6 +29,14 @@
   corner-shape: var(--corner-shape);
 }
 
+/* With one page there is no footer to round the panel off, so the grid is the
+ * last thing in it and rounds itself. */
+.media-grid:last-child {
+  border-end-start-radius: var(--radius-inner);
+  border-end-end-radius: var(--radius-inner);
+  corner-shape: var(--corner-shape);
+}
+
 /* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
  * number of them, which is what keeps the thumbnails a constant size - the same
  * thing Philomena's image list does. */
