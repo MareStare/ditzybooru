@@ -42,6 +42,7 @@
         const properties = {
           '--radius-unit': typeof saved.radius === 'number' ? saved.radius + 'px' : null,
           '--border-width': typeof saved.borderWidth === 'number' ? saved.borderWidth + 'px' : null,
+          '--border-force': typeof saved.borderWidth === 'number' ? (saved.borderWidth === 0 ? '0' : '1') : null,
           '--shadow-force': typeof saved.shadow === 'number' ? String(saved.shadow) : null,
           '--density': typeof saved.density === 'number' ? String(saved.density) : null,
           '--font-scale': typeof saved.fontScale === 'number' ? String(saved.fontScale) : null,

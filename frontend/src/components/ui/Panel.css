@@ -9,10 +9,24 @@
   overflow: hidden;
 
   border: var(--border);
+  /* Outlines and depth stand in for each other, so each setting compensates for
+   * the other being off: without an outline the panel would dissolve into the
+   * page and leans on depth instead, and without depth it takes a firmer edge.
+   * Arithmetic on the settings rather than a query about them - `--shadow-force`
+   * is already a multiplier and `--border-force` is the outline as one. */
+  border-color: color-mix(
+    in oklab,
+    var(--border-color-strong),
+    var(--border-color) min(100%, var(--shadow-force) * 100%)
+  );
   border-radius: var(--radius-md);
   corner-shape: var(--corner-shape);
   background-color: var(--surface-panel);
-  box-shadow: var(--shadow-sm), var(--edge-highlight);
+  box-shadow:
+    0 4px 12px
+      color-mix(in oklab, var(--shadow-color) calc(24% * var(--shadow-force) * (1 - var(--border-force))), transparent),
+    var(--shadow-sm),
+    var(--edge-highlight);
 }
 
 .panel-header {
@@ -154,20 +168,4 @@ a.panel-footer:hover {
 
 .panel-body--destroyed {
   background-color: #382c2f;
-}
-
-/* When borders are switched off, panels would dissolve into the page. Lean
- * on depth instead. Style queries are Baseline newly available; where they
- * are unsupported the panel simply keeps both border and shadow. */
-@container style(--border-width: 0px) {
-  .panel {
-    box-shadow: var(--shadow-md), var(--edge-highlight);
-  }
-}
-
-/* Symmetrically: with depth switched off, restore a visible edge. */
-@container style(--shadow-force: 0) {
-  .panel {
-    border-color: var(--border-color-strong);
-  }
 }
