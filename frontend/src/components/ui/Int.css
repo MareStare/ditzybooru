@@ -3,6 +3,6 @@
  * groups cohere without resorting to a narrow-space character that not every
  * font ships. `pre` keeps the separator from collapsing or wrapping. */
 .int {
-  word-spacing: -2px;
+  word-spacing: -1.5px;
   white-space: pre;
 }
