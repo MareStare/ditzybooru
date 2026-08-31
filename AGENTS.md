@@ -5,7 +5,7 @@
 
 ## Terminology
 
-- Never say "byte-identical" or "bit identical". Say "equal" or "the same" instead.
+- Never say "byte-identical" or "bit identical". Say just "identical" or "equal" or "the same" instead.
 - Never say "load-bearing". Say "important" instead.
 
 ## Comments
