@@ -1,4 +1,6 @@
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
+import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { TanStackDevtools } from '@tanstack/react-devtools';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
@@ -67,7 +69,10 @@ function Document() {
       <head>
         <HeadContent />
       </head>
-      <body>
+      {/* Some browser extensions (e.g. Grammarly) inject new attributes into
+      the <body> which generates a huge error in console. So we suppress
+      that warning on this node. */}
+      <body suppressHydrationWarning>
         <div className="app-shell">
           <SiteHeader />
           <main className="app-shell__main">
@@ -75,9 +80,10 @@ function Document() {
           </main>
           <SiteFooter />
           <BottomNav />
-          {/* The router devtools panel is out: `router-devtools-core` reads
-              `router.stores.pendingMatches`, which router 1.170 removed, and it
-              throws on every page load. Nothing newer is published yet. */}
+          <TanStackDevtools
+            config={{ position: 'bottom-right' }}
+            plugins={[{ name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> }]}
+          />
         </div>
         <Scripts />
       </body>
