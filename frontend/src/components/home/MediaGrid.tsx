@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ReactNode, Ref } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from '@tanstack/react-router';
 import { MonitorCog, SlidersHorizontal } from 'lucide-react';
 
@@ -28,6 +28,13 @@ type MediaGridSize =
  * At most one element per page may carry it - two cancel the transition.
  */
 export const SEARCH_RESULTS_TRANSITION = 'search-results';
+
+/**
+ * The search grid's `id`, and the hash the pagination navigates to. The router
+ * scrolls the fragment into view before paint, so the reader never sees the
+ * grid land and then correct itself.
+ */
+export const SEARCH_RESULTS_ID = 'search-results';
 
 /**
  * Who owns the page number. Omitted, the grid keeps its own and pages in place,
@@ -60,8 +67,8 @@ interface MediaGridProps {
   /** Set to {@link SEARCH_RESULTS_TRANSITION} on the grid that morphs across a
    *  search navigation. */
   viewTransitionName?: string;
-  /** The panel element, for callers that scroll the reader back up to it. */
-  ref?: Ref<HTMLElement>;
+  /** Set to {@link SEARCH_RESULTS_ID} on the grid the pagination scrolls to. */
+  id?: string;
 }
 
 /**
@@ -111,7 +118,7 @@ export function MediaGrid({
   size = 'large',
   paging,
   viewTransitionName,
-  ref,
+  id,
 }: MediaGridProps) {
   const [ownPage, setOwnPage] = useState(1);
   const { mediaPerPage } = useComponentSettings();
@@ -132,10 +139,10 @@ export function MediaGrid({
   const Heading = `h${headingLevel}` as const;
 
   return (
-    // Focusable, but not tabbable: a navigation that replaces the grid has
-    // nowhere to put focus otherwise, and drops it to the document.
+    // Focusable, but not tabbable: a load that lands on `#search-results` hands
+    // focus here rather than dropping it to the document.
     <Panel
-      ref={ref}
+      id={id}
       tabIndex={-1}
       className={cn('media-grid-panel', viewTransitionName !== undefined && 'media-grid-panel--transitioning')}
       style={{ viewTransitionName }}

@@ -11,8 +11,9 @@
   overflow: visible;
 
   /* Where pagination lands the reader: the title bar, clear of the sticky
-   * header. Read back by `scrollToTopOf` in `lib/motion.ts`. */
-  scroll-margin-block-start: calc(var(--header-h) + var(--space-3));
+   * header. Matches `.search-page`'s block padding, so the fragment scroll
+   * leaves the panel exactly where it already sits. */
+  scroll-margin-block-start: calc(var(--header-h) + var(--space-4));
 }
 
 /* `view-transition-name` makes the panel a stacking context, so the pagination
