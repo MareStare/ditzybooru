@@ -28,20 +28,6 @@ Run this if you are using Claude Code:
 npm run bootstrap-claude
 ```
 
-Recommended VSCode settings:
-
-```json
-{
-  "tailwindCSS.classFunctions": ["cva", "cn"],
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
-  "editor.quickSuggestions": {
-    "strings": "on"
-  }
-}
-```
-
 ## License
 
 <sup>
