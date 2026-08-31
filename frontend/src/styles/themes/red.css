@@ -13,8 +13,8 @@
 
 :root[data-theme-color='red'] {
   --base: light-dark(var(--seed-red-light), var(--seed-red-dark));
-  --page: light-dark(var(--page-light), #412121);
+  --page: light-dark(var(--page-light), #231212);
 
-  --link: light-dark(#b32e2e, #ebeb4d);
+  --link: light-dark(#b32e2e, #e8e988);
   --link-hover: light-dark(#944563, #fff3bd);
 }

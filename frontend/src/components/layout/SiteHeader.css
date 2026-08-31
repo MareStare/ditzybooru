@@ -53,7 +53,6 @@
 
   border: 0;
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: transparent;
 
   color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%);
@@ -89,7 +88,6 @@
   inline-size: 32px;
   block-size: 32px;
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--brand);
   color: var(--text-on-nav);
   font-size: var(--text-sm);

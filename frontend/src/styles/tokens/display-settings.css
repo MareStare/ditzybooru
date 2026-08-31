@@ -47,9 +47,6 @@
 
   /* Animation speed multiplier. 0 disables transitions. */
   --motion-scale: 1;
-
-  /* Progressive enhancement - Chromium-only today, ignored elsewhere. */
-  --corner-shape: round;
 }
 
 /* The `system` stop of the Animations setting. An explicit On or Off writes

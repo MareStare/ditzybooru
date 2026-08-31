@@ -79,6 +79,7 @@
   --w-nav-darken: light-dark(20%, 0%);
 
   --w-elev: light-dark(2%, 6%);
+  --w-raised: light-dark(0%, 5%);
   --w-recess: light-dark(60%, 55%);
   /* Dark sits further toward the page than Derpibooru's 25%: at 25% the panel
    * title strip was light enough to drop `--ink` on it to APCA Lc 73, under the

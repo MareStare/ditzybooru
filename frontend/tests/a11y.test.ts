@@ -28,7 +28,7 @@ import process from 'node:process';
 
 import { chromium } from 'playwright-core';
 import type { Browser, Page } from 'playwright-core';
-import { build, preview as vitePreview } from 'vite';
+import { createBuilder, preview as vitePreview } from 'vite';
 import type { PreviewServer } from 'vite';
 import { afterAll, beforeAll, describe, expect, test } from 'vitest';
 
@@ -170,7 +170,11 @@ beforeAll(async () => {
   if (externalUrl) {
     baseUrl = externalUrl;
   } else {
-    await build({ root: projectRoot, logLevel: 'warn' });
+    // `buildApp`, not `build`: `build` builds the client alone and leaves the
+    // server bundle from the run before it, whose manifest then points at
+    // client asset hashes that no longer exist - and the page loads unstyled.
+    const builder = await createBuilder({ root: projectRoot, logLevel: 'warn' });
+    await builder.buildApp();
     preview = await vitePreview({
       root: projectRoot,
       logLevel: 'warn',
@@ -188,6 +192,19 @@ beforeAll(async () => {
 afterAll(async () => {
   await browser?.close();
   await preview?.close();
+});
+
+/**
+ * The audits below are only meaningful on a styled page: unstyled black on
+ * white passes every contrast check, so a stylesheet that 404s would turn this
+ * suite green while the site renders naked markup.
+ */
+describe('styling', () => {
+  test('the page loads its stylesheet', async () => {
+    await audit('/', 'dark', 'blue', CONTRAST_RULES);
+    const background = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundColor);
+    expect(background).not.toBe('rgba(0, 0, 0, 0)');
+  });
 });
 
 describe('structure', () => {

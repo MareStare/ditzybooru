@@ -16,7 +16,6 @@
   border-inline-start-width: max(3px, calc(var(--border-width) * 2));
   border-inline-start-color: var(--notice-color);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: color-mix(in oklab, var(--notice-color), var(--surface) 84%);
 
   color: var(--text-color);
@@ -44,7 +43,6 @@
 .site-notice {
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: color-mix(in oklab, var(--surface), var(--base) 12%);
   color: var(--text-color);
   font-size: var(--text-sm);

@@ -20,7 +20,6 @@
     var(--border-color) min(100%, var(--shadow-force) * 100%)
   );
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-panel);
   box-shadow:
     0 4px 12px
@@ -131,7 +130,6 @@ a.panel-footer:hover {
 
   border: 0;
   border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  corner-shape: var(--corner-shape);
   background-color: transparent;
 
   color: var(--link-on-panel-header);

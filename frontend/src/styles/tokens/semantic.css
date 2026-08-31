@@ -19,8 +19,8 @@
  * Two cases deliberately use literal colors rather than the direction pair:
  *
  *   - Raised surfaces (popovers, dropdowns) mix toward literal white, because
- *     elevation reads as "lighter" in light and dark UI alike. In a light theme
- *     whose surface is already white this is a no-op and shadow does the work.
+ *     elevation reads as "lighter" rather than as a shadow on a dark surface.
+ *     Light themes weight it at zero and let shadow and border do the work.
  *   - Chromatic surfaces (nav bar, panel headers, filled buttons) darken toward
  *     literal black on hover in both polarities, because they are saturated
  *     mid-tones rather than backgrounds.
@@ -35,6 +35,7 @@
    * than toward `--lift`. */
   --surface: color-mix(in oklab, var(--page), #fff var(--w-elev));
   --surface-sunken: color-mix(in oklab, var(--surface), var(--page) var(--w-recess));
+  --surface-raised: color-mix(in oklab, var(--surface), #fff var(--w-raised));
 
   --surface-hover: color-mix(in oklab, var(--surface), var(--lift) 7%);
   --surface-selected: color-mix(in oklab, var(--surface), var(--base) 16%);

@@ -37,7 +37,6 @@
   position: relative;
   border-start-start-radius: var(--radius-inner);
   border-start-end-radius: var(--radius-inner);
-  corner-shape: var(--corner-shape);
 }
 
 /* With one page there is no footer to round the panel off, so the grid is the
@@ -45,7 +44,6 @@
 .media-grid:last-child {
   border-end-start-radius: var(--radius-inner);
   border-end-end-radius: var(--radius-inner);
-  corner-shape: var(--corner-shape);
 }
 
 /* `auto-fill` adds columns as the viewport widens instead of stretching a fixed
@@ -154,7 +152,6 @@
   border-block-start: var(--divider);
   border-end-start-radius: var(--radius-inner);
   border-end-end-radius: var(--radius-inner);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface);
 }
 
@@ -192,7 +189,6 @@
   padding: var(--space-1-5) var(--space-2);
 
   border-radius: var(--radius-inner);
-  corner-shape: var(--corner-shape);
 
   color: var(--text-color);
   font-size: var(--text-sm);

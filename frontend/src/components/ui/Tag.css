@@ -32,7 +32,6 @@
 
   border: var(--border-width) solid color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-border-mix));
   border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
   background-color: color-mix(in oklab, var(--tag-color), var(--surface) var(--tag-bg-mix));
 
   color: var(--tag-color);

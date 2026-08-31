@@ -47,7 +47,6 @@
   border-block-start: 2px solid currentColor;
   border-inline-start: 2px solid currentColor;
   border-start-start-radius: var(--preview-radius);
-  corner-shape: var(--corner-shape);
 }
 
 /* A filled swatch whose border is the weight on offer. Filled rather than
@@ -58,7 +57,6 @@
   block-size: 14px;
   border: var(--preview-width) solid currentColor;
   border-radius: 2px;
-  corner-shape: var(--corner-shape);
   background-color: color-mix(in oklab, currentColor 22%, transparent);
 }
 
@@ -83,7 +81,6 @@
 
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-sunken);
 
   color: var(--text-muted);

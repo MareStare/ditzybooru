@@ -18,7 +18,6 @@
   overflow: hidden;
 
   border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
 
   /* The nav bar is a saturated mid-tone in every theme, so a muted fallback
    * would sink into it. `--brand` is the one accent guaranteed to be lifted off
