@@ -1,9 +1,10 @@
 /**
  * The hover/focus-revealed anchor for a `.menu`.
  *
- * No JS: the panel is revealed by `:hover` and `:focus-within` on the wrapper,
- * so it works for pointer and keyboard alike without an open-state hook, an
- * outside-click listener or an Escape handler to keep in sync.
+ * The panel is revealed by `:hover` and `:focus-within` on the wrapper, so it
+ * works for pointer and keyboard alike without an outside-click listener or an
+ * Escape handler to keep in sync. Following a link is the one case CSS cannot
+ * see on its own - `Dropdown.tsx` marks that with `--dismissed`.
  */
 
 .dropdown {
@@ -46,6 +47,14 @@
   translate: 0 0;
 }
 
+/* Held shut after a link in the panel was followed, until the pointer or the
+ * focus comes back to the wrapper. */
+.dropdown.dropdown--dismissed > .dropdown__panel {
+  visibility: hidden;
+  opacity: 0;
+  translate: 0 -4px;
+}
+
 /* The affordance on the trigger, flipped while the panel is open. */
 .dropdown__chevron {
   opacity: 0.6;
@@ -55,4 +64,8 @@
 .dropdown:hover .dropdown__chevron,
 .dropdown:focus-within .dropdown__chevron {
   rotate: 180deg;
+}
+
+.dropdown.dropdown--dismissed .dropdown__chevron {
+  rotate: 0deg;
 }
