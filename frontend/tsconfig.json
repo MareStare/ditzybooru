@@ -1,5 +1,5 @@
 {
-  "include": ["**/*.ts", "**/*.tsx", "vite.config.js"],
+  "include": ["**/*.ts", "**/*.tsx"],
 
   "compilerOptions": {
     "target": "ES2022",
@@ -8,16 +8,25 @@
     "paths": {
       "#/*": ["./src/*"]
     },
-    /* A deliberately low floor for the app's own code, plus `ES2022.Error` for
+    /*
+      A deliberately low floor for the app's own code, plus `ES2022.Error` for
        `new Error(message, { cause })` - baseline since 2021, and the only way to
-       chain an error without flattening it into a string. */
+       chain an error without flattening it into a string.
+     */
     "lib": ["ES2019", "ES2022.Error", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
+
+    /*
+      verbatimModuleSyntax causes empty or type-only imports retention
+      which leads to server-only imports being included in client code.
+      It's recommended to leave this off by TanStack Start guide:
+      https://tanstack.com/start/latest/docs/framework/react/build-from-scratch
+    */
+    "verbatimModuleSyntax": false,
     "noEmit": true,
 
     /* Linting */

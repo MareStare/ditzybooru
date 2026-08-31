@@ -1,11 +1,10 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createFileRoute } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
-import { MediaGrid, SEARCH_RESULTS_TRANSITION } from '#/components/home/MediaGrid';
+import { MediaGrid, SEARCH_RESULTS_ID, SEARCH_RESULTS_TRANSITION } from '#/components/home/MediaGrid';
 import { unwrap } from '#/lib/assertions';
 import { images, totalImages } from '#/lib/mock/data';
-import { scrollToTopOf } from '#/lib/motion';
 
 /** The search this page ran. `*` is every image, as in Philomena. */
 export interface SearchParams {
@@ -33,24 +32,21 @@ function SearchPage() {
   const { q, page } = Route.useSearch();
   const navigate = Route.useNavigate();
   const grid = useRef<HTMLElement>(null);
-  const paged = useRef(false);
 
-  // Paging always puts the first result back under the reader's eye. Instant on
-  // arrival, since the route's own transition just carried them here; animated
-  // for every page picked on this page.
-  useLayoutEffect(() => {
-    const panel = unwrap(grid.current);
-    void scrollToTopOf(panel, { animate: paged.current });
-    if (!paged.current) {
-      panel.focus({ preventScroll: true });
-    }
-    paged.current = true;
-  }, [page]);
+  // Arriving from the home grid is a client-side navigation, and the router
+  // moves the scroll but never the focus - which would leave a reader who
+  // clicked "next" tabbing from the top of the document again. Scroll is the
+  // hash's job, hence `preventScroll`. Paging within this page keeps focus on
+  // the pagination control that was clicked, so this runs on mount only.
+  useEffect(() => {
+    unwrap(grid.current).focus({ preventScroll: true });
+  }, []);
 
   return (
     <div className="search-page">
       <MediaGrid
         ref={grid}
+        id={SEARCH_RESULTS_ID}
         headingLevel={1}
         size="large"
         label={q === '*' ? 'Search results' : `Results for ${q}`}
@@ -61,9 +57,13 @@ function SearchPage() {
         paging={{
           page,
           onPageChange: nextPage => {
-            // `resetScroll` off because the effect above owns where the reader
-            // lands, and the router's jump to 0 would fight it.
-            void navigate({ search: prev => ({ ...prev, page: nextPage }), resetScroll: false });
+            // The hash is what puts the first result back under the reader's
+            // eye: the router scrolls to it before paint, on a cold load and
+            // on a page click alike.
+            void navigate({
+              search: prev => ({ ...prev, page: nextPage }),
+              hash: SEARCH_RESULTS_ID,
+            });
           },
         }}
       />

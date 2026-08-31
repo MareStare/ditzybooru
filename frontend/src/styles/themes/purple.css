@@ -11,18 +11,10 @@
   --seed-purple-light: #71399b;
 }
 
-:root[data-theme-lightness='dark'][data-theme-color='purple'] {
-  --base: var(--seed-purple-dark);
-  --page: #15121a;
-  --ink: #ececee;
+:root[data-theme-color='purple'] {
+  --base: light-dark(var(--seed-purple-light), var(--seed-purple-dark));
+  --page: light-dark(var(--page-light), #15121a);
 
-  --link: #d3b3f7;
-  --link-hover: #cbb5f8;
-}
-
-:root[data-theme-lightness='light'][data-theme-color='purple'] {
-  --base: var(--seed-purple-light);
-
-  --link: #7c2fbd;
-  --link-hover: #cf73d0;
+  --link: light-dark(#7c2fbd, #d3b3f7);
+  --link-hover: light-dark(#cf73d0, #cbb5f8);
 }

@@ -4,6 +4,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { Camera, Search } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
+import { Field } from '#/components/ui/Field';
 
 /**
  * The site search field. Rendered twice: in the header bar on a wide screen,
@@ -26,9 +27,8 @@ export function SearchBar({ className = '', inputRef }: { className?: string; in
     >
       <div className="nav-search__box">
         <Search className="nav-search__icon" size={16} />
-        <input
+        <Field
           ref={inputRef}
-          className="field"
           value={query}
           onChange={event => {
             setQuery(event.target.value);

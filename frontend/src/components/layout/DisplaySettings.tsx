@@ -1,19 +1,32 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { Check, Monitor, Moon, Sun, UndoDot } from 'lucide-react';
+import { Check, Monitor, Moon, Sun, UndoDot, Zap, ZapOff } from 'lucide-react';
 
 import { Segmented } from '#/components/ui/Segmented';
-import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { useTheme } from '#/hooks/useTheme';
-import { useDisplaySettings } from '#/hooks/useDisplaySettings';
+import { useSettings } from '#/hooks/useSettings';
 import { SETTING_CONTROLS } from '#/lib/settingControls';
-import { componentSettingsAreDefault, resetComponentSettings } from '#/lib/componentSettings';
-import { hydrateTheme, onSystemLightnessChange, resetTheme, setResolvedLightness, themeIsDefault } from '#/lib/theme';
-import { resetDisplaySettings, displaySettingsAreDefault } from '#/lib/displaySettings';
+import { onSystemLightnessChange, resolveSystemLightness } from '#/lib/theme';
+import { resetSettings, settingsAreDefault } from '#/lib/settingsStore';
 
-import type { SettingControl, SettingsState } from '#/lib/settingControls';
+import type { ThemeLightness, ThemeLightnessPreference } from '#/lib/theme';
+import type { SettingControl } from '#/lib/settingControls';
 
 const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
+const MOTION_ICONS: Record<string, typeof Sun> = { on: Zap, off: ZapOff, system: Monitor };
+
+/** An icon beside the stop's word, for the two controls whose stops are modes
+ *  rather than values and so have nothing to draw. */
+function iconStops(icons: Record<string, typeof Sun>) {
+  return (value: string | number, label: string) => {
+    const Icon = icons[String(value)] ?? Monitor;
+    return (
+      <>
+        <Icon size={14} />
+        {label}
+      </>
+    );
+  };
+}
 
 /**
  * What each stop looks like, drawn with the value it is offering, keyed by
@@ -26,18 +39,12 @@ const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, sy
  *
  * `Spacing` and `Shadows` are the exceptions. A shadow at menu scale is a few
  * pixels of blur that reads as a smudge, and spacing has nothing to be spaced
- * inside a 28px cell, so both keep their words.
+ * inside a 28px cell, so both keep their words. `Color` and `Animations` offer
+ * modes rather than values, so they get an icon instead of a preview.
  */
 const PREVIEWS: Record<string, (value: string | number, label: string) => ReactNode> = {
-  lightness: (value, label) => {
-    const Icon = LIGHTNESS_ICONS[String(value)] ?? Sun;
-    return (
-      <>
-        <Icon size={14} />
-        {label}
-      </>
-    );
-  },
+  lightness: iconStops(LIGHTNESS_ICONS),
+  motion: iconStops(MOTION_ICONS),
   radius: value => (
     <span
       className="display-setting-preview display-setting-preview--corner"
@@ -69,7 +76,7 @@ function Swatches({
 }: {
   control: SettingControl;
   value: string | number;
-  lightness: string;
+  lightness: ThemeLightness;
 }) {
   return (
     <div className="display-settings__hues">
@@ -103,8 +110,33 @@ function Swatches({
 }
 
 /**
- * Every display control the site has: the theme's lightness and hue, then
- * the six layout settings. Shared by the header's display menu and the
+ * Which polarity is actually on screen, so a swatch can preview its color as it
+ * would really appear.
+ *
+ * Only the swatches need this. Everything else about the theme is settled by
+ * the stylesheet, which resolves `system` through `prefers-color-scheme`
+ * without asking anyone. Starting at the stored preference keeps the first
+ * client render identical to the server's; the effect fills in what only the
+ * browser knows.
+ */
+function useOnScreenLightness(preference: ThemeLightnessPreference): ThemeLightness {
+  const [lightness, setLightness] = useState<ThemeLightness>(preference === 'system' ? 'light' : preference);
+
+  useEffect(() => {
+    if (preference !== 'system') {
+      setLightness(preference);
+      return;
+    }
+    setLightness(resolveSystemLightness());
+    return onSystemLightnessChange(setLightness);
+  }, [preference]);
+
+  return lightness;
+}
+
+/**
+ * Every display control the site has: the theme's lightness and hue, the five
+ * layout settings, then animations. Shared by the header's display menu and the
  * display settings page's rail - both render this; neither owns the state.
  *
  * There is no per-control code here: the list comes from `SETTING_CONTROLS`,
@@ -112,43 +144,21 @@ function Swatches({
  * what a stop's preview looks like.
  */
 export function DisplaySettingsControls() {
-  const display = useDisplaySettings();
-  const theme = useTheme();
-  const components = useComponentSettings();
-  const state: SettingsState = { theme, display };
-
-  // Adopt whatever the pre-paint script put on `<html>`; until this runs the
-  // store holds the shipped defaults.
-  useEffect(hydrateTheme, []);
-
-  // While the preference is `system`, the OS gets to change the theme out from
-  // under us - so follow it rather than only reading it once at startup.
-  useEffect(() => {
-    if (theme.preference !== 'system') {
-      return;
-    }
-    return onSystemLightnessChange(next => {
-      document.documentElement.setAttribute('data-theme-lightness', next);
-      setResolvedLightness(next);
-    });
-  }, [theme.preference]);
-
-  // Covers the per-component settings too, even though those are set on their
-  // own cards: this is the only reset the site has.
-  const isDefault =
-    themeIsDefault(theme) && displaySettingsAreDefault(display) && componentSettingsAreDefault(components);
+  const settings = useSettings();
+  const lightness = useOnScreenLightness(settings.lightness);
+  const isDefault = settingsAreDefault(settings);
 
   return (
     <div className="display-settings">
       {SETTING_CONTROLS.map(control => {
-        const value = control.read(state);
+        const value = control.read(settings);
         const preview = PREVIEWS[control.id];
 
         return (
           <div className="display-setting" key={control.id}>
             {control.label ? <span className="display-setting__label">{control.label}</span> : null}
             {control.widget === 'swatches' ? (
-              <Swatches control={control} value={value} lightness={theme.lightness} />
+              <Swatches control={control} value={value} lightness={lightness} />
             ) : (
               <Segmented
                 label={control.label || control.id}
@@ -165,16 +175,7 @@ export function DisplaySettingsControls() {
         );
       })}
 
-      <button
-        type="button"
-        className="display-settings__reset"
-        disabled={isDefault}
-        onClick={() => {
-          resetTheme();
-          resetDisplaySettings();
-          resetComponentSettings();
-        }}
-      >
+      <button type="button" className="display-settings__reset" disabled={isDefault} onClick={resetSettings}>
         <UndoDot size={14} />
         Reset to defaults
       </button>

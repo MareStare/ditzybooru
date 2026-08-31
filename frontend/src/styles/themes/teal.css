@@ -12,18 +12,10 @@
   --seed-teal-light: #1f7b87;
 }
 
-:root[data-theme-lightness='dark'][data-theme-color='teal'] {
-  --base: var(--seed-teal-dark);
-  --page: #0a1a1c;
-  --ink: #ececee;
+:root[data-theme-color='teal'] {
+  --base: light-dark(var(--seed-teal-light), var(--seed-teal-dark));
+  --page: light-dark(var(--page-light), #0a1a1c);
 
-  --link: #6ad3e0;
-  --link-hover: #b099dd;
-}
-
-:root[data-theme-lightness='light'][data-theme-color='teal'] {
-  --base: var(--seed-teal-light);
-
-  --link: #166470;
-  --link-hover: #9273d0;
+  --link: light-dark(#166470, #6ad3e0);
+  --link-hover: light-dark(#9273d0, #b099dd);
 }

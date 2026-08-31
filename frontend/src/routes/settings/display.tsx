@@ -5,31 +5,36 @@ import { ArrowUp, ChevronDown, Clock, Dices, EyeOff, Image as ImageIcon, Search 
 import { DisplaySettingsControls } from '#/components/layout/DisplaySettings';
 import { Badge } from '#/components/ui/Badge';
 import { Button, ButtonGroup } from '#/components/ui/Button';
+import { Choice, Field, FieldGroup, FieldHint, FieldLabel, Switch, Textarea } from '#/components/ui/Field';
 import { Int } from '#/components/ui/Int';
 import { Menu, MenuButton, MenuLabel, MenuSeparator } from '#/components/ui/Menu';
+import { Notice, NoticeTitle, SiteNotice } from '#/components/ui/Notice';
 import { ComponentSettingsControls } from '#/components/layout/ComponentSettings';
 import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelTabs } from '#/components/ui/Panel';
+import { Table, TableScroll } from '#/components/ui/Table';
+import { Tag, TagCount, TagList } from '#/components/ui/Tag';
 import { MediaGrid } from '#/components/home/MediaGrid';
 import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/componentSettings';
 import { images, totalImages } from '#/lib/mock/data';
 
 import type { ComponentSettingControl } from '#/lib/componentSettings';
+import type { TagCategory } from '#/components/ui/Tag';
 
 export const Route = createFileRoute('/settings/display')({ component: DisplaySettingsPage });
 
 const TAG_CATEGORIES = [
-  { modifier: '', label: 'safe', count: '2.1M' },
-  { modifier: 'tag--rating', label: 'suggestive', count: '412k' },
-  { modifier: 'tag--spoiler', label: 'spoiler:s09', count: '8.3k' },
-  { modifier: 'tag--origin', label: 'screencap', count: '96k' },
-  { modifier: 'tag--oc', label: 'oc:littlepip', count: '3.4k' },
-  { modifier: 'tag--error', label: 'duplicate', count: '221' },
-  { modifier: 'tag--character', label: 'twilight sparkle', count: '188k' },
-  { modifier: 'tag--content-official', label: 'official comic', count: '1.2k' },
-  { modifier: 'tag--content-fanmade', label: 'fan art', count: '740k' },
-  { modifier: 'tag--species', label: 'pegasus', count: '311k' },
-  { modifier: 'tag--body-type', label: 'anthro', count: '54k' },
-] as const;
+  { label: 'safe', count: '2.1M' },
+  { category: 'rating', label: 'suggestive', count: '412k' },
+  { category: 'spoiler', label: 'spoiler:s09', count: '8.3k' },
+  { category: 'origin', label: 'screencap', count: '96k' },
+  { category: 'oc', label: 'oc:littlepip', count: '3.4k' },
+  { category: 'error', label: 'duplicate', count: '221' },
+  { category: 'character', label: 'twilight sparkle', count: '188k' },
+  { category: 'content-official', label: 'official comic', count: '1.2k' },
+  { category: 'content-fanmade', label: 'fan art', count: '740k' },
+  { category: 'species', label: 'pegasus', count: '311k' },
+  { category: 'body-type', label: 'anthro', count: '54k' },
+] as const satisfies Array<{ category?: TagCategory; label: string; count: string }>;
 
 function DisplaySettingsPage() {
   return (
@@ -219,16 +224,16 @@ function ButtonSpecimen() {
 function TagSpecimen() {
   return (
     <Section title="Tags">
-      <ul className="tag-list">
+      <TagList>
         {TAG_CATEGORIES.map(t => (
           <li key={t.label}>
-            <a className={`tag ${t.modifier}`} href="#tag">
+            <Tag category={'category' in t ? t.category : undefined} href="#tag">
               {t.label}
-              <span className="tag-count">{t.count}</span>
-            </a>
+              <TagCount>{t.count}</TagCount>
+            </Tag>
           </li>
         ))}
-      </ul>
+      </TagList>
       <p className="display-page-note">
         Category colors are identical in every Derpibooru theme, so they live in the shared palette rather than in each
         theme file. Background and border derive from the one category color via <code>color-mix()</code>.
@@ -260,52 +265,38 @@ function FormSpecimen() {
   return (
     <Section title="Forms">
       <div className="display-page-grid">
-        <div className="field-group">
-          <label className="field-label" htmlFor="demo-title">
-            Image title
-          </label>
-          <input className="field" id="demo-title" placeholder="Describe the upload" />
-          <span className="field-hint">Shown above the image on its page.</span>
-        </div>
+        <FieldGroup>
+          <FieldLabel htmlFor="demo-title">Image title</FieldLabel>
+          <Field id="demo-title" placeholder="Describe the upload" />
+          <FieldHint>Shown above the image on its page.</FieldHint>
+        </FieldGroup>
 
-        <div className="field-group">
-          <label className="field-label" htmlFor="demo-email">
-            Email (invalid on blur)
-          </label>
-          <input className="field" id="demo-email" type="email" required placeholder="you@example.com" />
-          <span className="field-hint">
+        <FieldGroup>
+          <FieldLabel htmlFor="demo-email">Email (invalid on blur)</FieldLabel>
+          <Field id="demo-email" type="email" required placeholder="you@example.com" />
+          <FieldHint>
             Uses <code>:user-invalid</code>, so it only flags after you interact.
-          </span>
-        </div>
+          </FieldHint>
+        </FieldGroup>
 
-        <div className="field-group">
-          <label className="field-label" htmlFor="demo-desc">
-            Description
-          </label>
-          <textarea className="field" id="demo-desc" placeholder="Markdown supported" />
-        </div>
+        <FieldGroup>
+          <FieldLabel htmlFor="demo-desc">Description</FieldLabel>
+          <Textarea id="demo-desc" placeholder="Markdown supported" />
+        </FieldGroup>
 
-        <div className="field-group">
-          <span className="field-label">Options</span>
-          <label className="choice">
-            <input type="checkbox" defaultChecked /> Show spoilered images
-          </label>
-          <label className="choice">
-            <input type="checkbox" /> Autoplay animations
-          </label>
-          <label className="choice">
-            <input type="radio" name="demo-layout" defaultChecked /> Grid layout
-          </label>
-          <label className="choice">
-            <input type="radio" name="demo-layout" /> List layout
-          </label>
-          <label className="choice">
-            <input className="switch" type="checkbox" defaultChecked role="switch" /> Compact mode
-          </label>
-          <label className="choice">
-            <input type="checkbox" disabled /> Disabled option
-          </label>
-        </div>
+        <FieldGroup>
+          <FieldLabel>Options</FieldLabel>
+          <Choice defaultChecked>Show spoilered images</Choice>
+          <Choice>Autoplay animations</Choice>
+          <Choice type="radio" name="demo-layout" defaultChecked>
+            Grid layout
+          </Choice>
+          <Choice type="radio" name="demo-layout">
+            List layout
+          </Choice>
+          <Switch defaultChecked>Compact mode</Switch>
+          <Choice disabled>Disabled option</Choice>
+        </FieldGroup>
       </div>
     </Section>
   );
@@ -322,8 +313,8 @@ function TableSpecimen() {
 
   return (
     <Section title="Tables" size="wide">
-      <div className="table-scroll">
-        <table className="table table--numeric">
+      <TableScroll>
+        <Table numeric>
           <thead>
             <tr>
               <th>Tag</th>
@@ -344,8 +335,8 @@ function TableSpecimen() {
               </tr>
             ))}
           </tbody>
-        </table>
-      </div>
+        </Table>
+      </TableScroll>
     </Section>
   );
 }
@@ -353,29 +344,29 @@ function TableSpecimen() {
 function FeedbackSpecimen() {
   return (
     <Section title="Notices & badges" size="wide">
-      <div className="notice">
+      <Notice>
         <span>
-          <strong className="notice-title">Heads up</strong>
+          <NoticeTitle>Heads up</NoticeTitle>
           Your filter is hiding 42 images on this page.
         </span>
-      </div>
-      <div className="notice notice--success">
+      </Notice>
+      <Notice variant="success">
         <span>
-          <strong className="notice-title">Upload complete</strong>
+          <NoticeTitle>Upload complete</NoticeTitle>
           Your image is now in the moderation queue.
         </span>
-      </div>
-      <div className="notice notice--warning">
+      </Notice>
+      <Notice variant="warning">
         <span>
-          <strong className="notice-title">Tag conflict</strong>
+          <NoticeTitle>Tag conflict</NoticeTitle>
           This image has both <code>safe</code> and <code>suggestive</code>.
         </span>
-      </div>
-      <div className="notice notice--danger">
+      </Notice>
+      <Notice variant="danger">
         <span>
-          <strong className="notice-title">Upload rejected</strong>A duplicate of this image already exists.
+          <NoticeTitle>Upload rejected</NoticeTitle>A duplicate of this image already exists.
         </span>
-      </div>
+      </Notice>
       <div className="display-page-row">
         <Badge>Member</Badge>
         <Badge variant="unread">3 new</Badge>
@@ -384,7 +375,7 @@ function FeedbackSpecimen() {
         <Badge variant="success">Live</Badge>
         <Badge variant="danger">Off air</Badge>
       </div>
-      <div className="site-notice">Scheduled maintenance tonight at 02:00 UTC.</div>
+      <SiteNotice>Scheduled maintenance tonight at 02:00 UTC.</SiteNotice>
     </Section>
   );
 }

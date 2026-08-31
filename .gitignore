@@ -2,6 +2,7 @@ target
 node_modules
 dist
 frontend/.tanstack/tmp
+frontend/.wrangler
 
 # Directory where our scripts install binaries with dependencies we need.
 tools
@@ -15,3 +16,6 @@ frontend/.gitignore
 .claude/skills
 .intent
 .impeccable
+# Local personal developer settings
+.claude/settings.local.json
+CLAUDE.local.md

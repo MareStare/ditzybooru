@@ -30,6 +30,13 @@ type MediaGridSize =
 export const SEARCH_RESULTS_TRANSITION = 'search-results';
 
 /**
+ * The search grid's `id`, and the hash the pagination navigates to. The router
+ * scrolls the fragment into view before paint, so the reader never sees the
+ * grid land and then correct itself.
+ */
+export const SEARCH_RESULTS_ID = 'search-results';
+
+/**
  * Who owns the page number. Omitted, the grid keeps its own and pages in place,
  * which is what a side block or a settings specimen wants; given, the caller
  * owns it and the grid only reports clicks.
@@ -60,7 +67,9 @@ interface MediaGridProps {
   /** Set to {@link SEARCH_RESULTS_TRANSITION} on the grid that morphs across a
    *  search navigation. */
   viewTransitionName?: string;
-  /** The panel element, for callers that scroll the reader back up to it. */
+  /** Set to {@link SEARCH_RESULTS_ID} on the grid the pagination scrolls to. */
+  id?: string;
+  /** The panel itself, for a page that has to move focus into the grid. */
   ref?: Ref<HTMLElement>;
 }
 
@@ -111,6 +120,7 @@ export function MediaGrid({
   size = 'large',
   paging,
   viewTransitionName,
+  id,
   ref,
 }: MediaGridProps) {
   const [ownPage, setOwnPage] = useState(1);
@@ -132,9 +142,16 @@ export function MediaGrid({
   const Heading = `h${headingLevel}` as const;
 
   return (
-    // Focusable, but not tabbable: a navigation that replaces the grid has
-    // nowhere to put focus otherwise, and drops it to the document.
-    <Panel ref={ref} tabIndex={-1} className="media-grid-panel" style={{ viewTransitionName }}>
+    // Focusable, but not tabbable. A document load on `#search-results` puts
+    // focus here on its own; a client-side navigation does not, which is what
+    // the search route's effect is for.
+    <Panel
+      ref={ref}
+      id={id}
+      tabIndex={-1}
+      className={cn('media-grid-panel', viewTransitionName !== undefined && 'media-grid-panel--transitioning')}
+      style={{ viewTransitionName }}
+    >
       <Heading className="visually-hidden">{label}</Heading>
 
       <PanelHeader className="media-grid__title">

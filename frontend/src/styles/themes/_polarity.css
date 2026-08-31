@@ -1,9 +1,9 @@
 /**
  * Everything a theme does NOT have to say.
  *
- * A theme declares at most five colors per polarity (see `blue.css`).
- * Everything else that separates a light theme from a dark one lives here, in
- * two blocks, so adding a theme never means copying a block of derived values.
+ * A theme declares four values (see `blue.css`). Everything else that separates
+ * a light theme from a dark one lives here, in one block, so adding a theme
+ * never means copying a block of derived values.
  *
  * Two kinds of value:
  *
@@ -15,116 +15,110 @@
  *    from the base color toward the page in a dark theme and 80% in a light one
  *    - and that difference is the whole reason one formula can serve both.
  *
+ * ---- How a value picks its polarity ------------------------------------
+ *
+ * Every polarity-dependent value is written once, as `light-dark(light, dark)`,
+ * and the switch below decides which half applies. That is what avoids stating
+ * each rule twice, once per branch: CSS cannot say "explicitly dark, OR prefers
+ * dark and nothing chosen" in a single selector, because a media query is a
+ * rule wrapper rather than something a selector can ask about.
+ *
+ * Browsers never see `light-dark()`. In a custom property it is an
+ * uninterpreted token stream - no browser evaluates it there - so LightningCSS
+ * lowers every one of them to a pair of `var()` toggles keyed on
+ * `color-scheme`. That runs in `vite dev` as well as in the build because
+ * LightningCSS is the CSS transformer, not just the minifier; if it were only
+ * the minifier, dev would silently render every derived color as invalid.
+ *
  * Selectors here are one attribute less specific than a theme's own
- * `[data-theme-lightness][data-theme-color]`, so a theme always wins.
+ * `[data-theme-color]`, so a theme always wins.
  */
 
-:root[data-theme-lightness='dark'] {
-  color-scheme: dark;
-
-  --lift: #fff;
-  --sink: #000;
-
-  /* A 1px inner top highlight reads as "lit from above" against a dark
-   * surface. */
-  --edge-tint: #fff;
-  --edge-alpha: 5%;
-
-  --w-elev: 6%;
-  --w-recess: 55%;
-  /* Chrome sits further toward the page than Derpibooru's 25%: at 25% the
-   * panel title strip was light enough to drop `--ink` on it to APCA Lc 73,
-   * under the Lc 75 body-text floor. 36% keeps the tint and buys ~8 Lc. */
-  --w-chrome: 36%;
-  --w-chrome-deep: 48%;
-  --w-field: 49%;
-  --w-frame: 12%;
-
-  /* The selected tab lifts off the strip, but only far enough to read as lit -
-   * every point of lightness here is a point of contrast lost against `--ink`. */
-  --w-tab-active: 10%;
-
-  /* The nav search field is a recess in the bar, so it darkens toward the page. */
-  --nav-field-target: var(--page);
-
-  /* The dark bases already carry `--ink` with room to spare. */
-  --w-nav-darken: 0%;
-
-  /* How far the fave/upvote/downvote colors are lifted before being painted as
-   * icons. Dark surfaces swallow all three otherwise. */
-  --w-icon-lift: 46%;
-
-  /* Status fills are dark and saturated so the normal foreground stays readable
-   * on them. Identical in every dark theme - these carry meaning, not identity,
-   * so they are not a theme's business. */
-  --success: #144714;
-  --danger: #66211f;
-  --warning: #71401f;
-
-  --tag-bg-mix: 82%;
-  --tag-border-mix: 55%;
-
-  /* How far the category seed is pushed toward white before it is used as tag
-   * text. Tuned to the worst seed in the set - the mid-tone purples and blues,
-   * which start closest to a dark wash. */
-  --tag-text-mix: 66%;
+/* The polarity switch, and the only place it is decided. No attribute means the
+ * user has chosen nothing, so the browser answers; the attributes are what the
+ * server writes from the settings cookie when they have chosen. */
+:root {
+  color-scheme: light dark;
 }
 
 :root[data-theme-lightness='light'] {
   color-scheme: light;
+}
 
-  /* On a light background, "away from the background" means darker. */
-  --lift: #000;
-  --sink: #fff;
+:root[data-theme-lightness='dark'] {
+  color-scheme: dark;
+}
 
-  /* A white highlight on an already-white surface is invisible; light themes
-   * get their definition from shadow and borders instead. */
+:root {
+  --lift: light-dark(#000, #fff);
+  --sink: light-dark(#fff, #000);
+
+  /* A 1px inner top highlight reads as "lit from above" against a dark surface.
+   * On an already-white one it is invisible, so light themes get their
+   * definition from shadow and borders instead. */
   --edge-tint: #fff;
-  --edge-alpha: 0%;
+  --edge-alpha: light-dark(0%, 5%);
 
-  /* Every light theme shares a page and a foreground; they differ only in their
-   * base color and their links. */
-  --page: #f8fafc;
-  --ink: #333333;
+  /* Every light theme shares this page; the dark side is the theme's own, so it
+   * is published for the themes to reference rather than set here. */
+  --page-light: #f8fafc;
 
-  /* The nav is a saturated mid-tone here, far too dark to carry `--ink`. */
-  --text-on-nav: #ffffff;
+  /* Uniform across all nine themes in both polarities, so it is not a theme's
+   * business either. */
+  --ink: light-dark(#333333, #ececee);
 
-  /* The bar is translucent, so the near-white page shows through it and lifts
-   * the effective background - white on the raw base composites to 3.3:1 in the
-   * worst accent. 20% is what the darkest of the nine (gray) needs to clear
-   * 4.5:1 through the glass; the rest gain margin from the same figure. */
-  --w-nav-darken: 20%;
+  /* The nav is a saturated mid-tone in a light theme, far too dark to carry
+   * `--ink`. The dark themes' bases carry it with room to spare, which is what
+   * `semantic.css` assumes. */
+  --text-on-nav: light-dark(#ffffff, var(--ink));
 
-  --w-elev: 2%;
-  --w-recess: 60%;
-  --w-chrome: 80%;
-  --w-chrome-deep: 84%;
-  --w-field: 14%;
-  --w-frame: 30%;
+  /* The light bar is translucent, so the near-white page shows through it and
+   * lifts the effective background - white on the raw base composites to 3.3:1
+   * in the worst accent. 20% is what the darkest of the nine (gray) needs to
+   * clear 4.5:1 through the glass; the rest gain margin from the same figure. */
+  --w-nav-darken: light-dark(20%, 0%);
+
+  --w-elev: light-dark(2%, 6%);
+  --w-recess: light-dark(60%, 55%);
+  /* Dark sits further toward the page than Derpibooru's 25%: at 25% the panel
+   * title strip was light enough to drop `--ink` on it to APCA Lc 73, under the
+   * Lc 75 body-text floor. 36% keeps the tint and buys ~8 Lc. */
+  --w-chrome: light-dark(80%, 36%);
+  --w-chrome-deep: light-dark(84%, 48%);
+  --w-field: light-dark(14%, 49%);
+  --w-frame: light-dark(30%, 12%);
 
   /* The light themes' strip is already close to the page, so it takes a much
-   * bigger push toward white before the selected tab separates from it. */
-  --w-tab-active: 62%;
+   * bigger push toward white before the selected tab separates from it. In a
+   * dark theme the tab lifts off the strip, but only far enough to read as lit -
+   * every point of lightness there is a point of contrast lost against `--ink`. */
+  --w-tab-active: light-dark(62%, 10%);
 
-  /* Mixing toward the page would make the field LIGHTER than the nav, which is
-   * the wrong direction for a recess and leaves white text stranded on it. */
-  --nav-field-target: #000;
+  /* The dark themes' nav search field is a recess in the bar, so it darkens
+   * toward the page. Mixing toward the page in a light theme would make the
+   * field LIGHTER than the nav, which is the wrong direction for a recess and
+   * leaves white text stranded on it. */
+  --nav-field-target: light-dark(#000, var(--page));
 
-  --w-icon-lift: 32%;
+  /* How far the fave/upvote/downvote colors are lifted before being painted as
+   * icons. Dark surfaces swallow all three otherwise. */
+  --w-icon-lift: light-dark(32%, 46%);
 
-  /* Pastels, for the same reason the dark ones are dark: the foreground has to
-   * stay readable on top of them. */
-  --success: #bde9a3;
-  --danger: #ebc0bb;
-  --warning: #eee9bc;
+  /* Status fills: pastel on light, dark and saturated on dark, both so the
+   * normal foreground stays readable on them. Identical in every theme - these
+   * carry meaning, not identity. */
+  --success: light-dark(#bde9a3, #144714);
+  --danger: light-dark(#ebc0bb, #66211f);
+  --warning: light-dark(#eee9bc, #71401f);
 
   /* Mixing 82% toward white leaves tag borders too faint to register on a white
    * surface. Dark themes have the opposite problem. */
-  --tag-bg-mix: 80%;
-  --tag-border-mix: 42%;
+  --tag-bg-mix: light-dark(80%, 82%);
+  --tag-border-mix: light-dark(42%, 55%);
 
-  /* Higher than the dark theme's: the wash here is near-white, so the label has
-   * further to travel to clear AA against it. */
-  --tag-text-mix: 60%;
+  /* How far the category seed is pushed toward white before it is used as tag
+   * text. Tuned to the worst seed in the set - the mid-tone purples and blues,
+   * which start closest to a dark wash. Higher on light: the wash there is
+   * near-white, so the label has further to travel to clear AA against it. */
+  --tag-text-mix: light-dark(60%, 66%);
 }

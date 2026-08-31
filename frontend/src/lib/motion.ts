@@ -1,16 +1,41 @@
 /**
- * Motion read from the cascade rather than from `lib/displaySettings`, because
- * `--motion-scale` is where the "Animations" setting and
- * `prefers-reduced-motion` have already been reconciled.
+ * The animation setting, and the motion actually in force.
+ *
+ * What the user picks is a {@link MotionPreference} - `on`, `off`, or `system`,
+ * exactly as the theme's lightness works. Only an explicit choice reaches
+ * `<html>`, as an inline `--motion-scale`; `system` is stored as nothing at
+ * all, which leaves the stylesheet's `prefers-reduced-motion` branch in charge.
+ *
+ * {@link motionScale} reads the cascade rather than the setting, because
+ * `--motion-scale` is where the two have already been reconciled.
+ *
+ * Persistence and the store live in `lib/settings` and `lib/settingsStore`.
  */
 
+/** What the user chose. `system` follows `prefers-reduced-motion` as it changes. */
+export type MotionPreference = 'on' | 'off' | 'system';
+
+export const DEFAULT_MOTION_PREFERENCE: MotionPreference = 'system';
+
+export const MOTION_PREFERENCES: Array<{ id: MotionPreference; label: string }> = [
+  { id: 'on', label: 'On' },
+  { id: 'off', label: 'Off' },
+  { id: 'system', label: 'System' },
+];
+
 /**
- * A pagination scroll is near-instant for a short hop and only a little longer
- * for a long one, so crossing a whole grid does not read as a teleport.
+ * The custom property the preference writes on `<html>`.
+ *
+ * An inline declaration, so `on` outranks the `prefers-reduced-motion: reduce`
+ * rule in `styles/tokens/display-settings.css`. Without that a reader whose OS
+ * asks for reduced motion could never turn animations back on.
  */
-const SCROLL_MIN_MS = 80;
-const SCROLL_MAX_MS = 100;
-const SCROLL_MS_PER_PX = 0.06;
+export function motionProperties(preference: MotionPreference): Record<string, string> {
+  if (preference === 'system') {
+    return {};
+  }
+  return { '--motion-scale': preference === 'on' ? '1' : '0' };
+}
 
 export function motionScale(): number {
   const raw = getComputedStyle(document.documentElement).getPropertyValue('--motion-scale');
@@ -21,45 +46,4 @@ export function motionScale(): number {
 
 export function animationsEnabled(): boolean {
   return motionScale() > 0;
-}
-
-function easeInOut(progress: number): number {
-  return progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
-}
-
-/**
- * Scrolls the page until `element` sits at the top of the viewport, clear of
- * whatever its `scroll-margin-block-start` reserves for the sticky header.
- *
- * Hand-animated rather than `scrollIntoView({ behavior: 'smooth' })`: the native
- * duration is a UA constant of several hundred milliseconds, far too slow for a
- * control clicked repeatedly, and it ignores the site's animation setting.
- */
-export function scrollToTopOf(element: HTMLElement, { animate }: { animate: boolean }): Promise<void> {
-  const margin = Number.parseFloat(getComputedStyle(element).scrollMarginBlockStart) || 0;
-  const from = window.scrollY;
-  const to = Math.max(0, from + element.getBoundingClientRect().top - margin);
-  const distance = Math.abs(to - from);
-  const duration = animate ? Math.min(SCROLL_MAX_MS, SCROLL_MIN_MS + distance * SCROLL_MS_PER_PX) * motionScale() : 0;
-
-  if (duration <= 0 || distance === 0) {
-    window.scrollTo({ top: to });
-    return Promise.resolve();
-  }
-
-  return new Promise(resolve => {
-    let startedAt: number | undefined;
-    const step = (now: number) => {
-      startedAt ??= now;
-      const progress = Math.min((now - startedAt) / duration, 1);
-      window.scrollTo({ top: from + (to - from) * easeInOut(progress) });
-      if (progress < 1) {
-        requestAnimationFrame(step);
-      } else {
-        resolve();
-      }
-    };
-
-    requestAnimationFrame(step);
-  });
 }

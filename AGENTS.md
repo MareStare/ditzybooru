@@ -3,6 +3,11 @@
 - Project unreleased: make breaking changes freely for clean code. No backwards compatibility, no deprecations.
 - Use regular dash instead of em-dash everywhere.
 
+## Terminology
+
+- Never say "byte-identical" or "bit identical". Say just "identical" or "equal" or "the same" instead.
+- Never say "load-bearing". Say "important" instead.
+
 ## Comments
 
 - No comments on simple functions up to 5 statements.

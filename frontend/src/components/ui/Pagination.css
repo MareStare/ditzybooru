@@ -157,15 +157,6 @@
   padding: var(--space-2);
 }
 
-/* The panel hangs outside the block it pages, and a block after that one would
- * otherwise paint over it: `view-transition-name` on the grid makes a stacking
- * context, so the panel's own `z-index` cannot reach past its own panel. Lifting
- * the whole panel while it is open is what gets it over the next one. */
-.panel:has(.pagination__jump) {
-  position: relative;
-  z-index: 1;
-}
-
 /* Over the trigger instead, where the row is at the bottom of the window. */
 .pagination__jump--above {
   inset-block-start: auto;

@@ -1,10 +1,6 @@
 /**
  * Notices and the site-notice strip. Same one-input contract as buttons: a
  * variant sets `--notice-seed`.
- *
- * No component owns these yet - nothing outside the Display settings page renders
- * one. When the first page does, these rules move next to its `.tsx`, the way
- * badges did (`components/ui/Badge.css`).
  */
 
 .notice {

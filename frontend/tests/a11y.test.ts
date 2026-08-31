@@ -43,6 +43,10 @@ interface AxeWindow {
 
 const PREVIEW_PORT = 4319;
 
+/** `SETTINGS_COOKIE` from `lib/settings`, repeated rather than imported: that
+ *  module pulls in the Start server runtime, which does not load under node. */
+const SETTINGS_COOKIE = 'ditzy-settings';
+
 const LIGHTNESSES = ['dark', 'light'] as const;
 const COLORS = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'pink', 'gray'] as const;
 const PATHS = ['/', '/search?q=*&page=1', '/settings/display'] as const;
@@ -127,23 +131,28 @@ let baseUrl: string;
 /**
  * Loads a path with a theme applied and returns axe's violations for it.
  *
- * The theme is set through localStorage and a reload rather than by writing the
- * attributes directly. Writing them races the app: with no stored preference
- * the site follows `prefers-color-scheme`, and that listener will overwrite
- * `data-theme-lightness` out from under the test - which showed up as
- * intermittent runs reporting light-theme colors on a page the test had just
- * set to dark. Storing an explicit preference takes the listener out of play.
+ * The theme is set through the settings cookie rather than by writing the
+ * attributes directly, because the cookie is what the server renders from: the
+ * markup arrives in the requested theme, with no window where the page is in
+ * one theme and axe is asked about another. Writing the attributes instead
+ * would also race `prefers-color-scheme`, which is what decides the theme
+ * whenever nothing is stored.
+ *
+ * An explicit `lightness` and `color` are sent even where they match the
+ * shipped defaults - `parseSettings` takes them either way, and it keeps this
+ * from depending on which values happen to be default.
  */
 async function audit(path: string, lightness: Lightness, color: Color, options: RunOptions): Promise<Array<string>> {
-  await page.goto(`${baseUrl}${path}`, { waitUntil: 'domcontentloaded' });
-  await page.evaluate(
-    ({ l, c }) => {
-      localStorage.setItem('theme-lightness', l);
-      localStorage.setItem('theme-color', c);
+  const context = page.context();
+  await context.clearCookies();
+  await context.addCookies([
+    {
+      name: SETTINGS_COOKIE,
+      value: encodeURIComponent(JSON.stringify({ lightness, color })),
+      url: baseUrl,
     },
-    { l: lightness, c: color },
-  );
-  await page.reload({ waitUntil: 'networkidle' });
+  ]);
+  await page.goto(`${baseUrl}${path}`, { waitUntil: 'networkidle' });
   await page.evaluate(axeSource);
   const results = await page.evaluate(async ({ opts }) => (window as unknown as AxeWindow).axe.run(document, opts), {
     opts: options,

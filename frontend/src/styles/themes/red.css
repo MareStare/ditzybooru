@@ -11,18 +11,10 @@
   --seed-red-light: #b93232;
 }
 
-:root[data-theme-lightness='dark'][data-theme-color='red'] {
-  --base: var(--seed-red-dark);
-  --page: #412121;
-  --ink: #ececee;
+:root[data-theme-color='red'] {
+  --base: light-dark(var(--seed-red-light), var(--seed-red-dark));
+  --page: light-dark(var(--page-light), #412121);
 
-  --link: #ebeb4d;
-  --link-hover: #fff3bd;
-}
-
-:root[data-theme-lightness='light'][data-theme-color='red'] {
-  --base: var(--seed-red-light);
-
-  --link: #b32e2e;
-  --link-hover: #944563;
+  --link: light-dark(#b32e2e, #ebeb4d);
+  --link-hover: light-dark(#944563, #fff3bd);
 }

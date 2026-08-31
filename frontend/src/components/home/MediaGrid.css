@@ -11,8 +11,19 @@
   overflow: visible;
 
   /* Where pagination lands the reader: the title bar, clear of the sticky
-   * header. Read back by `scrollToTopOf` in `lib/motion.ts`. */
-  scroll-margin-block-start: calc(var(--header-h) + var(--space-3));
+   * header. Matches `.search-page`'s block padding, so the fragment scroll
+   * leaves the panel exactly where it already sits. */
+  scroll-margin-block-start: calc(var(--header-h) + var(--space-4));
+}
+
+/* `view-transition-name` makes the panel a stacking context, so the pagination
+ * jump panel's own `z-index` cannot reach past it and the block after would
+ * paint over it. Lifting the whole panel is what gets it over that block; only
+ * the named panel needs it, or a later unnamed one would win on source order.
+ * Stays under the sticky header, which sits at 40. */
+.media-grid-panel--transitioning {
+  position: relative;
+  z-index: 1;
 }
 
 /* The panel is focus target as well as scroll target, so a navigation that
