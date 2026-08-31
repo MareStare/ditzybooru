@@ -4,6 +4,7 @@ import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
 import { SsrSettingsContext, useSettings } from '#/hooks/useSettings';
 import { readSettings, settingsAttributes } from '#/lib/settings';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 
 // The one stylesheet entry point: `styles/index.css` imports every other CSS
 // file in the project, so the whole site compiles to a single stylesheet. Start
@@ -15,13 +16,27 @@ export const Route = createRootRoute({
   // from one snapshot of the cookie.
   beforeLoad: () => ({ settings: readSettings() }),
   head: () => ({
-    // Dev only, and only because Start's own dev SSR stylesheet is disabled in
-    // `vite.config.ts` over https://github.com/TanStack/router/issues/7794
-    // (fix pending in https://github.com/TanStack/router/pull/7830). Without a
-    // link the first paint is unstyled: in dev the stylesheet is a module Vite
-    // injects after hydration. Production links the hashed file via the
-    // manifest, so this whole branch goes away once that bug is fixed.
-    links: import.meta.env.DEV ? [{ rel: 'stylesheet', href: '/src/styles/index.css?direct' }] : [],
+    links: [
+      // The font is declared inside the stylesheet, so without this the browser
+      // cannot even ask for it until the CSS has downloaded and parsed - a whole
+      // round trip during which the text paints in `system-ui` and then swaps.
+      // Preloading starts the fetch alongside the CSS instead. `crossOrigin` is
+      // required even same-origin, or the preload is discarded and refetched.
+      {
+        rel: 'preload',
+        href: interLatin,
+        as: 'font',
+        type: 'font/woff2',
+        crossOrigin: 'anonymous',
+      },
+      // Dev only, and only because Start's own dev SSR stylesheet is disabled
+      // in `vite.config.ts` over https://github.com/TanStack/router/issues/7794
+      // (fix pending in https://github.com/TanStack/router/pull/7830). Without
+      // a link the first paint is unstyled: in dev the stylesheet is a module
+      // Vite injects after hydration. Production links the hashed file via the
+      // manifest, so this whole branch goes away once that bug is fixed.
+      ...(import.meta.env.DEV ? [{ rel: 'stylesheet', href: '/src/styles/index.css?direct' }] : []),
+    ],
     meta: [
       { charSet: 'UTF-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },

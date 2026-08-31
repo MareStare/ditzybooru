@@ -14,23 +14,13 @@ const buildTarget = ['es2019', 'chrome80', 'firefox69', 'edge80', 'safari13', 'i
  * This however, allows us to share a lot of code between different color themes
  * (dark blue, light gray, etc.).
  *
- * Everything else modern in the stylesheet degrades rather than breaks -
- * view transitions, `backdrop-filter`, `corner-shape`, `text-wrap`,
- * `scrollbar-*` - so none of them raises the floor.
+ * Every other modern feature degrades gracefully. I.e. the site stays usable.
  *
  * TODO: bring this floor back down. The plan is a precompiled fallback
- * stylesheet for browsers without `color-mix()`: resolve every custom property
- * against one fixed theme (dark blue) at build time, which turns each
- * `color-mix()` into a literal that LightningCSS folds to a plain sRGB color.
- * A LightningCSS `visitor` substituting `Variable` nodes does the resolution;
- * it has to be a second pass over the whole stylesheet rather than a step in
- * this pipeline, since two thirds of the `color-mix()` calls are inline in
- * component rules rather than in custom properties. The cost is that the
- * Display Settings customization does not survive it - corner radius, outline
- * width, shadow depth, spacing, text size and motion are baked in at their
- * defaults, because a `calc()` in a `color-mix()` percentage stops it folding.
- * That is an acceptable trade for a fallback, but it is why this cannot simply
- * be turned on for everyone.
+ * stylesheet for old browsers via a custom plugin. Precompute `color-mix()`,
+ * use a fixed theme (dark blue). We may also not support some other display
+ * settings customization in fallback mode (need more research on potential
+ * degradations in the fallback).
  *
  * `major << 16 | minor << 8`, LightningCSS's version encoding.
  */
