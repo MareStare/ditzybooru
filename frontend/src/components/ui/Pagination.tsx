@@ -37,9 +37,10 @@ interface PaginationProps {
 /**
  * A page navigator: step controls around a window on the numbered pages.
  *
- * The window is a fixed width and scrolls its numbers under itself rather than
+ * The window is a fixed width and slides its numbers under itself rather than
  * resizing, so the steps either side hold their place while paging and the
- * number that only half fits shows half of itself. The ellipsis marking what is
+ * number that only half fits shows half of itself. The page the reader is on
+ * holds the middle of the window until an end of the range comes into it. The ellipsis marking what is
  * held back opens a field to type a page into, which is the way across a range
  * too long to walk. A screen too narrow for a window of numbers keeps the page
  * the reader is on and the steps either side of it, and nothing else.
@@ -50,6 +51,7 @@ interface PaginationProps {
 export function Pagination({ page, pageCount, onPageChange, label, back = true, className }: PaginationProps) {
   const navRef = useRef<HTMLElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
+  const pagesRef = useRef<HTMLDivElement>(null);
   const currentRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -65,20 +67,30 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
   const first = Math.max(1, page - RUN);
   const run = Array.from({ length: Math.min(pageCount, page + RUN) - first + 1 }, (_, i) => first + i);
 
-  // Asking for the current page to be centred is asking for past the run at
-  // either end of it, and scrolling hands back as much of it as there is.
+  // The run slides under the window so the page the reader is on holds the
+  // middle of it, and gives that up only where the run runs out. Offset rather
+  // than `scrollLeft`: the router restores the scroll position it last saw on
+  // every navigation, which is the position of the page before this one.
   useLayoutEffect(() => {
     const strip = stripRef.current;
+    const pages = pagesRef.current;
     const current = currentRef.current;
 
-    if (!strip || !current) {
+    if (!strip || !pages || !current) {
       return;
     }
 
-    const view = strip.getBoundingClientRect();
-    const box = current.getBoundingClientRect();
+    // Measured against the run's own box, which carries the same offset as the
+    // number in it, so what comes out is where the number sits in the run.
+    const runBox = pages.getBoundingClientRect();
+    const currentBox = current.getBoundingClientRect();
+    const room = runBox.width - strip.clientWidth;
+    const wanted = currentBox.left - runBox.left + currentBox.width / 2 - strip.clientWidth / 2;
+    const offset = Math.max(0, Math.min(wanted, room));
 
-    strip.scrollLeft += box.left + box.width / 2 - (view.left + view.width / 2);
+    pages.style.transform = `translateX(${-offset}px)`;
+
+    const view = strip.getBoundingClientRect();
 
     // A number the window cuts off entirely is scenery, and nothing a pointer or
     // a screen reader should find. Focus on the way out goes to the current
@@ -94,10 +106,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
       slot.toggleAttribute('inert', clipped);
     }
 
-    const ends = {
-      start: strip.scrollLeft > 1,
-      end: strip.scrollLeft < strip.scrollWidth - strip.clientWidth - 1,
-    };
+    const ends = { start: offset > 1, end: offset < room - 1 };
 
     setMore(prev => (prev.start === ends.start && prev.end === ends.end ? prev : ends));
 
@@ -269,7 +278,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
             more.end && 'pagination__strip--cut-end',
           )}
         >
-          <div className="pagination__pages">
+          <div ref={pagesRef} className="pagination__pages">
             {run.map((p, index) =>
               // Keyed by its place in the run rather than by its number, so that
               // paging renumbers the strip where it stands instead of moving the

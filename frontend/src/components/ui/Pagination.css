@@ -38,15 +38,13 @@
   min-inline-size: var(--page-frame);
 }
 
-/* Whatever the ellipses leave of the window. A scrollbar under it would be a
- * second row of furniture. */
+/* Whatever the ellipses leave of the window. The run inside it is placed by the
+ * component rather than scrolled, so there is nothing to scroll and no bar. */
 .pagination__strip {
   flex: 1;
   min-inline-size: 0;
 
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: none;
+  overflow: hidden;
 
   /* A number the window has cut in half dissolves at the edge rather than being
    * sliced through. Both stops sit at the edge until there is something out
@@ -66,10 +64,6 @@
 
 .pagination__strip--cut-end {
   --page-cut-end: 3ch;
-}
-
-.pagination__strip::-webkit-scrollbar {
-  display: none;
 }
 
 .pagination__pages {
