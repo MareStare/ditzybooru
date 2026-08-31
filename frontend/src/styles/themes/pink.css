@@ -12,20 +12,12 @@
   --seed-pink-light: #b83567;
 }
 
-:root[data-theme-lightness='dark'][data-theme-color='pink'] {
-  --base: var(--seed-pink-dark);
-  --page: #1c1116;
-  --ink: #ececee;
+:root[data-theme-color='pink'] {
+  --base: light-dark(var(--seed-pink-light), var(--seed-pink-dark));
+  --page: light-dark(var(--page-light), #1c1116);
 
-  --link: #f2b3cf;
+  --link: light-dark(#a32a58, #f2b3cf);
   /* Red's hover is a yellow; at this hue that reads as a clash, so pink borrows
    * purple's lavender instead. */
-  --link-hover: #cbb5f8;
-}
-
-:root[data-theme-lightness='light'][data-theme-color='pink'] {
-  --base: var(--seed-pink-light);
-
-  --link: #a32a58;
-  --link-hover: #9273d0;
+  --link-hover: light-dark(#9273d0, #cbb5f8);
 }

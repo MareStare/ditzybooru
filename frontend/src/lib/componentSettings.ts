@@ -11,8 +11,8 @@
  * setting reach every instance of the component without threading a prop
  * through the pages that render it.
  *
- * Applied pre-paint by the inline script in `index.html`, which must be kept in
- * sync with {@link componentSettingAttributes}.
+ * Persistence and the store live in `lib/settings` and `lib/settingsStore`;
+ * this module is only the descriptors and their validation.
  */
 
 /** How a thumbnail fills its media box; each mode is described on its own stop
@@ -83,24 +83,22 @@ export const MEDIA_GRID_SETTING_CONTROLS: Array<ComponentSettingControl> = [
 /** Every control there is, so a stored value can be validated against its own. */
 const ALL_CONTROLS: Array<ComponentSettingControl> = [...MEDIA_GRID_SETTING_CONTROLS];
 
-const STORAGE_KEY = 'component-settings';
-
 /**
- * The attributes a set of settings writes on `:root`.
+ * The attributes a set of settings writes on `<html>`.
  *
  * An attribute rather than a custom property because "justified" is a layout
  * mode, not a value: it swaps the grid for a flex row wrap, which no single
  * property can carry.
  */
-export function componentSettingAttributes(settings: ComponentSettings): Record<string, string> {
+export function componentSettingAttributes(settings: ComponentSettings): { 'data-media-fit': MediaFit } {
   return {
     'data-media-fit': settings.mediaFit,
   };
 }
 
 /** Rejects anything the control could not have produced, so a hand-edited or
- *  stale entry can never reach the component. */
-function sanitize<TKey extends keyof ComponentSettings>(
+ *  stale cookie can never reach the component. */
+export function sanitizeComponentSetting<TKey extends keyof ComponentSettings>(
   control: ComponentSettingControl<TKey>,
   value: unknown,
 ): ComponentSettings[TKey] {
@@ -122,81 +120,25 @@ function sanitize<TKey extends keyof ComponentSettings>(
 /* Writing through the control's own key is what keeps the value's type tied to
  * it: `settings[key] = value` with a key that could be any of them narrows the
  * write type to `never`, and this generic is the standard way out. */
-function assign<TKey extends keyof ComponentSettings>(
+export function assignComponentSetting<TKey extends keyof ComponentSettings>(
   settings: ComponentSettings,
   control: ComponentSettingControl<TKey>,
   value: unknown,
 ): void {
-  settings[control.key] = sanitize(control, value);
+  settings[control.key] = sanitizeComponentSetting(control, value);
 }
 
-export function readComponentSettings(): ComponentSettings {
-  if (typeof localStorage === 'undefined') {
-    return DEFAULT_COMPONENT_SETTINGS;
-  }
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw === null) {
+export function sanitizeComponentSettings(stored: unknown): ComponentSettings {
+  if (typeof stored !== 'object' || stored === null) {
     return DEFAULT_COMPONENT_SETTINGS;
   }
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    return DEFAULT_COMPONENT_SETTINGS;
-  }
-  if (typeof parsed !== 'object' || parsed === null) {
-    return DEFAULT_COMPONENT_SETTINGS;
-  }
-
-  const stored = parsed as Partial<Record<keyof ComponentSettings, unknown>>;
+  const values = stored as Partial<Record<keyof ComponentSettings, unknown>>;
   const settings = { ...DEFAULT_COMPONENT_SETTINGS };
   for (const control of ALL_CONTROLS) {
-    assign(settings, control, stored[control.key]);
+    assignComponentSetting(settings, control, values[control.key]);
   }
   return settings;
-}
-
-function writeComponentSettings(settings: ComponentSettings): void {
-  const root = document.documentElement;
-  for (const [name, value] of Object.entries(componentSettingAttributes(settings))) {
-    root.setAttribute(name, value);
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-}
-
-let current = readComponentSettings();
-const listeners = new Set<() => void>();
-
-export function getComponentSettings(): ComponentSettings {
-  return current;
-}
-
-export function subscribeComponentSettings(listener: () => void): () => void {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
-
-/* Takes the control rather than its key, and the widened value the widget hands
- * back - which is sound because the only values a widget can produce are the
- * ones its own descriptor offers. */
-export function setComponentSetting<TKey extends keyof ComponentSettings>(
-  control: ComponentSettingControl<TKey>,
-  value: string | number,
-): void {
-  const next = { ...current };
-  assign(next, control, value);
-  current = next;
-  writeComponentSettings(current);
-  for (const listener of listeners) listener();
-}
-
-export function resetComponentSettings(): void {
-  current = DEFAULT_COMPONENT_SETTINGS;
-  writeComponentSettings(current);
-  for (const listener of listeners) listener();
 }
 
 /** Whether anything has been changed from the shipped defaults. */

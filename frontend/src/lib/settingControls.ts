@@ -1,14 +1,10 @@
-import {
-  DEFAULT_THEME,
-  setThemeColor,
-  setThemeLightnessPreference,
-  THEME_COLORS,
-  THEME_LIGHTNESS_PREFERENCES,
-} from '#/lib/theme';
-import { DEFAULT_DISPLAY_SETTINGS, setDisplaySetting, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
+import { THEME_COLORS, THEME_LIGHTNESS_PREFERENCES } from '#/lib/theme';
+import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
+import { DEFAULT_SETTINGS } from '#/lib/settings';
+import { setDisplaySetting, setThemeColor, setThemeLightnessPreference } from '#/lib/settingsStore';
 
-import type { ThemeColor, ThemeLightnessPreference, ThemeState } from '#/lib/theme';
-import type { DisplaySettings } from '#/lib/displaySettings';
+import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
+import type { Settings } from '#/lib/settings';
 
 /**
  * One descriptor per display control, theme and layout alike.
@@ -20,9 +16,10 @@ import type { DisplaySettings } from '#/lib/displaySettings';
  * stops, where the current value comes from and where a new one goes. The only
  * difference left is which widget draws them, and that is one field.
  *
- * Persistence stays split, because it genuinely is: the theme is two attributes
- * on `<html>` under their own storage keys, the layout settings are six custom
- * properties under one. Both are applied pre-paint by `index.html`.
+ * Persistence is not split any more: every control below writes into the one
+ * settings cookie via `lib/settingsStore`. What still differs is what a control
+ * puts on `<html>` - the theme writes attributes, the layout settings write
+ * custom properties - and `lib/settings` owns that.
  */
 export interface SettingControl {
   id: string;
@@ -31,17 +28,12 @@ export interface SettingControl {
   /** Which widget draws the stops. */
   widget: 'segmented' | 'swatches';
   options: Array<{ value: string | number; label: string }>;
-  read: (state: SettingsState) => string | number;
+  read: (settings: Settings) => string | number;
   /* Takes the widened value the widget hands back. Each implementation narrows
    * it at the boundary, which is sound because the only values a widget can
    * produce are the ones in `options` directly above it. */
   write: (value: string | number) => void;
   defaultValue: string | number;
-}
-
-export interface SettingsState {
-  theme: ThemeState;
-  display: DisplaySettings;
 }
 
 export const SETTING_CONTROLS: Array<SettingControl> = [
@@ -50,11 +42,11 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     label: 'Color',
     widget: 'segmented',
     options: THEME_LIGHTNESS_PREFERENCES.map(option => ({ value: option.id, label: option.label })),
-    read: state => state.theme.preference,
+    read: settings => settings.lightness,
     write: value => {
       setThemeLightnessPreference(value as ThemeLightnessPreference);
     },
-    defaultValue: DEFAULT_THEME.preference,
+    defaultValue: DEFAULT_SETTINGS.lightness,
   },
   {
     id: 'hue',
@@ -63,20 +55,20 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     label: '',
     widget: 'swatches',
     options: THEME_COLORS.map(entry => ({ value: entry.id, label: entry.label })),
-    read: state => state.theme.color,
+    read: settings => settings.color,
     write: value => {
       setThemeColor(value as ThemeColor);
     },
-    defaultValue: DEFAULT_THEME.color,
+    defaultValue: DEFAULT_SETTINGS.color,
   },
   ...DISPLAY_SETTING_CONTROLS.map(control => ({
     id: control.key,
     label: control.label,
     widget: 'segmented' as const,
     options: control.options,
-    read: (state: SettingsState) => state.display[control.key],
+    read: (settings: Settings) => settings.display[control.key],
     write: (value: string | number) => {
-      setDisplaySetting(control.key, Number(value));
+      setDisplaySetting(control, Number(value));
     },
     defaultValue: DEFAULT_DISPLAY_SETTINGS[control.key],
   })),

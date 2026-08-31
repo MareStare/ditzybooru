@@ -1,6 +1,6 @@
 /**
  * The display settings: the six tier-1 custom properties a user is allowed to
- * change, plus their persistence.
+ * change.
  *
  * Shared rather than owned by the settings page, because the same six controls
  * are offered from the header's display menu - the settings page is just a
@@ -14,8 +14,8 @@
  * `calc()` that reads it and collapses the site's spacing rather than falling
  * back.
  *
- * Applied pre-paint by the inline script in `index.html`, which must be kept in
- * sync with {@link displaySettingProperties}.
+ * Persistence and the store live in `lib/settings` and `lib/settingsStore`;
+ * this module is only the descriptors and their validation.
  */
 
 export interface DisplaySettings {
@@ -119,110 +119,72 @@ export const DISPLAY_SETTING_CONTROLS: Array<DisplaySettingControl> = [
   },
 ];
 
-const STORAGE_KEY = 'display-settings';
-
 /**
- * The custom properties a set of settings writes on `:root`.
+ * The custom properties a set of settings writes on `<html>`.
+ *
+ * Only what differs from the defaults, so that a setting the user has never
+ * touched stays answerable by the stylesheet - which is how `--motion-scale`
+ * follows `prefers-reduced-motion` until someone overrides it by hand.
  *
  * `--border-force` is the outline setting again as a plain 0 or 1, because a
  * width is a length and CSS cannot turn one into the multiplier that panels
  * scale their compensating shadow by. See `Panel.css`.
  */
 export function displaySettingProperties(settings: DisplaySettings): Record<string, string> {
-  return {
-    '--radius-unit': `${settings.radius}px`,
-    '--border-width': `${settings.borderWidth}px`,
-    '--border-force': settings.borderWidth === 0 ? '0' : '1',
-    '--shadow-force': String(settings.shadow),
-    '--density': String(settings.density),
-    '--font-scale': String(settings.fontScale),
-    '--motion-scale': String(settings.motion),
-  };
+  const properties: Record<string, string> = {};
+  if (settings.radius !== DEFAULT_DISPLAY_SETTINGS.radius) {
+    properties['--radius-unit'] = `${settings.radius}px`;
+  }
+  if (settings.borderWidth !== DEFAULT_DISPLAY_SETTINGS.borderWidth) {
+    properties['--border-width'] = `${settings.borderWidth}px`;
+    properties['--border-force'] = settings.borderWidth === 0 ? '0' : '1';
+  }
+  if (settings.shadow !== DEFAULT_DISPLAY_SETTINGS.shadow) {
+    properties['--shadow-force'] = String(settings.shadow);
+  }
+  if (settings.density !== DEFAULT_DISPLAY_SETTINGS.density) {
+    properties['--density'] = String(settings.density);
+  }
+  if (settings.fontScale !== DEFAULT_DISPLAY_SETTINGS.fontScale) {
+    properties['--font-scale'] = String(settings.fontScale);
+  }
+  if (settings.motion !== DEFAULT_DISPLAY_SETTINGS.motion) {
+    properties['--motion-scale'] = String(settings.motion);
+  }
+  return properties;
 }
 
 /**
- * Clamps a stored value into the setting's range, so a hand-edited or stale entry
- * can never reach the stylesheet as something absurd.
+ * Clamps a stored value into the setting's range, so a hand-edited or stale
+ * cookie can never reach the stylesheet as something absurd.
  *
  * A value between two stops is kept rather than snapped: the menu only offers
- * the stops, but someone editing `display-settings` by hand to try `--radius-unit: 3px`
+ * the stops, but someone editing the cookie by hand to try `--radius-unit: 3px`
  * is doing something legitimate, and rounding it away under them would make the
  * setting look broken.
  */
-function sanitize(control: DisplaySettingControl, value: unknown): number {
+export function sanitizeDisplaySetting(control: DisplaySettingControl, value: unknown): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     return DEFAULT_DISPLAY_SETTINGS[control.key];
   }
   const stops = control.options.map(option => option.value);
   const clamped = Math.min(Math.max(...stops), Math.max(Math.min(...stops), value));
   // Guards against binary-float noise (0.30000000000000004) reaching the
-  // stylesheet and the stored JSON.
+  // stylesheet and the stored cookie.
   return Number(clamped.toFixed(2));
 }
 
-export function readDisplaySettings(): DisplaySettings {
-  if (typeof localStorage === 'undefined') {
-    return DEFAULT_DISPLAY_SETTINGS;
-  }
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (raw === null) {
+export function sanitizeDisplaySettings(stored: unknown): DisplaySettings {
+  if (typeof stored !== 'object' || stored === null) {
     return DEFAULT_DISPLAY_SETTINGS;
   }
 
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(raw);
-  } catch {
-    return DEFAULT_DISPLAY_SETTINGS;
-  }
-  if (typeof parsed !== 'object' || parsed === null) {
-    return DEFAULT_DISPLAY_SETTINGS;
-  }
-
-  const stored = parsed as Partial<Record<keyof DisplaySettings, unknown>>;
+  const values = stored as Partial<Record<keyof DisplaySettings, unknown>>;
   const settings = { ...DEFAULT_DISPLAY_SETTINGS };
   for (const control of DISPLAY_SETTING_CONTROLS) {
-    settings[control.key] = sanitize(control, stored[control.key]);
+    settings[control.key] = sanitizeDisplaySetting(control, values[control.key]);
   }
   return settings;
-}
-
-function writeDisplaySettings(settings: DisplaySettings): void {
-  const root = document.documentElement;
-  for (const [name, value] of Object.entries(displaySettingProperties(settings))) {
-    root.style.setProperty(name, value);
-  }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
-}
-
-// A module-level store rather than a context: the settings are a single global
-// setting, and both views of them (the header menu and the settings rail) can
-// be on screen at once.
-let current = readDisplaySettings();
-const listeners = new Set<() => void>();
-
-export function getDisplaySettings(): DisplaySettings {
-  return current;
-}
-
-export function subscribeDisplaySettings(listener: () => void): () => void {
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
-
-export function setDisplaySetting<TKey extends keyof DisplaySettings>(key: TKey, value: DisplaySettings[TKey]): void {
-  const control = DISPLAY_SETTING_CONTROLS.find(candidate => candidate.key === key);
-  current = { ...current, [key]: control ? sanitize(control, value) : value };
-  writeDisplaySettings(current);
-  for (const listener of listeners) listener();
-}
-
-export function resetDisplaySettings(): void {
-  current = DEFAULT_DISPLAY_SETTINGS;
-  writeDisplaySettings(current);
-  for (const listener of listeners) listener();
 }
 
 /** Whether anything has been changed from the shipped defaults. */

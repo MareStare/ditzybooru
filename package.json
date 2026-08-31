@@ -17,6 +17,7 @@
     "dev": "npm run dev --workspace frontend",
     "build": "npm run build --workspace frontend",
     "preview": "npm run preview --workspace frontend",
+    "deploy": "npm run deploy --workspace frontend",
     "type-check": "npm run type-check --workspace frontend",
     "test": "npm run test --workspace frontend",
     "check:a11y": "npm run check:a11y --workspace frontend",
@@ -31,5 +32,9 @@
     "eslint": "^10.5",
     "typescript-eslint": "^8.61",
     "@tanstack/eslint-config": "^0.4"
+  },
+  "allowScripts": {
+    "workerd@1.20260828.1": true,
+    "esbuild@0.28.1": true
   }
 }

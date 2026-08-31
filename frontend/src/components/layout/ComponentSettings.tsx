@@ -1,7 +1,8 @@
 import { Slider } from '#/components/ui/Slider';
 import { Segmented } from '#/components/ui/Segmented';
 import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { DEFAULT_COMPONENT_SETTINGS, setComponentSetting } from '#/lib/componentSettings';
+import { DEFAULT_COMPONENT_SETTINGS } from '#/lib/componentSettings';
+import { setComponentSetting } from '#/lib/settingsStore';
 import { cn } from '#/lib/utils';
 
 import type { ComponentSettingControl } from '#/lib/componentSettings';

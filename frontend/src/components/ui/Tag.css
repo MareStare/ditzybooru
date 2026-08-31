@@ -1,5 +1,5 @@
 /**
- * Tags.
+ * Tags. See `Tag.tsx`.
  *
  * Philomena declares three variables per category (colour, background, border)
  * for eleven categories, in both theme bases - 66 declarations. Here a category

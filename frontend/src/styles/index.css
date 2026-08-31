@@ -52,23 +52,20 @@
 
 /* ---- Primitives -------------------------------------------------------- */
 
-/* Those with no owning component yet stay here; when one grows a `.tsx`, its
- * rules move next to it - see `components/ui/Button.css`. */
-@import './components/field.css';
-@import './components/tag.css';
-@import './components/notice.css';
-@import './components/table.css';
-
 @import '../components/ui/Avatar.css';
 @import '../components/ui/Badge.css';
 @import '../components/ui/Button.css';
 @import '../components/ui/Dropdown.css';
+@import '../components/ui/Field.css';
 @import '../components/ui/Int.css';
 @import '../components/ui/Menu.css';
-@import '../components/ui/Slider.css';
+@import '../components/ui/Notice.css';
 @import '../components/ui/Pagination.css';
 @import '../components/ui/Panel.css';
 @import '../components/ui/Segmented.css';
+@import '../components/ui/Slider.css';
+@import '../components/ui/Table.css';
+@import '../components/ui/Tag.css';
 
 /* ---- Features ---------------------------------------------------------- */
 

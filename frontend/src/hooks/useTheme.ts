@@ -1,14 +1,8 @@
-import { useSyncExternalStore } from 'react';
+import { useSettings } from '#/hooks/useSettings';
+import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
 
-import { DEFAULT_THEME, getTheme, subscribeTheme } from '#/lib/theme';
-import type { ThemeState } from '#/lib/theme';
-
-/**
- * The current theme, kept in step across every component showing it. Writes go
- * through `setThemeColor` / `setThemeLightnessPreference` in `lib/theme`.
- */
-export function useTheme(): ThemeState {
-  // The server snapshot is the shipped default: there is no `<html>` to read
-  // during SSR, and the pre-paint script has not run yet either.
-  return useSyncExternalStore(subscribeTheme, getTheme, () => DEFAULT_THEME);
+/** The theme half of the settings. Writes go through `lib/settingsStore`. */
+export function useTheme(): { preference: ThemeLightnessPreference; color: ThemeColor } {
+  const { lightness, color } = useSettings();
+  return { preference: lightness, color };
 }

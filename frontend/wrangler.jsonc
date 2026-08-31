@@ -1,12 +1,12 @@
 {
   "name": "ditzybooru",
   "compatibility_date": "2026-07-19",
-  "assets": {
-    "directory": "./dist",
 
-    // The frontend is a SPA: only `/` and `/assets/*` exist as real files, so
-    // every other route (e.g. `/dev/styling`) must fall back to `index.html`
-    // instead of 404-ing on a hard navigation.
-    "not_found_handling": "single-page-application",
-  },
+  // TanStack Start's SSR handler reaches for `node:stream`.
+  "compatibility_flags": ["nodejs_compat"],
+
+  // Start owns the server entry: it builds the request handler, the route
+  // manifest and the asset links. `main` and `assets.directory` are wired to
+  // its build output by the Cloudflare plugin.
+  "main": "@tanstack/react-start/server-entry",
 }

@@ -134,7 +134,12 @@ export function MediaGrid({
   return (
     // Focusable, but not tabbable: a navigation that replaces the grid has
     // nowhere to put focus otherwise, and drops it to the document.
-    <Panel ref={ref} tabIndex={-1} className="media-grid-panel" style={{ viewTransitionName }}>
+    <Panel
+      ref={ref}
+      tabIndex={-1}
+      className={cn('media-grid-panel', viewTransitionName !== undefined && 'media-grid-panel--transitioning')}
+      style={{ viewTransitionName }}
+    >
       <Heading className="visually-hidden">{label}</Heading>
 
       <PanelHeader className="media-grid__title">

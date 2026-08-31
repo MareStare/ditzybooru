@@ -14,19 +14,11 @@
   --seed-blue-light: #2c74a9;
 }
 
-:root[data-theme-lightness='dark'][data-theme-color='blue'] {
-  --base: var(--seed-blue-dark);
-  --page: #141a24;
-  --ink: #ececee;
+:root[data-theme-color='blue'] {
+  --base: light-dark(var(--seed-blue-light), var(--seed-blue-dark));
+  --page: light-dark(var(--page-light), #141a24);
 
-  --link: #8cc4f0;
+  --link: light-dark(#1f6ea6, #8cc4f0);
   /* The signature purple hover. Do not normalize this to a blue. */
-  --link-hover: #b099dd;
-}
-
-:root[data-theme-lightness='light'][data-theme-color='blue'] {
-  --base: var(--seed-blue-light);
-
-  --link: #1f6ea6;
-  --link-hover: #9273d0;
+  --link-hover: light-dark(#9273d0, #b099dd);
 }

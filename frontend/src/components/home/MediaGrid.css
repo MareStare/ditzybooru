@@ -15,6 +15,16 @@
   scroll-margin-block-start: calc(var(--header-h) + var(--space-3));
 }
 
+/* `view-transition-name` makes the panel a stacking context, so the pagination
+ * jump panel's own `z-index` cannot reach past it and the block after would
+ * paint over it. Lifting the whole panel is what gets it over that block; only
+ * the named panel needs it, or a later unnamed one would win on source order.
+ * Stays under the sticky header, which sits at 40. */
+.media-grid-panel--transitioning {
+  position: relative;
+  z-index: 1;
+}
+
 /* The panel is focus target as well as scroll target, so a navigation that
  * replaces the grid has somewhere to hand focus. It is never tabbed to, so it
  * gets no ring. */
