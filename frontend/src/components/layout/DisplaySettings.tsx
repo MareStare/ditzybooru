@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
-import { Check, Monitor, Moon, Sun, UndoDot } from 'lucide-react';
+import { Check, Monitor, Moon, Sun, UndoDot, Zap, ZapOff } from 'lucide-react';
 
 import { Segmented } from '#/components/ui/Segmented';
 import { useSettings } from '#/hooks/useSettings';
@@ -12,6 +12,21 @@ import type { ThemeLightness, ThemeLightnessPreference } from '#/lib/theme';
 import type { SettingControl } from '#/lib/settingControls';
 
 const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
+const MOTION_ICONS: Record<string, typeof Sun> = { on: Zap, off: ZapOff, system: Monitor };
+
+/** An icon beside the stop's word, for the two controls whose stops are modes
+ *  rather than values and so have nothing to draw. */
+function iconStops(icons: Record<string, typeof Sun>) {
+  return (value: string | number, label: string) => {
+    const Icon = icons[String(value)] ?? Monitor;
+    return (
+      <>
+        <Icon size={14} />
+        {label}
+      </>
+    );
+  };
+}
 
 /**
  * What each stop looks like, drawn with the value it is offering, keyed by
@@ -24,18 +39,12 @@ const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, sy
  *
  * `Spacing` and `Shadows` are the exceptions. A shadow at menu scale is a few
  * pixels of blur that reads as a smudge, and spacing has nothing to be spaced
- * inside a 28px cell, so both keep their words.
+ * inside a 28px cell, so both keep their words. `Color` and `Animations` offer
+ * modes rather than values, so they get an icon instead of a preview.
  */
 const PREVIEWS: Record<string, (value: string | number, label: string) => ReactNode> = {
-  lightness: (value, label) => {
-    const Icon = LIGHTNESS_ICONS[String(value)] ?? Sun;
-    return (
-      <>
-        <Icon size={14} />
-        {label}
-      </>
-    );
-  },
+  lightness: iconStops(LIGHTNESS_ICONS),
+  motion: iconStops(MOTION_ICONS),
   radius: value => (
     <span
       className="display-setting-preview display-setting-preview--corner"
@@ -126,8 +135,8 @@ function useOnScreenLightness(preference: ThemeLightnessPreference): ThemeLightn
 }
 
 /**
- * Every display control the site has: the theme's lightness and hue, then
- * the six layout settings. Shared by the header's display menu and the
+ * Every display control the site has: the theme's lightness and hue, the five
+ * layout settings, then animations. Shared by the header's display menu and the
  * display settings page's rail - both render this; neither owns the state.
  *
  * There is no per-control code here: the list comes from `SETTING_CONTROLS`,

@@ -1,8 +1,8 @@
 /**
- * The display settings: the six tier-1 custom properties a user is allowed to
- * change.
+ * The display settings: the five tier-1 custom properties a user is allowed to
+ * change as numbers.
  *
- * Shared rather than owned by the settings page, because the same six controls
+ * Shared rather than owned by the settings page, because the same controls
  * are offered from the header's display menu - the settings page is just a
  * second view onto them. State lives in this module rather than in either
  * component so the two stay in step while both are mounted, which they are on
@@ -24,7 +24,6 @@ export interface DisplaySettings {
   shadow: number;
   density: number;
   fontScale: number;
-  motion: number;
 }
 
 export const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
@@ -35,7 +34,6 @@ export const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
   shadow: 1,
   density: 1,
   fontScale: 1,
-  motion: 1,
 };
 
 export interface DisplaySettingOption {
@@ -109,22 +107,13 @@ export const DISPLAY_SETTING_CONTROLS: Array<DisplaySettingControl> = [
       { value: 1.25, label: 'Huge' },
     ],
   },
-  {
-    key: 'motion',
-    label: 'Animations',
-    options: [
-      { value: 0, label: 'Off' },
-      { value: 1, label: 'On' },
-    ],
-  },
 ];
 
 /**
  * The custom properties a set of settings writes on `<html>`.
  *
  * Only what differs from the defaults, so that a setting the user has never
- * touched stays answerable by the stylesheet - which is how `--motion-scale`
- * follows `prefers-reduced-motion` until someone overrides it by hand.
+ * touched is left to the stylesheet's own `:root` value.
  *
  * `--border-force` is the outline setting again as a plain 0 or 1, because a
  * width is a length and CSS cannot turn one into the multiplier that panels
@@ -147,9 +136,6 @@ export function displaySettingProperties(settings: DisplaySettings): Record<stri
   }
   if (settings.fontScale !== DEFAULT_DISPLAY_SETTINGS.fontScale) {
     properties['--font-scale'] = String(settings.fontScale);
-  }
-  if (settings.motion !== DEFAULT_DISPLAY_SETTINGS.motion) {
-    properties['--motion-scale'] = String(settings.motion);
   }
   return properties;
 }

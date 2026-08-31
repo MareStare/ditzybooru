@@ -52,6 +52,8 @@
   --corner-shape: round;
 }
 
+/* The `system` stop of the Animations setting. An explicit On or Off writes
+ * `--motion-scale` inline on `<html>`, which outranks this. */
 @media (prefers-reduced-motion: reduce) {
   :root {
     --motion-scale: 0;

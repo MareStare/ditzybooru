@@ -1,8 +1,15 @@
 import { THEME_COLORS, THEME_LIGHTNESS_PREFERENCES } from '#/lib/theme';
 import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
 import { DEFAULT_SETTINGS } from '#/lib/settings';
-import { setDisplaySetting, setThemeColor, setThemeLightnessPreference } from '#/lib/settingsStore';
+import { MOTION_PREFERENCES } from '#/lib/motion';
+import {
+  setDisplaySetting,
+  setMotionPreference,
+  setThemeColor,
+  setThemeLightnessPreference,
+} from '#/lib/settingsStore';
 
+import type { MotionPreference } from '#/lib/motion';
 import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
 import type { Settings } from '#/lib/settings';
 
@@ -72,4 +79,15 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     },
     defaultValue: DEFAULT_DISPLAY_SETTINGS[control.key],
   })),
+  {
+    id: 'motion',
+    label: 'Animations',
+    widget: 'segmented',
+    options: MOTION_PREFERENCES.map(option => ({ value: option.id, label: option.label })),
+    read: settings => settings.motion,
+    write: value => {
+      setMotionPreference(value as MotionPreference);
+    },
+    defaultValue: DEFAULT_SETTINGS.motion,
+  },
 ];

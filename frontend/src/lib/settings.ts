@@ -11,7 +11,7 @@
  * stays small - it rides on every same-origin request, `/assets/*` included.
  *
  * What is NOT here: anything the browser can answer on its own. `system`
- * lightness and untouched motion are absences, left to `prefers-color-scheme`
+ * lightness and `system` motion are absences, left to `prefers-color-scheme`
  * and `prefers-reduced-motion` in the stylesheet.
  */
 
@@ -26,12 +26,15 @@ import {
 import type { ComponentSettings, MediaFit } from '#/lib/componentSettings';
 import { DEFAULT_DISPLAY_SETTINGS, displaySettingProperties, sanitizeDisplaySettings } from '#/lib/displaySettings';
 import type { DisplaySettings } from '#/lib/displaySettings';
+import { DEFAULT_MOTION_PREFERENCE, motionProperties } from '#/lib/motion';
+import type { MotionPreference } from '#/lib/motion';
 import { DEFAULT_THEME_COLOR, DEFAULT_THEME_LIGHTNESS_PREFERENCE, THEME_COLORS } from '#/lib/theme';
 import type { ThemeColor, ThemeLightness, ThemeLightnessPreference } from '#/lib/theme';
 
 export interface Settings {
   lightness: ThemeLightnessPreference;
   color: ThemeColor;
+  motion: MotionPreference;
   display: DisplaySettings;
   components: ComponentSettings;
 }
@@ -39,6 +42,7 @@ export interface Settings {
 export const DEFAULT_SETTINGS: Settings = {
   lightness: DEFAULT_THEME_LIGHTNESS_PREFERENCE,
   color: DEFAULT_THEME_COLOR,
+  motion: DEFAULT_MOTION_PREFERENCE,
   display: DEFAULT_DISPLAY_SETTINGS,
   components: DEFAULT_COMPONENT_SETTINGS,
 };
@@ -65,7 +69,7 @@ export interface SettingsAttributes {
  * chosen anything.
  */
 export function settingsAttributes(settings: Settings): SettingsAttributes {
-  const style = displaySettingProperties(settings.display);
+  const style = { ...displaySettingProperties(settings.display), ...motionProperties(settings.motion) };
 
   return {
     ...(settings.lightness === 'system' ? {} : { 'data-theme-lightness': settings.lightness }),
@@ -77,6 +81,10 @@ export function settingsAttributes(settings: Settings): SettingsAttributes {
 
 function isThemeLightnessPreference(value: unknown): value is ThemeLightnessPreference {
   return value === 'light' || value === 'dark' || value === 'system';
+}
+
+function isMotionPreference(value: unknown): value is MotionPreference {
+  return value === 'on' || value === 'off' || value === 'system';
 }
 
 function isThemeColor(value: unknown): value is ThemeColor {
@@ -104,6 +112,7 @@ export function parseSettings(raw: string | undefined): Settings {
   return {
     lightness: isThemeLightnessPreference(stored.lightness) ? stored.lightness : DEFAULT_SETTINGS.lightness,
     color: isThemeColor(stored.color) ? stored.color : DEFAULT_SETTINGS.color,
+    motion: isMotionPreference(stored.motion) ? stored.motion : DEFAULT_SETTINGS.motion,
     display: sanitizeDisplaySettings(stored.display),
     components: sanitizeComponentSettings(stored.components),
   };
@@ -122,6 +131,7 @@ function settingsPayload(settings: Settings): Record<string, unknown> {
   return {
     ...(settings.lightness === DEFAULT_SETTINGS.lightness ? {} : { lightness: settings.lightness }),
     ...(settings.color === DEFAULT_SETTINGS.color ? {} : { color: settings.color }),
+    ...(settings.motion === DEFAULT_SETTINGS.motion ? {} : { motion: settings.motion }),
     ...(Object.keys(display).length === 0 ? {} : { display }),
     ...(Object.keys(components).length === 0 ? {} : { components }),
   };

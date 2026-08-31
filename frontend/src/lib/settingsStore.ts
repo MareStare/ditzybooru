@@ -17,6 +17,7 @@ import { displaySettingsAreDefault, sanitizeDisplaySetting } from '#/lib/display
 import type { DisplaySettingControl } from '#/lib/displaySettings';
 import { DEFAULT_SETTINGS, readSettings, writeSettingsCookie } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';
+import type { MotionPreference } from '#/lib/motion';
 import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
 
 let current: Settings = DEFAULT_SETTINGS;
@@ -53,6 +54,10 @@ export function setThemeColor(color: ThemeColor): void {
   updateSettings(settings => ({ ...settings, color }));
 }
 
+export function setMotionPreference(motion: MotionPreference): void {
+  updateSettings(settings => ({ ...settings, motion }));
+}
+
 export function setDisplaySetting(control: DisplaySettingControl, value: unknown): void {
   updateSettings(settings => ({
     ...settings,
@@ -81,6 +86,7 @@ export function settingsAreDefault(settings: Settings): boolean {
   return (
     settings.lightness === DEFAULT_SETTINGS.lightness &&
     settings.color === DEFAULT_SETTINGS.color &&
+    settings.motion === DEFAULT_SETTINGS.motion &&
     displaySettingsAreDefault(settings.display) &&
     componentSettingsAreDefault(settings.components)
   );

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ReactNode } from 'react';
+import type { ReactNode, Ref } from 'react';
 import { Link } from '@tanstack/react-router';
 import { MonitorCog, SlidersHorizontal } from 'lucide-react';
 
@@ -69,6 +69,8 @@ interface MediaGridProps {
   viewTransitionName?: string;
   /** Set to {@link SEARCH_RESULTS_ID} on the grid the pagination scrolls to. */
   id?: string;
+  /** The panel itself, for a page that has to move focus into the grid. */
+  ref?: Ref<HTMLElement>;
 }
 
 /**
@@ -119,6 +121,7 @@ export function MediaGrid({
   paging,
   viewTransitionName,
   id,
+  ref,
 }: MediaGridProps) {
   const [ownPage, setOwnPage] = useState(1);
   const { mediaPerPage } = useComponentSettings();
@@ -139,9 +142,11 @@ export function MediaGrid({
   const Heading = `h${headingLevel}` as const;
 
   return (
-    // Focusable, but not tabbable: a load that lands on `#search-results` hands
-    // focus here rather than dropping it to the document.
+    // Focusable, but not tabbable. A document load on `#search-results` puts
+    // focus here on its own; a client-side navigation does not, which is what
+    // the search route's effect is for.
     <Panel
+      ref={ref}
       id={id}
       tabIndex={-1}
       className={cn('media-grid-panel', viewTransitionName !== undefined && 'media-grid-panel--transitioning')}
