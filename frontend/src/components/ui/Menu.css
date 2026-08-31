@@ -11,7 +11,7 @@
   border: var(--border);
   border-radius: var(--radius-md);
   corner-shape: var(--corner-shape);
-  background-color: color-mix(in oklab, var(--surface), #fff 5%);
+  background-color: var(--surface-raised);
   box-shadow:
     0 12px 32px color-mix(in oklab, var(--shadow-color) calc(30% * var(--shadow-force)), transparent),
     var(--edge-highlight);

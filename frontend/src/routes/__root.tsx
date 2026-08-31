@@ -63,10 +63,14 @@ function RootComponent() {
  * calls `useSettings`. */
 function Document() {
   const settings = useSettings();
+  const colorScheme = settings.lightness === 'system' ? 'light dark' : settings.lightness;
 
   return (
     <html lang="en" {...settingsAttributes(settings)}>
       <head>
+        {/* The UA paints its canvas and native controls before the stylesheet
+            lands, so this cannot live only in `_polarity.css`. */}
+        <meta name="color-scheme" content={colorScheme} />
         <HeadContent />
       </head>
       {/* Some browser extensions (e.g. Grammarly) inject new attributes into

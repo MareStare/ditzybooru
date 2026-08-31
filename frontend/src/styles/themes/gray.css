@@ -17,7 +17,7 @@
 
 :root[data-theme-color='gray'] {
   --base: light-dark(var(--seed-gray-light), var(--seed-gray-dark));
-  --page: light-dark(var(--page-light), #0c0c0c);
+  --page: light-dark(var(--page-light), #121212);
 
   --link: light-dark(#31667f, #c3d6e3);
   --link-hover: light-dark(#9273d0, #b099dd);

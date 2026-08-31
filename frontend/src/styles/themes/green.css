@@ -15,6 +15,6 @@
   --base: light-dark(var(--seed-green-light), var(--seed-green-dark));
   --page: light-dark(var(--page-light), #091a11);
 
-  --link: light-dark(#04641f, #3ee08a);
+  --link: light-dark(#04641f, #7bd69d);
   --link-hover: light-dark(#13bb16, #b099dd);
 }
