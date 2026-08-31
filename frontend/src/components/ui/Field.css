@@ -1,7 +1,3 @@
-/**
- * Form controls. See `Field.tsx`.
- */
-
 .field {
   inline-size: 100%;
   min-block-size: calc(36px * var(--density));

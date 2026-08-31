@@ -1,6 +1,6 @@
 /**
- * Notices and the site-notice strip. See `Notice.tsx`. Same one-input contract
- * as buttons: a variant sets `--notice-seed`.
+ * Notices and the site-notice strip. Same one-input contract as buttons: a
+ * variant sets `--notice-seed`.
  */
 
 .notice {
