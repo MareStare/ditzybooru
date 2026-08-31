@@ -41,7 +41,6 @@
 
     border: var(--border);
     border-radius: var(--radius-lg);
-    corner-shape: var(--corner-shape);
     box-shadow: var(--shadow-sm);
   }
 }
@@ -140,7 +139,6 @@
   min-inline-size: 0;
   border: var(--border-width) solid var(--border-color-subtle);
   border-radius: var(--radius-lg);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-sunken);
 }
 

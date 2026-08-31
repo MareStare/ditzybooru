@@ -24,7 +24,6 @@
 
   border: var(--border-width) solid color-mix(in oklab, var(--btn-color), var(--lift) 22%);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--btn-color);
   box-shadow: var(--edge-highlight);
 

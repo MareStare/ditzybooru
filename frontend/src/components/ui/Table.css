@@ -41,5 +41,4 @@
 .table-scroll {
   overflow-x: auto;
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
 }

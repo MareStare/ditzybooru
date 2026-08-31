@@ -12,7 +12,6 @@
   overflow: hidden;
   border-end-start-radius: var(--radius-inner, 0px);
   border-end-end-radius: var(--radius-inner, 0px);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-sunken);
 }
 
@@ -86,7 +85,6 @@
   padding: var(--space-0-5) var(--space-1-5);
 
   border-radius: var(--radius-xs);
-  corner-shape: var(--corner-shape);
   background-color: color-mix(in oklab, #000 70%, transparent);
 
   color: #fff;

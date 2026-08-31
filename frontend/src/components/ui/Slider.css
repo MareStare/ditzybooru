@@ -31,7 +31,6 @@
 
   border: var(--border-width) solid transparent;
   border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
   background-color: transparent;
 
   color: var(--text-color);

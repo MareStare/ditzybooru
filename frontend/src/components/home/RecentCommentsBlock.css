@@ -10,7 +10,6 @@
   inline-size: 40px;
   block-size: 40px;
   border-radius: var(--radius-sm);
-  corner-shape: var(--corner-shape);
   object-fit: cover;
 }
 

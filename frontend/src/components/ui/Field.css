@@ -5,7 +5,6 @@
 
   border: var(--border-width) solid var(--border-color-input);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-sunken);
 
   color: var(--text-color);

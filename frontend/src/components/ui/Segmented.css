@@ -12,7 +12,6 @@
   padding: 2px;
   border: var(--border-width) solid var(--border-color);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-sunken);
 }
 
@@ -24,7 +23,6 @@
   inline-size: calc((100% - 4px) / var(--segment-count));
 
   border-radius: max(0px, calc(var(--radius-md) - 2px));
-  corner-shape: var(--corner-shape);
   background-color: var(--surface-selected);
   box-shadow: var(--shadow-sm);
 

@@ -15,7 +15,6 @@
 
   border: var(--border-width) solid var(--surface-media);
   border-radius: var(--radius-md);
-  corner-shape: var(--corner-shape);
   background-color: var(--surface);
 
   transition:
@@ -53,7 +52,6 @@
 
   border-start-start-radius: var(--radius-inner);
   border-start-end-radius: var(--radius-inner);
-  corner-shape: var(--corner-shape);
   border-block-end: var(--border-width) solid var(--surface-media);
   background-color: color-mix(in oklab, var(--surface-panel-header), var(--surface) 50%);
   font-size: var(--text-xs);
