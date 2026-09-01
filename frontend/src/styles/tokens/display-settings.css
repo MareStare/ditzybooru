@@ -38,12 +38,21 @@
   /* Spacing multiplier: 0.85 compact / 1 cozy / 1.15 comfortable. */
   --density: 1;
 
-  /* Type. The families are inputs like any other setting, not derived values. */
-  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  /* Type. Fredoka carries body copy and display alike; `--font-display` stays
+   * a separate token so headings can be split onto another face without every
+   * component that names one changing. Input fields take `--font-mono` - see
+   * `Field.css` - so a tag query lines up character by character. */
+  --font-sans: 'Fredoka Variable', system-ui, sans-serif;
+  --font-display: var(--font-sans);
   --font-mono: ui-monospace, 'Droid Sans Mono', menlo, monospace;
 
   /* Type size multiplier. */
   --font-scale: 1;
+
+  /* How far the emphasis tiers sit above `--weight-normal`. 0 flattens every
+   * tier onto normal; 2 is the top of the setting's range and reaches 700,
+   * which is where Fredoka's weight axis ends. */
+  --weight-boost: 1;
 
   /* Animation speed multiplier. 0 disables transitions. */
   --motion-scale: 1;

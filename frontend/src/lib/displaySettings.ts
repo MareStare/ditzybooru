@@ -24,6 +24,7 @@ export interface DisplaySettings {
   shadow: number;
   density: number;
   fontScale: number;
+  weightBoost: number;
 }
 
 export const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
@@ -34,12 +35,14 @@ export const DEFAULT_DISPLAY_SETTINGS: DisplaySettings = {
   shadow: 1,
   density: 1,
   fontScale: 1,
+  weightBoost: 1,
 };
 
-export interface DisplaySettingOption {
-  value: number;
-  /** The accessible name, and the visible one where no preview is drawn. */
-  label: string;
+/** A continuous setting, for the one question that has no natural stops. */
+export interface DisplaySettingRange {
+  min: number;
+  max: number;
+  step: number;
 }
 
 export interface DisplaySettingControl {
@@ -47,66 +50,26 @@ export interface DisplaySettingControl {
   /** Plain-English name. Deliberately not the custom property it writes: the
    *  people this menu is for do not think in `--border-width`. */
   label: string;
-  options: Array<DisplaySettingOption>;
+  range: DisplaySettingRange;
 }
 
 /**
- * Three or four named stops per setting, not a continuous slider.
+ * One continuous range per setting rather than named stops.
  *
- * A slider offers a precision nobody wants from a settings menu - the question
- * is "rounded or square", not "which of 17 pixel values" - and it cannot be
- * previewed, because there is no set of positions to draw. Discrete stops can
- * show the reader the actual corner, line weight or letter they are choosing.
- * Every value in between is still reachable by editing the stored
- * `display-settings` entry, which is where that precision belongs.
+ * Stops were the original design, on the grounds that the question is "rounded
+ * or square" rather than "which of 17 pixel values". That holds for a reader
+ * picking a look, but not for one correcting a specific discomfort - text a
+ * shade too large, a face a shade too heavy - which is what these are actually
+ * used for. A range answers both, and the reset button beside each one carries
+ * the default that the stops used to mark.
  */
 export const DISPLAY_SETTING_CONTROLS: Array<DisplaySettingControl> = [
-  {
-    key: 'radius',
-    label: 'Corners',
-    options: [
-      { value: 0, label: 'Square' },
-      { value: 6, label: 'Rounded' },
-      { value: 12, label: 'Very rounded' },
-    ],
-  },
-  {
-    key: 'borderWidth',
-    label: 'Outlines',
-    options: [
-      { value: 0, label: 'None' },
-      { value: 1, label: 'Thin' },
-      { value: 2, label: 'Thick' },
-    ],
-  },
-  {
-    key: 'shadow',
-    label: 'Shadows',
-    options: [
-      { value: 0, label: 'Flat' },
-      { value: 1, label: 'Soft' },
-      { value: 1.6, label: 'Deep' },
-    ],
-  },
-  {
-    key: 'density',
-    label: 'Spacing',
-    options: [
-      { value: 0.85, label: 'Compact' },
-      { value: 1, label: 'Cozy' },
-      { value: 1.15, label: 'Roomy' },
-    ],
-  },
-  {
-    key: 'fontScale',
-    label: 'Text size',
-    options: [
-      { value: 0.9, label: 'Small' },
-      { value: 1, label: 'Medium' },
-      { value: 1.1, label: 'Large' },
-      { value: 1.25, label: 'Huge' },
-    ],
-  },
+  { key: 'radius', label: 'Corners', range: { min: 0, max: 24, step: 1 } },
+  { key: 'borderWidth', label: 'Outlines', range: { min: 0, max: 4, step: 1 } },
+  { key: 'shadow', label: 'Shadows', range: { min: 0, max: 2, step: 0.1 } },
+  { key: 'density', label: 'Spacing', range: { min: 0.7, max: 1.4, step: 0.05 } },
+  { key: 'fontScale', label: 'Font size', range: { min: 0.8, max: 1.5, step: 0.05 } },
+  { key: 'weightBoost', label: 'Font weight', range: { min: 0, max: 2, step: 0.05 } },
 ];
 
 /**
@@ -137,6 +100,9 @@ export function displaySettingProperties(settings: DisplaySettings): Record<stri
   if (settings.fontScale !== DEFAULT_DISPLAY_SETTINGS.fontScale) {
     properties['--font-scale'] = String(settings.fontScale);
   }
+  if (settings.weightBoost !== DEFAULT_DISPLAY_SETTINGS.weightBoost) {
+    properties['--weight-boost'] = String(settings.weightBoost);
+  }
   return properties;
 }
 
@@ -144,17 +110,16 @@ export function displaySettingProperties(settings: DisplaySettings): Record<stri
  * Clamps a stored value into the setting's range, so a hand-edited or stale
  * cookie can never reach the stylesheet as something absurd.
  *
- * A value between two stops is kept rather than snapped: the menu only offers
- * the stops, but someone editing the cookie by hand to try `--radius-unit: 3px`
- * is doing something legitimate, and rounding it away under them would make the
- * setting look broken.
+ * The value is clamped rather than snapped to the step: a cookie written by an
+ * older build, or edited by hand, is honoured wherever it lands inside the
+ * range.
  */
 export function sanitizeDisplaySetting(control: DisplaySettingControl, value: unknown): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) {
     return DEFAULT_DISPLAY_SETTINGS[control.key];
   }
-  const stops = control.options.map(option => option.value);
-  const clamped = Math.min(Math.max(...stops), Math.max(Math.min(...stops), value));
+  const { min, max } = control.range;
+  const clamped = Math.min(max, Math.max(min, value));
   // Guards against binary-float noise (0.30000000000000004) reaching the
   // stylesheet and the stored cookie.
   return Number(clamped.toFixed(2));

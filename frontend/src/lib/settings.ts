@@ -69,7 +69,10 @@ export interface SettingsAttributes {
  * chosen anything.
  */
 export function settingsAttributes(settings: Settings): SettingsAttributes {
-  const style = { ...displaySettingProperties(settings.display), ...motionProperties(settings.motion) };
+  const style = {
+    ...displaySettingProperties(settings.display),
+    ...motionProperties(settings.motion),
+  };
 
   return {
     ...(settings.lightness === 'system' ? {} : { 'data-theme-lightness': settings.lightness }),

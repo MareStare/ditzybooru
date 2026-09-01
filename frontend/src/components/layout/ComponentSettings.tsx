@@ -1,7 +1,8 @@
-import { Slider } from '#/components/ui/Slider';
+import { ResetButton } from '#/components/ui/ResetButton';
+import { Slider, sliderReadoutWidth } from '#/components/ui/Slider';
 import { Segmented } from '#/components/ui/Segmented';
 import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { DEFAULT_COMPONENT_SETTINGS } from '#/lib/componentSettings';
+import { componentSettingDefaultLabel, DEFAULT_COMPONENT_SETTINGS } from '#/lib/componentSettings';
 import { setComponentSetting } from '#/lib/settingsStore';
 import { cn } from '#/lib/utils';
 
@@ -26,33 +27,51 @@ export function ComponentSettingsControls({
 }) {
   const settings = useComponentSettings();
 
+  // One width across the group, so a card's sliders line up the way the rail's
+  // do. `Math.max` of nothing is only reached when there is no slider to size.
+  const readoutWidth = Math.max(
+    ...controls.flatMap(control =>
+      control.widget === 'slider' ? [sliderReadoutWidth(control.min, control.max, control.step)] : [],
+    ),
+  );
+
   return (
     <div className={cn('component-settings', inline && 'component-settings--inline')}>
       {controls.map(control => (
         <div className="component-setting" key={control.key}>
           <span className="component-setting__label">{control.label}</span>
-          {control.widget === 'slider' ? (
-            <Slider
-              label={control.label}
-              value={Number(settings[control.key])}
-              min={control.min}
-              max={control.max}
-              step={control.step}
-              onChange={value => {
-                setComponentSetting(control, value);
+          <div className="component-setting__control">
+            {control.widget === 'slider' ? (
+              <Slider
+                label={control.label}
+                value={Number(settings[control.key])}
+                min={control.min}
+                max={control.max}
+                step={control.step}
+                readoutWidth={readoutWidth}
+                onChange={value => {
+                  setComponentSetting(control, value);
+                }}
+              />
+            ) : (
+              <Segmented
+                label={control.label}
+                value={settings[control.key]}
+                options={control.options}
+                onChange={value => {
+                  setComponentSetting(control, value);
+                }}
+              />
+            )}
+            <ResetButton
+              setting={control.label}
+              defaultLabel={componentSettingDefaultLabel(control)}
+              disabled={settings[control.key] === DEFAULT_COMPONENT_SETTINGS[control.key]}
+              onReset={() => {
+                setComponentSetting(control, DEFAULT_COMPONENT_SETTINGS[control.key]);
               }}
             />
-          ) : (
-            <Segmented
-              label={control.label}
-              value={settings[control.key]}
-              defaultValue={DEFAULT_COMPONENT_SETTINGS[control.key]}
-              options={control.options}
-              onChange={value => {
-                setComponentSetting(control, value);
-              }}
-            />
-          )}
+          </div>
         </div>
       ))}
     </div>

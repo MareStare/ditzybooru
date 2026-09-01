@@ -28,6 +28,46 @@
   margin-block-end: var(--space-3);
 }
 
+/* The fill each swatch previews, stated here rather than inline so LightningCSS
+ * lowers `light-dark()` against `color-scheme`. A visitor who has chosen no
+ * polarity then gets the right seed at first paint, server render included -
+ * JS never learns which polarity is on screen. */
+.theme-swatch[data-swatch-color='red'] {
+  --swatch: light-dark(var(--seed-red-light), var(--seed-red-dark));
+}
+
+.theme-swatch[data-swatch-color='orange'] {
+  --swatch: light-dark(var(--seed-orange-light), var(--seed-orange-dark));
+}
+
+.theme-swatch[data-swatch-color='yellow'] {
+  --swatch: light-dark(var(--seed-yellow-light), var(--seed-yellow-dark));
+}
+
+.theme-swatch[data-swatch-color='green'] {
+  --swatch: light-dark(var(--seed-green-light), var(--seed-green-dark));
+}
+
+.theme-swatch[data-swatch-color='teal'] {
+  --swatch: light-dark(var(--seed-teal-light), var(--seed-teal-dark));
+}
+
+.theme-swatch[data-swatch-color='blue'] {
+  --swatch: light-dark(var(--seed-blue-light), var(--seed-blue-dark));
+}
+
+.theme-swatch[data-swatch-color='purple'] {
+  --swatch: light-dark(var(--seed-purple-light), var(--seed-purple-dark));
+}
+
+.theme-swatch[data-swatch-color='pink'] {
+  --swatch: light-dark(var(--seed-pink-light), var(--seed-pink-dark));
+}
+
+.theme-swatch[data-swatch-color='gray'] {
+  --swatch: light-dark(var(--seed-gray-light), var(--seed-gray-dark));
+}
+
 /* One solid fill: the swatch answers "what color is this theme", and the
  * polarity it would be shown in is the setting directly above it. */
 .theme-swatch {

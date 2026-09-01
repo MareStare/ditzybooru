@@ -14,9 +14,11 @@
 }
 
 .slider__range {
-  /* Sized rather than stretched: the hosts are a menu and a card title bar,
-   * neither of which gives the control a width to fill. */
-  inline-size: 9rem;
+  /* Takes whatever the row has left, down to a 9rem basis. A host that hands
+   * the slider a width - the settings rail, a card - gets a track that fills
+   * it; one that sizes to content, like a card's title bar, measures the basis
+   * instead of collapsing the track to nothing. */
+  flex: 1 1 9rem;
   min-inline-size: 0;
   margin: 0;
   block-size: 20px;
@@ -26,7 +28,10 @@
  * into the field it has been all along. A permanently bordered box next to a
  * slider reads as a second, unrelated setting. */
 .slider__value {
-  inline-size: 3.5ch;
+  /* Wide enough for the widest value the range can reach, so the readout never
+   * changes size - see `readoutWidth`. Border-box, so the padding and the
+   * border it grows on hover have to be added back. */
+  inline-size: calc(var(--readout-width) * 1ch + 2 * (var(--space-1) + var(--border-width)));
   padding: 2px var(--space-1);
 
   border: var(--border-width) solid transparent;

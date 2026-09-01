@@ -8,7 +8,10 @@
   background-color: var(--surface-sunken);
 
   color: var(--text-color);
+  /* `font: inherit` first, because a form control does not inherit type at all
+   * by default; the family override then applies on top of it. */
   font: inherit;
+  font-family: var(--font-mono);
   font-size: var(--text-sm);
 
   transition:
@@ -99,18 +102,32 @@ textarea.field {
   --switch-w: 2.6rem;
   --switch-h: 1.4rem;
 
+  /* On or off as a 0/1 toggle rather than as a `:checked` block of its own.
+   * `:checked` is a DOM property JS owns, so it says nothing before hydration;
+   * a caller that knows the state from a media query instead - see
+   * `DisplaySettings.css` - sets this and gets the whole look without any of it
+   * being written twice. */
+  --switch-on: 0;
+
   position: relative;
   flex-shrink: 0;
   inline-size: var(--switch-w);
   block-size: var(--switch-h);
   margin: 0;
 
-  border: var(--border-width) solid var(--border-color-input);
+  border: var(--border-width) solid
+    color-mix(in oklab, var(--brand) calc(var(--switch-on) * 100%), var(--border-color-input));
   border-radius: var(--radius-full);
-  background-color: var(--surface-sunken);
+  background-color: color-mix(in oklab, var(--brand) calc(var(--switch-on) * 100%), var(--surface-sunken));
   appearance: none;
 
-  transition: background-color var(--duration) var(--ease-out);
+  transition:
+    background-color var(--duration) var(--ease-out),
+    border-color var(--duration) var(--ease-out);
+}
+
+.switch:checked {
+  --switch-on: 1;
 }
 
 .switch::after {
@@ -121,19 +138,9 @@ textarea.field {
   inline-size: calc(var(--switch-h) - 6px);
   block-size: calc(var(--switch-h) - 6px);
   border-radius: var(--radius-full);
-  background-color: var(--text-muted);
-  translate: 0 -50%;
+  background-color: color-mix(in oklab, var(--text-on-nav) calc(var(--switch-on) * 100%), var(--text-muted));
+  translate: calc(var(--switch-on) * (var(--switch-w) - var(--switch-h))) -50%;
   transition:
     translate var(--duration) var(--ease-out),
     background-color var(--duration) var(--ease-out);
-}
-
-.switch:checked {
-  border-color: var(--brand);
-  background-color: var(--brand);
-}
-
-.switch:checked::after {
-  background-color: var(--text-on-nav);
-  translate: calc(var(--switch-w) - var(--switch-h)) -50%;
 }
