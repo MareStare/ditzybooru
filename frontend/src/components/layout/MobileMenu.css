@@ -169,10 +169,6 @@
   font-variant-numeric: tabular-nums;
 }
 
-.drawer__link--live svg {
-  color: var(--vote-up);
-}
-
 .drawer__link--donate svg {
   color: var(--vote-up);
 }

@@ -35,33 +35,25 @@
   color: var(--text-color);
 }
 
-.nav-sub__spacer {
-  flex: 1;
+/* The live-channel count riding beside the Streams label. Inline rather than a
+ * corner badge like the notifications bell: this link has a label to sit next
+ * to, so the count reads as part of it. */
+.nav-link__count {
+  padding-inline: var(--space-1-5);
+  border-radius: var(--radius-full);
+  background-color: var(--surface-sunken);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
 }
 
-.nav-sub__actions {
-  display: flex;
-  align-items: center;
-  gap: var(--space-1);
-}
-
-/* Donate reads as an affordance rather than another section link - the one
- * tinted item in a row of neutral ones. */
-.nav-link--donate {
-  border: var(--border-width) solid color-mix(in oklab, var(--vote-up), var(--surface) 62%);
-  /* Barely tinted. At 86% the wash drifted far enough per theme that
-   * `--text-color` on it landed under 4.5:1 in the warmer bases; at 94% the
-   * pair reduces to text-on-surface, which is verified everywhere. */
-  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 94%);
-  /* The plain body text, not the vote-up green: on a green-tinted wash the
-   * green itself lands between 4.0 and 4.5 depending on the theme's base. The
-   * border and background already say "this is the donate link". */
-  color: var(--text-color);
-}
-
-.nav-bar--sub .nav-link--donate:hover {
-  background-color: color-mix(in oklab, var(--vote-up), var(--surface) 86%);
-  color: var(--text-color);
+/* Donate is an ordinary link in the row; only its glyph carries the vote-up
+ * green, which is enough to pick it out of a run of neutral ones.
+ * `--score-positive` rather than the raw palette value: the raw green bottoms
+ * out as a 14px glyph on the darker themes. The label keeps the row's text
+ * color, where the green lands under 4.5:1 in the warmer bases. */
+.nav-bar--sub .nav-link--donate svg {
+  color: var(--score-positive);
 }
 
 /* The strip's contents move into the mobile drawer below this. */

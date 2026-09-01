@@ -1,7 +1,19 @@
+import {
+  ALargeSmall,
+  AlignVerticalSpaceAround,
+  Bold,
+  Layers,
+  Palette,
+  SquareDashed,
+  SquareRoundCorner,
+  SunMoon,
+  Zap,
+} from 'lucide-react';
+
 import { unwrap } from '#/lib/assertions';
 import { THEME_COLORS, THEME_LIGHTNESS_OPTIONS } from '#/lib/theme';
 import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
-import type { DisplaySettingRange } from '#/lib/displaySettings';
+import type { DisplaySettingRange, DisplaySettings } from '#/lib/displaySettings';
 import { DEFAULT_SETTINGS } from '#/lib/settings';
 import {
   setDisplaySetting,
@@ -10,6 +22,7 @@ import {
   setThemeLightnessPreference,
 } from '#/lib/settingsStore';
 
+import type { LucideIcon } from 'lucide-react';
 import type { MotionPreference } from '#/lib/motion';
 import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
 import type { Settings } from '#/lib/settings';
@@ -33,6 +46,10 @@ export interface SettingControl {
   id: string;
   /** Plain-English name. Deliberately not the custom property it writes. */
   label: string;
+  /** Drawn beside the label. Decoration for the reader scanning the rail for
+   *  one setting - the label is what names the control, so the icon is
+   *  `aria-hidden` where it is rendered. */
+  icon: LucideIcon;
   /** Which widget draws the stops. */
   widget: 'segmented' | 'swatches' | 'slider' | 'switch';
   options: Array<{ value: string | number; label: string }>;
@@ -51,10 +68,22 @@ export interface SettingControl {
   defaultLabel: string | undefined;
 }
 
+/** Keyed by `DisplaySettingControl.key`, so a new slider setting fails to
+ *  compile until it has one. */
+const DISPLAY_SETTING_ICONS: Record<keyof DisplaySettings, LucideIcon> = {
+  radius: SquareRoundCorner,
+  borderWidth: SquareDashed,
+  shadow: Layers,
+  density: AlignVerticalSpaceAround,
+  fontScale: ALargeSmall,
+  weightBoost: Bold,
+};
+
 export const SETTING_CONTROLS: Array<SettingControl> = [
   {
     id: 'lightness',
-    label: 'Color',
+    label: 'Lightness',
+    icon: SunMoon,
     widget: 'segmented',
     options: THEME_LIGHTNESS_OPTIONS.map(option => ({ value: option.id, label: option.label })),
     read: settings => settings.lightness,
@@ -67,6 +96,7 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
   {
     id: 'hue',
     label: 'Accent',
+    icon: Palette,
     widget: 'swatches',
     options: THEME_COLORS.map(entry => ({ value: entry.id, label: entry.label })),
     read: settings => settings.color,
@@ -79,6 +109,7 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
   ...DISPLAY_SETTING_CONTROLS.map(control => ({
     id: control.key,
     label: control.label,
+    icon: DISPLAY_SETTING_ICONS[control.key],
     widget: 'slider' as const,
     options: [],
     range: control.range,
@@ -92,6 +123,7 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
   {
     id: 'motion',
     label: 'Animations',
+    icon: Zap,
     widget: 'switch',
     options: [
       { value: 'on', label: 'On' },

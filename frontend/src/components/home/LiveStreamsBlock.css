@@ -40,3 +40,9 @@
   font-size: var(--text-xs);
   font-variant-numeric: tabular-nums;
 }
+
+/* See the "LIVE" badge in `LiveStreamsBlock.tsx`: the gap Fredoka does not
+ * leave between "I" and "V". */
+.channel-row__kern {
+  margin-inline-start: 0.06em;
+}

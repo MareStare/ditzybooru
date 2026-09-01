@@ -78,6 +78,14 @@
    * clear 4.5:1 through the glass; the rest gain margin from the same figure. */
   --w-nav-darken: light-dark(20%, 0%);
 
+  /* Chrome desaturation. Mixing toward a mid gray of roughly the same oklab
+   * lightness as the darkest theme bases drops chroma without moving L, so no
+   * text tier loses contrast - APCA on the panel strip stays at Lc 87+ in every
+   * dark theme. Light themes need none of it: their chrome is already 80% of
+   * the way to a near-white page, so there is barely any chroma left to pull. */
+  --chrome-neutral: #505050;
+  --w-desaturate: light-dark(0%, 40%);
+
   --w-elev: light-dark(2%, 6%);
   --w-raised: light-dark(0%, 5%);
   --w-recess: light-dark(60%, 55%);

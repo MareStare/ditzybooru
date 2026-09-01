@@ -128,7 +128,10 @@ export function DisplaySettingsControls() {
 
         return (
           <div className={cn('display-setting', pending && 'display-setting--pending')} key={control.id}>
-            <span className="display-setting__label">{control.label}</span>
+            <span className="display-setting__label">
+              <control.icon size={14} aria-hidden />
+              {control.label}
+            </span>
 
             <div className="display-setting__control">
               {control.widget === 'swatches' ? (

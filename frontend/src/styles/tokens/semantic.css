@@ -43,17 +43,24 @@
 
   /* ---- Chrome -------------------------------------------------------- */
 
+  /* The base color with its chroma pulled back toward neutral. Derpibooru's
+   * dark themes do the same thing by hand: the header is `#284371`, but the
+   * block header below it is `#2e3a52` - same hue, two thirds the saturation.
+   * The nav keeps the full base; panels and borders take this. */
+  --chrome-base: color-mix(in oklab, var(--base), var(--chrome-neutral) var(--w-desaturate));
+
   /* The nav bar is the theme's base color, darkened by whatever headroom the
-   * polarity needs for the text on it; everything else in this group is that
+   * polarity needs for the text on it; the sub-bar and the field below are that
    * base color fading toward the page. */
   --surface-nav: color-mix(in oklab, var(--base), #000 var(--w-nav-darken));
   --surface-nav-field: color-mix(in oklab, var(--base), var(--nav-field-target) var(--w-field));
   --surface-nav-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
 
-  /* Panel ("block" in Philomena) title strips. */
-  --surface-panel: var(--surface);
-  --surface-panel-header: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
-  --surface-panel-header-sub: color-mix(in oklab, var(--base), var(--page) var(--w-chrome-deep));
+  /* Panel ("block" in Philomena) title strips. Derived from `--chrome-base`
+   * rather than `--base`: the nav bar carries the theme's full saturation, and
+   * everything below it is the same hue with the chroma pulled back. */
+  --surface-panel-header: color-mix(in oklab, var(--chrome-base), var(--page) var(--w-chrome));
+  --surface-panel-header-sub: color-mix(in oklab, var(--chrome-base), var(--page) var(--w-chrome-deep));
 
   /* The selected tab, lifted OUT of the title strip rather than sunk into the
    * panel below it. Mixing toward literal white in both polarities, because a
@@ -90,7 +97,7 @@
 
   /* ---- Borders ------------------------------------------------------- */
 
-  --border-color: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
+  --border-color: color-mix(in oklab, var(--chrome-base), var(--page) var(--w-chrome));
   --border-color-subtle: color-mix(in oklab, var(--border-color), var(--surface) 45%);
   --border-color-strong: color-mix(in oklab, var(--border-color), var(--lift) 18%);
   --border-color-input: color-mix(in oklab, var(--border-color), var(--lift) 10%);

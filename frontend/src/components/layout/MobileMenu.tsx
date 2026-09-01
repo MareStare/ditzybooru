@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from '@tanstack/react-router';
-import { ChevronDown, Heart, LogIn, Mail, Radio, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
+import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { primaryNav } from '#/lib/mock/site';
-import { currentUser, liveChannelCount } from '#/lib/mock/data';
+import { currentUser } from '#/lib/mock/data';
 import { DisplaySettingsControls } from './DisplaySettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
@@ -70,16 +70,6 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
           </Link>
           <Link
             // @ts-expect-error TODO: route not built yet
-            to="/channels"
-            className="drawer__link drawer__link--live"
-            onClick={onClose}
-          >
-            <Radio size={16} />
-            Live
-            <span className="drawer__count">{liveChannelCount}</span>
-          </Link>
-          <Link
-            // @ts-expect-error TODO: route not built yet
             to="/pages/donations"
             className="drawer__link drawer__link--donate"
             onClick={onClose}
@@ -102,7 +92,9 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
           {primaryNav.map(item => (
             <div key={item.href} className="drawer__group">
               <Link to={item.href} className="drawer__link drawer__link--section" onClick={onClose}>
+                <item.icon size={16} />
                 {item.label}
+                {item.counter === undefined ? null : <span className="drawer__count">{item.counter}</span>}
               </Link>
               {item.children?.map(child => (
                 <Link key={child.href} to={child.href} className="drawer__link drawer__link--child" onClick={onClose}>
