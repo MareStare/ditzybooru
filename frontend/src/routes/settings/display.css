@@ -15,7 +15,7 @@
 
 @media (--xl) {
   .display-page {
-    grid-template-columns: 16rem minmax(0, 1fr);
+    grid-template-columns: 24rem minmax(0, 1fr);
   }
 }
 

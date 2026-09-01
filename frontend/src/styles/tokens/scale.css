@@ -60,20 +60,34 @@
   /* Anchored to a 16px root - see the note in `base.css` about why the root's
    * own font size must stay there. `--text-sm` is the workhorse: body copy, nav
    * links, buttons, table cells and menu items all sit on it, so it is the one
-   * value that decides whether the site reads dense or cramped. */
-  --text-2xs: calc(0.6875rem * var(--font-scale));
-  --text-xs: calc(0.75rem * var(--font-scale));
-  --text-sm: calc(0.875rem * var(--font-scale));
-  --text-md: calc(0.9375rem * var(--font-scale));
-  --text-lg: calc(1rem * var(--font-scale));
-  --text-xl: calc(1.25rem * var(--font-scale));
+   * value that decides whether the site reads dense or cramped.
+   *
+   * Every step is one pixel up from the ladder this site launched on, because
+   * Fredoka's x-height is 0.49em against Inter's 0.55em - the same nominal size
+   * reads about a tenth smaller in it. Whole pixels rather than an exact 1.12
+   * correction: the remaining few percent are not worth taking every size in
+   * the system off the pixel grid for. */
+  --text-2xs: calc(0.75rem * var(--font-scale));
+  --text-xs: calc(0.8125rem * var(--font-scale));
+  --text-sm: calc(0.9375rem * var(--font-scale));
+  --text-md: calc(1rem * var(--font-scale));
+  --text-lg: calc(1.0625rem * var(--font-scale));
+  --text-xl: calc(1.3125rem * var(--font-scale));
 
   --leading-tight: 1.2;
 
+  /* Normal is the anchor and never moves - it is body copy, and a value under
+   * 400 costs legibility for nothing. Every tier above it is its distance from
+   * 400 scaled by `--weight-boost`, so one knob widens or flattens the whole
+   * emphasis range without touching the text most of the page is set in.
+   *
+   * The spreads below are sized so the setting's maximum of 2 lands `--weight-
+   * bold` on 700, the top of Fredoka's weight axis. Changing a spread means
+   * rechecking that maximum in `lib/displaySettings.ts`. */
   --weight-normal: 400;
-  --weight-medium: 500;
-  --weight-semibold: 600;
-  --weight-bold: 700;
+  --weight-medium: calc(400 + 50 * var(--weight-boost));
+  --weight-semibold: calc(400 + 100 * var(--weight-boost));
+  --weight-bold: calc(400 + 150 * var(--weight-boost));
 
   --tracking-tight: -0.011em;
   --tracking-wide: 0.02em;

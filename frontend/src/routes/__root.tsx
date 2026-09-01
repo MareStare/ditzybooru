@@ -6,7 +6,7 @@ import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
 import { SsrSettingsContext, useSettings } from '#/hooks/useSettings';
 import { readSettings, settingsAttributes } from '#/lib/settings';
-import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import fredokaLatin from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
 
 // The one stylesheet entry point: `styles/index.css` imports every other CSS
 // file in the project, so the whole site compiles to a single stylesheet. Start
@@ -26,7 +26,7 @@ export const Route = createRootRoute({
       // required even same-origin, or the preload is discarded and refetched.
       {
         rel: 'preload',
-        href: interLatin,
+        href: fredokaLatin,
         as: 'font',
         type: 'font/woff2',
         crossOrigin: 'anonymous',

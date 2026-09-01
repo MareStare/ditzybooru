@@ -22,7 +22,7 @@
  *    to restyle a plain `<h2>` without a fight.
  */
 
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/fredoka';
 
 /* Definitions only - substituted into the `@media` rules below at build time,
  * and contributing no CSS of its own. */
@@ -62,6 +62,7 @@
 @import '../components/ui/Notice.css';
 @import '../components/ui/Pagination.css';
 @import '../components/ui/Panel.css';
+@import '../components/ui/ResetButton.css';
 @import '../components/ui/Segmented.css';
 @import '../components/ui/Slider.css';
 @import '../components/ui/Table.css';

@@ -1,7 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react';
 
-import { UndoDot } from 'lucide-react';
-
 import { cn } from '#/lib/utils';
 
 import type { ClassValue } from '#/lib/utils';
@@ -22,9 +20,10 @@ interface SegmentedProps<TValue> {
   options: Array<SegmentedOption<TValue>>;
   value: TValue;
   onChange: (value: TValue) => void;
-  /** Marked with a dot while the selection is something else, so "how do I put
-   *  this back" is answerable without hunting for a reset button. */
-  defaultValue?: TValue;
+  /** The value is not knowable yet - see `DisplaySettings`. The thumb's index
+   *  is left unset so a stylesheet can place it, and no stop claims to be the
+   *  chosen one until it is. */
+  pending?: boolean;
   className?: ClassValue;
 }
 
@@ -39,15 +38,14 @@ export function Segmented<TValue extends string | number>({
   options,
   value,
   onChange,
-  defaultValue,
+  pending = false,
   className,
 }: SegmentedProps<TValue>) {
   const index = options.findIndex(option => option.value === value);
-  const changed = defaultValue !== undefined && defaultValue !== value;
 
   return (
     <div
-      className={cn('segmented', className)}
+      className={cn('segmented', pending && 'segmented--pending', className)}
       role="radiogroup"
       aria-label={label}
       style={{ '--segment-count': options.length } as CSSProperties}
@@ -55,21 +53,22 @@ export function Segmented<TValue extends string | number>({
       {/* Hidden from the thumb's own index when nothing matches, so an
           out-of-range stored value parks it on the first stop rather than
           sliding it off the track. */}
-      <span className="segmented__thumb" style={{ '--segment-index': Math.max(index, 0) } as CSSProperties} />
+      <span
+        className="segmented__thumb"
+        style={pending ? undefined : ({ '--segment-index': Math.max(index, 0) } as CSSProperties)}
+      />
       {options.map(option => {
-        const isDefault = changed && option.value === defaultValue;
         // Always named explicitly: a stop showing only a preview has no text to
-        // be named by, and one that is the default has more to say than the
-        // text it does show. The description rides along in the name rather
-        // than in `title` alone, which assistive tech drops next to a label.
-        const name = isDefault ? `${option.label} (default)` : option.label;
-        const title = option.description === undefined ? name : `${name} - ${option.description}`;
+        // be named by. The description rides along in the name rather than in
+        // `title` alone, which assistive tech drops next to a label.
+        const title = option.description === undefined ? option.label : `${option.label} - ${option.description}`;
         return (
           <button
             key={String(option.value)}
             type="button"
             role="radio"
-            aria-checked={option.value === value}
+            aria-checked={!pending && option.value === value}
+            data-value={String(option.value)}
             title={title}
             aria-label={title}
             className="segmented__option"
@@ -77,7 +76,6 @@ export function Segmented<TValue extends string | number>({
               onChange(option.value);
             }}
           >
-            {isDefault ? <UndoDot className="segmented__default-mark" size={11} aria-hidden="true" /> : null}
             {option.preview ?? option.label}
           </button>
         );

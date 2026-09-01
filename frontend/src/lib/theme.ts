@@ -9,6 +9,10 @@
  * the server render the right theme for a first-time visitor without knowing
  * anything about their machine.
  *
+ * `system` is not a stop the picker offers. It is the default, and every
+ * setting reaches its default through the same reset button; the track shows
+ * whichever polarity `system` currently resolves to.
+ *
  * Persistence and the store live in `lib/settings` and `lib/settingsStore`.
  */
 
@@ -24,10 +28,11 @@ const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 export const DEFAULT_THEME_LIGHTNESS_PREFERENCE: ThemeLightnessPreference = 'system';
 export const DEFAULT_THEME_COLOR: ThemeColor = 'blue';
 
-export const THEME_LIGHTNESS_PREFERENCES: Array<{ id: ThemeLightnessPreference; label: string }> = [
+/** The stops the picker offers. `system` is deliberately absent: it is the
+ *  default, and the reset button beside the track is what returns to it. */
+export const THEME_LIGHTNESS_OPTIONS: Array<{ id: ThemeLightness; label: string }> = [
   { id: 'light', label: 'Light' },
   { id: 'dark', label: 'Dark' },
-  { id: 'system', label: 'System' },
 ];
 
 /** The selectable accent colors. Each has a theme file under `styles/themes/`
@@ -46,23 +51,42 @@ export const THEME_COLORS: Array<{ id: ThemeColor; label: string }> = [
 ];
 
 /**
- * What `system` currently resolves to. Client-only, and only ever needed by the
- * settings UI to label the `System` option - the stylesheet resolves it on its
- * own via `prefers-color-scheme`, so nothing about the page's appearance
- * depends on this.
+ * What `system` currently resolves to, as a store the settings UI subscribes
+ * to. Only the UI needs it, and only to show which stop is in force - the
+ * stylesheet resolves `prefers-color-scheme` on its own, so nothing about the
+ * page's appearance depends on this.
+ *
+ * A store rather than state seeded in an effect, because there is no honest
+ * value to seed it with: the server cannot know the answer, and a guess is a
+ * wrong stop drawn for one frame. Read through `useSyncExternalStore`, the
+ * server snapshot is `undefined` and the answer arrives with hydration.
  */
 export function resolveSystemLightness(): ThemeLightness {
   return window.matchMedia(DARK_SCHEME_QUERY).matches ? 'dark' : 'light';
 }
 
-/** Subscribes to OS light/dark changes, for the same labelling purpose. */
-export function onSystemLightnessChange(listener: (lightness: ThemeLightness) => void): () => void {
+/**
+ * The preference to store for a chosen stop.
+ *
+ * Choosing the stop that `system` already resolves to stores `system` rather
+ * than an explicit override, so light-then-dark on a dark machine lands back on
+ * the default rather than on a pinned value that merely looks like it. The
+ * alternative leaves a setting that is indistinguishable on screen but no
+ * longer follows the OS, with a reset button offering to undo something the
+ * reader cannot see.
+ *
+ * The trade is that the choice tracks the OS afterwards. That is the right way
+ * round: a reader who wants to pin a polarity is a reader whose OS is on the
+ * other one, and picking that stop does pin it.
+ */
+export function preferredLightness(lightness: ThemeLightnessPreference): ThemeLightnessPreference {
+  return lightness === resolveSystemLightness() ? 'system' : lightness;
+}
+
+export function subscribeSystemLightness(listener: () => void): () => void {
   const media = window.matchMedia(DARK_SCHEME_QUERY);
-  const handler = (event: MediaQueryListEvent) => {
-    listener(event.matches ? 'dark' : 'light');
-  };
-  media.addEventListener('change', handler);
+  media.addEventListener('change', listener);
   return () => {
-    media.removeEventListener('change', handler);
+    media.removeEventListener('change', listener);
   };
 }

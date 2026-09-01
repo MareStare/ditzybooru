@@ -1,183 +1,196 @@
-import { useEffect, useState } from 'react';
-import type { CSSProperties, ReactNode } from 'react';
-import { Check, Monitor, Moon, Sun, UndoDot, Zap, ZapOff } from 'lucide-react';
+import { useSyncExternalStore } from 'react';
+import type { ReactNode } from 'react';
+import { Check, Moon, Sun, UndoDot } from 'lucide-react';
 
+import { Switch } from '#/components/ui/Field';
+import { ResetButton } from '#/components/ui/ResetButton';
 import { Segmented } from '#/components/ui/Segmented';
+import { Slider, sliderReadoutWidth } from '#/components/ui/Slider';
 import { useSettings } from '#/hooks/useSettings';
 import { SETTING_CONTROLS } from '#/lib/settingControls';
-import { onSystemLightnessChange, resolveSystemLightness } from '#/lib/theme';
+import { cn } from '#/lib/utils';
+import { resolveSystemMotion, subscribeSystemMotion } from '#/lib/motion';
+import { resolveSystemLightness, subscribeSystemLightness } from '#/lib/theme';
 import { resetSettings, settingsAreDefault } from '#/lib/settingsStore';
 
-import type { ThemeLightness, ThemeLightnessPreference } from '#/lib/theme';
 import type { SettingControl } from '#/lib/settingControls';
 
-const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon, system: Monitor };
-const MOTION_ICONS: Record<string, typeof Sun> = { on: Zap, off: ZapOff, system: Monitor };
+const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon };
 
-/** An icon beside the stop's word, for the two controls whose stops are modes
+/* One width for every slider in the rail, so their tracks start and end at the
+ * same two positions. Corners needs two digits and Spacing needs four, and a
+ * column of tracks each a few characters longer than the last reads as a
+ * mistake rather than as a range that happens to be wider. */
+const READOUT_WIDTH = Math.max(
+  ...SETTING_CONTROLS.flatMap(control =>
+    control.range === undefined ? [] : [sliderReadoutWidth(control.range.min, control.range.max, control.range.step)],
+  ),
+);
+
+/** An icon beside the stop's word, for the one control whose stops are modes
  *  rather than values and so have nothing to draw. */
-function iconStops(icons: Record<string, typeof Sun>) {
-  return (value: string | number, label: string) => {
-    const Icon = icons[String(value)] ?? Monitor;
+const PREVIEWS: Record<string, (value: string | number, label: string) => ReactNode> = {
+  lightness: (value, label) => {
+    const Icon = LIGHTNESS_ICONS[String(value)] ?? Sun;
     return (
       <>
         <Icon size={14} />
         {label}
       </>
     );
-  };
-}
-
-/**
- * What each stop looks like, drawn with the value it is offering, keyed by
- * control id.
- *
- * The preview IS the setting applied to a shape: the corner stops are boxes at
- * that radius, the outline stops are boxes at that border width. That is worth
- * more than a word, because it answers the question the reader actually has -
- * "how round is 'Rounded'?" - which no label can.
- *
- * `Spacing` and `Shadows` are the exceptions. A shadow at menu scale is a few
- * pixels of blur that reads as a smudge, and spacing has nothing to be spaced
- * inside a 28px cell, so both keep their words. `Color` and `Animations` offer
- * modes rather than values, so they get an icon instead of a preview.
- */
-const PREVIEWS: Record<string, (value: string | number, label: string) => ReactNode> = {
-  lightness: iconStops(LIGHTNESS_ICONS),
-  motion: iconStops(MOTION_ICONS),
-  radius: value => (
-    <span
-      className="display-setting-preview display-setting-preview--corner"
-      style={{ '--preview-radius': `${value}px` } as CSSProperties}
-    />
-  ),
-  borderWidth: value => (
-    <span
-      className="display-setting-preview display-setting-preview--outline"
-      style={{ '--preview-width': `${value}px` } as CSSProperties}
-    />
-  ),
-  fontScale: value => (
-    <span
-      className="display-setting-preview display-setting-preview--text"
-      style={{ '--preview-scale': value } as CSSProperties}
-    >
-      Aa
-    </span>
-  ),
+  },
 };
 
 /** The nine hue swatches. A different widget from the segmented tracks, but the
- *  same descriptor drives it - including the default marker. */
-function Swatches({
-  control,
-  value,
-  lightness,
-}: {
-  control: SettingControl;
-  value: string | number;
-  lightness: ThemeLightness;
-}) {
+ *  same descriptor drives it. */
+function Swatches({ control, value }: { control: SettingControl; value: string | number }) {
   return (
     <div className="display-settings__hues">
-      {control.options.map(option => {
-        const active = option.value === value;
-        const isDefault = option.value === control.defaultValue;
-        return (
-          <button
-            key={String(option.value)}
-            type="button"
-            title={isDefault ? `${option.label} (default)` : option.label}
-            aria-label={isDefault ? `${option.label} (default)` : option.label}
-            aria-pressed={active}
-            className="theme-swatch"
-            // The seed for the polarity currently on screen, so the swatch shows
-            // the color as it would actually appear.
-            style={{ '--swatch': `var(--seed-${String(option.value)}-${lightness})` } as CSSProperties}
-            onClick={() => {
-              control.write(option.value);
-            }}
-          >
-            {active ? <Check size={16} /> : null}
-            {!active && isDefault && value !== control.defaultValue ? (
-              <UndoDot className="theme-swatch__default" size={13} aria-hidden="true" />
-            ) : null}
-          </button>
-        );
-      })}
+      {control.options.map(option => (
+        <button
+          key={String(option.value)}
+          type="button"
+          title={option.label}
+          aria-label={option.label}
+          aria-pressed={option.value === value}
+          className="theme-swatch"
+          // The fill is `ThemeMenu.css`'s to pick: it needs the seed for the
+          // polarity on screen, and only CSS knows that before hydration.
+          data-swatch-color={String(option.value)}
+          onClick={() => {
+            control.write(option.value);
+          }}
+        >
+          {option.value === value ? <Check size={16} /> : null}
+        </button>
+      ))}
     </div>
   );
 }
 
 /**
- * Which polarity is actually on screen, so a swatch can preview its color as it
- * would really appear.
+ * What the two `system` settings currently resolve to.
  *
- * Only the swatches need this. Everything else about the theme is settled by
- * the stylesheet, which resolves `system` through `prefers-color-scheme`
- * without asking anyone. Starting at the stored preference keeps the first
- * client render identical to the server's; the effect fills in what only the
- * browser knows.
+ * Both are `undefined` until hydration - only a browser can answer them - and
+ * that absence is what the widgets below read as `pending`. It does not mean
+ * nothing is drawn: `DisplaySettings.css` resolves the same two media queries
+ * and paints the right thumb, switch and word at first paint. What JS still
+ * owns is the part CSS cannot reach - `aria-checked`, the input's `checked`,
+ * and the reset button's tooltip - and those settle a frame later.
  */
-function useOnScreenLightness(preference: ThemeLightnessPreference): ThemeLightness {
-  const [lightness, setLightness] = useState<ThemeLightness>(preference === 'system' ? 'light' : preference);
-
-  useEffect(() => {
-    if (preference !== 'system') {
-      setLightness(preference);
-      return;
-    }
-    setLightness(resolveSystemLightness());
-    return onSystemLightnessChange(setLightness);
-  }, [preference]);
-
-  return lightness;
+function useSystemSettings() {
+  return {
+    lightness: useSyncExternalStore(subscribeSystemLightness, resolveSystemLightness, () => undefined),
+    motion: useSyncExternalStore(subscribeSystemMotion, resolveSystemMotion, () => undefined),
+  };
 }
 
 /**
- * Every display control the site has: the theme's lightness and hue, the five
+ * Every display control the site has: the theme's lightness and hue, the six
  * layout settings, then animations. Shared by the header's display menu and the
  * display settings page's rail - both render this; neither owns the state.
  *
  * There is no per-control code here: the list comes from `SETTING_CONTROLS`,
- * and the only thing this file decides is which widget draws a descriptor and
- * what a stop's preview looks like.
+ * and the only thing this file decides is which widget draws a descriptor, what
+ * a stop's preview looks like, and which two settings show a resolved `system`
+ * rather than their stored value.
  */
 export function DisplaySettingsControls() {
   const settings = useSettings();
-  const lightness = useOnScreenLightness(settings.lightness);
-  const isDefault = settingsAreDefault(settings);
+  const system = useSystemSettings();
+
+  // What `system` currently means, for the two settings whose default it is.
+  // Also what their reset button restores, which is not the same question: a
+  // reader who has pinned Light on a dark machine is shown Light and offered a
+  // reset to Dark.
+  const systemValue: Record<string, string | undefined> = {
+    lightness: system.lightness,
+    motion: system.motion === undefined ? undefined : system.motion ? 'on' : 'off',
+  };
+
+  // What is stored is what the reset button acts on; what is drawn is the
+  // stored value, or what `system` means where that is what was stored.
+  const onScreen: Record<string, string | undefined> = {
+    lightness: settings.lightness === 'system' ? systemValue.lightness : settings.lightness,
+    motion: settings.motion === 'system' ? systemValue.motion : settings.motion,
+  };
 
   return (
     <div className="display-settings">
       {SETTING_CONTROLS.map(control => {
-        const value = control.read(settings);
-        const preview = PREVIEWS[control.id];
+        const stored = control.read(settings);
+        const pending = control.id in onScreen && onScreen[control.id] === undefined;
+        const value = onScreen[control.id] ?? stored;
+        // A `system` default has no label of its own: what it restores to is
+        // whichever stop the OS currently picks.
+        const defaultLabel =
+          control.defaultLabel ?? control.options.find(option => option.value === systemValue[control.id])?.label;
 
         return (
-          <div className="display-setting" key={control.id}>
-            {control.label ? <span className="display-setting__label">{control.label}</span> : null}
-            {control.widget === 'swatches' ? (
-              <Swatches control={control} value={value} lightness={lightness} />
-            ) : (
-              <Segmented
-                label={control.label || control.id}
-                value={value}
-                defaultValue={control.defaultValue}
-                onChange={control.write}
-                options={control.options.map(option => ({
-                  ...option,
-                  preview: preview?.(option.value, option.label),
-                }))}
+          <div className={cn('display-setting', pending && 'display-setting--pending')} key={control.id}>
+            <span className="display-setting__label">{control.label}</span>
+
+            <div className="display-setting__control">
+              {control.widget === 'swatches' ? (
+                <Swatches control={control} value={value} />
+              ) : control.widget === 'switch' ? (
+                <Switch
+                  className="display-setting__switch"
+                  checked={value === 'on'}
+                  aria-label={control.label}
+                  onChange={event => {
+                    control.write(event.target.checked ? 'on' : 'off');
+                  }}
+                >
+                  {/* The word is the stylesheet's while pending, for the same
+                      reason the switch itself is. */}
+                  {pending ? null : value === 'on' ? 'On' : 'Off'}
+                </Switch>
+              ) : control.widget === 'slider' && control.range !== undefined ? (
+                <Slider
+                  label={control.label}
+                  value={Number(value)}
+                  min={control.range.min}
+                  max={control.range.max}
+                  step={control.range.step}
+                  readoutWidth={READOUT_WIDTH}
+                  onChange={control.write}
+                />
+              ) : (
+                <Segmented
+                  label={control.label}
+                  value={value}
+                  pending={pending}
+                  onChange={control.write}
+                  options={control.options.map(option => ({
+                    ...option,
+                    preview: PREVIEWS[control.id]?.(option.value, option.label),
+                  }))}
+                />
+              )}
+
+              <ResetButton
+                setting={control.label}
+                defaultLabel={defaultLabel}
+                fromSystem={control.defaultValue === 'system'}
+                disabled={stored === control.defaultValue}
+                onReset={() => {
+                  control.write(control.defaultValue);
+                }}
               />
-            )}
+            </div>
           </div>
         );
       })}
 
-      <button type="button" className="display-settings__reset" disabled={isDefault} onClick={resetSettings}>
+      <button
+        type="button"
+        className="display-settings__reset"
+        disabled={settingsAreDefault(settings)}
+        onClick={resetSettings}
+      >
         <UndoDot size={14} />
-        Reset to defaults
+        Reset all to defaults
       </button>
     </div>
   );

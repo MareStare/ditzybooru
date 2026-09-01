@@ -141,6 +141,15 @@ export function sanitizeComponentSettings(stored: unknown): ComponentSettings {
   return settings;
 }
 
+/** What a control's reset button names as the value it would restore. */
+export function componentSettingDefaultLabel(control: ComponentSettingControl): string {
+  const value = DEFAULT_COMPONENT_SETTINGS[control.key];
+  if (control.widget === 'slider') {
+    return String(value);
+  }
+  return control.options.find(option => option.value === value)?.label ?? String(value);
+}
+
 /** Whether anything has been changed from the shipped defaults. */
 export function componentSettingsAreDefault(settings: ComponentSettings): boolean {
   return ALL_CONTROLS.every(control => settings[control.key] === DEFAULT_COMPONENT_SETTINGS[control.key]);

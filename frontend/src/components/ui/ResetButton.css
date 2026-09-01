@@ -1,0 +1,36 @@
+/**
+ * The per-setting reset. Sized to sit on a label row without growing it, and
+ * borderless until hovered so a rail of them does not read as a column of
+ * buttons competing with the settings themselves.
+ */
+
+.reset-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  inline-size: 28px;
+  block-size: 28px;
+
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+
+  color: var(--text-subtle);
+  cursor: pointer;
+
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.reset-button:hover:not(:disabled) {
+  border-color: var(--border-color);
+  background-color: var(--surface-hover);
+  color: var(--text-color);
+}
+
+.reset-button:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}

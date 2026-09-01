@@ -1,7 +1,8 @@
-import { THEME_COLORS, THEME_LIGHTNESS_PREFERENCES } from '#/lib/theme';
+import { unwrap } from '#/lib/assertions';
+import { THEME_COLORS, THEME_LIGHTNESS_OPTIONS } from '#/lib/theme';
 import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
+import type { DisplaySettingRange } from '#/lib/displaySettings';
 import { DEFAULT_SETTINGS } from '#/lib/settings';
-import { MOTION_PREFERENCES } from '#/lib/motion';
 import {
   setDisplaySetting,
   setMotionPreference,
@@ -33,14 +34,21 @@ export interface SettingControl {
   /** Plain-English name. Deliberately not the custom property it writes. */
   label: string;
   /** Which widget draws the stops. */
-  widget: 'segmented' | 'swatches';
+  widget: 'segmented' | 'swatches' | 'slider' | 'switch';
   options: Array<{ value: string | number; label: string }>;
+  /** Set on slider controls only, and the range the slider spans. */
+  range?: DisplaySettingRange;
   read: (settings: Settings) => string | number;
   /* Takes the widened value the widget hands back. Each implementation narrows
    * it at the boundary, which is sound because the only values a widget can
    * produce are the ones in `options` directly above it. */
   write: (value: string | number) => void;
   defaultValue: string | number;
+  /** What the reset button names as the value it would restore. `undefined` for
+   *  the two settings whose default is `system`: what that restores to is the
+   *  OS's answer, which only a browser can give, so `DisplaySettings` fills it
+   *  in from the resolved value once it has one. */
+  defaultLabel: string | undefined;
 }
 
 export const SETTING_CONTROLS: Array<SettingControl> = [
@@ -48,18 +56,17 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     id: 'lightness',
     label: 'Color',
     widget: 'segmented',
-    options: THEME_LIGHTNESS_PREFERENCES.map(option => ({ value: option.id, label: option.label })),
+    options: THEME_LIGHTNESS_OPTIONS.map(option => ({ value: option.id, label: option.label })),
     read: settings => settings.lightness,
     write: value => {
       setThemeLightnessPreference(value as ThemeLightnessPreference);
     },
     defaultValue: DEFAULT_SETTINGS.lightness,
+    defaultLabel: undefined,
   },
   {
     id: 'hue',
-    // No label of its own: it sits directly under the lightness control and the
-    // two are one decision made in two parts.
-    label: '',
+    label: 'Accent',
     widget: 'swatches',
     options: THEME_COLORS.map(entry => ({ value: entry.id, label: entry.label })),
     read: settings => settings.color,
@@ -67,27 +74,34 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
       setThemeColor(value as ThemeColor);
     },
     defaultValue: DEFAULT_SETTINGS.color,
+    defaultLabel: unwrap(THEME_COLORS.find(entry => entry.id === DEFAULT_SETTINGS.color)).label,
   },
   ...DISPLAY_SETTING_CONTROLS.map(control => ({
     id: control.key,
     label: control.label,
-    widget: 'segmented' as const,
-    options: control.options,
+    widget: 'slider' as const,
+    options: [],
+    range: control.range,
     read: (settings: Settings) => settings.display[control.key],
     write: (value: string | number) => {
       setDisplaySetting(control, Number(value));
     },
     defaultValue: DEFAULT_DISPLAY_SETTINGS[control.key],
+    defaultLabel: String(DEFAULT_DISPLAY_SETTINGS[control.key]),
   })),
   {
     id: 'motion',
     label: 'Animations',
-    widget: 'segmented',
-    options: MOTION_PREFERENCES.map(option => ({ value: option.id, label: option.label })),
+    widget: 'switch',
+    options: [
+      { value: 'on', label: 'On' },
+      { value: 'off', label: 'Off' },
+    ],
     read: settings => settings.motion,
     write: value => {
       setMotionPreference(value as MotionPreference);
     },
     defaultValue: DEFAULT_SETTINGS.motion,
+    defaultLabel: undefined,
   },
 ];
