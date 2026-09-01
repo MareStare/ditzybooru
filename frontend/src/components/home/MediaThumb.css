@@ -12,7 +12,6 @@
   overflow: hidden;
   border-end-start-radius: var(--radius-inner, 0px);
   border-end-end-radius: var(--radius-inner, 0px);
-  background-color: var(--surface-sunken);
 }
 
 /* The justified layout sizes the card by the image's own ratio, so the thumb

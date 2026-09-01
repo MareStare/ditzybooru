@@ -3,12 +3,19 @@
  * Mirrors the structure Philomena hard-codes in its layout templates.
  */
 
+import { GalleryVerticalEnd, MessageSquare, MessagesSquare, Palette, Radio, Tags } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
+
+import { liveChannelCount } from '#/lib/mock/data';
+
 interface NavLink {
   label: string;
   href: string;
 }
 
 export interface NavItem extends NavLink {
+  /** Rendered before the label in the section strip and the mobile drawer. */
+  icon: LucideIcon;
   /** Dropdown entries revealed on hover/focus. */
   children?: Array<NavLink>;
   /** A live counter rendered next to the label (e.g. live channel count). */
@@ -16,11 +23,10 @@ export interface NavItem extends NavLink {
 }
 
 export const primaryNav: Array<NavItem> = [
-  { label: 'Images', href: '/images', children: [{ label: 'Random', href: '/images/random' }] },
-  { label: 'Activity', href: '/activity', children: [{ label: 'Comments', href: '/comments' }] },
   {
     label: 'Forums',
     href: '/forums',
+    icon: MessagesSquare,
     children: [
       { label: 'Art Chat', href: '/forums/art' },
       { label: 'General Discussion', href: '/forums/dis' },
@@ -30,9 +36,11 @@ export const primaryNav: Array<NavItem> = [
       { label: 'Post Search', href: '/posts' },
     ],
   },
-  { label: 'Tags', href: '/tags', children: [{ label: 'Tag Changes', href: '/tag_changes' }] },
-  { label: 'Galleries', href: '/galleries' },
-  { label: 'Commissions', href: '/commissions' },
+  { label: 'Comments', href: '/comments', icon: MessageSquare },
+  { label: 'Tags', href: '/tags', icon: Tags, children: [{ label: 'Tag Changes', href: '/tag_changes' }] },
+  { label: 'Galleries', href: '/galleries', icon: GalleryVerticalEnd },
+  { label: 'Streams', href: '/channels', icon: Radio, counter: liveChannelCount },
+  { label: 'Commissions', href: '/commissions', icon: Palette },
 ];
 
 interface FooterColumn {

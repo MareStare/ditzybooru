@@ -20,7 +20,6 @@
     var(--border-color) min(100%, var(--shadow-force) * 100%)
   );
   border-radius: var(--radius-md);
-  background-color: var(--surface-panel);
   box-shadow:
     0 4px 12px
       color-mix(in oklab, var(--shadow-color) calc(24% * var(--shadow-force) * (1 - var(--border-force))), transparent),

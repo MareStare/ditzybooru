@@ -102,17 +102,16 @@
   letter-spacing: var(--tracking-tight);
 }
 
-/* Three columns rather than a flex row, so the search field is centred on the
- * viewport instead of on the space left between the brand and the account
- * controls - which are different widths, and change width with the signed-in
- * state. The side tracks never drop below their content, so a narrow bar takes
- * the width out of the field rather than clipping the brand.
+/* Three columns rather than a flex row, so the search field takes every pixel
+ * the brand and the account controls leave behind. The side tracks sit at
+ * their content width, so a narrow bar takes the width out of the field rather
+ * than clipping the brand.
  *
  * Only the primary bar: the section strip below it (`nav-bar--sub`) is a plain
  * row of links. */
 .nav-bar--primary {
   display: grid;
-  grid-template-columns: minmax(max-content, 1fr) minmax(0, 52rem) minmax(max-content, 1fr);
+  grid-template-columns: max-content minmax(0, 1fr) max-content;
 }
 
 .nav__start {

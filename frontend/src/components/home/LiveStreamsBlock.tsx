@@ -28,7 +28,13 @@ function ChannelStrip({ channel }: { channel: LiveStreamChannel }) {
             </span>
             <Badge variant="success">
               <BadgeDot />
-              LIVE
+              {/* Fredoka fits a bare stem so tight that the "IV" reads as one
+                  letter. Only this pair needs the air, so it is split here
+                  rather than tracked out across every badge on the site. The
+                  wrapper keeps the halves out of the badge's flex `gap`. */}
+              <span>
+                LI<span className="channel-row__kern">VE</span>
+              </span>
             </Badge>
           </span>
         ) : (

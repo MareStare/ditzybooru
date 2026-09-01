@@ -15,7 +15,6 @@
 
   border: var(--border-width) solid var(--surface-media);
   border-radius: var(--radius-md);
-  background-color: var(--surface);
 
   transition:
     border-color var(--duration) var(--ease-out),
