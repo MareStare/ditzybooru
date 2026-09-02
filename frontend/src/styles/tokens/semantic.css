@@ -97,6 +97,28 @@
 
   /* ---- Borders ------------------------------------------------------- */
 
+  /* ---- Section tones --------------------------------------------------
+   *
+   * Every section of the site owns a hue, and that hue is carried by its glyph
+   * in the section strip - the same job the eleven tag category colours already
+   * do for tags, and the reason a reader can find Streams without reading.
+   *
+   * Every seed is a colour Derpibooru already ships: five of its tag category
+   * hues plus `$commission-category-color`, the one section colour Philomena
+   * actually has. Nothing here is invented - a parallel set tuned to look nicer
+   * beside them would read as a second, competing system rather than as an
+   * extension of the one this fandom already knows. */
+  --tone-comments: #6f66d6;
+  --tone-forums: #4aaabf;
+  --tone-tags: #4aa158;
+  --tone-galleries: #b157b7;
+  --tone-streams: #d45460;
+  --tone-commissions: #e07b27;
+
+  /* Whatever owns the section sets the seed; `--tone` below derives from it.
+   * Defaults to the theme accent, for anything that names no section. */
+  --tone-seed: var(--base);
+
   --border-color: color-mix(in oklab, var(--chrome-base), var(--page) var(--w-chrome));
   --border-color-subtle: color-mix(in oklab, var(--border-color), var(--surface) 45%);
   --border-color-strong: color-mix(in oklab, var(--border-color), var(--lift) 18%);
@@ -126,4 +148,25 @@
   --fave-bg: color-mix(in oklab, var(--fave) 25%, transparent);
   --vote-up-bg: color-mix(in oklab, var(--vote-up) 25%, transparent);
   --vote-down-bg: color-mix(in oklab, var(--vote-down) 25%, transparent);
+}
+
+/* `--tone` has to be declared on every element rather than on `:root`.
+ *
+ * A custom property's `var()` references are substituted where the property is
+ * DECLARED, and the result is what inherits - so a `--tone` written once on the
+ * root bakes in the root's seed, and an element that later sets its own
+ * `--tone-seed` inherits a `--tone` that has already forgotten it. Redeclaring
+ * it here makes every element re-substitute against the seed it actually has.
+ *
+ * `.tag` solves the same problem with one selector, because there the element
+ * that sets the seed is the element that paints it. */
+* {
+  /* Chroma pulled back, then lightness lifted until the glyph clears AA on the
+   * strip - the same two corrections `--tag-color` and `--score-positive` make,
+   * against the same neutral. */
+  --tone: color-mix(
+    in oklab,
+    color-mix(in oklab, var(--tone-seed), var(--chrome-neutral) var(--w-tone-mute)),
+    var(--lift) var(--w-tone-lift)
+  );
 }

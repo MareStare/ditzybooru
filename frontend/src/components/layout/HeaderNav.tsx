@@ -4,6 +4,7 @@ import { ChevronDown, Heart, Mail } from 'lucide-react';
 import { Dropdown } from '#/components/ui/Dropdown';
 import { Menu, MenuLink } from '#/components/ui/Menu';
 import { primaryNav } from '#/lib/mock/site';
+import { toneStyle } from '#/lib/tone';
 import type { NavItem } from '#/lib/mock/site';
 
 function NavEntry({ item }: { item: NavItem }) {
@@ -13,8 +14,8 @@ function NavEntry({ item }: { item: NavItem }) {
 
   if (children.length === 0) {
     return (
-      <Link to={item.href} className="nav-link">
-        <Icon size={14} />
+      <Link to={item.href} className="nav-link" style={toneStyle(item.tone)}>
+        <Icon className="nav-link__icon" size={14} />
         {item.label}
         {counter}
       </Link>
@@ -24,8 +25,8 @@ function NavEntry({ item }: { item: NavItem }) {
   return (
     <Dropdown
       trigger={
-        <Link to={item.href} className="nav-link">
-          <Icon size={14} />
+        <Link to={item.href} className="nav-link" style={toneStyle(item.tone)}>
+          <Icon className="nav-link__icon" size={14} />
           {item.label}
           {counter}
           <ChevronDown className="dropdown__chevron" size={14} />

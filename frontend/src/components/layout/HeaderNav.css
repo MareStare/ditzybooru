@@ -35,6 +35,14 @@
   color: var(--text-color);
 }
 
+/* Each section's glyph carries the section's own hue. Six coloured 14px marks
+ * across a strip read as a legend; six coloured labels would read as a paint
+ * chart, so the colour stays on the glyph and the label keeps the row's text
+ * colour. The seeds are in `tokens/semantic.css`. */
+.nav-bar--sub .nav-link__icon {
+  color: var(--tone);
+}
+
 /* The live-channel count riding beside the Streams label. Inline rather than a
  * corner badge like the notifications bell: this link has a label to sit next
  * to, so the count reads as part of it. */

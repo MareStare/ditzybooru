@@ -113,6 +113,17 @@
    * icons. Dark surfaces swallow all three otherwise. */
   --w-icon-lift: light-dark(32%, 46%);
 
+  /* The same lift for the section tones (`tokens/semantic.css`). Higher than
+   * the icon lift because the tones run cooler and the mid-tone violet is the
+   * worst case in the set. */
+  --w-tone-lift: light-dark(36%, 42%);
+
+  /* How far a tone seed is desaturated first. The seeds are Derpibooru's tag
+   * colours, tuned to be read as a dozen small chips against a neutral page; a
+   * row of them across the section strip is louder than anything on it needs to
+   * be. The light themes take more, where the same chroma reads louder. */
+  --w-tone-mute: light-dark(30%, 18%);
+
   /* Status fills: pastel on light, dark and saturated on dark, both so the
    * normal foreground stays readable on them. Identical in every theme - these
    * carry meaning, not identity. */

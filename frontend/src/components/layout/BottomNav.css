@@ -1,7 +1,12 @@
 /**
- * The phone navigation bar, pinned to the bottom of the viewport. Same surface
- * as the top bar, so the two read as one piece of chrome wrapped around the
- * page rather than as a bar and a widget.
+ * The phone navigation bar, pinned to the bottom of the viewport.
+ *
+ * It takes the PAGE colour, a step darker, rather than the top bar's accent. On a phone this
+ * strip sits directly under the content for the whole session, and a saturated
+ * band there competes with the art above it all the way down the page; the
+ * A hairline along its top edge, the shadow it casts upward and its blur are
+ * what separate it, not a change of colour. It therefore carries the ordinary
+ * text tiers, not `--text-on-nav`.
  *
  * Only exists below `--md`; above it every destination here is back on the top
  * bar, and `--bottom-nav-h` collapses to zero so the shell stops reserving
@@ -14,8 +19,13 @@
   inset-inline: 0;
   z-index: 40;
 
-  background-color: var(--surface-nav);
-  color: var(--text-on-nav);
+  border-block-start: var(--border);
+  /* A step below the page rather than exactly it: the bar has to read as
+   * standing off the content it overlaps, and darkening is the direction that
+   * says "chrome" in both polarities - a lighter strip on a light theme would
+   * disappear into the page it sits on. */
+  background-color: color-mix(in oklab, var(--surface-page), #000 18%);
+  color: var(--text-color);
   /* Cast upward: the bar sits over the page, and the page scrolls under it. */
   box-shadow: 0 -2px 8px color-mix(in oklab, #000 22%, transparent);
 }
@@ -23,7 +33,7 @@
 /* Same glass as the top bar, so the two ends of the page match. */
 @supports (backdrop-filter: blur(1px)) {
   .bottom-nav {
-    background-color: color-mix(in oklab, var(--surface-nav) 80%, transparent);
+    background-color: color-mix(in oklab, color-mix(in oklab, var(--surface-page), #000 18%) 80%, transparent);
     backdrop-filter: blur(12px) saturate(1.4);
   }
 }
@@ -54,7 +64,7 @@
   border: 0;
   background-color: transparent;
 
-  color: color-mix(in oklab, var(--text-on-nav), var(--surface-nav) 18%);
+  color: var(--text-muted);
   font: inherit;
   font-size: var(--text-2xs);
   font-weight: var(--weight-medium);
@@ -66,8 +76,8 @@
 
 .bottom-nav__item:hover,
 .bottom-nav__item:active {
-  background-color: color-mix(in oklab, var(--surface-nav), #000 14%);
-  color: var(--text-on-nav);
+  background-color: var(--surface-hover);
+  color: var(--text-color);
 }
 
 /* The badge rides the icon, not the whole cell, which is a label tall. */
@@ -101,5 +111,5 @@
  * the thing that closes the sheet again. */
 .bottom-nav__sheet {
   padding: var(--space-2);
-  border-block-end: var(--border-width) solid color-mix(in oklab, var(--surface-nav), #000 20%);
+  border-block-end: var(--border);
 }
