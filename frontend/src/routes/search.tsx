@@ -31,7 +31,7 @@ export const Route = createFileRoute('/search')({
 function SearchPage() {
   const { q, page } = Route.useSearch();
   const navigate = Route.useNavigate();
-  const grid = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLElement>(null);
 
   // Arriving from the home grid is a client-side navigation, and the router
   // moves the scroll but never the focus - which would leave a reader who
@@ -39,13 +39,13 @@ function SearchPage() {
   // hash's job, hence `preventScroll`. Paging within this page keeps focus on
   // the pagination control that was clicked, so this runs on mount only.
   useEffect(() => {
-    unwrap(grid.current).focus({ preventScroll: true });
+    unwrap(gridRef.current).focus({ preventScroll: true });
   }, []);
 
   return (
     <div className="search-page">
       <MediaGrid
-        ref={grid}
+        ref={gridRef}
         id={SEARCH_RESULTS_ID}
         headingLevel={1}
         size="large"

@@ -52,9 +52,9 @@ function RootComponent() {
   const { settings } = Route.useRouteContext();
 
   return (
-    <SsrSettingsContext.Provider value={settings}>
+    <SsrSettingsContext value={settings}>
       <Document />
-    </SsrSettingsContext.Provider>
+    </SsrSettingsContext>
   );
 }
 

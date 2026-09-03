@@ -27,7 +27,10 @@
     "bootstrap-claude": "./scripts/bootstrap-claude.sh"
   },
   "devDependencies": {
+    "@eslint-react/eslint-plugin": "^5.18.7",
     "@tanstack/eslint-config": "^0.4",
+    "@tanstack/eslint-plugin-router": "^1.162.0",
+    "@vitest/eslint-plugin": "^1.6.27",
     "eslint": "^10.9.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "prettier": "^3.8",

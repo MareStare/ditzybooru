@@ -290,6 +290,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
                 // Not a control: it is where the reader already is. Focusable all
                 // the same, for the pass below to hand focus back to.
                 <span
+                  // eslint-disable-next-line @eslint-react/no-array-index-key -- see above
                   key={index}
                   ref={currentRef}
                   className="page-link page-link--current"
@@ -300,6 +301,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
                 </span>
               ) : (
                 <button
+                  // eslint-disable-next-line @eslint-react/no-array-index-key -- see above
                   key={index}
                   type="button"
                   className="page-link"
