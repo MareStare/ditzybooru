@@ -1,11 +1,18 @@
 //  @ts-check
 import { tanstackConfig } from '@tanstack/eslint-config';
 import tseslint from 'typescript-eslint';
+import { fileURLToPath } from 'node:url';
+import reactHooks from 'eslint-plugin-react-hooks';
+import { includeIgnoreFile } from 'eslint/config';
 
 export default [
+  // Keeps the lint file set the same locally and on CI: gitignored paths are
+  // absent from a CI checkout, so linting them only ever fails on a dev box.
+  includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
   ...tanstackConfig,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
+  reactHooks.configs.flat['recommended-latest'],
   {
     rules: {
       'import/no-cycle': 'off',

@@ -71,6 +71,9 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
   // middle of it, and gives that up only where the run runs out. Offset rather
   // than `scrollLeft`: the router restores the scroll position it last saw on
   // every navigation, which is the position of the page before this one.
+  // Runs every render on purpose: it measures what the render laid out. The
+  // `setMore` bail-out below is what keeps that from looping.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
     const strip = stripRef.current;
     const pages = pagesRef.current;
