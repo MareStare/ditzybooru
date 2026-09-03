@@ -2,7 +2,8 @@ import { defineConfig } from 'vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { devtools } from '@tanstack/devtools-vite';
-import viteReact from '@vitejs/plugin-react';
+import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
+import babel from '@rolldown/plugin-babel';
 
 /** The JS floor, deliberately low. Lower than the CSS floor below on purpose -
  *  see the TODO there. */
@@ -70,5 +71,6 @@ export default defineConfig({
       },
     }),
     viteReact(),
+    babel({ presets: [reactCompilerPreset()] }),
   ],
 });

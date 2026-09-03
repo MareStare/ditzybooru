@@ -71,6 +71,9 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
   // middle of it, and gives that up only where the run runs out. Offset rather
   // than `scrollLeft`: the router restores the scroll position it last saw on
   // every navigation, which is the position of the page before this one.
+  // Runs every render on purpose: it measures what the render laid out. The
+  // `setMore` bail-out below is what keeps that from looping.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useLayoutEffect(() => {
     const strip = stripRef.current;
     const pages = pagesRef.current;
@@ -287,6 +290,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
                 // Not a control: it is where the reader already is. Focusable all
                 // the same, for the pass below to hand focus back to.
                 <span
+                  // eslint-disable-next-line @eslint-react/no-array-index-key -- see above
                   key={index}
                   ref={currentRef}
                   className="page-link page-link--current"
@@ -297,6 +301,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
                 </span>
               ) : (
                 <button
+                  // eslint-disable-next-line @eslint-react/no-array-index-key -- see above
                   key={index}
                   type="button"
                   className="page-link"

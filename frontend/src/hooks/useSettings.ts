@@ -1,4 +1,4 @@
-import { createContext, useContext, useSyncExternalStore } from 'react';
+import { createContext, use, useSyncExternalStore } from 'react';
 
 import { DEFAULT_SETTINGS } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';
@@ -16,6 +16,6 @@ export const SsrSettingsContext = createContext<Settings>(DEFAULT_SETTINGS);
 /** The current settings, kept in step across every component showing them.
  *  Writes go through `lib/settingsStore`. */
 export function useSettings(): Settings {
-  const ssrSettings = useContext(SsrSettingsContext);
+  const ssrSettings = use(SsrSettingsContext);
   return useSyncExternalStore(subscribeSettings, getSettings, () => ssrSettings);
 }
