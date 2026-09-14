@@ -135,7 +135,7 @@
  * buttons in from the right edge, so the same controls move into the burger
  * drawer instead (`MobileMenu.tsx`) - the same width at which the burger
  * appears. */
-@media (--below-lg) {
+@media (--below-xl) {
   .theme-menu-anchor {
     display: none;
   }

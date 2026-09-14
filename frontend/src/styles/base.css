@@ -110,9 +110,15 @@ body {
   border-top: var(--divider);
 }
 
-:where(img, svg, video, canvas) {
+:where(img, video, canvas) {
   display: block;
   max-inline-size: 100%;
+}
+
+/* Every svg here is an icon. Icons keep their size in a crowded flex row. */
+:where(svg) {
+  display: block;
+  flex-shrink: 0;
 }
 
 /* Counters, scores and timestamps must not jitter as their digits change. */
