@@ -10,7 +10,7 @@
  * cannot drift apart and leave a band of widths where neither rule applies.
  *
  * Every step comes in both directions because most are used from both sides in
- * different files - the nav strip hides below `--lg` while the token that
+ * different files - the nav strip hides below `--xl` while the token that
  * reserves its height appears above it.
  *
  * A component reaches for the nearest name rather than inventing a width. Add a
@@ -20,7 +20,7 @@
  *
  * One caveat on use: a `--below-*` name carries a `not`, which per Media
  * Queries Level 4 cannot be combined with `and` in the same condition. Two
- * bounds at once want a nested `@media`, not `(--lg) and (--below-2xl)`.
+ * bounds at once want a nested `@media`, not `(--xl) and (--below-2xl)`.
  */
 
 /* 480px - a small phone. The panel tab strip starts to scroll. */
@@ -36,12 +36,9 @@
 @custom-media --md (width >= 40rem);
 @custom-media --below-md not (--md);
 
-/* 768px - a tablet. The header's secondary strip and display menu exist
- * above this; below it, both live in the burger drawer instead. */
-@custom-media --lg (width >= 48rem);
-@custom-media --below-lg not (--lg);
-
-/* 960px - room for a fixed control rail beside the content it drives. */
+/* 960px - room for a fixed control rail beside the content it drives. The
+ * header's secondary strip and display menu exist above this; below it, both
+ * live in the burger drawer instead. */
 @custom-media --xl (width >= 60rem);
 @custom-media --below-xl not (--xl);
 

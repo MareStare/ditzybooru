@@ -50,10 +50,6 @@
   font-weight: var(--weight-medium);
 }
 
-.display-setting__label svg {
-  flex-shrink: 0;
-}
-
 .display-settings__reset {
   display: inline-flex;
   align-items: center;

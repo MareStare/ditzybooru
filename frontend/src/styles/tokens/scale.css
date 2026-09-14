@@ -121,7 +121,7 @@
 
 /* The secondary nav row only exists once there is room for it; below this the
  * mobile drawer carries its links instead. */
-@media (--lg) {
+@media (--xl) {
   :root {
     --nav-sub-h: calc(40px * var(--density));
   }

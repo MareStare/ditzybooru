@@ -178,7 +178,7 @@
 /* ---- Responsive -------------------------------------------------------- */
 
 /* The burger only exists while the secondary bar is folded away into it. */
-@media (--lg) {
+@media (--xl) {
   .nav__burger {
     display: none;
   }

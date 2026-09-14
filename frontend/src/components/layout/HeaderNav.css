@@ -65,7 +65,7 @@
 }
 
 /* The strip's contents move into the mobile drawer below this. */
-@media (--below-lg) {
+@media (--below-xl) {
   .nav-bar--sub {
     display: none;
   }
