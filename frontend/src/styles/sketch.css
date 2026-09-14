@@ -1,0 +1,1089 @@
+/**
+ * Crayon prototype: colored pencil and wax crayon on dark paper.
+ *
+ * Boxes do not use CSS borders. A `::before` layer draws the outline and the
+ * fill, and an SVG filter from `SketchDefs.tsx` makes the line shake and grain.
+ * The text stays crisp because the filter never touches it.
+ */
+
+/* ---- Palette and tokens ------------------------------------------------ */
+
+html:root[data-theme-color] {
+  --paper: #1b1a20;
+  --paper-2: #232129;
+  --paper-3: #2c2a33;
+  --chalk: #efe8d8;
+  --chalk-2: #c4bcab;
+  --chalk-3: #8f887b;
+
+  --c-blue: #6f9dff;
+  --c-sky: #86c9f2;
+  --c-pink: #f290bb;
+  --c-yellow: #f5d35c;
+  --c-green: #86d17c;
+  --c-purple: #ad8cf0;
+  --c-brown: #c99063;
+  --c-red: #f0705f;
+  --c-orange: #f5a14f;
+
+  --page: var(--paper);
+  --ink: var(--chalk);
+  --base: #3a4f86;
+  --link: var(--c-sky);
+  --link-hover: var(--c-pink);
+  --brand: var(--c-blue);
+
+  --surface-page: var(--paper);
+  --surface: var(--paper-2);
+  --surface-sunken: #15141a;
+  --surface-raised: var(--paper-3);
+  --surface-hover: color-mix(in oklab, var(--paper-2), var(--chalk) 6%);
+  --surface-selected: color-mix(in oklab, var(--paper-2), var(--c-blue) 18%);
+  --surface-panel-header: transparent;
+  --surface-panel-header-sub: transparent;
+  --surface-nav: var(--paper);
+  --surface-nav-field: var(--surface-sunken);
+  --surface-media: var(--chalk-3);
+
+  --text-color: var(--chalk);
+  --text-muted: var(--chalk-2);
+  --text-subtle: var(--chalk-3);
+  --text-on-nav: var(--chalk);
+  --link-on-panel-header: var(--chalk);
+
+  --border-color: var(--chalk-3);
+  --border-color-subtle: color-mix(in oklab, var(--chalk-3) 50%, transparent);
+  --border-color-strong: var(--chalk-2);
+  --border-color-input: var(--chalk-3);
+
+  --score-positive: var(--c-green);
+  --score-negative: var(--c-red);
+  --fave-strong: var(--c-yellow);
+
+  --tone-comments: var(--c-purple);
+  --tone-forums: var(--c-sky);
+  --tone-tags: var(--c-green);
+  --tone-galleries: var(--c-pink);
+  --tone-streams: var(--c-red);
+  --tone-commissions: var(--c-orange);
+
+  --font-sans: 'Patrick Hand', 'Comic Sans MS', system-ui, sans-serif;
+  --font-display: 'Gaegu', 'Patrick Hand', system-ui, sans-serif;
+  --font-mono: 'Patrick Hand', ui-monospace, monospace;
+
+  --text-2xs: calc(0.85rem * var(--font-scale));
+  --text-xs: calc(0.95rem * var(--font-scale));
+  --text-sm: calc(1.08rem * var(--font-scale));
+  --text-md: calc(1.15rem * var(--font-scale));
+  --text-lg: calc(1.3rem * var(--font-scale));
+  --text-xl: calc(1.6rem * var(--font-scale));
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --edge-highlight: 0 0 transparent;
+
+  /* Hand-drawn corners: every corner has a different curve. */
+  --sk-box: 18px 6px 22px 5px / 5px 20px 6px 18px;
+  --sk-pill: 255px 25px 225px 25px / 25px 225px 25px 255px;
+  --sk-blob: 60% 40% 55% 45% / 45% 55% 40% 60%;
+
+  --sk-line: var(--chalk-3);
+  --sk-fill: transparent;
+  --sk-width: 2.6px;
+
+  --sk-scribble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 14' preserveAspectRatio='none'%3E%3Cpath d='M3 8 C 30 3, 55 12, 90 7 S 150 2, 197 7 M 12 11 C 60 7, 120 12, 185 9' fill='none' stroke='black' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --sk-loop: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 60' preserveAspectRatio='none'%3E%3Cpath d='M60 6 C 20 2, 3 18, 6 34 C 9 54, 70 60, 90 44 C 104 30, 88 6, 50 5 C 34 5, 22 10, 18 14' fill='none' stroke='black' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E");
+  --sk-hatch: repeating-linear-gradient(-38deg, currentcolor 0 1.6px, transparent 1.6px 4.5px);
+}
+
+html:root {
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 15% 0%, rgb(111 157 255 / 0.07), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 100% 30%, rgb(242 144 187 / 0.05), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 40% 100%, rgb(245 211 92 / 0.04), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .11 0 0 0 -.02'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  scrollbar-color: var(--chalk-3) var(--paper);
+}
+
+body {
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+
+.sketch-defs {
+  position: absolute;
+  inline-size: 0;
+  block-size: 0;
+}
+
+:where(h1, h2, h3, h4, h5, h6) {
+  letter-spacing: 0;
+}
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px dashed var(--c-yellow);
+  outline-offset: 3px;
+  border-radius: var(--sk-box);
+}
+
+::selection {
+  background-color: rgb(245 211 92 / 0.35);
+}
+
+/* ---- The sketch box ----------------------------------------------------
+ *
+ * Any element in this list gets a crayon outline and fill. Set `--sk-line`,
+ * `--sk-fill` and `--sk-shape` on it to change the drawing. */
+
+.panel,
+.menu,
+.media-box,
+.page-link,
+.btn:not(.btn--ghost),
+.nav-search__box,
+.badge,
+.tag,
+.comment-row > a,
+.segmented,
+.slider,
+.notice,
+.site-footer__columns {
+  --sk-shape: var(--sk-box);
+
+  position: relative;
+  border-color: transparent;
+  border-radius: var(--sk-shape);
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.panel::before,
+.menu::before,
+.media-box::before,
+.page-link::before,
+.btn:not(.btn--ghost)::before,
+.nav-search__box::before,
+.badge::before,
+.tag::before,
+.comment-row > a::before,
+.segmented::before,
+.notice::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  border: var(--sk-width) solid var(--sk-line);
+  border-radius: var(--sk-shape);
+  background: var(--sk-fill);
+  filter: url('#sk-crayon');
+}
+
+/* A second, looser pass of the same line, the way a hand traces twice. */
+.panel::after,
+.menu::after,
+.btn:not(.btn--ghost)::after,
+.page-link--current::after {
+  content: '';
+  position: absolute;
+  inset: -2px 1px 1px -1px;
+  z-index: -1;
+  pointer-events: none;
+
+  border: 1.5px solid var(--sk-line);
+  border-radius: var(--sk-shape);
+  opacity: 0.45;
+  rotate: -0.35deg;
+  filter: url('#sk-wobble');
+}
+
+/* ---- Header ------------------------------------------------------------ */
+
+.nav {
+  background-color: color-mix(in oklab, var(--paper) 88%, transparent);
+  box-shadow: none;
+}
+
+/* A parent with `backdrop-filter` stops the dropdown blur from seeing the
+ * page, so the header blur lives on a pseudo-element. */
+.nav,
+.nav-bar--sub {
+  backdrop-filter: none;
+}
+
+/* `view-transition-name` has the same effect, so the header takes its name
+ * only while a transition runs. */
+.nav {
+  view-transition-name: none;
+}
+
+:root:active-view-transition .nav {
+  view-transition-name: site-header;
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .nav {
+    background-color: transparent;
+  }
+
+  .nav::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in oklab, var(--paper) 78%, transparent);
+    backdrop-filter: blur(10px);
+  }
+}
+
+.nav::after {
+  content: '';
+  position: absolute;
+  inset-inline: 8px;
+  inset-block-end: -6px;
+  block-size: 10px;
+  pointer-events: none;
+
+  background-color: var(--c-blue);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+.nav-bar--primary {
+  min-block-size: calc(60px * var(--density));
+  padding-block: var(--space-1);
+}
+
+/* A crayon circle around a hand-lettered "D", shaded with pencil hatching. */
+.nav-brand__mark {
+  position: relative;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 0;
+  background: none;
+  color: var(--chalk);
+  font-family: var(--font-display);
+  font-size: calc(1.9rem * var(--font-scale));
+  font-weight: 700;
+  line-height: 1;
+  rotate: -6deg;
+}
+
+.nav-brand__mark::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 2.6px solid var(--c-pink);
+  border-radius: var(--sk-blob);
+  color: rgb(242 144 187 / 0.4);
+  background: var(--sk-hatch);
+  filter: url('#sk-crayon');
+}
+
+.nav-brand__mark::after {
+  content: '';
+  position: absolute;
+  inset: -3px -1px 1px -4px;
+  z-index: -1;
+  border: 1.5px solid var(--c-pink);
+  border-radius: 45% 55% 40% 60% / 60% 40% 55% 45%;
+  opacity: 0.5;
+  filter: url('#sk-wobble');
+}
+
+.nav-brand__name {
+  font-family: var(--font-display);
+  font-size: calc(2rem * var(--font-scale));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--chalk);
+  rotate: -2deg;
+  text-shadow: 1px 1px 0 rgb(111 157 255 / 0.55);
+}
+
+.nav-link,
+.nav .btn--ghost {
+  border-radius: var(--sk-pill);
+  color: var(--chalk-2);
+}
+
+.nav-link:hover,
+.nav .btn--ghost:hover:not(:disabled) {
+  background-color: rgb(239 232 216 / 0.07);
+  color: var(--chalk);
+}
+
+.nav-link svg,
+.nav .btn--ghost svg,
+.bottom-nav__item svg {
+  filter: url('#sk-wobble');
+}
+
+.nav__actions > :nth-child(1) svg {
+  color: var(--c-yellow);
+}
+
+.nav-link[title='Notifications'] svg {
+  color: var(--c-pink);
+}
+
+.nav-link[title='Conversations'] svg {
+  color: var(--c-sky);
+}
+
+.nav-link[title='Filters'] svg {
+  color: var(--c-green);
+}
+
+.nav-link[title='Upload'] svg {
+  color: var(--c-orange);
+}
+
+.nav-link__badge,
+.bottom-nav__badge {
+  border-radius: var(--sk-blob);
+  background-color: var(--c-orange);
+  color: #1b1a20;
+  rotate: 8deg;
+}
+
+.nav-search__box {
+  --sk-shape: var(--sk-pill);
+  --sk-line: var(--c-blue);
+  --sk-fill: rgb(0 0 0 / 0.25);
+}
+
+.nav-search .field {
+  border-color: transparent;
+  border-radius: var(--sk-pill);
+  background-color: transparent;
+  font-size: var(--text-md);
+}
+
+.nav-search .field:hover:not(:disabled, :read-only) {
+  border-color: transparent;
+  background-color: transparent;
+}
+
+.nav-search__icon {
+  color: var(--c-blue);
+}
+
+.nav-bar--sub {
+  border-block-end: 0;
+  background-color: transparent;
+  gap: var(--space-2);
+  padding-block: var(--space-1);
+}
+
+@supports (backdrop-filter: blur(1px)) {
+  .nav-bar--sub {
+    background-color: transparent;
+  }
+}
+
+.nav-bar--sub .nav-link {
+  color: var(--chalk);
+  font-size: var(--text-md);
+}
+
+.nav-bar--sub .nav-link:hover {
+  background-color: transparent;
+  color: var(--chalk);
+}
+
+.nav-bar--sub .nav-link:hover::after {
+  content: '';
+  position: absolute;
+  inset-inline: 4px;
+  inset-block-end: 0;
+  block-size: 8px;
+  background-color: var(--tone);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+.nav-bar--sub .nav-link {
+  position: relative;
+}
+
+.nav-bar--sub .nav-link__icon {
+  inline-size: 18px;
+  block-size: 18px;
+  stroke-width: 2.4;
+}
+
+.nav-link__count {
+  border-radius: var(--sk-blob);
+  background-color: rgb(240 112 95 / 0.25);
+  color: var(--c-red);
+}
+
+.avatar {
+  border: 2px solid var(--c-purple);
+  border-radius: var(--sk-blob);
+  background-color: color-mix(in oklab, var(--c-purple) 30%, var(--paper));
+  color: var(--chalk);
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+/* ---- Dropdowns and menus ----------------------------------------------- */
+
+/* The crayon filter eats holes into the fill, so the solid fill lives on the
+ * menu itself and the filtered layer only draws the line. */
+.menu,
+.menu.media-grid__settings-menu {
+  --sk-line: var(--chalk-2);
+  --sk-fill: transparent;
+
+  isolation: isolate;
+  background-color: color-mix(in oklab, var(--paper-3) 72%, transparent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .22 0 0 0 -.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  backdrop-filter: blur(14px) saturate(1.2);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.4);
+}
+
+.menu::before {
+  z-index: 1;
+}
+
+.menu-item {
+  border-radius: var(--sk-pill);
+  font-size: var(--text-md);
+}
+
+.menu-item:hover:not(:disabled),
+.menu-item:focus-visible {
+  background-color: rgb(111 157 255 / 0.14);
+}
+
+.menu-separator {
+  block-size: 6px;
+  background-color: var(--chalk-3);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+}
+
+/* ---- Panels ------------------------------------------------------------ */
+
+.panel {
+  --sk-line: var(--chalk-3);
+  --sk-fill: color-mix(in oklab, var(--paper-3) 85%, var(--sk-line) 6%);
+
+  overflow: visible;
+}
+
+.panel-header {
+  position: relative;
+  justify-content: flex-start;
+  min-block-size: auto;
+  padding: var(--space-3) var(--space-3) var(--space-2);
+
+  background-color: transparent;
+  font-family: var(--font-display);
+  font-size: calc(1.55rem * var(--font-scale));
+  font-weight: 700;
+  line-height: 1;
+}
+
+.panel-header--center {
+  justify-content: center;
+}
+
+.panel-header > svg,
+.panel-header a > svg {
+  inline-size: 22px;
+  block-size: 22px;
+  color: var(--sk-line);
+  filter: url('#sk-wobble');
+}
+
+.panel-header a {
+  color: var(--chalk);
+}
+
+.panel-header a:hover {
+  color: var(--sk-line);
+}
+
+/* Crayon colour swipe under the title text. */
+.panel-header::after {
+  content: '';
+  position: absolute;
+  inset-inline: 22%;
+  inset-block-end: 0;
+  block-size: 9px;
+  background-color: var(--sk-line);
+  opacity: 0.8;
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+.media-grid__title::after {
+  inset-inline: var(--space-3) auto;
+  inline-size: 7rem;
+}
+
+.panel-footer {
+  border-top: 0;
+  background-color: transparent;
+  color: var(--chalk-2);
+  font-size: var(--text-sm);
+}
+
+a.panel-footer:hover {
+  background-color: transparent;
+  color: var(--sk-line);
+}
+
+.panel-list > *:not(:last-child) {
+  border-bottom: 1px dashed rgb(239 232 216 / 0.14);
+}
+
+.panel-tabs {
+  background-color: transparent;
+}
+
+.panel-tab {
+  position: relative;
+  border-radius: var(--sk-pill);
+  color: var(--chalk-2);
+  font-size: var(--text-md);
+}
+
+.panel-tab[aria-selected='true'] {
+  background-color: transparent;
+  color: var(--chalk);
+}
+
+.panel-tab[aria-selected='true']::after {
+  content: '';
+  position: absolute;
+  inset-inline: 6px;
+  inset-block-end: 0;
+  block-size: 8px;
+  background-color: var(--c-blue);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+/* Each block on the home page gets its own crayon, like a kid's drawing. */
+.featured-block {
+  --sk-line: var(--c-yellow);
+  rotate: -0.6deg;
+}
+
+.home__spotlight > :nth-child(2) {
+  --sk-line: var(--c-pink);
+  rotate: 0.4deg;
+}
+
+.home__activity > :nth-child(1) {
+  --sk-line: var(--c-red);
+  rotate: 0.3deg;
+}
+
+.home__activity > :nth-child(2) {
+  --sk-line: var(--c-sky);
+  rotate: -0.4deg;
+}
+
+.home__activity > :nth-child(3) {
+  --sk-line: var(--c-purple);
+  rotate: 0.5deg;
+}
+
+.media-grid-panel {
+  --sk-line: var(--c-blue);
+}
+
+.home__main > :nth-child(2) {
+  --sk-line: var(--c-green);
+}
+
+.home__spotlight,
+.home__activity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.home {
+  gap: var(--space-6);
+  padding-block-start: var(--space-6);
+}
+
+@media (--2xl) {
+  .home {
+    gap: var(--space-6) calc(var(--space-6) * 1.3);
+    padding-inline: var(--space-6);
+  }
+}
+
+/* A strip of tape holding the featured drawing onto the page. */
+.featured-block::after {
+  inset: -12px auto auto 50%;
+  inline-size: 90px;
+  block-size: 26px;
+  translate: -50% 0;
+  rotate: -4deg;
+
+  border: 0;
+  border-radius: 2px;
+  background:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.06) 0 2px, transparent 2px 6px), rgb(239 232 216 / 0.16);
+  opacity: 1;
+  z-index: 3;
+  filter: url('#sk-wobble');
+}
+
+/* ---- Media boxes ------------------------------------------------------- */
+
+.media-grid {
+  gap: var(--space-4);
+  padding: var(--space-3);
+}
+
+.media-box {
+  --sk-line: var(--chalk-3);
+  --sk-fill: rgb(0 0 0 / 0.28);
+  --radius-inner: 0px;
+
+  border: 0;
+  transition:
+    rotate calc(var(--duration) * 2) var(--ease-out),
+    scale calc(var(--duration) * 2) var(--ease-out);
+}
+
+.media-grid .media-box:nth-child(3n + 1) {
+  rotate: -0.8deg;
+}
+
+.media-grid .media-box:nth-child(4n + 2) {
+  rotate: 0.7deg;
+}
+
+.media-grid .media-box:nth-child(5n + 3) {
+  rotate: -0.3deg;
+}
+
+.media-box:hover {
+  --sk-line: var(--c-yellow);
+
+  border-color: transparent;
+  box-shadow: none;
+  rotate: 0deg;
+  scale: 1.02;
+  z-index: 2;
+}
+
+.media-grid .media-box:hover {
+  rotate: 0deg;
+}
+
+.media-box--bare::before {
+  display: none;
+}
+
+.media-box-bar {
+  min-block-size: 32px;
+  border-block-end: 0;
+  background-color: transparent;
+  font-size: var(--text-sm);
+}
+
+.media-action {
+  font-size: var(--text-sm);
+  border-radius: var(--sk-blob);
+}
+
+.media-action svg {
+  inline-size: 17px;
+  block-size: 17px;
+  filter: url('#sk-wobble');
+}
+
+.media-action:hover:not(:disabled) {
+  background-color: rgb(239 232 216 / 0.08);
+}
+
+.media-action--fave:not([aria-pressed='true']) {
+  color: color-mix(in oklab, var(--c-yellow) 70%, var(--chalk-3));
+}
+
+.media-action--up:not([aria-pressed='true']) {
+  color: color-mix(in oklab, var(--c-green) 70%, var(--chalk-3));
+}
+
+.media-action--down:not([aria-pressed='true']) {
+  color: color-mix(in oklab, var(--c-red) 70%, var(--chalk-3));
+}
+
+.media-box-bar > a.media-action {
+  color: color-mix(in oklab, var(--c-sky) 70%, var(--chalk-3));
+}
+
+.media-score {
+  font-size: var(--text-md);
+}
+
+/* The picture sits inside the crayon frame, with a small paper margin. */
+.media-thumb {
+  margin: 0 7px 7px;
+  border-radius: 3px 10px 4px 12px / 12px 4px 10px 3px;
+}
+
+.media-box--bare .media-thumb {
+  margin: 0 var(--space-3) var(--space-3);
+}
+
+.media-thumb__format {
+  border-radius: var(--sk-pill);
+  background-color: var(--c-purple);
+  color: #1b1a20;
+  font-size: var(--text-xs);
+  rotate: 4deg;
+}
+
+.media-overlay {
+  background-color: var(--paper-2);
+  background-image: repeating-linear-gradient(-38deg, rgb(173 140 240 / 0.18) 0 2px, transparent 2px 7px);
+  color: var(--chalk-2);
+  font-size: var(--text-md);
+}
+
+.media-overlay svg {
+  inline-size: 30px;
+  block-size: 30px;
+  color: var(--c-purple);
+  filter: url('#sk-wobble');
+}
+
+.media-grid__footer {
+  border-block-start: 0;
+  background-color: transparent;
+  padding-block: var(--space-3) var(--space-4);
+}
+
+.media-grid__count {
+  font-size: var(--text-md);
+}
+
+.media-grid__count strong {
+  color: var(--c-yellow);
+}
+
+/* ---- Pagination -------------------------------------------------------- */
+
+.page-link {
+  --sk-shape: var(--sk-blob);
+  --sk-line: color-mix(in oklab, var(--c-sky) 55%, var(--paper));
+  --sk-width: 1.5px;
+
+  min-inline-size: 32px;
+  min-block-size: 32px;
+  color: var(--c-sky);
+  font-size: var(--text-md);
+}
+
+.page-link:hover:not(:disabled, [aria-current='page']) {
+  --sk-line: var(--c-sky);
+  background-color: transparent;
+}
+
+.page-link--current {
+  --sk-line: var(--c-blue);
+  --sk-width: 2.5px;
+
+  background-color: transparent;
+  color: var(--chalk);
+}
+
+.page-link--current::before {
+  color: rgb(111 157 255 / 0.55);
+  background: var(--sk-hatch);
+}
+
+.page-link:disabled::before {
+  --sk-line: var(--chalk-3);
+  opacity: 0.5;
+}
+
+/* ---- Buttons, badges, tags --------------------------------------------- */
+
+.btn:not(.btn--ghost) {
+  --sk-shape: var(--sk-pill);
+  --sk-line: var(--c-blue);
+  --sk-fill: transparent;
+
+  font-size: var(--text-md);
+}
+
+.btn:not(.btn--ghost):hover:not(:disabled) {
+  --sk-line: var(--c-sky);
+
+  background-color: transparent;
+}
+
+.btn--primary::before {
+  color: rgb(111 157 255 / 0.45);
+  background: var(--sk-hatch);
+}
+
+.btn--ghost {
+  border-radius: var(--sk-blob);
+}
+
+.btn--ghost:hover:not(:disabled) {
+  background-color: rgb(239 232 216 / 0.07);
+}
+
+.badge {
+  --sk-shape: var(--sk-pill);
+  --sk-line: var(--badge-color);
+  --sk-width: 1.5px;
+  --badge-color: var(--c-blue);
+
+  padding-inline: var(--space-2);
+  color: var(--badge-color);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+}
+
+.badge::before {
+  color: color-mix(in oklab, var(--badge-color) 30%, transparent);
+  background: var(--sk-hatch);
+}
+
+.badge--success {
+  --badge-color: var(--c-green);
+}
+
+.badge--danger {
+  --badge-color: var(--c-red);
+}
+
+.badge--unread {
+  --badge-color: var(--c-orange);
+}
+
+.badge--fave {
+  --badge-color: var(--c-yellow);
+}
+
+.badge__dot {
+  border-radius: var(--sk-blob);
+}
+
+.tag {
+  --sk-shape: var(--sk-pill);
+  --sk-line: color-mix(in oklab, var(--tag-color) 70%, transparent);
+  --sk-width: 1.5px;
+
+  font-size: var(--text-sm);
+}
+
+/* ---- Fields ------------------------------------------------------------ */
+
+.field {
+  border: 2px solid var(--chalk-3);
+  border-radius: var(--sk-box);
+  background-color: rgb(0 0 0 / 0.2);
+  font-size: var(--text-md);
+}
+
+.field:focus {
+  border-color: var(--c-blue);
+  outline: none;
+}
+
+.switch {
+  border-width: 2px;
+  border-radius: var(--sk-pill);
+}
+
+.switch::after {
+  border-radius: var(--sk-blob);
+}
+
+/* ---- Sidebar rows ------------------------------------------------------ */
+
+.channel-row:nth-child(odd) {
+  background-color: transparent;
+}
+
+.channel-row:hover {
+  background-color: rgb(239 232 216 / 0.04);
+}
+
+.channel-row__link,
+.forum-topic,
+.comment-row {
+  font-size: var(--text-md);
+}
+
+.channel-row__viewers,
+.comment-row__time {
+  font-size: var(--text-sm);
+}
+
+.comment-row > a {
+  --sk-shape: var(--sk-blob);
+  --sk-line: var(--c-purple);
+
+  display: block;
+  flex-shrink: 0;
+  padding: 3px;
+}
+
+.comment-row__thumb {
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: var(--sk-blob);
+}
+
+.forum-topic__pin {
+  color: var(--c-orange);
+}
+
+/* ---- Bottom nav and footer --------------------------------------------- */
+
+.bottom-nav {
+  border-block-start: 0;
+  background-color: color-mix(in oklab, var(--paper) 90%, transparent);
+  box-shadow: none;
+}
+
+.bottom-nav::before {
+  content: '';
+  position: absolute;
+  inset-inline: 6px;
+  inset-block-start: -5px;
+  block-size: 10px;
+  background-color: var(--c-blue);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+.bottom-nav__item {
+  font-size: var(--text-xs);
+}
+
+.bottom-nav__item:hover,
+.bottom-nav__item:active {
+  background-color: transparent;
+  color: var(--chalk);
+}
+
+.site-footer {
+  position: relative;
+  border-block-start: 0;
+  background-color: transparent;
+}
+
+.site-footer::before {
+  content: '';
+  position: absolute;
+  inset-inline: 5%;
+  inset-block-start: 0;
+  block-size: 12px;
+  background-color: var(--chalk-3);
+  mask: var(--sk-scribble) center / 100% 100% no-repeat;
+  filter: url('#sk-crayon');
+}
+
+.site-footer__title {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--c-yellow);
+}
+
+.site-footer__columns > :nth-child(2) .site-footer__title {
+  color: var(--c-pink);
+}
+
+.site-footer__columns > :nth-child(3) .site-footer__title {
+  color: var(--c-green);
+}
+
+.site-footer__link {
+  font-size: var(--text-md);
+}
+
+.site-footer__note {
+  font-size: var(--text-sm);
+}
+
+/* ---- Display settings page --------------------------------------------- */
+
+.display-page-rail,
+.display-page-card {
+  --sk-shape: var(--sk-box);
+  --sk-line: var(--chalk-3);
+
+  border-color: transparent;
+  border-radius: var(--sk-shape);
+  background-color: transparent;
+}
+
+.display-page-card {
+  position: relative;
+}
+
+.display-page-rail {
+  --sk-line: var(--c-yellow);
+}
+
+.display-page-rail::before,
+.display-page-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border: 2px dashed var(--sk-line);
+  border-radius: var(--sk-shape);
+  background: rgb(0 0 0 / 0.14);
+  filter: url('#sk-wobble');
+}
+
+.display-page-rail::before {
+  border-style: solid;
+  filter: url('#sk-crayon');
+}
+
+.display-page-card-head {
+  border-block-end: 0;
+  background-color: transparent;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+.display-page-title {
+  font-family: var(--font-display);
+  font-size: calc(1.9rem * var(--font-scale));
+}
+
+.segmented {
+  --sk-shape: var(--sk-pill);
+  --sk-line: var(--c-blue);
+
+  background-color: transparent;
+}
+
+.segmented__thumb {
+  border-radius: var(--sk-pill);
+  background-color: transparent;
+  background-image: repeating-linear-gradient(-38deg, rgb(111 157 255 / 0.45) 0 1.6px, transparent 1.6px 4.5px);
+  filter: url('#sk-pencil');
+}
+
+.slider__range {
+  filter: url('#sk-wobble');
+}
