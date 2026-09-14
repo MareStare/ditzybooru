@@ -23,6 +23,8 @@
  */
 
 @import '@fontsource-variable/fredoka';
+@import '@fontsource/patrick-hand';
+@import '@fontsource/gaegu/700.css';
 
 /* Definitions only - substituted into the `@media` rules below at build time,
  * and contributing no CSS of its own. */
@@ -96,3 +98,6 @@
 @import '../routes/index.css';
 @import '../routes/search.css';
 @import '../routes/settings/display.css';
+
+/* Crayon prototype. Last, so it wins over everything above. */
+@import './sketch.css';

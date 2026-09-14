@@ -4,6 +4,7 @@ import { TanStackDevtools } from '@tanstack/react-devtools';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
+import { SketchDefs } from '#/components/layout/SketchDefs';
 import { SsrSettingsContext, useSettings } from '#/hooks/useSettings';
 import { readSettings, settingsAttributes } from '#/lib/settings';
 import fredokaLatin from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
@@ -77,6 +78,7 @@ function Document() {
       the <body> which generates a huge error in console. So we suppress
       that warning on this node. */}
       <body suppressHydrationWarning>
+        <SketchDefs />
         <div className="app-shell">
           <SiteHeader />
           <main className="app-shell__main">
