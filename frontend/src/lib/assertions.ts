@@ -1,7 +1,6 @@
 /**
  * Similar to Rust's `unwrap()`, but this one throws an error if the value is
- * `null` or `undefined`. An optional error message can be provided as a second
- * parameter.
+ * `null` or `undefined`.
  *
  * Note the complex conditional return type signature of this function. It makes
  * sure that `unwrap()` is only ever used with types that contain `null` or
