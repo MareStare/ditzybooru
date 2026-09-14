@@ -9,6 +9,7 @@
     "deploy": "vite build && wrangler deploy",
     "type-check": "tsc --noEmit",
     "check:a11y": "vitest run tests/a11y.test.ts",
+    "browsers:install": "playwright-core install chromium",
     "test": "vitest run"
   },
   "dependencies": {

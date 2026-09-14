@@ -112,7 +112,7 @@ async function launchBrowser(): Promise<Browser> {
     return await chromium.launch(executablePath ? { executablePath } : {});
   } catch (cause) {
     throw new Error(
-      'Could not launch Chromium. Run `npx playwright install chromium`, or set CHROME_PATH to a Chrome binary.',
+      'Could not launch Chromium. Run `npm run browsers:install`, or set CHROME_PATH to a Chrome binary.',
       { cause },
     );
   }

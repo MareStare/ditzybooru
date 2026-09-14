@@ -6,6 +6,10 @@ on:
   push:
     branches: [main]
 
+env:
+  # Tools run only from the lockfile. `npx` fails for a package not installed.
+  npm_config_yes: false
+
 jobs:
   typescript-lint:
     runs-on: ubuntu-latest
@@ -26,7 +30,7 @@ jobs:
       # Structural a11y via axe-core plus a contrast audit over all 18
       # theme combinations. `playwright-core` ships no browser of its own, so
       # one is fetched here rather than on every `npm ci`.
-      - run: npx playwright install --with-deps chromium
+      - run: npm run browsers:install -- --with-deps
       - run: npm run test
 
   # Check for typos in the repository based on a static dictionary
