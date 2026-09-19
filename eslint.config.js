@@ -19,11 +19,16 @@ export default [
   eslintReact.configs['strict-type-checked'],
   ...router.configs['flat/recommended'],
   {
-    // The strict preset reports part of its rules as warnings.
+    // `@eslint-react` reimplements the React Compiler rules of
+    // `eslint-plugin-react-hooks` v7. This preset names every such pair, but
+    // resolves it the other way: it turns off the react-hooks copy. Keep the
+    // first-party copy instead.
     rules: Object.fromEntries(
-      Object.entries(eslintReact.configs['strict-type-checked'].rules)
-        .filter(([, severity]) => severity === 'warn')
-        .map(([rule]) => [rule, 'error']),
+      Object.keys(
+        /** @type {import('eslint').Linter.RulesRecord} */ (
+          eslintReact.configs['disable-conflict-eslint-plugin-react-hooks'].rules
+        ),
+      ).map(rule => [rule.replace('react-hooks/', '@eslint-react/'), 'off']),
     ),
   },
   {
@@ -38,15 +43,7 @@ export default [
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
 
-      // Both also ship in `eslint-plugin-react-hooks`, which reports them with
-      // better messages and honours its own disable comments.
-      '@eslint-react/exhaustive-deps': 'off',
-      '@eslint-react/set-state-in-effect': 'off',
-
-      // Not in any preset. React Compiler correctness, same family as `purity`.
-      '@eslint-react/globals': 'error',
-      '@eslint-react/immutability': 'error',
-      '@eslint-react/refs': 'error',
+      // Not in any `@eslint-react` preset.
       '@eslint-react/no-duplicate-key': 'error',
       '@eslint-react/no-unused-state': 'error',
       '@eslint-react/no-implicit-children': 'error',
