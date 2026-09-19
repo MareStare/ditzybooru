@@ -16,8 +16,16 @@ export default [
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   reactHooks.configs.flat['recommended-latest'],
-  eslintReact.configs['recommended-typescript'],
+  eslintReact.configs['strict-type-checked'],
   ...router.configs['flat/recommended'],
+  {
+    // The strict preset reports part of its rules as warnings.
+    rules: Object.fromEntries(
+      Object.entries(eslintReact.configs['strict-type-checked'].rules)
+        .filter(([, severity]) => severity === 'warn')
+        .map(([rule]) => [rule, 'error']),
+    ),
+  },
   {
     files: ['frontend/tests/**/*.ts'],
     ...vitest.configs.recommended,
@@ -34,6 +42,16 @@ export default [
       // better messages and honours its own disable comments.
       '@eslint-react/exhaustive-deps': 'off',
       '@eslint-react/set-state-in-effect': 'off',
+
+      // Not in any preset. React Compiler correctness, same family as `purity`.
+      '@eslint-react/globals': 'error',
+      '@eslint-react/immutability': 'error',
+      '@eslint-react/refs': 'error',
+      '@eslint-react/no-duplicate-key': 'error',
+      '@eslint-react/no-unused-state': 'error',
+      '@eslint-react/no-implicit-children': 'error',
+      '@eslint-react/no-implicit-key': 'error',
+      '@eslint-react/no-implicit-ref': 'error',
 
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
       'no-restricted-syntax': [
