@@ -3,8 +3,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
 import { MediaGrid, SEARCH_RESULTS_ID, SEARCH_RESULTS_TRANSITION } from '#/components/home/MediaGrid';
+import { useMediaSearch } from '#/hooks/useMediaSearch';
 import { unwrap } from '#/lib/assertions';
-import { images, totalImages } from '#/lib/mock/data';
+import { mediaSearchQuery } from '#/lib/api/queries';
 
 /** The search this page ran. `*` is every image, as in Philomena. */
 export interface SearchParams {
@@ -26,12 +27,26 @@ export const Route = createFileRoute('/search')({
     q: typeof search.q === 'string' ? search.q : '*',
     page: pageParam(search.page),
   }),
+  loaderDeps: ({ search }: { search: SearchParams }) => search,
+  loader: async ({ context, deps }) => {
+    const { queryClient, settings } = context;
+
+    await queryClient.query({
+      ...mediaSearchQuery(settings.dataSource, {
+        query: deps.q,
+        page: deps.page,
+        perPage: settings.components.mediaPerPage,
+      }),
+      staleTime: 'static',
+    });
+  },
 });
 
 function SearchPage() {
   const { q, page } = Route.useSearch();
   const navigate = Route.useNavigate();
   const gridRef = useRef<HTMLElement>(null);
+  const { images, total } = useMediaSearch(q, page);
 
   // Arriving from the home grid is a client-side navigation, and the router
   // moves the scroll but never the focus - which would leave a reader who
@@ -52,7 +67,7 @@ function SearchPage() {
         label={q === '*' ? 'Search results' : `Results for ${q}`}
         icon={<Search size={16} />}
         images={images}
-        total={totalImages}
+        total={total}
         viewTransitionName={SEARCH_RESULTS_TRANSITION}
         paging={{
           page,

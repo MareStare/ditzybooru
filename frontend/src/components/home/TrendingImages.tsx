@@ -1,16 +1,23 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { TrendingUp } from 'lucide-react';
 
-import { topScoring } from '#/lib/mock/data';
-import { searchSorts } from '#/lib/mock/site';
+import { useDataSource } from '#/hooks/useDataSource';
+import { trendingMediaQuery } from '#/lib/api/queries';
+import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { SidebarBlock } from './SidebarBlock';
 import { MediaBox } from './MediaBox';
 
-const trendingQuery = `/search?q=${encodeURIComponent('first_seen_at.gt:3 days ago')}&sf=${searchSorts.wilsonScore.sf}&sd=${searchSorts.wilsonScore.sd}`;
+/** How many thumbnails the block holds. Its grid is two by two. */
+export const TRENDING_COUNT = 4;
+
+const trendingQuery = `/search?q=${encodeURIComponent(TRENDING_WINDOW)}&sf=${searchSorts.wilsonScore.sf}&sd=${searchSorts.wilsonScore.sd}`;
 
 export function TrendingImages() {
+  const { data: images } = useSuspenseQuery(trendingMediaQuery(useDataSource(), TRENDING_COUNT));
+
   return (
     <SidebarBlock title="Trending" href={trendingQuery} icon={<TrendingUp size={16} />} bodyClassName="trending-grid">
-      {topScoring.map(image => (
+      {images.map(image => (
         <MediaBox key={image.id} image={image} src={image.representations.thumbSmall} />
       ))}
     </SidebarBlock>

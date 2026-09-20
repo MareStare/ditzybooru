@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Bell, ChevronDown, Filter, Mail, Menu as MenuIcon, Upload } from 'lucide-react';
 
+import { useCurrentUser } from '#/hooks/useCurrentUser';
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
 import { Menu, MenuLink, MenuSeparator } from '#/components/ui/Menu';
-import { currentUser } from '#/lib/mock/data';
 import { HeaderNav } from './HeaderNav';
 import { MobileMenu } from './MobileMenu';
 import { SearchBar } from './SearchBar';
@@ -24,7 +24,7 @@ const userMenuLinks: Array<{ label: string; href: string }> = [
 ];
 
 function UserMenu() {
-  const user = currentUser;
+  const user = useCurrentUser();
 
   if (!user) {
     return (

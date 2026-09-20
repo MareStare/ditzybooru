@@ -1,9 +1,11 @@
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { MessageCircle } from 'lucide-react';
 
-import { comments } from '#/lib/mock/data';
 import type { Comment } from '#/lib/types';
-import { searchSorts } from '#/lib/mock/site';
+import { useDataSource } from '#/hooks/useDataSource';
+import { recentCommentsQuery } from '#/lib/api/queries';
+import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { timeAgo } from '#/lib/format';
 import { PanelList } from '#/components/ui/Panel';
 import { SidebarBlock } from './SidebarBlock';
@@ -38,10 +40,15 @@ function CommentStrip({ comment }: { comment: Comment }) {
   );
 }
 
-const mostCommentedQuery = `/search?q=${encodeURIComponent('first_seen_at.gt:3 days ago')}&sf=${searchSorts.commentCount.sf}&sd=${searchSorts.commentCount.sd}`;
+const mostCommentedQuery = `/search?q=${encodeURIComponent(TRENDING_WINDOW)}&sf=${searchSorts.commentCount.sf}&sd=${searchSorts.commentCount.sd}`;
+
+/** How many comments the strip holds. */
+export const RECENT_COMMENT_COUNT = 6;
 
 /** "Recent Comments" block. */
 export function RecentCommentsBlock() {
+  const { data: comments } = useSuspenseQuery(recentCommentsQuery(useDataSource(), RECENT_COMMENT_COUNT));
+
   return (
     <SidebarBlock
       title="Recent Comments"

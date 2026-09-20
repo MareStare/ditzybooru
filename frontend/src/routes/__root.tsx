@@ -1,6 +1,8 @@
-import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router';
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from '@tanstack/react-router';
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
+import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
+import type { QueryClient } from '@tanstack/react-query';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
@@ -13,7 +15,7 @@ import fredokaLatin from '@fontsource-variable/fredoka/files/fredoka-latin-wght-
 // records it in the route manifest and `<HeadContent />` links it, hashed.
 import '#/styles/index.css';
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Read once per request rather than per component, so the whole tree renders
   // from one snapshot of the cookie.
   beforeLoad: () => ({ settings: readSettings() }),
@@ -86,7 +88,10 @@ function Document() {
           <BottomNav />
           <TanStackDevtools
             config={{ position: 'bottom-right' }}
-            plugins={[{ name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> }]}
+            plugins={[
+              { name: 'TanStack Router', render: <TanStackRouterDevtoolsPanel /> },
+              { name: 'TanStack Query', render: <ReactQueryDevtoolsPanel /> },
+            ]}
           />
         </div>
         <Scripts />

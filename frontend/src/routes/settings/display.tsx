@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ArrowUp, ChevronDown, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
@@ -61,7 +61,8 @@ function DisplaySettingsPage() {
             <DisplaySettingsControls />
 
             <p className="display-page-note">
-              Settings that only make sense for one kind of component live on that component&apos;s card instead.
+              Settings that only make sense for one kind of component live on that component&apos;s card instead. The
+              switches for working on the site itself are on <Link to="/settings/developer">developer settings</Link>.
             </p>
           </div>
         </details>

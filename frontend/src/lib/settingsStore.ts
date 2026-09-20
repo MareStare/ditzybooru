@@ -15,6 +15,7 @@ import { assignComponentSetting, componentSettingsAreDefault } from '#/lib/compo
 import type { ComponentSettingControl, ComponentSettings } from '#/lib/componentSettings';
 import { displaySettingsAreDefault, sanitizeDisplaySetting } from '#/lib/displaySettings';
 import type { DisplaySettingControl } from '#/lib/displaySettings';
+import type { DataSourceKind } from '#/lib/api/types';
 import { DEFAULT_SETTINGS, readSettings, writeSettingsCookie } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';
 import { preferredMotion } from '#/lib/motion';
@@ -78,10 +79,15 @@ export function setComponentSetting<TKey extends keyof ComponentSettings>(
   });
 }
 
+export function setDataSource(dataSource: DataSourceKind): void {
+  updateSettings(settings => ({ ...settings, dataSource }));
+}
+
 /** The only reset the site has: it covers the per-component settings too, even
- *  though those are set on their own cards. */
+ *  though those are set on their own cards. The data source is left alone -
+ *  it is a developer switch rather than part of the site's appearance. */
 export function resetSettings(): void {
-  updateSettings(() => DEFAULT_SETTINGS);
+  updateSettings(settings => ({ ...DEFAULT_SETTINGS, dataSource: settings.dataSource }));
 }
 
 export function settingsAreDefault(settings: Settings): boolean {

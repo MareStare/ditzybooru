@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as SearchRouteImport } from './routes/search';
+import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any);
+const SettingsDeveloperRoute = SettingsDeveloperRouteImport.update({
+  id: '/settings/developer',
+  path: '/settings/developer',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const SettingsDisplayRoute = SettingsDisplayRouteImport.update({
   id: '/settings/display',
   path: '/settings/display',
@@ -32,30 +38,35 @@ const SettingsDisplayRoute = SettingsDisplayRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
-  fullPaths: '/' | '/search' | '/settings/display';
+  fullPaths: '/' | '/search' | '/settings/developer' | '/settings/display';
   fileRoutesByTo: FileRoutesByTo;
-  to: '/' | '/search' | '/settings/display';
-  id: '__root__' | '/' | '/search' | '/settings/display';
+  to: '/' | '/search' | '/settings/developer' | '/settings/display';
+  id:
+    '__root__' | '/' | '/search' | '/settings/developer' | '/settings/display';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   SearchRoute: typeof SearchRoute;
+  SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
 }
 
@@ -75,6 +86,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/settings/developer': {
+      id: '/settings/developer';
+      path: '/settings/developer';
+      fullPath: '/settings/developer';
+      preLoaderRoute: typeof SettingsDeveloperRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/settings/display': {
       id: '/settings/display';
       path: '/settings/display';
@@ -88,6 +106,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SearchRoute: SearchRoute,
+  SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
 };
 export const routeTree = rootRouteImport

@@ -18,6 +18,8 @@
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { getCookie } from '@tanstack/react-start/server';
 
+import { DATA_SOURCE_KINDS } from '#/lib/api/types';
+import type { DataSourceKind } from '#/lib/api/types';
 import {
   DEFAULT_COMPONENT_SETTINGS,
   componentSettingAttributes,
@@ -37,6 +39,9 @@ export interface Settings {
   motion: MotionPreference;
   display: DisplaySettings;
   components: ComponentSettings;
+  /** Which backend the site reads from. A developer setting, offered on
+   *  `/settings/developer`. */
+  dataSource: DataSourceKind;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -45,6 +50,7 @@ export const DEFAULT_SETTINGS: Settings = {
   motion: DEFAULT_MOTION_PREFERENCE,
   display: DEFAULT_DISPLAY_SETTINGS,
   components: DEFAULT_COMPONENT_SETTINGS,
+  dataSource: 'live',
 };
 
 export const SETTINGS_COOKIE = 'ditzy-settings';
@@ -90,6 +96,10 @@ function isMotionPreference(value: unknown): value is MotionPreference {
   return value === 'on' || value === 'off' || value === 'system';
 }
 
+function isDataSourceKind(value: unknown): value is DataSourceKind {
+  return DATA_SOURCE_KINDS.some(kind => kind === value);
+}
+
 function isThemeColor(value: unknown): value is ThemeColor {
   return THEME_COLORS.some(color => color.id === value);
 }
@@ -118,6 +128,7 @@ export function parseSettings(raw: string | undefined): Settings {
     motion: isMotionPreference(stored.motion) ? stored.motion : DEFAULT_SETTINGS.motion,
     display: sanitizeDisplaySettings(stored.display),
     components: sanitizeComponentSettings(stored.components),
+    dataSource: isDataSourceKind(stored.dataSource) ? stored.dataSource : DEFAULT_SETTINGS.dataSource,
   };
 }
 
@@ -137,6 +148,7 @@ function settingsPayload(settings: Settings): Record<string, unknown> {
     ...(settings.motion === DEFAULT_SETTINGS.motion ? {} : { motion: settings.motion }),
     ...(Object.keys(display).length === 0 ? {} : { display }),
     ...(Object.keys(components).length === 0 ? {} : { components }),
+    ...(settings.dataSource === DEFAULT_SETTINGS.dataSource ? {} : { dataSource: settings.dataSource }),
   };
 }
 

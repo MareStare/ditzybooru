@@ -9,8 +9,6 @@ import vitest from '@vitest/eslint-plugin';
 import { includeIgnoreFile } from 'eslint/config';
 
 export default [
-  // Keeps the lint file set the same locally and on CI: gitignored paths are
-  // absent from a CI checkout, so linting them only ever fails on a dev box.
   includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
   ...tanstackConfig,
   ...tseslint.configs.strictTypeChecked,
