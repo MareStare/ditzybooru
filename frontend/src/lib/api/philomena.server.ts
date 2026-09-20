@@ -90,16 +90,25 @@ async function get<TResponse>(path: string, params: QueryParams): Promise<TRespo
 
 const MIME_TYPES: Array<MimeType> = ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'video/webm'];
 
-function representations(raw: RawReprs): MediaReprs {
+/**
+ * Philomena names every representation of a video `.webm`, which an `<img>`
+ * cannot show. The same path with a `.gif` extension is the animated still
+ * Derpibooru renders in a grid, and it exists for the thumbnail sizes only -
+ * a larger slot has to play the video itself.
+ */
+function representations(raw: RawImage): MediaReprs {
+  const still = (url: string) => (raw.mime_type === 'video/webm' ? url.replace(/\.webm$/, '.gif') : url);
+  const reprs = raw.representations;
+
   return {
-    full: raw.full,
-    tall: raw.tall,
-    large: raw.large,
-    medium: raw.medium,
-    small: raw.small,
-    thumb: raw.thumb,
-    thumbSmall: raw.thumb_small,
-    thumbTiny: raw.thumb_tiny,
+    full: reprs.full,
+    tall: reprs.tall,
+    large: reprs.large,
+    medium: reprs.medium,
+    small: reprs.small,
+    thumb: still(reprs.thumb),
+    thumbSmall: still(reprs.thumb_small),
+    thumbTiny: still(reprs.thumb_tiny),
   };
 }
 
@@ -130,7 +139,7 @@ function toMedia(raw: RawImage): Array<Media> {
       faves: raw.faves,
       commentCount: raw.comment_count,
       sourceUrls: raw.source_urls,
-      representations: representations(raw.representations),
+      representations: representations(raw),
       spoilered: raw.spoilered,
       hiddenFromUsers: raw.hidden_from_users,
     },
@@ -203,7 +212,7 @@ async function thumbTinyByImageId(imageIds: Array<number>): Promise<Map<number, 
     per_page: Math.min(imageIds.length, MAX_PER_PAGE),
   });
 
-  return new Map(response.images.map(image => [image.id, image.representations.thumb_tiny]));
+  return new Map(response.images.map(image => [image.id, representations(image).thumbTiny]));
 }
 
 export async function recentComments(limit: number): Promise<Array<Comment>> {
