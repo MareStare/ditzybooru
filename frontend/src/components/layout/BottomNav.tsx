@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Bell, Mail, Search, X } from 'lucide-react';
 
-import { currentUser } from '#/lib/mock/data';
+import { useCurrentUser } from '#/hooks/useCurrentUser';
 import { SearchBar } from './SearchBar';
 
 /**
@@ -34,7 +34,7 @@ export function BottomNav() {
     };
   }, [searchOpen]);
 
-  const user = currentUser;
+  const user = useCurrentUser();
 
   return (
     <nav className="bottom-nav" aria-label="Primary">

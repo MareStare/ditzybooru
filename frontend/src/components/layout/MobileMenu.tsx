@@ -5,8 +5,8 @@ import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, X
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
+import { useCurrentUser } from '#/hooks/useCurrentUser';
 import { primaryNav } from '#/lib/mock/site';
-import { currentUser } from '#/lib/mock/data';
 import { DisplaySettingsControls } from './DisplaySettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
@@ -41,7 +41,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
     };
   }, [onClose]);
 
-  const user = currentUser;
+  const user = useCurrentUser();
 
   const overlay = (
     <div className="drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">

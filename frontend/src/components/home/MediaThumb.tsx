@@ -24,6 +24,10 @@ interface MediaThumbProps {
 export function MediaThumb({ image, src, title, hidden = false, className }: MediaThumbProps) {
   const isVideo = image.mimeType === 'video/webm';
   const spoilered = image.spoilered && !hidden;
+  // The element follows the file, not the media type: thumbnail sizes come
+  // through as `.gif` stills, and only the larger ones stay video.
+  const playable = src.endsWith('.webm');
+  const imageClass = cn('media-thumb__image', spoilered && 'media-thumb__image--spoilered');
 
   return (
     <Link
@@ -39,12 +43,20 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
         </div>
       ) : null}
 
-      <img
-        src={src}
-        alt={title}
-        loading="lazy"
-        className={cn('media-thumb__image', spoilered && 'media-thumb__image--spoilered')}
-      />
+      {playable ? (
+        <video
+          src={src}
+          aria-label={title}
+          autoPlay
+          loop
+          muted
+          playsInline
+          disablePictureInPicture
+          className={imageClass}
+        />
+      ) : (
+        <img src={src} alt={title} loading="lazy" className={imageClass} />
+      )}
 
       {isVideo && !spoilered && !hidden ? (
         <span className="media-thumb__format">

@@ -22,7 +22,7 @@
     "test": "npm run test --workspace frontend",
     "check:a11y": "npm run check:a11y --workspace frontend",
     "browsers:install": "npm run browsers:install --workspace frontend --",
-    "lint": "eslint",
+    "lint": "eslint --max-warnings 0",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "bootstrap-claude": "./scripts/bootstrap-claude.sh"

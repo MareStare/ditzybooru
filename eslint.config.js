@@ -9,15 +9,26 @@ import vitest from '@vitest/eslint-plugin';
 import { includeIgnoreFile } from 'eslint/config';
 
 export default [
-  // Keeps the lint file set the same locally and on CI: gitignored paths are
-  // absent from a CI checkout, so linting them only ever fails on a dev box.
   includeIgnoreFile(fileURLToPath(new URL('.gitignore', import.meta.url))),
   ...tanstackConfig,
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   reactHooks.configs.flat['recommended-latest'],
-  eslintReact.configs['recommended-typescript'],
+  eslintReact.configs['strict-type-checked'],
   ...router.configs['flat/recommended'],
+  {
+    // `@eslint-react` reimplements the React Compiler rules of
+    // `eslint-plugin-react-hooks` v7. This preset names every such pair, but
+    // resolves it the other way: it turns off the react-hooks copy. Keep the
+    // first-party copy instead.
+    rules: Object.fromEntries(
+      Object.keys(
+        /** @type {import('eslint').Linter.RulesRecord} */ (
+          eslintReact.configs['disable-conflict-eslint-plugin-react-hooks'].rules
+        ),
+      ).map(rule => [rule.replace('react-hooks/', '@eslint-react/'), 'off']),
+    ),
+  },
   {
     files: ['frontend/tests/**/*.ts'],
     ...vitest.configs.recommended,
@@ -30,10 +41,12 @@ export default [
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
 
-      // Both also ship in `eslint-plugin-react-hooks`, which reports them with
-      // better messages and honours its own disable comments.
-      '@eslint-react/exhaustive-deps': 'off',
-      '@eslint-react/set-state-in-effect': 'off',
+      // Not in any `@eslint-react` preset.
+      '@eslint-react/no-duplicate-key': 'error',
+      '@eslint-react/no-unused-state': 'error',
+      '@eslint-react/no-implicit-children': 'error',
+      '@eslint-react/no-implicit-key': 'error',
+      '@eslint-react/no-implicit-ref': 'error',
 
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
       'no-restricted-syntax': [

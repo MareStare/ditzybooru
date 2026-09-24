@@ -141,6 +141,9 @@ let baseUrl: string;
  * An explicit `lightness` and `color` are sent even where they match the
  * shipped defaults - `parseSettings` takes them either way, and it keeps this
  * from depending on which values happen to be default.
+ *
+ * The mock data source is pinned so the audited markup is the same on every
+ * run and the suite needs no network.
  */
 async function audit(path: string, lightness: Lightness, color: Color, options: RunOptions): Promise<Array<string>> {
   const context = page.context();
@@ -148,7 +151,7 @@ async function audit(path: string, lightness: Lightness, color: Color, options: 
   await context.addCookies([
     {
       name: SETTINGS_COOKIE,
-      value: encodeURIComponent(JSON.stringify({ lightness, color })),
+      value: encodeURIComponent(JSON.stringify({ lightness, color, dataSource: 'mock' })),
       url: baseUrl,
     },
   ]);

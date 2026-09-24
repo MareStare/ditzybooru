@@ -97,10 +97,3 @@ export const footerColumns: Array<FooterColumn> = [
     ],
   },
 ];
-
-/** Search sort options offered on Philomena. */
-export const searchSorts = {
-  wilsonScore: { sf: 'wilson_score', sd: 'desc' },
-  score: { sf: 'score', sd: 'desc' },
-  commentCount: { sf: 'comment_count', sd: 'desc' },
-} as const;

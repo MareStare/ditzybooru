@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 import { ArrowUp, ChevronDown, Clock, Dices, EyeOff, Image as ImageIcon, Search } from 'lucide-react';
 
@@ -61,7 +61,8 @@ function DisplaySettingsPage() {
             <DisplaySettingsControls />
 
             <p className="display-page-note">
-              Settings that only make sense for one kind of component live on that component&apos;s card instead.
+              Settings that only make sense for one kind of component live on that component&apos;s card instead. The
+              switches for working on the site itself are on <Link to="/settings/developer">developer settings</Link>.
             </p>
           </div>
         </details>
@@ -103,7 +104,7 @@ function Section({
   id,
   title,
   size = 'normal',
-  controls = [],
+  controls,
   children,
 }: {
   id?: string;
@@ -118,7 +119,7 @@ function Section({
     <section id={id} className={`display-page-card${modifier}`}>
       <div className="display-page-card-head">
         <h2>{title}</h2>
-        {controls.length > 0 ? <ComponentSettingsControls controls={controls} inline /> : null}
+        {!controls?.length ? null : <ComponentSettingsControls controls={controls} inline />}
       </div>
       <div className="display-page-card-body">{children}</div>
     </section>

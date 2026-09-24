@@ -129,13 +129,16 @@ export function MediaGrid({
   const requestedPage = paging?.page ?? ownPage;
   const setPage = paging?.onPageChange ?? setOwnPage;
 
-  // Fabricated in this mockup: the API does not report a page count yet, so it
-  // is inferred from the total and the page size the reader asked for.
+  // The API reports how many images match, not how many pages that is, so the
+  // count follows from the page size the reader asked for.
   const pageCount = Math.max(1, Math.ceil(total / mediaPerPage));
   // Raising the page size shrinks the page count under a reader who is deep in
   // the results, so the stored page is clamped rather than trusted.
   const page = Math.min(requestedPage, pageCount);
+  // The source already returns a page of this size. Slicing matters only while
+  // a smaller size is on its way, and for the display page's fixed specimen.
   const shown = images.slice(0, mediaPerPage);
+  const firstShown = (page - 1) * mediaPerPage + 1;
 
   // The heading is visually redundant with the title bar, but the page still
   // needs one logical heading per section for the document outline.
@@ -177,8 +180,9 @@ export function MediaGrid({
           <span className="media-grid__count">
             Showing{' '}
             <strong>
-              1&ndash;
-              {shown.length}
+              <Int value={firstShown} />
+              &ndash;
+              <Int value={firstShown + shown.length - 1} />
             </strong>{' '}
             of{' '}
             <strong>
