@@ -5,11 +5,6 @@
   "workspaces": [
     "frontend"
   ],
-  "intent": {
-    "skills": [
-      "@tanstack/*"
-    ]
-  },
   "engines": {
     "node": "^24"
   },

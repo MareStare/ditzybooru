@@ -14,7 +14,6 @@ frontend/.gitignore
 
 # AI
 .claude/skills
-.intent
 .impeccable
 # Local personal developer settings
 .claude/settings.local.json
