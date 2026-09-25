@@ -15,7 +15,7 @@
 - No comments for what code already shows.
 - Never write comment longer than 3 lines or 80 characters wide.
 
-# Code Conventions
+## Code Conventions
 
 - Never write untyped JavaScript, use TypeScript.
 - Use `unwrap()` from `lib/assertions` instead of non-null assertions (`!` suffix). Prefer type system that avoids nulls.
