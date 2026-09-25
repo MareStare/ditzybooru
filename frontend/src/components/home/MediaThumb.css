@@ -29,15 +29,21 @@
   block-size: 100%;
   /* `scale-down` by default - a booru thumbnail is the whole image, and
    * cropping a tall comic page to a square hides the part that identifies it.
-   * It is `contain` that never enlarges, so an image smaller than the cell
+   * Unlike `contain`, it never enlarges, so an image smaller than the cell
    * keeps its own size. The media grid's "Image fit" setting is what picks the
-   * other keyword; see `lib/componentSettings.ts`. */
+   * other keywords; see `lib/componentSettings.ts`. */
   object-fit: scale-down;
   transition: scale calc(var(--duration) * 1.3) var(--ease-out);
 }
 
 :root[data-media-fit='crop'] .media-thumb__image {
   object-fit: cover;
+}
+
+/* The justified layout gives the thumb the image's own ratio. `contain` then
+ * fills the thumb, and enlarges a small image to do so. */
+:root[data-media-fit='justified'] .media-grid .media-thumb__image {
+  object-fit: contain;
 }
 
 .media-thumb:hover .media-thumb__image {
