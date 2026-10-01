@@ -9,13 +9,8 @@
 - Never say "byte-identical" or "bit identical". Say just "identical" or "equal" or "the same" instead.
 - Never say "load-bearing". Say "important" instead.
 
-## Comments
-
-- No comments on simple functions up to 5 statements.
-- No comments for what code already shows.
-- Never write comment longer than 3 lines or 80 characters wide.
-
 ## Code Conventions
 
 - Never write untyped JavaScript, use TypeScript.
+- Avoid premature exports. Only use `export` if another file needs to import something.
 - Use `unwrap()` from `lib/assertions` instead of non-null assertions (`!` suffix). Prefer type system that avoids nulls.

@@ -49,6 +49,17 @@ export default [
       '@eslint-react/no-implicit-ref': 'error',
 
       '@typescript-eslint/switch-exhaustiveness-check': 'error',
+      '@typescript-eslint/naming-convention': [
+        'error',
+        {
+          selector: 'typeParameter',
+          format: ['PascalCase'],
+          leadingUnderscore: 'forbid',
+          trailingUnderscore: 'forbid',
+          // `R` is the conventional name for a return type.
+          custom: { regex: '^(R|T|T[A-Z][A-Za-z]+)$', match: true },
+        },
+      ],
       'no-restricted-syntax': [
         'error',
         {
