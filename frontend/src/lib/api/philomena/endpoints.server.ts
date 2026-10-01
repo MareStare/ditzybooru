@@ -1,22 +1,16 @@
 /**
- * A client for the Philomena REST API.
+ * The Philomena REST API, mapped to the types of this frontend.
  *
  * Read-only and unauthenticated. The origin applies its anonymous default
  * filter to every search, and anything that needs an account - faves, watched
  * tags, votes - is out of reach until sign-in exists.
- *
- * Server-only. Philomena sends no `Access-Control-Allow-Origin`, so a browser
- * blocks these requests. `philomena.ts` exposes the same calls to the browser
- * over server functions.
  */
 
 import type { Attribution, Comment, Media, MediaReprs, MimeType } from '#/lib/types';
 import type { MediaPage, MediaSearchParams } from '#/lib/api/types';
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
-
-/** The Philomena server the site reads from. TODO: make this configurable so
- *  the frontend can be self-hosted against another instance. */
-const API_ORIGIN = 'https://derpibooru.org';
+import { get } from '#/lib/api/philomena/client.server';
+import type { QueryParams } from '#/lib/api/philomena/client.server';
 
 /** Philomena rejects anything larger. */
 const MAX_PER_PAGE = 50;
@@ -60,32 +54,6 @@ interface RawComment {
   avatar: string;
   /** `null` when the comment was posted anonymously. */
   user_id: null | number;
-}
-
-type QueryParams = Record<string, number | string>;
-
-class PhilomenaError extends Error {
-  constructor(
-    readonly status: number,
-    path: string,
-  ) {
-    super(`Philomena API request to ${path} failed with status ${status}`);
-    this.name = 'PhilomenaError';
-  }
-}
-
-async function get<TResponse>(path: string, params: QueryParams): Promise<TResponse> {
-  const url = new URL(`/api/v1/json/${path}`, API_ORIGIN);
-  for (const [key, value] of Object.entries(params)) {
-    url.searchParams.set(key, String(value));
-  }
-
-  const response = await fetch(url, { headers: { Accept: 'application/json' } });
-  if (!response.ok) {
-    throw new PhilomenaError(response.status, path);
-  }
-
-  return (await response.json()) as TResponse;
 }
 
 const MIME_TYPES: Array<MimeType> = ['image/gif', 'image/jpeg', 'image/png', 'image/svg+xml', 'video/webm'];

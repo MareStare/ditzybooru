@@ -1,5 +1,5 @@
 import { mockSource } from '#/lib/api/mock';
-import { philomenaSource } from '#/lib/api/philomena';
+import { philomenaSource } from '#/lib/api/philomena/source.functions';
 import type { DataSource, DataSourceKind } from '#/lib/api/types';
 
 export function dataSource(kind: DataSourceKind): DataSource {

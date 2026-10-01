@@ -10,7 +10,7 @@
 
 import { createServerFn } from '@tanstack/react-start';
 
-import * as philomena from '#/lib/api/philomena.server';
+import * as philomena from '#/lib/api/philomena/endpoints.server';
 import type { DataSource, MediaSearchParams } from '#/lib/api/types';
 
 /** Arguments arrive over the wire as `unknown` - the browser is not the only
