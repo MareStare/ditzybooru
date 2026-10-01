@@ -161,7 +161,7 @@ imitation: the familiar booru brought up to date.
   token and component system (`src/components/`, `src/styles/`).
 - Mock data at `src/lib/mock/`, shaped like Philomena API responses, with
   thumbnails from the public Derpibooru CDN (Philomena's development seeds).
-- Accessibility suite at `tests/a11y.test.ts` - axe-core against the built
+- Accessibility suite at `a11y/a11y.test.ts` - axe-core against the built
   site in a real browser, run across every theme.
 - No search, tag-editing, or image-page code exists yet. The header's search
   field is a placeholder that submits nowhere, and the tag component

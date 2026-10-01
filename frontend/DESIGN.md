@@ -483,7 +483,7 @@ and positioned absolutely so marking a stop never changes the track's width.
 - **Do** multiply every spacing value by `--density`, every type size by `--font-scale`, every duration by `--motion-scale`, and every shadow alpha by `--shadow-force`.
 - **Do** name a breakpoint from `tokens/breakpoints.css` rather than writing a width.
 - **Do** pair every `border-radius` with `corner-shape: var(--corner-shape)`.
-- **Do** verify contrast in all nine accents × both polarities. `tests/a11y.test.ts` runs axe-core against the built site in a real browser, and zero violations is a gate.
+- **Do** verify contrast in all nine accents × both polarities. `a11y/a11y.test.ts` runs axe-core against the built site in a real browser, and zero violations is a gate.
 - **Do** style native elements rather than reimplementing them, and use `:focus-visible`, `:user-invalid`, and `:has()` over JS-managed state classes.
 - **Do** add every new stylesheet to the `@import` list in `styles/index.css` - a component's CSS lives next to its `.tsx`, but no `.tsx` imports CSS.
 - **Do** use `:where()` for element-level defaults so component classes never have to fight base rules.

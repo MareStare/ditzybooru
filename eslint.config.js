@@ -30,7 +30,7 @@ export default [
     ),
   },
   {
-    files: ['frontend/tests/**/*.ts'],
+    files: ['frontend/a11y/**/*.ts', 'frontend/src/**/*.test.ts'],
     ...vitest.configs.recommended,
   },
   {
