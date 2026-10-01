@@ -88,7 +88,9 @@ describe('HttpClient', () => {
     );
 
     await expect(client.fetch('/')).rejects.toThrow(/429/);
-    await expect(client.fetch('/')).rejects.toMatchObject({ name: 'RateLimitedError' });
+    await expect(client.fetch('/')).rejects.toThrow(
+      /^Rate limited, the next request goes in 5 seconds \(\d{4}-.+Z\)\. Request not sent: GET /,
+    );
     expect(fetchMock).toHaveBeenCalledOnce();
 
     vi.advanceTimersByTime(5000);

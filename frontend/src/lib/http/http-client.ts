@@ -1,3 +1,4 @@
+import { timeAgo } from '#/lib/format';
 import { log } from '#/lib/http/logging';
 import { retry } from '#/lib/http/retry';
 
@@ -162,6 +163,9 @@ class RateLimitedError extends Error {
   override name = 'RateLimitedError';
 
   constructor(request: Request, untilMs: number) {
-    super(`Rate limited until ${new Date(untilMs).toISOString()}, request not sent: ${request.method} ${request.url}`);
+    const until = new Date(untilMs);
+    super(
+      `Rate limited, the next request goes ${timeAgo(until)} (${until.toISOString()}). Request not sent: ${request.method} ${request.url}`,
+    );
   }
 }
