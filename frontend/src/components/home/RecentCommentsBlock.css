@@ -35,6 +35,7 @@
 }
 
 .comment-row__time {
+  display: block;
   color: var(--text-muted);
   font-size: var(--text-xs);
 }

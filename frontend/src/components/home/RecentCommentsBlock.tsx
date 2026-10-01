@@ -6,8 +6,8 @@ import type { Comment } from '#/lib/types';
 import { useDataSource } from '#/hooks/use-data-source';
 import { recentCommentsQuery } from '#/lib/api/queries';
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
-import { timeAgo } from '#/lib/format';
 import { PanelList } from '#/components/ui/Panel';
+import { RelativeTime } from '#/components/ui/RelativeTime';
 import { SidebarBlock } from './SidebarBlock';
 import { UserAttribution } from './UserAttribution';
 
@@ -34,7 +34,7 @@ function CommentStrip({ comment }: { comment: Comment }) {
           </Link>{' '}
           <span className="comment-row__by">by</span> <UserAttribution author={comment.author} />
         </div>
-        <div className="comment-row__time">{timeAgo(new Date(comment.createdAt))}</div>
+        <RelativeTime className="comment-row__time" dateTime={comment.createdAt} />
       </div>
     </li>
   );
