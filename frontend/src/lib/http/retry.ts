@@ -83,14 +83,11 @@ export async function retry<R>(func: RetryFunc<R>, params?: RetryParams): Promis
       }
 
       if (!hasNextAttempts) {
-        console.error(`All ${maxAttempts} attempts of running ${label} failed`, error);
+        console.error(`All ${maxAttempts} attempts failed: ${label}`, error);
         throw error;
       }
 
-      console.warn(
-        `[Attempt ${attempt}/${maxAttempts}] Error when running ${label}. Retrying in ${nextDelayMs} milliseconds...`,
-        error,
-      );
+      console.warn(`[Attempt ${attempt}/${maxAttempts}] Retrying in ${nextDelayMs} ms after an error: ${label}`, error);
 
       await sleep(nextDelayMs);
 

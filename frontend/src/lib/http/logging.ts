@@ -54,7 +54,7 @@ type LogLevel = 'debug' | 'error' | 'info' | 'warn';
  * so the caller can still read the response. Leaves out every secret.
  */
 export async function log(level: LogLevel, request: Request, response: Response): Promise<void> {
-  console[level](`HTTP ${request.method} ${request.url} ${response.status}`, {
+  console[level](`HTTP ${response.status} ${request.method} ${request.url}`, {
     requestId: request.headers.get('x-request-id'),
     status: response.status,
     headers: Object.fromEntries([...response.headers].filter(([name]) => LOGGED_HEADERS.has(name))),

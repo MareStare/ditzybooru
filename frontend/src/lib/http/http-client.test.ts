@@ -126,7 +126,7 @@ describe('HttpClient', () => {
     await expect(client.fetch('/missing')).rejects.toThrow();
 
     expect(console.error).toHaveBeenCalledWith(
-      'HTTP GET https://example.com/missing 404',
+      'HTTP 404 GET https://example.com/missing',
       expect.objectContaining({ status: 404, body: 'Not Found' }),
     );
   });

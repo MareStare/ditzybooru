@@ -192,7 +192,7 @@ describe('retry', () => {
     expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
       [
         [
-          "All 3 attempts of running test-routine failed",
+          "All 3 attempts failed: test-routine",
           [Error: always failing],
         ],
       ]
@@ -216,7 +216,7 @@ describe('retry', () => {
     expect(consoleErrorSpy.mock.calls).toMatchInlineSnapshot(`
       [
         [
-          "All 3 attempts of running Mock failed",
+          "All 3 attempts failed: Mock",
           [Error: always failing],
         ],
       ]

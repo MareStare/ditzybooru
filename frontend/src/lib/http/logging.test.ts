@@ -19,7 +19,7 @@ describe('log', () => {
 
     expect(await logged(request, response)).toMatchInlineSnapshot(`
       [
-        "HTTP GET https://example.com/api 500",
+        "HTTP 500 GET https://example.com/api",
         {
           "body": "Oops",
           "headers": {

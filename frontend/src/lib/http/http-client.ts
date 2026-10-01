@@ -99,7 +99,7 @@ class HttpError extends Error {
   response: Response;
 
   constructor(request: Request, response: Response) {
-    super(`${request.method} ${request.url} request failed (${response.status}: ${response.statusText})`);
+    super(`Request failed (${response.status}: ${response.statusText}): ${request.method} ${request.url}`);
     this.response = response;
   }
 }
