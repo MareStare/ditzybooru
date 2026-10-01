@@ -9,7 +9,17 @@ typos
 
 mapfile -t staged_files < <(git diff --cached --name-only --diff-filter=ACMR)
 
-if [[ ${#staged_files[@]} -gt 0 ]]; then
-  npm exec -- prettier --write --ignore-unknown "${staged_files[@]}"
-  git add -- "${staged_files[@]}"
+# Re-adding a partially staged file would also stage its unstaged changes.
+fully_staged_files=()
+for file in "${staged_files[@]}"; do
+  if git diff --quiet -- "$file"; then
+    fully_staged_files+=("$file")
+  else
+    echo "Not formatting partially staged file: $file" >&2
+  fi
+done
+
+if [[ ${#fully_staged_files[@]} -gt 0 ]]; then
+  npm exec -- prettier --write --ignore-unknown "${fully_staged_files[@]}"
+  git add -- "${fully_staged_files[@]}"
 fi

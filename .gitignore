@@ -14,7 +14,11 @@ frontend/.gitignore
 
 # AI
 .claude/skills
-.impeccable
+**/.impeccable/*
+!**/.impeccable/design.json
+!**/.impeccable/live/
+**/.impeccable/live/*
+!**/.impeccable/live/config.json
 # Local personal developer settings
 .claude/settings.local.json
 CLAUDE.local.md
