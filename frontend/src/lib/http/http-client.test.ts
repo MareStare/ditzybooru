@@ -67,6 +67,19 @@ describe('HttpClient', () => {
     expect(fetchMock).toHaveBeenCalledOnce();
   });
 
+  it('should throw a NetworkError when there is no response', async () => {
+    const client = new HttpClient(BASE_URL);
+
+    fetchMock.mockRejectedValue(new TypeError('Failed to fetch'));
+
+    await expect(client.fetch('/')).rejects.toMatchObject({
+      name: 'NetworkError',
+      message: 'Request got no response (network or CORS error): GET https://example.com/',
+    });
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
   it('should render the URL with query parameters', async () => {
     const client = new HttpClient(BASE_URL);
 

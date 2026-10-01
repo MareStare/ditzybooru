@@ -68,7 +68,10 @@ export class HttpClient {
           headers: this.params.tracingHeaders === false ? headers : { ...headers, ...tracingHeaders },
         });
 
-        const response = await fetch(request);
+        const response = await fetch(request).catch((error: unknown) => {
+          // `fetch` rejects with a `TypeError` when there is no response.
+          throw error instanceof TypeError ? new NetworkError(request, error) : error;
+        });
 
         if (!response.ok) {
           await log('error', request, response);
@@ -114,5 +117,18 @@ export class HttpError extends Error {
   constructor(request: Request, response: Response) {
     super(`Request failed (${response.status}: ${response.statusText}): ${request.method} ${request.url}`);
     this.response = response;
+  }
+}
+
+/**
+ * A request got no response. The cause can be a network failure, or a CORS
+ * error: a browser hides a cross-origin response without
+ * `Access-Control-Allow-Origin`, even for an error status.
+ */
+class NetworkError extends Error {
+  override name = 'NetworkError';
+
+  constructor(request: Request, cause: TypeError) {
+    super(`Request got no response (network or CORS error): ${request.method} ${request.url}`, { cause });
   }
 }
