@@ -80,6 +80,22 @@ describe('HttpClient', () => {
     expect(fetchMock).toHaveBeenCalledOnce();
   });
 
+  it('should send no requests until Retry-After passes after a 429', async () => {
+    const client = new HttpClient(BASE_URL);
+
+    fetchMock.mockImplementation(() =>
+      Promise.resolve(new Response('error code: 1015', { status: 429, headers: { 'Retry-After': '5' } })),
+    );
+
+    await expect(client.fetch('/')).rejects.toThrow(/429/);
+    await expect(client.fetch('/')).rejects.toMatchObject({ name: 'RateLimitedError' });
+    expect(fetchMock).toHaveBeenCalledOnce();
+
+    vi.advanceTimersByTime(5000);
+    await expect(client.fetch('/')).rejects.toThrow(/429/);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
   it('should render the URL with query parameters', async () => {
     const client = new HttpClient(BASE_URL);
 

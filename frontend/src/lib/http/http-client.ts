@@ -27,6 +27,9 @@ export interface HttpClientParams {
  * - ...Some other method-specific goodies
  */
 export class HttpClient {
+  /** The origin answered 429. The client sends no requests until this time. */
+  private rateLimitedUntilMs = 0;
+
   constructor(
     private readonly baseUrl: string,
     private readonly params: HttpClientParams = {},
@@ -68,10 +71,18 @@ export class HttpClient {
           headers: this.params.tracingHeaders === false ? headers : { ...headers, ...tracingHeaders },
         });
 
+        if (Date.now() < this.rateLimitedUntilMs) {
+          throw new RateLimitedError(request, this.rateLimitedUntilMs);
+        }
+
         const response = await fetch(request).catch((error: unknown) => {
           // `fetch` rejects with a `TypeError` when there is no response.
           throw error instanceof TypeError ? new NetworkError(request, error) : error;
         });
+
+        if (response.status === 429) {
+          this.rateLimitedUntilMs = Date.now() + retryAfterMs(response);
+        }
 
         if (!response.ok) {
           await log('error', request, response);
@@ -83,6 +94,19 @@ export class HttpClient {
       { isRetryable, label: `HTTP ${init.method ?? 'GET'} ${url.toString()}` },
     );
   }
+}
+
+const DEFAULT_RETRY_AFTER_MS = 10_000;
+
+/** Reads `Retry-After`. It holds seconds or an HTTP date. */
+function retryAfterMs(response: Response): number {
+  const value = response.headers.get('Retry-After');
+  if (value === null) {
+    return DEFAULT_RETRY_AFTER_MS;
+  }
+  const seconds = Number(value);
+  const ms = Number.isNaN(seconds) ? Date.parse(value) - Date.now() : seconds * 1000;
+  return Number.isNaN(ms) ? DEFAULT_RETRY_AFTER_MS : Math.max(0, ms);
 }
 
 function isRetryable(error: Error): boolean {
@@ -130,5 +154,14 @@ class NetworkError extends Error {
 
   constructor(request: Request, cause: TypeError) {
     super(`Request got no response (network or CORS error): ${request.method} ${request.url}`, { cause });
+  }
+}
+
+/** The client did not send the request, because the origin answered 429 before. */
+class RateLimitedError extends Error {
+  override name = 'RateLimitedError';
+
+  constructor(request: Request, untilMs: number) {
+    super(`Rate limited until ${new Date(untilMs).toISOString()}, request not sent: ${request.method} ${request.url}`);
   }
 }
