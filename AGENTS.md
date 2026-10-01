@@ -1,4 +1,3 @@
-- Never touch git index, never `git rm`. Leave changes unstaged for human to review/stage.
 - Developer may already run `npm run dev` server. Never kill it, reuse it.
 - Project unreleased: make breaking changes freely for clean code. No backwards compatibility, no deprecations.
 - Use regular dash instead of em-dash everywhere.
@@ -14,3 +13,7 @@
 - Never write untyped JavaScript, use TypeScript.
 - Avoid premature exports. Only use `export` if another file needs to import something.
 - Use `unwrap()` from `lib/assertions` instead of non-null assertions (`!` suffix). Prefer type system that avoids nulls.
+
+## Git
+
+- Write commit messages in the Conventional Commits format.
