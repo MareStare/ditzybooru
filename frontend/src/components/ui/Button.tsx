@@ -5,9 +5,9 @@ import { cn } from '#/lib/utils';
 import type { ClassValue } from '#/lib/utils';
 
 /** Fill colors. Each maps to a single `--btn-seed` in `Button.css`. */
-export type ButtonVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'ghost';
+type ButtonVariant = 'default' | 'primary' | 'success' | 'warning' | 'danger' | 'ghost';
 
-export type ButtonSize = 'sm' | 'md' | 'lg';
+type ButtonSize = 'sm' | 'md' | 'lg';
 
 interface ButtonProps extends Omit<ComponentProps<'button'>, 'className'> {
   variant?: ButtonVariant;

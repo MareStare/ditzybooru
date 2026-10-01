@@ -4,7 +4,7 @@ import { cn } from '#/lib/utils';
 
 import type { ClassValue } from '#/lib/utils';
 
-export type BadgeVariant = 'default' | 'success' | 'danger' | 'unread' | 'staff' | 'fave';
+type BadgeVariant = 'default' | 'success' | 'danger' | 'unread' | 'staff' | 'fave';
 
 interface BadgeProps extends Omit<ComponentProps<'span'>, 'className'> {
   variant?: BadgeVariant;

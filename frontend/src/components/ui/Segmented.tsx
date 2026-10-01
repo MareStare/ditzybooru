@@ -4,7 +4,7 @@ import { cn } from '#/lib/utils';
 
 import type { ClassValue } from '#/lib/utils';
 
-export interface SegmentedOption<TValue> {
+interface SegmentedOption<TValue> {
   value: TValue;
   /** The accessible name. Also the visible one unless `preview` is given. */
   label: string;

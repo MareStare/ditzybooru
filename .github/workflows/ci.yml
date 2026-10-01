@@ -25,6 +25,7 @@ jobs:
       - run: npm run fmt:check
       - run: npm run type-check
       - run: npm run lint
+      - run: npm run knip
       - run: npm run build
 
       # Structural a11y via axe-core plus a contrast audit over all 18

@@ -18,6 +18,7 @@
     "check:a11y": "npm run check:a11y --workspace frontend",
     "browsers:install": "npm run browsers:install --workspace frontend --",
     "lint": "eslint --max-warnings 0",
+    "knip": "knip",
     "fmt": "prettier --write .",
     "fmt:check": "prettier --check .",
     "bootstrap-claude": "./scripts/bootstrap-claude.sh"
@@ -29,6 +30,7 @@
     "@vitest/eslint-plugin": "^1.6.27",
     "eslint": "^10.9.1",
     "eslint-plugin-react-hooks": "^7.1.1",
+    "knip": "^6.39.0",
     "prettier": "^3.8",
     "typescript": "^6.0",
     "typescript-eslint": "^8.69.0"

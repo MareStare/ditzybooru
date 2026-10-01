@@ -98,7 +98,7 @@ export function componentSettingAttributes(settings: ComponentSettings): { 'data
 
 /** Rejects anything the control could not have produced, so a hand-edited or
  *  stale cookie can never reach the component. */
-export function sanitizeComponentSetting<TKey extends keyof ComponentSettings>(
+function sanitizeComponentSetting<TKey extends keyof ComponentSettings>(
   control: ComponentSettingControl<TKey>,
   value: unknown,
 ): ComponentSettings[TKey] {

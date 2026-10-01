@@ -43,7 +43,7 @@ export function subscribeSettings(listener: () => void): () => void {
 
 /** Persists and publishes a change. React re-renders `<html>` from the store,
  *  so nothing here touches the DOM. */
-export function updateSettings(change: (settings: Settings) => Settings): void {
+function updateSettings(change: (settings: Settings) => Settings): void {
   current = change(current);
   writeSettingsCookie(current);
   for (const listener of listeners) listener();

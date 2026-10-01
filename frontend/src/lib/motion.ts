@@ -64,7 +64,7 @@ export function motionProperties(preference: MotionPreference): Record<string, s
   return { '--motion-scale': preference === 'on' ? '1' : '0' };
 }
 
-export function motionScale(): number {
+function motionScale(): number {
   const raw = getComputedStyle(document.documentElement).getPropertyValue('--motion-scale');
   const scale = Number.parseFloat(raw);
 

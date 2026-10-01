@@ -53,7 +53,7 @@ export const DEFAULT_SETTINGS: Settings = {
   dataSource: 'live',
 };
 
-export const SETTINGS_COOKIE = 'ditzy-settings';
+const SETTINGS_COOKIE = 'ditzy-settings';
 
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
 
@@ -106,7 +106,7 @@ function isThemeColor(value: unknown): value is ThemeColor {
 
 /** Rejects anything a control could not have produced, so a hand-edited cookie
  *  can never reach the stylesheet as something absurd. */
-export function parseSettings(raw: string | undefined): Settings {
+function parseSettings(raw: string | undefined): Settings {
   if (raw === undefined) {
     return DEFAULT_SETTINGS;
   }
