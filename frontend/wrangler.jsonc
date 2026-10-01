@@ -9,4 +9,11 @@
   // manifest and the asset links. `main` and `assets.directory` are wired to
   // its build output by the Cloudflare plugin.
   "main": "@tanstack/react-start/server-entry",
+
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true,
+    },
+  },
 }
