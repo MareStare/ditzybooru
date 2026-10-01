@@ -1,4 +1,4 @@
-interface RetryParams {
+export interface RetryParams {
   /**
    * Maximum number of attempts to retry the operation. The first attempt counts
    * too, so setting this to 1 is equivalent to no retries.
@@ -31,7 +31,7 @@ interface RetryParams {
   label?: string;
 }
 
-type RetryFunc<R = void> = (attempt: number, nextDelayMs?: number) => Promise<R>;
+export type RetryFunc<R = void> = (attempt: number, nextDelayMs?: number) => Promise<R>;
 
 /**
  * Retry an async operation with exponential backoff and jitter.
