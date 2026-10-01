@@ -7,23 +7,22 @@ export interface RequestParams extends Omit<RequestInit, 'headers'> {
   headers?: Record<string, string>;
 }
 
-export class HttpError extends Error {
-  constructor(
-    request: Request,
-    readonly response: Response,
-  ) {
-    super(`${request.method} ${request.url} request failed (${response.status}: ${response.statusText})`);
-  }
-}
-
 /**
- * An HTTP client that renders query parameters, throws on a non-OK response,
- * logs it, retries server errors, and adds headers to trace the retries.
+ * Generic HTTP Client with some batteries included:
+ *
+ * - Handles rendering of the URL with query parameters
+ * - Throws an error on non-OK responses
+ * - Logs non-OK responses
+ * - Automatically retries failed requests
+ * - Add some useful meta headers
+ * - ...Some other method-specific goodies
  */
 export class HttpClient {
   constructor(private readonly baseUrl: string) {}
 
-  /** Issues a request, expecting a JSON response. */
+  /**
+   * Issues a request, expecting a JSON response.
+   */
   async fetchJson<T>(path: string, params?: RequestParams): Promise<T> {
     const response = await this.fetch(path, params);
     return (await response.json()) as T;
@@ -33,16 +32,19 @@ export class HttpClient {
     const { query = {}, headers = {}, ...init } = params;
 
     const url = new URL(path, this.baseUrl);
+
     for (const [key, value] of Object.entries(query)) {
       url.searchParams.set(key, String(value));
     }
 
-    // Identifies all retries of one request, so that the backend can apply
-    // its side effects only once.
+    // This header serves as an idempotency token that identifies the sequence
+    // of retries of the same request. The backend may use this information to
+    // ensure that the same retried request doesn't result in multiple accumulated
+    // side-effects.
     const retrySequenceId = generateId('rs-');
 
     return retry(
-      async attempt => {
+      async (attempt: number) => {
         const request = new Request(url, {
           ...init,
           headers: {
@@ -54,6 +56,7 @@ export class HttpClient {
         });
 
         const response = await fetch(request);
+
         if (!response.ok) {
           await log('error', request, response);
           throw new HttpError(request, response);
@@ -70,14 +73,33 @@ function isRetryable(error: Error): boolean {
   return error instanceof HttpError && error.response.status >= 500;
 }
 
-/** Base32 alphabet without ambiguous characters. */
-const ID_ALPHABET = '23456789abcdefghjklmnpqrstuvwxyz';
-
 /**
- * A random ID that starts with `prefix`, so a reader of the logs sees its
- * kind. 20 random characters make it long enough for Phoenix to reuse it.
+ * Generates a base32 ID with the given prefix as the ID discriminator.
+ * The prefix is useful when reading or grepping thru logs to identify the type
+ * of the ID (i.e. it's visually clear that strings that start with `req-` are
+ * request IDs).
  */
-function generateId(prefix: string): string {
-  const chars = Array.from({ length: 20 }, () => ID_ALPHABET.charAt(Math.floor(Math.random() * ID_ALPHABET.length)));
-  return prefix + chars.join('');
+function generateId(prefix: string) {
+  // Base32 alphabet without any ambiguous characters.
+  // (details: https://github.com/maksverver/key-encoding#eliminating-ambiguous-characters)
+  const alphabet = '23456789abcdefghjklmnpqrstuvwxyz';
+
+  const chars = [prefix];
+
+  // Phoenix reuses an incoming `X-Request-Id` only if it is 20-200 bytes long.
+  for (let i = 0; i < 20; i++) {
+    chars.push(alphabet.charAt(Math.floor(Math.random() * alphabet.length)));
+  }
+
+  return chars.join('');
+}
+
+class HttpError extends Error {
+  override name = 'HttpError';
+  response: Response;
+
+  constructor(request: Request, response: Response) {
+    super(`${request.method} ${request.url} request failed (${response.status}: ${response.statusText})`);
+    this.response = response;
+  }
 }

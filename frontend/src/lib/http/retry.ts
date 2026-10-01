@@ -1,41 +1,69 @@
-export interface RetryParams {
-  /** The first attempt counts too, so `1` means no retries. */
+interface RetryParams {
+  /**
+   * Maximum number of attempts to retry the operation. The first attempt counts
+   * too, so setting this to 1 is equivalent to no retries.
+   */
   maxAttempts?: number;
 
-  /** Delay before the first retry. Later delays grow exponentially. */
+  /**
+   * Initial delay for the first retry. Subsequent retries will be exponentially
+   * delayed up to `maxDelayMs`.
+   */
   minDelayMs?: number;
 
-  /** Upper bound of the exponential delay. */
+  /**
+   * Max value a delay can reach. This is useful to avoid unreasonably long
+   * delays that can be reached at a larger number of retries where the delay
+   * grows exponentially very fast.
+   */
   maxDelayMs?: number;
 
-  /** Errors that are not instances of `Error` are never retried. */
+  /**
+   * If present determines if the error should be retried or immediately re-thrown.
+   * All errors that aren't instances of `Error` are considered non-retryable.
+   */
   isRetryable?: (error: Error) => boolean;
 
-  /** Names the operation in the logs. The default is the function name. */
+  /**
+   * Human-readable message to identify the operation being retried. By default
+   * the function name is used.
+   */
   label?: string;
 }
 
-/** `nextDelayMs` is `undefined` on the last attempt. */
-export type RetryFunc<TResult> = (attempt: number, nextDelayMs?: number) => Promise<TResult>;
+type RetryFunc<R = void> = (attempt: number, nextDelayMs?: number) => Promise<R>;
 
 /**
- * Retries an async operation with exponential backoff and equal jitter.
- * See https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+ * Retry an async operation with exponential backoff and jitter.
+ *
+ * The callback receives the current attempt number and the delay before the
+ * next attempt in case the current attempt fails. The next delay may be
+ * `undefined` if this is the last attempt and no further retries will be scheduled.
+ *
+ * This is based on the following AWS paper:
+ * https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
  */
-export async function retry<TResult>(func: RetryFunc<TResult>, params: RetryParams = {}): Promise<TResult> {
-  const { maxAttempts = 3, minDelayMs = 200, maxDelayMs = 1500, isRetryable } = params;
+export async function retry<R>(func: RetryFunc<R>, params?: RetryParams): Promise<R> {
+  const maxAttempts = params?.maxAttempts ?? 3;
 
   if (maxAttempts < 1) {
     throw new Error(`Invalid 'maxAttempts' for retry: ${maxAttempts}`);
   }
+
+  const minDelayMs = params?.minDelayMs ?? 200;
+
   if (minDelayMs < 0) {
     throw new Error(`Invalid 'minDelayMs' for retry: ${minDelayMs}`);
   }
+
+  const maxDelayMs = params?.maxDelayMs ?? 1500;
+
   if (maxDelayMs < minDelayMs) {
     throw new Error(`Invalid 'maxDelayMs' for retry: ${maxDelayMs}, 'minDelayMs' is ${minDelayMs}`);
   }
 
-  const label = params.label ?? (func.name || '{unnamed routine}');
+  const label = params?.label ?? (func.name || '{unnamed routine}');
+
   const backoffExponent = 2;
 
   let attempt = 1;
@@ -45,10 +73,12 @@ export async function retry<TResult>(func: RetryFunc<TResult>, params: RetryPara
     const hasNextAttempts = attempt < maxAttempts;
 
     try {
-      // The `await` keeps the rejection inside this `try`.
+      // NB: an `await` is important in this block to make sure the exception is caught
+      // in this scope. Doing a `return func()` would be a big mistake, so don't try
+      // to "refactor" that!
       return await func(attempt, hasNextAttempts ? nextDelayMs : undefined);
     } catch (error) {
-      if (!(error instanceof Error) || (isRetryable !== undefined && !isRetryable(error))) {
+      if (!(error instanceof Error) || (params?.isRetryable && !params.isRetryable(error))) {
         throw error;
       }
 
@@ -58,16 +88,27 @@ export async function retry<TResult>(func: RetryFunc<TResult>, params: RetryPara
       }
 
       console.warn(
-        `[Attempt ${attempt}/${maxAttempts}] Error when running ${label}. Retrying in ${nextDelayMs} ms`,
+        `[Attempt ${attempt}/${maxAttempts}] Error when running ${label}. Retrying in ${nextDelayMs} milliseconds...`,
         error,
       );
 
       await sleep(nextDelayMs);
 
-      // Equal jitter: half of the exponential delay is fixed, half is random.
-      // The random half keeps many clients from retrying at the same time.
-      const pure = Math.min(maxDelayMs, minDelayMs * backoffExponent ** attempt);
-      nextDelayMs = Math.max(minDelayMs, pure / 2 + randomBetween(0, pure / 2));
+      // Equal jitter algorithm taken from AWS blog post's code reference:
+      // https://github.com/aws-samples/aws-arch-backoff-simulator/blob/66cb169277051eea207dbef8c7f71767fe6af144/src/backoff_simulator.py#L35-L38
+      let pure = minDelayMs * backoffExponent ** attempt;
+
+      // Make sure we don't overflow
+      pure = Math.min(maxDelayMs, pure);
+
+      // Now that we have a purely exponential delay, we add random jitter
+      // to avoid DDOSing the backend from multiple clients retrying at
+      // the same time (see the "thundering herd problem" on Wikipedia).
+      const halfPure = pure / 2;
+      nextDelayMs = halfPure + randomBetween(0, halfPure);
+
+      // Make sure we don't underflow
+      nextDelayMs = Math.max(minDelayMs, nextDelayMs);
 
       attempt += 1;
     }

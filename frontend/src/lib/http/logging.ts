@@ -47,7 +47,7 @@ function redactSecrets(body: string, ...headerSets: Array<Headers>): string {
   return secrets.reduce((text, { name, secret }) => text.split(secret).join(`<redacted:${name}>`), body);
 }
 
-export type LogLevel = 'debug' | 'error' | 'info' | 'warn';
+type LogLevel = 'debug' | 'error' | 'info' | 'warn';
 
 /**
  * Logs a request with its response, for debugging. Reads a clone of the body,
