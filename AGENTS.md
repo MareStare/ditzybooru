@@ -17,3 +17,4 @@
 ## Git
 
 - Write commit messages in the Conventional Commits format.
+- Cloudflare Workers Builds deploys every push to `main` to production.
