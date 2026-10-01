@@ -6,7 +6,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
-import { SsrSettingsContext, useSettings } from '#/hooks/useSettings';
+import { SsrSettingsContext, useSettings } from '#/hooks/use-settings';
 import { readSettings, settingsAttributes } from '#/lib/settings';
 import fredokaLatin from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
 

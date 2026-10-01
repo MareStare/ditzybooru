@@ -3,8 +3,8 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Notice, NoticeTitle } from '#/components/ui/Notice';
 import { Panel, PanelBody, PanelHeader } from '#/components/ui/Panel';
 import { Segmented } from '#/components/ui/Segmented';
-import { useDataSource } from '#/hooks/useDataSource';
-import { setDataSource } from '#/lib/settingsStore';
+import { useDataSource } from '#/hooks/use-data-source';
+import { setDataSource } from '#/lib/settings-store';
 import type { DataSourceKind } from '#/lib/api/types';
 
 export const Route = createFileRoute('/settings/developer')({ component: DeveloperSettingsPage });

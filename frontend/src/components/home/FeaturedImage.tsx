@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-import { useDataSource } from '#/hooks/useDataSource';
+import { useDataSource } from '#/hooks/use-data-source';
 import { featuredMediaQuery } from '#/lib/api/queries';
 import { SidebarBlock } from './SidebarBlock';
 import { MediaBox } from './MediaBox';

@@ -1,4 +1,4 @@
-import { useDataSource } from '#/hooks/useDataSource';
+import { useDataSource } from '#/hooks/use-data-source';
 import { currentUser } from '#/lib/api/session';
 import type { User } from '#/lib/types';
 

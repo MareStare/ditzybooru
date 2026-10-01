@@ -83,7 +83,7 @@
    *
    * The spreads below are sized so the setting's maximum of 2 lands `--weight-
    * bold` on 700, the top of Fredoka's weight axis. Changing a spread means
-   * rechecking that maximum in `lib/displaySettings.ts`. */
+   * rechecking that maximum in `lib/display-settings.ts`. */
   --weight-normal: 400;
   --weight-medium: calc(400 + 50 * var(--weight-boost));
   --weight-semibold: calc(400 + 100 * var(--weight-boost));

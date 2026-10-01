@@ -1,12 +1,12 @@
 import { ResetButton } from '#/components/ui/ResetButton';
 import { Slider, sliderReadoutWidth } from '#/components/ui/Slider';
 import { Segmented } from '#/components/ui/Segmented';
-import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { componentSettingDefaultLabel, DEFAULT_COMPONENT_SETTINGS } from '#/lib/componentSettings';
-import { setComponentSetting } from '#/lib/settingsStore';
+import { useComponentSettings } from '#/hooks/use-component-settings';
+import { componentSettingDefaultLabel, DEFAULT_COMPONENT_SETTINGS } from '#/lib/component-settings';
+import { setComponentSetting } from '#/lib/settings-store';
 import { cn } from '#/lib/utils';
 
-import type { ComponentSettingControl } from '#/lib/componentSettings';
+import type { ComponentSettingControl } from '#/lib/component-settings';
 
 /**
  * The controls for one component's settings. The counterpart of

@@ -10,8 +10,8 @@ import { Dropdown } from '#/components/ui/Dropdown';
 import { Int } from '#/components/ui/Int';
 import { Pagination } from '#/components/ui/Pagination';
 import { Panel, PanelHeader } from '#/components/ui/Panel';
-import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/componentSettings';
+import { useComponentSettings } from '#/hooks/use-component-settings';
+import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/component-settings';
 import { cn } from '#/lib/utils';
 import { MediaBox } from './MediaBox';
 

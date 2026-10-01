@@ -31,7 +31,7 @@
    * cropping a tall comic page to a square hides the part that identifies it.
    * Unlike `contain`, it never enlarges, so an image smaller than the cell
    * keeps its own size. The media grid's "Image fit" setting is what picks the
-   * other keywords; see `lib/componentSettings.ts`. */
+   * other keywords; see `lib/component-settings.ts`. */
   object-fit: scale-down;
   transition: scale calc(var(--duration) * 1.3) var(--ease-out);
 }

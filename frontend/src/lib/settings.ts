@@ -24,10 +24,10 @@ import {
   DEFAULT_COMPONENT_SETTINGS,
   componentSettingAttributes,
   sanitizeComponentSettings,
-} from '#/lib/componentSettings';
-import type { ComponentSettings, MediaFit } from '#/lib/componentSettings';
-import { DEFAULT_DISPLAY_SETTINGS, displaySettingProperties, sanitizeDisplaySettings } from '#/lib/displaySettings';
-import type { DisplaySettings } from '#/lib/displaySettings';
+} from '#/lib/component-settings';
+import type { ComponentSettings, MediaFit } from '#/lib/component-settings';
+import { DEFAULT_DISPLAY_SETTINGS, displaySettingProperties, sanitizeDisplaySettings } from '#/lib/display-settings';
+import type { DisplaySettings } from '#/lib/display-settings';
 import { DEFAULT_MOTION_PREFERENCE, motionProperties } from '#/lib/motion';
 import type { MotionPreference } from '#/lib/motion';
 import { DEFAULT_THEME_COLOR, DEFAULT_THEME_LIGHTNESS_PREFERENCE, THEME_COLORS } from '#/lib/theme';

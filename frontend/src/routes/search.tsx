@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 
 import { MediaGrid, SEARCH_RESULTS_ID, SEARCH_RESULTS_TRANSITION } from '#/components/home/MediaGrid';
-import { useMediaSearch } from '#/hooks/useMediaSearch';
+import { useMediaSearch } from '#/hooks/use-media-search';
 import { unwrap } from '#/lib/assertions';
 import { mediaSearchQuery } from '#/lib/api/queries';
 

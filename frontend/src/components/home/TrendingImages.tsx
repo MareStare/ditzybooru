@@ -1,7 +1,7 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { TrendingUp } from 'lucide-react';
 
-import { useDataSource } from '#/hooks/useDataSource';
+import { useDataSource } from '#/hooks/use-data-source';
 import { trendingMediaQuery } from '#/lib/api/queries';
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { SidebarBlock } from './SidebarBlock';

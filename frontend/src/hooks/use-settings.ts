@@ -2,7 +2,7 @@ import { createContext, use, useSyncExternalStore } from 'react';
 
 import { DEFAULT_SETTINGS } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';
-import { getSettings, subscribeSettings } from '#/lib/settingsStore';
+import { getSettings, subscribeSettings } from '#/lib/settings-store';
 
 /**
  * The settings for the request being rendered, published by the root route.

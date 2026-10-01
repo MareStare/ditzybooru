@@ -14,10 +14,10 @@ import { Panel, PanelBody, PanelFooter, PanelHeader, PanelList, PanelTab, PanelT
 import { Table, TableScroll } from '#/components/ui/Table';
 import { Tag, TagCount, TagList } from '#/components/ui/Tag';
 import { MediaGrid } from '#/components/home/MediaGrid';
-import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/componentSettings';
+import { MEDIA_GRID_SETTING_CONTROLS } from '#/lib/component-settings';
 import { images, totalImages } from '#/lib/mock/data';
 
-import type { ComponentSettingControl } from '#/lib/componentSettings';
+import type { ComponentSettingControl } from '#/lib/component-settings';
 import type { TagCategory } from '#/components/ui/Tag';
 
 export const Route = createFileRoute('/settings/display')({ component: DisplaySettingsPage });

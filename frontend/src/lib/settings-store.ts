@@ -11,10 +11,10 @@
  * shared by every request the isolate handles.
  */
 
-import { assignComponentSetting, componentSettingsAreDefault } from '#/lib/componentSettings';
-import type { ComponentSettingControl, ComponentSettings } from '#/lib/componentSettings';
-import { displaySettingsAreDefault, sanitizeDisplaySetting } from '#/lib/displaySettings';
-import type { DisplaySettingControl } from '#/lib/displaySettings';
+import { assignComponentSetting, componentSettingsAreDefault } from '#/lib/component-settings';
+import type { ComponentSettingControl, ComponentSettings } from '#/lib/component-settings';
+import { displaySettingsAreDefault, sanitizeDisplaySetting } from '#/lib/display-settings';
+import type { DisplaySettingControl } from '#/lib/display-settings';
 import type { DataSourceKind } from '#/lib/api/types';
 import { DEFAULT_SETTINGS, readSettings, writeSettingsCookie } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';

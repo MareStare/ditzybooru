@@ -5,7 +5,7 @@ import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, X
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
-import { useCurrentUser } from '#/hooks/useCurrentUser';
+import { useCurrentUser } from '#/hooks/use-current-user';
 import { primaryNav } from '#/lib/mock/site';
 import { DisplaySettingsControls } from './DisplaySettings';
 

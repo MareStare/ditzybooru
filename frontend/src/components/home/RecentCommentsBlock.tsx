@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router';
 import { MessageCircle } from 'lucide-react';
 
 import type { Comment } from '#/lib/types';
-import { useDataSource } from '#/hooks/useDataSource';
+import { useDataSource } from '#/hooks/use-data-source';
 import { recentCommentsQuery } from '#/lib/api/queries';
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { timeAgo } from '#/lib/format';

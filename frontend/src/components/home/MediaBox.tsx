@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowBigDown, ArrowBigUp, EyeOff, FolderPlus, Link2, MoreHorizontal, Star } from 'lucide-react';
 
 import type { Media } from '#/lib/types';
-import { useImageInteraction } from '#/hooks/useImageInteraction';
+import { useImageInteraction } from '#/hooks/use-image-interaction';
 import { Int } from '#/components/ui/Int';
 import { Menu, MenuButton } from '#/components/ui/Menu';
 import { cn } from '#/lib/utils';

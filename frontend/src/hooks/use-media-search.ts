@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useComponentSettings } from '#/hooks/useComponentSettings';
-import { useDataSource } from '#/hooks/useDataSource';
-import { useDebounced } from '#/hooks/useDebounced';
+import { useComponentSettings } from '#/hooks/use-component-settings';
+import { useDataSource } from '#/hooks/use-data-source';
+import { useDebounced } from '#/hooks/use-debounced';
 import { mediaSearchQuery } from '#/lib/api/queries';
 import type { MediaPage } from '#/lib/api/types';
 

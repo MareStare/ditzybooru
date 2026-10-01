@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Bell, Mail, Search, X } from 'lucide-react';
 
-import { useCurrentUser } from '#/hooks/useCurrentUser';
+import { useCurrentUser } from '#/hooks/use-current-user';
 import { SearchBar } from './SearchBar';
 
 /**

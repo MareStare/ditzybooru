@@ -6,14 +6,14 @@ import { Switch } from '#/components/ui/Field';
 import { ResetButton } from '#/components/ui/ResetButton';
 import { Segmented } from '#/components/ui/Segmented';
 import { Slider, sliderReadoutWidth } from '#/components/ui/Slider';
-import { useSettings } from '#/hooks/useSettings';
-import { SETTING_CONTROLS } from '#/lib/settingControls';
+import { useSettings } from '#/hooks/use-settings';
+import { SETTING_CONTROLS } from '#/lib/setting-controls';
 import { cn } from '#/lib/utils';
 import { resolveSystemMotion, subscribeSystemMotion } from '#/lib/motion';
 import { resolveSystemLightness, subscribeSystemLightness } from '#/lib/theme';
-import { resetSettings, settingsAreDefault } from '#/lib/settingsStore';
+import { resetSettings, settingsAreDefault } from '#/lib/settings-store';
 
-import type { SettingControl } from '#/lib/settingControls';
+import type { SettingControl } from '#/lib/setting-controls';
 
 const LIGHTNESS_ICONS: Record<string, typeof Sun> = { light: Sun, dark: Moon };
 

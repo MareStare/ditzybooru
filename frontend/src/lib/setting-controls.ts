@@ -12,15 +12,15 @@ import {
 
 import { unwrap } from '#/lib/assertions';
 import { THEME_COLORS, THEME_LIGHTNESS_OPTIONS } from '#/lib/theme';
-import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/displaySettings';
-import type { DisplaySettingRange, DisplaySettings } from '#/lib/displaySettings';
+import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/display-settings';
+import type { DisplaySettingRange, DisplaySettings } from '#/lib/display-settings';
 import { DEFAULT_SETTINGS } from '#/lib/settings';
 import {
   setDisplaySetting,
   setMotionPreference,
   setThemeColor,
   setThemeLightnessPreference,
-} from '#/lib/settingsStore';
+} from '#/lib/settings-store';
 
 import type { LucideIcon } from 'lucide-react';
 import type { MotionPreference } from '#/lib/motion';

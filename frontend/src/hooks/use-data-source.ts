@@ -1,4 +1,4 @@
-import { useSettings } from '#/hooks/useSettings';
+import { useSettings } from '#/hooks/use-settings';
 import type { DataSourceKind } from '#/lib/api/types';
 
 /** Which backend the page being rendered reads from. Writes go through
