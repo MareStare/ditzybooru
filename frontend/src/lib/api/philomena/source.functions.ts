@@ -47,13 +47,29 @@ const recentComments = createServerFn({ method: 'GET' })
   .validator((data: unknown) => count(data, 'limit'))
   .handler(({ data }) => directSource.recentComments(data));
 
+/** How long the browser sends requests only via the server after a direct request fails. */
+const DIRECT_COOLDOWN_MS = 60_000;
+
+/** The browser sends no direct requests until this time. */
+let directBlockedUntilMs = 0;
+
 function withFallback<R>(direct: () => Promise<R>, server: () => Promise<R>): Promise<R> {
   if (import.meta.env.SSR) {
     return direct();
   }
 
+  // A failed direct request is often a rate limit on the visitor's IP, and
+  // every further request counts toward it.
+  if (Date.now() < directBlockedUntilMs) {
+    return server();
+  }
+
   return direct().catch((error: unknown) => {
-    console.warn('The request from the browser failed. Retrying it via the server.', error);
+    directBlockedUntilMs = Date.now() + DIRECT_COOLDOWN_MS;
+    console.warn(
+      `The request from the browser failed. Sending requests via the server for ${DIRECT_COOLDOWN_MS / 1000} s.`,
+      error,
+    );
     return server();
   });
 }
