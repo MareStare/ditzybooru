@@ -107,7 +107,7 @@ function generateId(prefix: string) {
   return chars.join('');
 }
 
-class HttpError extends Error {
+export class HttpError extends Error {
   override name = 'HttpError';
   response: Response;
 

@@ -1,10 +1,12 @@
-import { Suspense } from 'react';
+import { BrowserRetry } from '#/components/ui/BrowserRetry';
+import { useDataSource } from '#/hooks/use-data-source';
+import { featuredMediaQuery, recentCommentsQuery, trendingMediaQuery } from '#/lib/api/queries';
 
 import { FeaturedImage } from './FeaturedImage';
-import { TrendingImages } from './TrendingImages';
+import { TRENDING_COUNT, TrendingImages } from './TrendingImages';
 import { LiveStreamsBlock } from './LiveStreamsBlock';
 import { ForumActivityBlock } from './ForumActivityBlock';
-import { RecentCommentsBlock } from './RecentCommentsBlock';
+import { RECENT_COMMENT_COUNT, RecentCommentsBlock } from './RecentCommentsBlock';
 
 /**
  * The home page's activity column, in two halves.
@@ -16,34 +18,31 @@ import { RecentCommentsBlock } from './RecentCommentsBlock';
  * back into a single column.
  */
 
-/**
- * A query that failed on the server throws in its block. React then sends the
- * empty fallback and renders the block again in the browser.
- */
-
 /** Featured and trending images - the picture half of the column. */
 export function ActivitySpotlight() {
+  const kind = useDataSource();
   return (
     <aside className="home__spotlight" aria-label="Featured and trending">
-      <Suspense>
+      <BrowserRetry queryKey={featuredMediaQuery(kind).queryKey} label="the featured image">
         <FeaturedImage />
-      </Suspense>
-      <Suspense>
+      </BrowserRetry>
+      <BrowserRetry queryKey={trendingMediaQuery(kind, TRENDING_COUNT).queryKey} label="trending images">
         <TrendingImages />
-      </Suspense>
+      </BrowserRetry>
     </aside>
   );
 }
 
 /** Streams, forum and comment feeds - the text half of the column. */
 export function ActivityFeeds() {
+  const kind = useDataSource();
   return (
     <aside className="home__activity" aria-label="Site activity">
       <LiveStreamsBlock />
       <ForumActivityBlock />
-      <Suspense>
+      <BrowserRetry queryKey={recentCommentsQuery(kind, RECENT_COMMENT_COUNT).queryKey} label="recent comments">
         <RecentCommentsBlock />
-      </Suspense>
+      </BrowserRetry>
     </aside>
   );
 }
