@@ -7,10 +7,10 @@
  */
 
 import type { Attribution, Comment, Media, MediaReprs, MimeType } from '#/lib/types';
-import type { MediaPage, MediaSearchParams } from '#/lib/api/types';
+import type { DataSource, MediaPage, MediaSearchParams } from '#/lib/api/types';
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
-import { get } from '#/lib/api/philomena/client.server';
-import type { QueryParams } from '#/lib/api/philomena/client.server';
+import { get } from '#/lib/api/philomena/client';
+import type { QueryParams } from '#/lib/api/philomena/client';
 
 /** Philomena rejects anything larger. */
 const MAX_PER_PAGE = 50;
@@ -136,13 +136,13 @@ async function searchImages(params: QueryParams): Promise<ImageSearchResponse> {
   return get<ImageSearchResponse>('search/images', params);
 }
 
-export async function searchMedia({ query, page, perPage }: MediaSearchParams): Promise<MediaPage> {
+async function searchMedia({ query, page, perPage }: MediaSearchParams): Promise<MediaPage> {
   const response = await searchImages({ q: query, page, per_page: Math.min(perPage, MAX_PER_PAGE) });
 
   return { images: response.images.flatMap(toMedia), total: response.total };
 }
 
-export async function featuredMedia(): Promise<Media> {
+async function featuredMedia(): Promise<Media> {
   const { image } = await get<{ image: RawImage }>('images/featured', {});
   const [media] = toMedia(image);
   if (media === undefined) {
@@ -152,7 +152,7 @@ export async function featuredMedia(): Promise<Media> {
   return media;
 }
 
-export async function trendingMedia(limit: number): Promise<Array<Media>> {
+async function trendingMedia(limit: number): Promise<Array<Media>> {
   const response = await searchImages({
     q: TRENDING_WINDOW,
     per_page: limit,
@@ -183,7 +183,7 @@ async function thumbTinyByImageId(imageIds: Array<number>): Promise<Map<number, 
   return new Map(response.images.map(image => [image.id, representations(image).thumbTiny]));
 }
 
-export async function recentComments(limit: number): Promise<Array<Comment>> {
+async function recentComments(limit: number): Promise<Array<Comment>> {
   const { comments } = await get<{ comments: Array<RawComment> }>('search/comments', {
     q: '*',
     per_page: limit,
@@ -210,3 +210,5 @@ export async function recentComments(limit: number): Promise<Array<Comment>> {
     ];
   });
 }
+
+export const directSource: DataSource = { searchMedia, featuredMedia, trendingMedia, recentComments };

@@ -1,6 +1,8 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, defaultShouldDehydrateQuery } from '@tanstack/react-query';
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
+
+import { failedQueryHashes, markFailedOnServer } from '#/lib/api/ssr-failures';
 
 import { routeTree } from './route-tree.gen';
 
@@ -14,7 +16,12 @@ const STALE_TIME_MS = 60_000;
 
 export function getRouter() {
   const queryClient = new QueryClient({
-    defaultOptions: { queries: { staleTime: STALE_TIME_MS } },
+    defaultOptions: {
+      // `HttpClient` already retries failed requests.
+      queries: { staleTime: STALE_TIME_MS, retry: false },
+      // The browser fetches again what failed on the server.
+      dehydrate: { shouldDehydrateQuery: defaultShouldDehydrateQuery },
+    },
   });
 
   const router = createTanStackRouter({
@@ -25,6 +32,10 @@ export function getRouter() {
     // Query owns the cache. A second copy in the router would answer the same
     // question with staler data depending on which one was asked.
     defaultPreloadStaleTime: 0,
+    dehydrate: () => ({ failedQueryHashes: failedQueryHashes(queryClient) }),
+    hydrate: dehydrated => {
+      markFailedOnServer(dehydrated.failedQueryHashes);
+    },
   });
 
   setupRouterSsrQueryIntegration({ router, queryClient });

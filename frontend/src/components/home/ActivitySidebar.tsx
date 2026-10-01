@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { FeaturedImage } from './FeaturedImage';
 import { TrendingImages } from './TrendingImages';
 import { LiveStreamsBlock } from './LiveStreamsBlock';
@@ -14,12 +16,21 @@ import { RecentCommentsBlock } from './RecentCommentsBlock';
  * back into a single column.
  */
 
+/**
+ * A query that failed on the server throws in its block. React then sends the
+ * empty fallback and renders the block again in the browser.
+ */
+
 /** Featured and trending images - the picture half of the column. */
 export function ActivitySpotlight() {
   return (
     <aside className="home__spotlight" aria-label="Featured and trending">
-      <FeaturedImage />
-      <TrendingImages />
+      <Suspense>
+        <FeaturedImage />
+      </Suspense>
+      <Suspense>
+        <TrendingImages />
+      </Suspense>
     </aside>
   );
 }
@@ -30,7 +41,9 @@ export function ActivityFeeds() {
     <aside className="home__activity" aria-label="Site activity">
       <LiveStreamsBlock />
       <ForumActivityBlock />
-      <RecentCommentsBlock />
+      <Suspense>
+        <RecentCommentsBlock />
+      </Suspense>
     </aside>
   );
 }

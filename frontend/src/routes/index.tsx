@@ -19,11 +19,12 @@ export const Route = createFileRoute('/')({
   // Fetched here rather than in the blocks alone, so the server render has
   // every one of them and the page arrives whole. `staleTime: 'static'` is what
   // makes this fill the cache rather than refetch what is already in it.
+  // A failed query does not fail the page. The browser fetches it again.
   loader: async ({ context }) => {
     const { queryClient, settings } = context;
     const kind = settings.dataSource;
 
-    await Promise.all([
+    const queries = [
       queryClient.query({
         ...mediaSearchQuery(kind, { query: RECENT_QUERY, page: 1, perPage: settings.components.mediaPerPage }),
         staleTime: 'static',
@@ -31,7 +32,9 @@ export const Route = createFileRoute('/')({
       queryClient.query({ ...featuredMediaQuery(kind), staleTime: 'static' }),
       queryClient.query({ ...trendingMediaQuery(kind, TRENDING_COUNT), staleTime: 'static' }),
       queryClient.query({ ...recentCommentsQuery(kind, RECENT_COMMENT_COUNT), staleTime: 'static' }),
-    ]);
+    ];
+
+    await Promise.all(queries.map(query => query.catch(() => undefined)));
   },
 });
 

@@ -31,14 +31,17 @@ export const Route = createFileRoute('/search')({
   loader: async ({ context, deps }) => {
     const { queryClient, settings } = context;
 
-    await queryClient.query({
-      ...mediaSearchQuery(settings.dataSource, {
-        query: deps.q,
-        page: deps.page,
-        perPage: settings.components.mediaPerPage,
-      }),
-      staleTime: 'static',
-    });
+    // A failed query does not fail the page. The browser fetches it again.
+    await queryClient
+      .query({
+        ...mediaSearchQuery(settings.dataSource, {
+          query: deps.q,
+          page: deps.page,
+          perPage: settings.components.mediaPerPage,
+        }),
+        staleTime: 'static',
+      })
+      .catch(() => undefined);
   },
 });
 

@@ -7,6 +7,15 @@ export interface RequestParams extends Omit<RequestInit, 'headers'> {
   headers?: Record<string, string>;
 }
 
+export interface HttpClientParams {
+  /**
+   * Adds the `X-Request-Id` and `X-Retry-*` headers to every request. These
+   * headers trigger a CORS preflight. Disable them for an origin that does not
+   * allow them. Default: `true`.
+   */
+  tracingHeaders?: boolean;
+}
+
 /**
  * Generic HTTP Client with some batteries included:
  *
@@ -18,7 +27,10 @@ export interface RequestParams extends Omit<RequestInit, 'headers'> {
  * - ...Some other method-specific goodies
  */
 export class HttpClient {
-  constructor(private readonly baseUrl: string) {}
+  constructor(
+    private readonly baseUrl: string,
+    private readonly params: HttpClientParams = {},
+  ) {}
 
   /**
    * Issues a request, expecting a JSON response.
@@ -45,14 +57,15 @@ export class HttpClient {
 
     return retry(
       async (attempt: number) => {
+        const tracingHeaders = {
+          'X-Retry-Sequence-Id': retrySequenceId,
+          'X-Request-Id': generateId('req-'),
+          'X-Retry-Attempt': String(attempt),
+        };
+
         const request = new Request(url, {
           ...init,
-          headers: {
-            ...headers,
-            'X-Retry-Sequence-Id': retrySequenceId,
-            'X-Request-Id': generateId('req-'),
-            'X-Retry-Attempt': String(attempt),
-          },
+          headers: this.params.tracingHeaders === false ? headers : { ...headers, ...tracingHeaders },
         });
 
         const response = await fetch(request);

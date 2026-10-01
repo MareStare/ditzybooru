@@ -1,16 +1,13 @@
 /**
  * The Philomena REST API as a {@link DataSource}.
  *
- * Every call is a server function. Philomena sends no
- * `Access-Control-Allow-Origin`, so the browser cannot reach it: page 1 would
- * arrive with the server-rendered document and every step after it would fail
- * on CORS. Going through our own origin also puts one place in front of the
- * upstream for caching and, later, for an API key.
+ * The server and the browser both call Philomena directly. If the browser call
+ * fails, the browser falls back to a server function.
  */
 
 import { createServerFn } from '@tanstack/react-start';
 
-import * as philomena from '#/lib/api/philomena/endpoints.server';
+import { directSource } from '#/lib/api/philomena/endpoints';
 import type { DataSource, MediaSearchParams } from '#/lib/api/types';
 
 /** Arguments arrive over the wire as `unknown` - the browser is not the only
@@ -38,21 +35,48 @@ function searchParams(data: unknown): MediaSearchParams {
 
 const searchMedia = createServerFn({ method: 'GET' })
   .validator(searchParams)
-  .handler(({ data }) => philomena.searchMedia(data));
+  .handler(({ data }) => directSource.searchMedia(data));
 
-const featuredMedia = createServerFn({ method: 'GET' }).handler(() => philomena.featuredMedia());
+const featuredMedia = createServerFn({ method: 'GET' }).handler(() => directSource.featuredMedia());
 
 const trendingMedia = createServerFn({ method: 'GET' })
   .validator((data: unknown) => count(data, 'limit'))
-  .handler(({ data }) => philomena.trendingMedia(data));
+  .handler(({ data }) => directSource.trendingMedia(data));
 
 const recentComments = createServerFn({ method: 'GET' })
   .validator((data: unknown) => count(data, 'limit'))
-  .handler(({ data }) => philomena.recentComments(data));
+  .handler(({ data }) => directSource.recentComments(data));
+
+function withFallback<R>(direct: () => Promise<R>, server: () => Promise<R>): Promise<R> {
+  if (import.meta.env.SSR) {
+    return direct();
+  }
+
+  return direct().catch((error: unknown) => {
+    console.warn('The request from the browser failed. Retrying it via the server.', error);
+    return server();
+  });
+}
 
 export const philomenaSource: DataSource = {
-  searchMedia: params => searchMedia({ data: params }),
-  featuredMedia: () => featuredMedia(),
-  trendingMedia: limit => trendingMedia({ data: limit }),
-  recentComments: limit => recentComments({ data: limit }),
+  searchMedia: params =>
+    withFallback(
+      () => directSource.searchMedia(params),
+      () => searchMedia({ data: params }),
+    ),
+  featuredMedia: () =>
+    withFallback(
+      () => directSource.featuredMedia(),
+      () => featuredMedia(),
+    ),
+  trendingMedia: limit =>
+    withFallback(
+      () => directSource.trendingMedia(limit),
+      () => trendingMedia({ data: limit }),
+    ),
+  recentComments: limit =>
+    withFallback(
+      () => directSource.recentComments(limit),
+      () => recentComments({ data: limit }),
+    ),
 };

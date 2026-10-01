@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
@@ -34,7 +35,18 @@ const cssTargets = {
   opera: 97 << 16,
 };
 
+function git(...args: Array<string>): string {
+  return execFileSync('git', args, { encoding: 'utf8' }).trim();
+}
+
+const commitSha = git('rev-parse', '--short=12', 'HEAD');
+const commitDate = new Date(git('show', '--no-patch', '--format=%cI', 'HEAD')).toISOString().replace(/\.\d{3}Z$/, 'Z');
+
 export default defineConfig({
+  define: {
+    'import.meta.env.COMMIT_SHA': JSON.stringify(commitSha),
+    'import.meta.env.COMMIT_DATE': JSON.stringify(commitDate),
+  },
   css: {
     // Important LightningCSS transforms we depend on:
     // - `light-dark()` inside custom properties.
