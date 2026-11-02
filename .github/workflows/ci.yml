@@ -30,7 +30,7 @@ jobs:
       # Structural a11y via axe-core plus a contrast audit over all 18
       # theme combinations. `playwright-core` ships no browser of its own, so
       # one is fetched here rather than on every `pnpm install`.
-      - run: pnpm run browsers:install -- --with-deps
+      - run: pnpm run browsers:install --with-deps
       - run: pnpm run test
 
   # Check for typos in the repository based on a static dictionary
