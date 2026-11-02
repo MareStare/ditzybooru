@@ -30,6 +30,13 @@ jobs:
       # Structural a11y via axe-core plus a contrast audit over all 18
       # theme combinations. `playwright-core` ships no browser of its own, so
       # one is fetched here rather than on every `pnpm install`.
+      # Keyed on the lockfile, which pins the Playwright version and thus the
+      # Chromium build. `--with-deps` still installs the system libraries.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
       - run: pnpm run browsers:install --with-deps
       - run: pnpm run test
 
@@ -38,5 +45,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - run: ./scripts/install/typos.sh
+
+      # The installed binary, keyed on the scripts that pin its version.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: tools
+        with:
+          path: tools
+          key: tools-${{ runner.os }}-${{ hashFiles('scripts/install/*.sh', 'scripts/utils/lib.sh') }}
+
+      - if: steps.tools.outputs.cache-hit != 'true'
+        run: ./scripts/install/typos.sh
+      - run: echo "$GITHUB_WORKSPACE/tools" >> "$GITHUB_PATH"
       - run: typos
