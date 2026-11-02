@@ -127,9 +127,9 @@
   /* Status fills: pastel on light, dark and saturated on dark, both so the
    * normal foreground stays readable on them. Identical in every theme - these
    * carry meaning, not identity. */
-  --success: light-dark(#bde9a3, #144714);
-  --danger: light-dark(#ebc0bb, #66211f);
-  --warning: light-dark(#eee9bc, #71401f);
+  --success-fill: light-dark(#bde9a3, #144714);
+  --danger-fill: light-dark(#ebc0bb, #66211f);
+  --warning-fill: light-dark(#eee9bc, #71401f);
 
   /* Mixing 82% toward white leaves tag borders too faint to register on a white
    * surface. Dark themes have the opposite problem. */

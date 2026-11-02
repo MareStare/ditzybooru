@@ -23,13 +23,13 @@
 }
 
 .notice--success {
-  --notice-seed: var(--vote-up);
+  --notice-seed: var(--success);
 }
 .notice--warning {
-  --notice-seed: #e07b27;
+  --notice-seed: var(--warning);
 }
 .notice--danger {
-  --notice-seed: var(--vote-down);
+  --notice-seed: var(--danger);
 }
 
 .notice-title {

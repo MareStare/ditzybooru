@@ -170,7 +170,7 @@
 }
 
 .drawer__link--donate svg {
-  color: var(--vote-up);
+  color: var(--success);
 }
 
 /* The drawer only exists while the secondary bar is folded away. */

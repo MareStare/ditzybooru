@@ -1,21 +1,30 @@
 /**
  * Theme-invariant colors used by more than one component.
  *
- * Byte-identical across all of Derpibooru's themes - dark-blue, dark-red,
+ * The same across all of Derpibooru's themes - dark-blue, dark-red,
  * light-blue, the lot. Philomena redeclares them in each of its 18 theme files.
  *
  * Anything only one component needs lives in that component instead; the tag
  * category colors, for instance, are all in `components/tag.css`. What is left
- * here is genuinely shared, and load-bearing for recognition: the
+ * here is genuinely shared, and important for recognition: the
  * fave/upvote/downvote colors are muscle memory. Do not "modernize" them.
  */
 
 :root {
+  /* ---- Status -------------------------------------------------------- */
+
+  /* The saturated status hues. Components that mean "good", "careful" or "bad"
+   * use these; the interaction colors below are derived from them. The soft
+   * fills buttons use live in `themes/_polarity.css` as `--*-fill`. */
+  --success: #5b9b26;
+  --warning: #e07b27;
+  --danger: #da3412;
+
   /* ---- Interactions -------------------------------------------------- */
 
   --fave: #a18e27;
-  --vote-up: #5b9b26;
-  --vote-down: #da3412;
+  --vote-up: var(--success);
+  --vote-down: var(--danger);
 
   /* ---- Site state ---------------------------------------------------- */
 

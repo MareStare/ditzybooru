@@ -421,7 +421,7 @@ rounding names a radius token; a component that wants a circle names
 
 - **Shape:** square by default (`--radius-md`, i.e. `--radius-unit`), 32px minimum height × `--density` - comfortably clear of the 24px WCAG 2.5.8 floor and the height every other control lines up on.
 - **Derivation:** a variant sets `--btn-seed` and nothing else. Border is the fill mixed 22% toward `--lift`; hover mixes the fill 12% toward `--lift` and the border 34%; active darkens 8% toward black and drops the edge highlight.
-- **Variants:** `--primary` (base mixed toward page at `--w-chrome`), `--success`, `--danger`, `--warning` (polarity status constants), `--ghost` (transparent, muted text, `--surface-hover` on hover).
+- **Variants:** `--primary` (base mixed toward page at `--w-chrome`), `--success`, `--danger`, `--warning` (polarity `--*-fill` status constants), `--ghost` (transparent, muted text, `--surface-hover` on hover).
 - **Sizes:** `--sm` 28px / `--lg` 36px / `--icon` square via `aspect-ratio: 1` / `--block` full width.
 - **Groups:** `.btn-group` welds a row into one control by collapsing the shared border with a negative margin and squaring the interior corners.
 

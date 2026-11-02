@@ -62,13 +62,13 @@
   --btn-seed: color-mix(in oklab, var(--base), var(--page) var(--w-chrome));
 }
 .btn--success {
-  --btn-seed: var(--success);
+  --btn-seed: var(--success-fill);
 }
 .btn--danger {
-  --btn-seed: var(--danger);
+  --btn-seed: var(--danger-fill);
 }
 .btn--warning {
-  --btn-seed: var(--warning);
+  --btn-seed: var(--warning-fill);
 }
 
 /* Text-only button for dense toolbars. Keeps the same hit area. */

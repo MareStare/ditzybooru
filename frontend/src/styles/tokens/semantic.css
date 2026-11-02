@@ -126,7 +126,7 @@
 
   /* ---- Status -------------------------------------------------------- */
 
-  /* `--success`, `--danger` and `--warning` are polarity constants; the button
+  /* `--success-fill`, `--danger-fill` and `--warning-fill` are polarity constants; the button
    * that uses them derives its own fill. `--brand` is the theme's own accent,
    * lifted off the base so it reads against both the page and the nav. */
   --brand: color-mix(in oklab, var(--base), var(--lift) 28%);

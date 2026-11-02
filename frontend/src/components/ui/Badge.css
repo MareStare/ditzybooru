@@ -26,10 +26,10 @@
 }
 
 .badge--success {
-  --badge-seed: var(--vote-up);
+  --badge-seed: var(--success);
 }
 .badge--danger {
-  --badge-seed: var(--vote-down);
+  --badge-seed: var(--danger);
 }
 .badge--unread {
   --badge-seed: var(--unread);
