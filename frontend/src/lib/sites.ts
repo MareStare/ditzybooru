@@ -26,6 +26,9 @@ export interface Site {
 /** One entry of the config file. Only `origin` is required. */
 export interface SiteConfig extends Partial<Omit<Site, 'origin'>> {
   origin: string;
+  /** Which Philomena variant the origin runs. Only the Rust backend reads it,
+   *  to pick its API mapping; it guesses from the origin when absent. */
+  flavor?: string;
 }
 
 /** What a live site tells us about itself. Every field is optional. */
@@ -164,15 +167,19 @@ export function parseSiteTable(raw: unknown): Map<string, SiteConfig> {
       throw new Error(`${where}: expected an origin or an object, got ${JSON.stringify(entry)}`);
     }
 
-    const { origin, name, logo, themeColor } = entry as Record<string, unknown>;
+    const { origin, name, logo, themeColor, flavor } = entry as Record<string, unknown>;
     if (name !== undefined && (typeof name !== 'string' || name.trim() === '')) {
       throw new Error(`${where}: name must be a non-empty string`);
     }
     if (themeColor !== undefined && !isThemeColor(themeColor)) {
       throw new Error(`${where}: themeColor must be one of ${THEME_COLORS.map(color => color.id).join(', ')}`);
     }
+    if (flavor !== undefined && (typeof flavor !== 'string' || flavor.trim() === '')) {
+      throw new Error(`${where}: flavor must be a non-empty string`);
+    }
     table.set(host, {
       origin: parseOrigin(origin, where),
+      ...(flavor === undefined ? {} : { flavor: flavor.trim() }),
       ...(name === undefined ? {} : { name: name.trim() }),
       ...(logo === undefined ? {} : { logo: parseLogo(logo, where) }),
       ...(themeColor === undefined ? {} : { themeColor }),

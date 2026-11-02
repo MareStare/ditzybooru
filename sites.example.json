@@ -3,6 +3,7 @@
   "furb.example.org": "https://furbooru.org",
   "custom.example.org": {
     "origin": "https://philomena.example.net",
+    "flavor": "philomena",
     "name": "My Booru",
     "logo": "https://philomena.example.net/logo.svg",
     "themeColor": "teal"

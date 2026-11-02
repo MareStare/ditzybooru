@@ -30,9 +30,17 @@ describe('parseSiteTable', () => {
     [{ 'a.example.org': 5 }],
     [{ 'a/b': 'https://x.org' }],
     [{ 'a.example.org': { origin: 'https://x.org', themeColor: 'mauve' } }],
+    [{ 'a.example.org': { origin: 'https://x.org', flavor: 3 } }],
     [{ 'a.example.org': { origin: 'https://x.org', logo: 'javascript:alert(1)' } }],
   ])('rejects %j', raw => {
     expect(() => parseSiteTable(raw)).toThrow();
+  });
+});
+
+describe('parseSiteTable flavor', () => {
+  it('keeps the flavor for the backend', () => {
+    const table = parseSiteTable({ 'a.example.org': { origin: 'https://x.org', flavor: ' furbooru ' } });
+    expect(table.get('a.example.org')?.flavor).toBe('furbooru');
   });
 });
 
