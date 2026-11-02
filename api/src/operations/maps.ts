@@ -58,3 +58,21 @@ export function under(prefix: string, map: JsonMap): JsonMap {
   }
   return lifted;
 }
+
+/** Upstream tag -> `Tag`. */
+export const tagMap: JsonMap = {
+  id: '/id',
+  name: '/name',
+  slug: '/slug',
+  namespace: '/namespace',
+  nameInNamespace: '/name_in_namespace',
+  category: '/category',
+  shortDescription: '/short_description',
+  description: '/description',
+  imageCount: '/images',
+  aliases: '/aliases',
+  aliasedTag: '/aliased_tag',
+  impliedTags: '/implied_tags',
+  impliedByTags: '/implied_by_tags',
+  spoilerImageUrl: urlAt('/spoiler_image_uri'),
+};

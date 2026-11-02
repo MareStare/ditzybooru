@@ -169,6 +169,37 @@ const Topic = s.object({
   authorId: s.nullable(s.int()),
 });
 
+const Profile = s.object({
+  id: s.int(),
+  name: s.string(),
+  slug: s.string(),
+  role: s.string(),
+  description: s.nullable(s.string()),
+  createdAt: s.dateTime(),
+  avatarUrl: s.nullable(s.uri()),
+  commentsCount: s.int(),
+  postsCount: s.int(),
+  topicsCount: s.int(),
+  uploadsCount: s.int(),
+  /** Tags the user has linked to their account. */
+  links: s.array(
+    s.object({
+      state: s.string(),
+      tagId: s.nullable(s.int()),
+      createdAt: s.dateTime(),
+    }),
+  ),
+  awards: s.array(
+    s.object({
+      id: s.int(),
+      title: s.string(),
+      label: s.nullable(s.string()),
+      awardedOn: s.dateTime(),
+      imageUrl: s.uri(),
+    }),
+  ),
+});
+
 const ForumTopic = s.object({
   slug: s.string(),
   title: s.string(),
@@ -195,6 +226,7 @@ export const schemas = {
   Filter,
   Forum,
   Topic,
+  Profile,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
   MediaResults: results('Media'),

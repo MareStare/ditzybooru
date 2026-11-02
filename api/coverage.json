@@ -1557,8 +1557,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getPostById"
+    ],
     "note": ""
   },
   "GET /api/v1/json/profiles/:id": {
@@ -1570,8 +1572,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getProfile"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search": {
@@ -1583,9 +1587,9 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "Alias of the images search: searchImages already serves it."
   },
   "GET /api/v1/json/search/comments": {
     "controller": "PhilomenaWeb.Api.Json.Search.CommentController#index",
@@ -1686,8 +1690,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getTag"
+    ],
     "note": ""
   },
   "GET /api/v1/rss/watched": {
@@ -3252,8 +3258,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getTag"
+    ],
     "note": ""
   },
   "GET /tags/:id/edit": {

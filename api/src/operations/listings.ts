@@ -1,7 +1,6 @@
 import { s } from '../dsl/schema.ts';
 import { listingOperation } from './listing.ts';
-import { commentMap, filterMap, postMap } from './maps.ts';
-import { urlAt } from './media.ts';
+import { commentMap, filterMap, postMap, tagMap } from './maps.ts';
 
 export const listTags = listingOperation({
   operationId: 'listTags',
@@ -11,22 +10,7 @@ export const listTags = listingOperation({
   item: 'Tag',
   itemsKey: 'tags',
   htmlRoute: 'GET /tags',
-  itemMap: {
-    id: '/id',
-    name: '/name',
-    slug: '/slug',
-    namespace: '/namespace',
-    nameInNamespace: '/name_in_namespace',
-    category: '/category',
-    shortDescription: '/short_description',
-    description: '/description',
-    imageCount: '/images',
-    aliases: '/aliases',
-    aliasedTag: '/aliased_tag',
-    impliedTags: '/implied_tags',
-    impliedByTags: '/implied_by_tags',
-    spoilerImageUrl: urlAt('/spoiler_image_uri'),
-  },
+  itemMap: tagMap,
 });
 
 export const listComments = listingOperation({
