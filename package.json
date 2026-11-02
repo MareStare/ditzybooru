@@ -16,7 +16,6 @@
     "api:next": "pnpm --filter api run next",
     "test": "pnpm --filter frontend run test",
     "e2e": "./scripts/e2e.sh",
-    "e2e:update": "./scripts/e2e.sh --update",
     "check:a11y": "pnpm --filter frontend run check:a11y",
     "browsers:install": "pnpm --filter frontend run browsers:install",
     "lint": "eslint --max-warnings 0",

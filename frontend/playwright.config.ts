@@ -4,7 +4,8 @@ const PORT = 4320;
 const BASE_URL = `http://127.0.0.1:${PORT}`;
 
 /**
- * Screenshot suite behind `pnpm run e2e`. Kept apart from the Vitest `a11y`
+ * Screenshot recorder behind `pnpm run e2e`. It keeps a visual history and
+ * enforces nothing: `scripts/e2e.sh` always rewrites changed images. Kept apart from the Vitest `a11y`
  * project: that one walks themes for axe, this one stores pixels, and the two
  * want different lifecycles. Port 4320 keeps it clear of the a11y preview.
  *
@@ -22,8 +23,7 @@ export default defineConfig({
       animations: 'disabled',
       caret: 'hide',
       // No pixel budget: every shot is rendered by the same pinned browser, so
-      // there is no noise to absorb, and a ratio would hide small text changes
-      // on a tall page.
+      // there is no noise to absorb, and any difference is worth recording.
       maxDiffPixels: 0,
     },
   },

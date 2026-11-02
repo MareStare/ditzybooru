@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 #
-# Runs the screenshot suite against Chromium from the pinned Playwright image,
-# so baselines are rendered identically on every machine and in CI.
-#
-#   scripts/e2e.sh            compare against the committed baselines
-#   scripts/e2e.sh --update   write only new or changed baselines, then
-#                             optimize them losslessly with oxipng
+# Records screenshots of the site with Chromium from the pinned Playwright
+# image, so they are rendered identically on every machine and in CI. They are
+# a visual history, not a test: a changed page is never a failure. Only new or
+# changed images are written, then optimized losslessly with oxipng.
 
 set -euo pipefail
 
@@ -20,16 +18,6 @@ port=3355
 version=$(node -p "require('./frontend/node_modules/@playwright/test/package.json').version")
 runtime=$(command -v docker || command -v podman || bail "Needs docker or podman")
 
-update=false
-args=()
-if [[ "${1:-}" == "--update" ]]; then
-    update=true
-    shift
-    # Rewrites a baseline only when it no longer matches. A passing one is left
-    # alone, so git sees no churn.
-    args+=(--update-snapshots=changed)
-fi
-
 # The browser runs in the container, the app and the tests stay on the host.
 container=$("$runtime" run --detach --rm --network host --init \
     "mcr.microsoft.com/playwright:v$version-noble" \
@@ -42,12 +30,10 @@ trap '"$runtime" stop "$container" > /dev/null' EXIT
 step timeout 120 grep --quiet --max-count=1 'Listening on' < <("$runtime" logs --follow "$container" 2>&1)
 
 PW_TEST_CONNECT_WS_ENDPOINT="ws://127.0.0.1:$port/" \
-    step pnpm --filter frontend exec playwright test "${args[@]}" "$@"
+    step pnpm --filter frontend exec playwright test --update-snapshots=changed "$@"
 
-if [[ $update == true ]]; then
-    # Only files git reports as new or modified, so settled ones stay untouched.
-    mapfile -t changed < <(git ls-files --modified --others --exclude-standard -- "$shots" | grep '\.png$' || true)
-    if [[ ${#changed[@]} -gt 0 ]]; then
-        step oxipng --opt max --strip all --quiet "${changed[@]}"
-    fi
+# Only files git reports as new or modified, so settled ones stay untouched.
+mapfile -t changed < <(git ls-files --modified --others --exclude-standard -- "$shots" | grep '\.png$' || true)
+if [[ ${#changed[@]} -gt 0 ]]; then
+    step oxipng --opt max --strip all --quiet "${changed[@]}"
 fi
