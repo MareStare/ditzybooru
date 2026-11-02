@@ -24,9 +24,9 @@ interface SelectSpec {
   fields: Record<string, FieldSpec>;
 }
 
-/** JSON pointer remap: our field -> pointer into the upstream document, or a nested spec. */
+/** JSON pointer remap (`a|b` tries pointer `a`, then `b`, for renamed fields): our field -> pointer into the upstream document, or a nested spec. */
 type JsonMapValue = string | { from: string; as?: Transform; map?: Record<string, JsonMapValue> };
-type JsonMap = Record<string, JsonMapValue>;
+export type JsonMap = Record<string, JsonMapValue>;
 
 interface UpstreamRequest {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';

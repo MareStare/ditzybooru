@@ -69,7 +69,29 @@ fn apply_rule(
     }
 }
 
+/// Resolves `pointer`, or the first of several `a|b` alternatives that exists.
+/// Alternatives cover fields that were renamed between Philomena versions.
 fn lookup<'a>(doc: &'a Value, pointer: &str) -> Result<&'a Value> {
-    doc.pointer(pointer)
+    pointer
+        .split('|')
+        .find_map(|alternative| doc.pointer(alternative))
         .ok_or_else(|| anyhow!("pointer {pointer:?} matched nothing"))
+}
+
+#[cfg(test)]
+mod tests {
+    use serde_json::json;
+
+    use super::*;
+
+    #[test]
+    fn alternatives_pick_the_first_existing_pointer() {
+        let doc = json!({ "creator": "new", "user": "old", "other": { "user": "x" } });
+        assert_eq!(lookup(&doc, "/creator|/user").unwrap(), "new");
+        assert_eq!(
+            lookup(&json!({ "user": "old" }), "/creator|/user").unwrap(),
+            "old"
+        );
+        lookup(&doc, "/missing|/gone").unwrap_err();
+    }
 }

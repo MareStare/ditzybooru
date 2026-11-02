@@ -42,7 +42,7 @@ const ImagePage = s.object({
 });
 
 /** One image in a listing; mirrors the frontend's `Media`. */
-const MediaItem = s.object({
+const Media = s.object({
   id: s.int(),
   createdAt: s.dateTime(),
   width: s.int(),
@@ -62,11 +62,98 @@ const MediaItem = s.object({
   hiddenFromUsers: s.bool(),
 });
 
-const SearchPage = s.object({
-  items: s.array(s.ref('MediaItem')),
-  total: s.int(),
-  page: s.int(),
-  perPage: s.int(),
+/** One page of a listing: the items, the total match count and the paging used. */
+function results(item: string) {
+  return s.object({
+    items: s.array(s.ref(item)),
+    total: s.int(),
+    page: s.int(),
+    perPage: s.int(),
+  });
+}
+
+const Tag = s.object({
+  id: s.int(),
+  name: s.string(),
+  slug: s.string(),
+  namespace: s.nullable(s.string()),
+  nameInNamespace: s.string(),
+  category: s.nullable(s.string()),
+  shortDescription: s.nullable(s.string()),
+  description: s.string(),
+  imageCount: s.int(),
+  aliases: s.array(s.string()),
+  aliasedTag: s.nullable(s.string()),
+  impliedTags: s.array(s.string()),
+  impliedByTags: s.array(s.string()),
+  spoilerImageUrl: s.nullable(s.string()),
 });
 
-export const schemas = { Representations, ImageTag, ImagePage, MediaItem, SearchPage, Error: ErrorBody };
+const Comment = s.object({
+  id: s.int(),
+  imageId: s.int(),
+  createdAt: s.dateTime(),
+  updatedAt: s.dateTime(),
+  editedAt: s.nullable(s.dateTime()),
+  editReason: s.nullable(s.string()),
+  body: s.string(),
+  author: s.string(),
+  avatarUrl: s.string(),
+  /** `null` for anonymous comments. */
+  userId: s.nullable(s.int()),
+});
+
+const Post = s.object({
+  id: s.int(),
+  createdAt: s.dateTime(),
+  updatedAt: s.dateTime(),
+  editedAt: s.nullable(s.dateTime()),
+  editReason: s.nullable(s.string()),
+  body: s.string(),
+  author: s.string(),
+  avatarUrl: s.string(),
+  userId: s.nullable(s.int()),
+});
+
+const Gallery = s.object({
+  id: s.int(),
+  title: s.string(),
+  description: s.string(),
+  spoilerWarning: s.string(),
+  thumbnailId: s.int(),
+  user: s.string(),
+  userId: s.int(),
+});
+
+const Filter = s.object({
+  id: s.int(),
+  name: s.string(),
+  description: s.string(),
+  public: s.bool(),
+  system: s.bool(),
+  userCount: s.int(),
+  userId: s.nullable(s.int()),
+  hiddenTagIds: s.array(s.int()),
+  spoileredTagIds: s.array(s.int()),
+  hiddenComplex: s.nullable(s.string()),
+  spoileredComplex: s.nullable(s.string()),
+});
+
+export const schemas = {
+  Representations,
+  ImageTag,
+  ImagePage,
+  Media,
+  Tag,
+  Comment,
+  Post,
+  Gallery,
+  Filter,
+  MediaResults: results('Media'),
+  TagResults: results('Tag'),
+  CommentResults: results('Comment'),
+  PostResults: results('Post'),
+  GalleryResults: results('Gallery'),
+  FilterResults: results('Filter'),
+  Error: ErrorBody,
+};

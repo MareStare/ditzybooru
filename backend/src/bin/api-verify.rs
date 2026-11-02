@@ -76,6 +76,13 @@ async fn run() -> Result<bool> {
                 let body = fetch_body(&client, ctx, strategy, &op.examples).await?;
                 let value = extract(strategy, &body, ctx, &op.examples)?;
                 validate(&document, op, &value)?;
+                if value
+                    .get("items")
+                    .and_then(Value::as_array)
+                    .is_some_and(Vec::is_empty)
+                {
+                    anyhow::bail!("`items` is empty, so no item fields were checked; seed data");
+                }
                 Ok::<_, anyhow::Error>(body)
             }
             .await;

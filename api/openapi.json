@@ -1,6 +1,106 @@
 {
   "components": {
     "schemas": {
+      "Comment": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editedAt": {
+            "oneOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "editReason": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "imageId": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "userId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "imageId",
+          "createdAt",
+          "updatedAt",
+          "editedAt",
+          "editReason",
+          "body",
+          "author",
+          "avatarUrl",
+          "userId"
+        ],
+        "type": "object"
+      },
+      "CommentResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Comment"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
+        ],
+        "type": "object"
+      },
       "Error": {
         "additionalProperties": false,
         "properties": {
@@ -23,6 +123,179 @@
         },
         "required": [
           "error"
+        ],
+        "type": "object"
+      },
+      "Filter": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "hiddenComplex": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "hiddenTagIds": {
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "public": {
+            "type": "boolean"
+          },
+          "spoileredComplex": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "spoileredTagIds": {
+            "items": {
+              "type": "integer"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "system": {
+            "type": "boolean"
+          },
+          "userCount": {
+            "type": "integer"
+          },
+          "userId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description",
+          "public",
+          "system",
+          "userCount",
+          "userId",
+          "hiddenTagIds",
+          "spoileredTagIds",
+          "hiddenComplex",
+          "spoileredComplex"
+        ],
+        "type": "object"
+      },
+      "FilterResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
+        ],
+        "type": "object"
+      },
+      "Gallery": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "spoilerWarning": {
+            "type": "string"
+          },
+          "thumbnailId": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "spoilerWarning",
+          "thumbnailId",
+          "user",
+          "userId"
+        ],
+        "type": "object"
+      },
+      "GalleryResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Gallery"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
         ],
         "type": "object"
       },
@@ -130,7 +403,7 @@
         ],
         "type": "object"
       },
-      "MediaItem": {
+      "Media": {
         "additionalProperties": false,
         "properties": {
           "aspectRatio": {
@@ -215,6 +488,130 @@
         ],
         "type": "object"
       },
+      "MediaResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Media"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
+        ],
+        "type": "object"
+      },
+      "Post": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editedAt": {
+            "oneOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "editReason": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "userId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "updatedAt",
+          "editedAt",
+          "editReason",
+          "body",
+          "author",
+          "avatarUrl",
+          "userId"
+        ],
+        "type": "object"
+      },
+      "PostResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Post"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
+        ],
+        "type": "object"
+      },
       "Representations": {
         "additionalProperties": false,
         "properties": {
@@ -263,12 +660,123 @@
         ],
         "type": "object"
       },
-      "SearchPage": {
+      "Tag": {
+        "additionalProperties": false,
+        "properties": {
+          "aliasedTag": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "aliases": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "imageCount": {
+            "type": "integer"
+          },
+          "impliedByTags": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "impliedTags": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          },
+          "nameInNamespace": {
+            "type": "string"
+          },
+          "namespace": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "shortDescription": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "slug": {
+            "type": "string"
+          },
+          "spoilerImageUrl": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "namespace",
+          "nameInNamespace",
+          "category",
+          "shortDescription",
+          "description",
+          "imageCount",
+          "aliases",
+          "aliasedTag",
+          "impliedTags",
+          "impliedByTags",
+          "spoilerImageUrl"
+        ],
+        "type": "object"
+      },
+      "TagResults": {
         "additionalProperties": false,
         "properties": {
           "items": {
             "items": {
-              "$ref": "#/components/schemas/MediaItem"
+              "$ref": "#/components/schemas/Tag"
             },
             "minItems": 0,
             "type": "array"
@@ -300,6 +808,334 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/comments": {
+      "get": {
+        "operationId": "listComments",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The comments page: image comments matching a query.",
+        "tags": [
+          "comments"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "*"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/comments",
+            "GET /comments"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/comments",
+                  "map": {
+                    "author": "/author",
+                    "avatarUrl": "/avatar",
+                    "body": "/body",
+                    "createdAt": "/created_at",
+                    "editedAt": "/edited_at",
+                    "editReason": "/edit_reason",
+                    "id": "/id",
+                    "imageId": "/image_id",
+                    "updatedAt": "/updated_at",
+                    "userId": "/user_id"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/comments",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/filters": {
+      "get": {
+        "operationId": "listFilters",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The filters page: public filters matching a query.",
+        "tags": [
+          "filters"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "*"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/filters",
+            "GET /filters"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/filters",
+                  "map": {
+                    "description": "/description",
+                    "hiddenComplex": "/hidden_complex",
+                    "hiddenTagIds": "/hidden_tag_ids",
+                    "id": "/id",
+                    "name": "/name",
+                    "public": "/public",
+                    "spoileredComplex": "/spoilered_complex",
+                    "spoileredTagIds": "/spoilered_tag_ids",
+                    "system": "/system",
+                    "userCount": "/user_count",
+                    "userId": "/user_id"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/filters",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/galleries": {
+      "get": {
+        "operationId": "listGalleries",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The galleries page: galleries matching a query.",
+        "tags": [
+          "galleries"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "*"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/galleries",
+            "GET /galleries"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/galleries",
+                  "map": {
+                    "description": "/description",
+                    "id": "/id",
+                    "spoilerWarning": "/spoiler_warning",
+                    "thumbnailId": "/thumbnail_id",
+                    "title": "/title",
+                    "user": "/creator|/user",
+                    "userId": "/creator_id|/user_id"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/galleries",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "/images/{id}": {
       "get": {
         "operationId": "getImage",
@@ -510,6 +1346,115 @@
         }
       }
     },
+    "/posts": {
+      "get": {
+        "operationId": "listPosts",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The posts page: forum posts matching a query.",
+        "tags": [
+          "posts"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "*"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/posts",
+            "GET /posts"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/posts",
+                  "map": {
+                    "author": "/author",
+                    "avatarUrl": "/avatar",
+                    "body": "/body",
+                    "createdAt": "/created_at",
+                    "editedAt": "/edited_at",
+                    "editReason": "/edit_reason",
+                    "id": "/id",
+                    "updatedAt": "/updated_at",
+                    "userId": "/user_id"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/posts",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "/search": {
       "get": {
         "operationId": "searchImages",
@@ -575,7 +1520,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SearchPage"
+                  "$ref": "#/components/schemas/MediaResults"
                 }
               }
             },
@@ -592,9 +1537,9 @@
             "description": "Error"
           }
         },
-        "summary": "Search images. Returns one page of results and the total match count.",
+        "summary": "The search page: one page of image results for a query.",
         "tags": [
-          "search"
+          "images"
         ],
         "x-examples": {
           "perPage": 2,
@@ -664,6 +1609,120 @@
                   "q": "{q|*}",
                   "sd": "{sd|desc}",
                   "sf": "{sf|created_at}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/tags": {
+      "get": {
+        "operationId": "listTags",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The tags page: tags matching a query, with their metadata.",
+        "tags": [
+          "tags"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "*"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/tags",
+            "GET /tags"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/tags",
+                  "map": {
+                    "aliasedTag": "/aliased_tag",
+                    "aliases": "/aliases",
+                    "category": "/category",
+                    "description": "/description",
+                    "id": "/id",
+                    "imageCount": "/images",
+                    "impliedByTags": "/implied_by_tags",
+                    "impliedTags": "/implied_tags",
+                    "name": "/name",
+                    "nameInNamespace": "/name_in_namespace",
+                    "namespace": "/namespace",
+                    "shortDescription": "/short_description",
+                    "slug": "/slug",
+                    "spoilerImageUrl": "/spoiler_image_uri"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/tags",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}"
                 }
               }
             }

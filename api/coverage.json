@@ -1576,8 +1576,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listComments"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search/filters": {
@@ -1589,8 +1591,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listFilters"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search/galleries": {
@@ -1602,8 +1606,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listGalleries"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search/images": {
@@ -1630,8 +1636,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listPosts"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search/tags": {
@@ -1643,8 +1651,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listTags"
+    ],
     "note": ""
   },
   "GET /api/v1/json/tags/:id": {
@@ -1773,8 +1783,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listComments"
+    ],
     "note": ""
   },
   "GET /commissions": {
@@ -1980,8 +1992,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listFilters"
+    ],
     "note": ""
   },
   "GET /filters/:id": {
@@ -2188,8 +2202,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listGalleries"
+    ],
     "note": ""
   },
   "GET /galleries/:gallery_id/reports/new": {
@@ -2671,8 +2687,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listPosts"
+    ],
     "note": ""
   },
   "GET /profiles/:id": {
@@ -3199,8 +3217,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listTags"
+    ],
     "note": ""
   },
   "GET /tags/:id": {
