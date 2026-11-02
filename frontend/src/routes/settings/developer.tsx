@@ -12,6 +12,11 @@ export const Route = createFileRoute('/settings/developer')({ component: Develop
 const DATA_SOURCE_OPTIONS: Array<{ value: DataSourceKind; label: string; description: string }> = [
   { value: 'live', label: 'Live', description: 'Read from the Philomena origin server.' },
   { value: 'mock', label: 'Mock', description: 'Read the fabricated data bundled with the frontend.' },
+  {
+    value: 'mock-anonymous',
+    label: 'Mock, signed out',
+    description: 'The same fabricated data, browsed without a signed-in user.',
+  },
 ];
 
 function DeveloperSettingsPage() {

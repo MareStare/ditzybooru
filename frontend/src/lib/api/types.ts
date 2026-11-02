@@ -8,10 +8,11 @@
 
 import type { Comment, Media } from '#/lib/types';
 
-/** Which backend the site reads from. */
-export type DataSourceKind = 'live' | 'mock';
+/** Which backend the site reads from. `mock` is the bundled data with a
+ *  signed-in user, `mock-anonymous` the same data browsed signed out. */
+export type DataSourceKind = 'live' | 'mock' | 'mock-anonymous';
 
-export const DATA_SOURCE_KINDS: Array<DataSourceKind> = ['live', 'mock'];
+export const DATA_SOURCE_KINDS: Array<DataSourceKind> = ['live', 'mock', 'mock-anonymous'];
 
 export interface MediaPage {
   images: Array<Media>;

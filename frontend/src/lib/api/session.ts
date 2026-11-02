@@ -6,8 +6,8 @@ import type { User } from '#/lib/types';
  * The signed-in user, or `null` when browsing anonymously.
  *
  * Sign-in is not built yet, so every live request is anonymous: no faves, no
- * votes, no watched tags. The mock source keeps a signed-in user so the pages
- * that only exist for one can still be worked on.
+ * votes, no watched tags. The `mock` source keeps a signed-in user so the pages
+ * that only exist for one can still be worked on; `mock-anonymous` has none.
  */
 export function currentUser(kind: DataSourceKind): User | null {
   return kind === 'mock' ? mockCurrentUser : null;

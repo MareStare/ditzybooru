@@ -6,7 +6,7 @@ import type { DataSource, DataSourceKind } from '#/lib/api/types';
 /** With `serverFallback: false`, a failed call from the browser does not go to
  *  the server. */
 export function dataSource(kind: DataSourceKind, serverFallback = true): DataSource {
-  if (kind === 'mock') {
+  if (kind === 'mock' || kind === 'mock-anonymous') {
     return mockSource;
   }
 
