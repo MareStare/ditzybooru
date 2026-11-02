@@ -15,7 +15,9 @@ mod json;
 mod spec;
 mod transform;
 
-pub use engine::{Context, extract, fetch_body, plan_request, select_strategy, validate};
+pub use engine::{
+    Context, UpstreamStatus, extract, fetch_body, plan_request, select_strategy, validate,
+};
 pub use spec::{Document, Operation, Strategy};
 
 /// The tracked `OpenAPI` document, embedded at build time.

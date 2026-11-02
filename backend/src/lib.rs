@@ -1,6 +1,8 @@
 use axum::{Router, routing::get};
 
+mod api;
 pub mod mapping;
+mod sites;
 
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
@@ -13,7 +15,9 @@ pub async fn run() {
 }
 
 async fn try_run() -> Result {
-    let app = Router::new().route("/", get(|| async { "Hello, World!" }));
+    let app = Router::new()
+        .route("/", get(|| async { "Hello, World!" }))
+        .merge(api::router()?);
 
     // Loopback by default: a reverse proxy is the public entry point.
     let host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_owned());

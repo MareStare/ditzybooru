@@ -11,6 +11,18 @@ use super::{
 };
 use crate::Result;
 
+/// The upstream answered with a non-success status.
+#[derive(Debug)]
+pub struct UpstreamStatus(pub reqwest::StatusCode);
+
+impl std::fmt::Display for UpstreamStatus {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "upstream returned {}", self.0)
+    }
+}
+
+impl std::error::Error for UpstreamStatus {}
+
 /// The upstream instance a request is made against.
 #[derive(Debug, Clone, Copy)]
 pub struct Context<'a> {
@@ -97,7 +109,7 @@ pub async fn fetch_body(
         .with_context(|| format!("GET {url}"))?;
     let status = response.status();
     if !status.is_success() {
-        bail!("GET {url} returned {status}");
+        return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
     }
     Ok(response.text().await?)
 }

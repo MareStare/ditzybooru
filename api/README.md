@@ -33,3 +33,15 @@ upstream route and is the resume point.
 - Flavor differences use `flavors` on strategies, never forked operations.
 - `:new` / `:edit` form GETs are not operations; they become `form.page` of the
   write they belong to. Skip them in `coverage.json` with a `note`.
+
+## Serving
+
+The Rust backend (`backend/src/api.rs`) registers every GET operation of
+`openapi.json` under `/api/v1`. The node build of the frontend proxies
+`/api/v1/**` to it (`frontend/api-proxy.ts`, backend address from
+`API_BACKEND_URL`, default `http://127.0.0.1:3711`). The proxy passes the
+site's `Host` as `X-Forwarded-Host`; the backend picks the Philomena from it
+with the same `sites.local.json` (or `SITES_FILE`) as the frontend. An entry may
+add `"flavor"`; otherwise it is `furbooru` for furbooru origins and `philomena`
+for the rest. Hosts that are not listed get `UPSTREAM_ORIGIN`, or Derpibooru.
+Redirects from the upstream are not followed and read as 404.

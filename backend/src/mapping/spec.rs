@@ -21,6 +21,10 @@ pub struct Document {
 pub struct Operation {
     /// The `operationId`.
     pub id: String,
+    /// Our path under `/api/v1`, in axum syntax (`/images/{id}`).
+    pub path: String,
+    /// Lowercase HTTP method.
+    pub method: String,
     /// Authentication the upstream needs.
     pub auth: String,
     /// Coverage keys (`"GET /images/:id"`) this operation serves.
@@ -221,8 +225,8 @@ impl Document {
     pub fn parse(source: &str) -> Result<Self> {
         let raw: RawDocument = serde_json::from_str(source)?;
         let mut operations = vec![];
-        for item in raw.paths.into_values() {
-            for op in item.into_values() {
+        for (path, item) in raw.paths {
+            for (method, op) in item {
                 let schema = op
                     .responses
                     .ok
@@ -233,6 +237,8 @@ impl Document {
                     .ok_or_else(|| anyhow::anyhow!("{}: no 200 response", op.operation_id))?;
                 operations.push(Operation {
                     id: op.operation_id,
+                    path: path.clone(),
+                    method,
                     auth: op.philomena.auth,
                     routes: op.philomena.routes,
                     strategies: op.philomena.strategies,

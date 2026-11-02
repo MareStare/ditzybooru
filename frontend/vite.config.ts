@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
 import { nitro } from 'nitro/vite';
@@ -94,7 +95,13 @@ export default defineConfig({
         semicolons: true,
       },
     }),
-    ...(serverTarget === 'node' ? [nitro()] : []),
+    ...(serverTarget === 'node'
+      ? [
+          nitro({
+            handlers: [{ route: '/api/v1/**', handler: fileURLToPath(new URL('./api-proxy.ts', import.meta.url)) }],
+          }),
+        ]
+      : []),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
     bundleBudget(),
