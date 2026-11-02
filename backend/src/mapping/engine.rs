@@ -112,6 +112,31 @@ pub fn effective_params(
     Ok(all)
 }
 
+/// The request parameters the strategy's request templates read, in order.
+/// Anything else a client sent cannot change the upstream request, so it is
+/// left out of cache keys.
+pub fn relevant_params(
+    strategy: &Strategy,
+    params: &BTreeMap<String, String>,
+) -> Result<BTreeMap<String, String>> {
+    let mut requests = vec![strategy.request()];
+    if let Strategy::Json(json_strategy) = strategy {
+        requests.extend(json_strategy.joins.iter().map(|join| &join.request));
+        requests.extend(json_strategy.fanout.iter().map(|fanout| &fanout.request));
+    }
+    let mut kept = BTreeMap::new();
+    for request in requests {
+        for template in std::iter::once(&request.path).chain(request.query.values()) {
+            for (name, _) in placeholders(template)? {
+                if let Some(value) = params.get(name) {
+                    kept.insert(name.to_owned(), value.clone());
+                }
+            }
+        }
+    }
+    Ok(kept)
+}
+
 /// Inserts the defaults a request's templates declare for missing parameters.
 fn add_defaults(request: &UpstreamRequest, all: &mut BTreeMap<String, String>) -> Result<()> {
     let templates = std::iter::once(&request.path).chain(request.query.values());

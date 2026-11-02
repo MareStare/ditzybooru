@@ -1,13 +1,20 @@
 //! Runs `x-philomena` mappings against the local Philomena instances.
 //!
-//! Usage: `cargo run -p backend --bin api-verify -- [--all | <operationId>...]`.
+//! Usage: `cargo run -p backend --bin api-verify -- [--all | <operationId>...] [--remote]`.
 //! Writes raw upstream responses to `api/fixtures/` and marks routes `verified`
 //! in `api/coverage.json`.
 
-use std::{collections::BTreeMap, fs, path::PathBuf, process::ExitCode};
+use std::{
+    collections::BTreeMap,
+    fs,
+    path::{Path, PathBuf},
+    process::ExitCode,
+};
 
 use anyhow::{Context as _, Result};
-use backend::mapping::{Context, Document, Strategy, extract, fetch, select_strategy, validate};
+use backend::mapping::{
+    Context, Document, Responses, Strategy, extract, fetch, select_strategy, validate,
+};
 use serde::Deserialize;
 use serde_json::Value;
 
@@ -15,6 +22,10 @@ use serde_json::Value;
 struct Instance {
     origin: String,
     flavor: String,
+    /// A live third-party site. Only verified with `--remote`, so routine runs
+    /// do not hit it (it rate limits).
+    #[serde(default)]
+    remote: bool,
 }
 
 #[tokio::main]
@@ -29,6 +40,31 @@ async fn main() -> ExitCode {
     }
 }
 
+/// Saves the upstream responses as fixtures: `<op>.json` (or `.html`), a join's
+/// follow-up as `<op>.<join>.json` and each fan-out response as
+/// `<op>.fanout<index>.json`.
+fn write_fixtures(
+    dir: &Path,
+    op_id: &str,
+    strategy: &Strategy,
+    responses: Responses,
+) -> Result<()> {
+    let ext = if matches!(strategy, Strategy::Html(_)) {
+        "html"
+    } else {
+        "json"
+    };
+    fs::create_dir_all(dir)?;
+    fs::write(dir.join(format!("{op_id}.{ext}")), responses.main)?;
+    for (join, body) in responses.joins {
+        fs::write(dir.join(format!("{op_id}.{join}.json")), body)?;
+    }
+    for (index, body) in responses.fanout.iter().enumerate() {
+        fs::write(dir.join(format!("{op_id}.fanout{index}.json")), body)?;
+    }
+    Ok(())
+}
+
 async fn run() -> Result<bool> {
     let api_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../api");
     let document = Document::parse(&fs::read_to_string(api_dir.join("openapi.json"))?)?;
@@ -38,6 +74,7 @@ async fn run() -> Result<bool> {
     let mut coverage: Value = serde_json::from_str(&fs::read_to_string(&coverage_path)?)?;
 
     let args: Vec<String> = std::env::args().skip(1).collect();
+    let remote = args.iter().any(|a| a == "--remote");
     let selected: Vec<_> = document
         .operations
         .iter()
@@ -55,6 +92,10 @@ async fn run() -> Result<bool> {
         let mut passed: Vec<&str> = vec![];
         for (name, instance) in &instances {
             let label = format!("{} @ {name}", op.id);
+            if instance.remote && !remote {
+                println!("SKIP {label}: remote instance, pass --remote to include it");
+                continue;
+            }
             if op.auth != "none" {
                 println!(
                     "SKIP {label}: auth {:?} is not supported by the verifier yet",
@@ -86,22 +127,12 @@ async fn run() -> Result<bool> {
             .await;
             match result {
                 Ok(responses) => {
-                    let ext = if matches!(strategy, Strategy::Html(_)) {
-                        "html"
-                    } else {
-                        "json"
-                    };
-                    let dir = api_dir.join("fixtures").join(name);
-                    fs::create_dir_all(&dir)?;
-                    fs::write(dir.join(format!("{}.{ext}", op.id)), responses.main)?;
-                    // A join's follow-up response goes beside it as `<op>.<join>.json`.
-                    for (join, body) in responses.joins {
-                        fs::write(dir.join(format!("{}.{join}.json", op.id)), body)?;
-                    }
-                    // So is each fan-out response, as `<op>.fanout<index>.json`.
-                    for (index, body) in responses.fanout.iter().enumerate() {
-                        fs::write(dir.join(format!("{}.fanout{index}.json", op.id)), body)?;
-                    }
+                    write_fixtures(
+                        &api_dir.join("fixtures").join(name),
+                        &op.id,
+                        strategy,
+                        responses,
+                    )?;
                     println!("OK   {label}");
                     passed.push(name);
                 }

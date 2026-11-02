@@ -25,6 +25,8 @@ export interface Operation {
     /** Coverage keys (`"GET /images/:id"`) this operation serves. */
     routes: string[];
     auth: AuthLevel;
+    /** How long the backend may serve a successful response from its cache. Default 60. */
+    cacheSeconds?: number;
     strategies: Strategy[];
   };
 }

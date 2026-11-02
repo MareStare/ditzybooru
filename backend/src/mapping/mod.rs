@@ -16,7 +16,8 @@ mod spec;
 mod transform;
 
 pub use engine::{
-    Context, Responses, UpstreamStatus, extract, fetch, plan_request, select_strategy, validate,
+    Context, Responses, UpstreamStatus, extract, fetch, plan_request, relevant_params,
+    select_strategy, validate,
 };
 pub use spec::{Document, Operation, Strategy};
 

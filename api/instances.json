@@ -11,6 +11,7 @@
   },
   "derpibooru": {
     "origin": "https://derpibooru.org",
-    "flavor": "derpibooru"
+    "flavor": "derpibooru",
+    "remote": true
   }
 }

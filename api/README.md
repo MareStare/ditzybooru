@@ -17,7 +17,10 @@ upstream route and is the resume point.
    extend operations in `src/operations/*.ts` (shared types in `src/schemas`).
 4. `pnpm api:build` - regenerates `openapi.json`; routes referenced by an
    operation become `mapped`. `pnpm api:check` fails if outputs are stale.
-5. Verify with the Rust verifier (not written yet), which sets `verified`.
+5. `cargo run -p backend --bin api-verify -- --all` fetches from the local
+   instances, validates, saves fixtures and sets `verified`. Add `--remote` to
+   include live third-party instances such as Derpibooru; it rate limits, so
+   do that sparingly.
 6. Commit the batch. Resume = rerun step 2.
 
 ## Conventions

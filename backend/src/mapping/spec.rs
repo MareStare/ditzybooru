@@ -29,6 +29,8 @@ pub struct Operation {
     pub auth: String,
     /// Coverage keys (`"GET /images/:id"`) this operation serves.
     pub routes: Vec<String>,
+    /// How long a successful response may be served from the cache.
+    pub cache_seconds: u64,
     /// Strategies in preference order.
     pub strategies: Vec<Strategy>,
     /// Sample parameters used by the verifier.
@@ -74,7 +76,13 @@ struct RawMedia {
 struct RawPhilomena {
     routes: Vec<String>,
     auth: String,
+    #[serde(rename = "cacheSeconds", default = "default_cache_seconds")]
+    cache_seconds: u64,
     strategies: Vec<Strategy>,
+}
+
+const fn default_cache_seconds() -> u64 {
+    60
 }
 
 /// How to produce a response from the upstream.
@@ -311,6 +319,7 @@ impl Document {
                     path: path.clone(),
                     method,
                     auth: op.philomena.auth,
+                    cache_seconds: op.philomena.cache_seconds,
                     routes: op.philomena.routes,
                     strategies: op.philomena.strategies,
                     examples: op

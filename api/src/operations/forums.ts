@@ -14,6 +14,8 @@ export const getForumActivity = defineOperation({
   philomena: {
     routes: ['GET /api/v1/json/forums', 'GET /api/v1/json/forums/:forum_id/topics'],
     auth: 'none',
+    // One block load asks every forum, so keep it longer than a listing.
+    cacheSeconds: 120,
     strategies: [
       {
         kind: 'json',

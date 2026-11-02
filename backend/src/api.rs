@@ -1,6 +1,6 @@
 //! Serves every operation of `api/openapi.json` under `/api/v1`.
 
-use std::{collections::BTreeMap, sync::Arc};
+use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
 use axum::{
     Json, Router,
@@ -13,7 +13,11 @@ use serde_json::json;
 
 use crate::{
     Result,
-    mapping::{Context, Document, OPENAPI_JSON, UpstreamStatus, extract, fetch, select_strategy},
+    cache::{Failure, Outcome, ResponseCache},
+    mapping::{
+        Context, Document, OPENAPI_JSON, Strategy, UpstreamStatus, extract, fetch, relevant_params,
+        select_strategy,
+    },
     sites::Sites,
 };
 
@@ -22,6 +26,7 @@ struct AppState {
     document: Document,
     client: reqwest::Client,
     sites: Sites,
+    cache: ResponseCache,
 }
 
 /// Builds the `/api/v1` router.
@@ -35,6 +40,7 @@ pub fn router() -> Result<Router> {
             .redirect(reqwest::redirect::Policy::none())
             .build()?,
         sites: Sites::load()?,
+        cache: ResponseCache::default(),
     });
 
     let mut router = Router::new();
@@ -87,7 +93,8 @@ async fn handle(
             "unknown operation",
         );
     };
-    let upstream = state.sites.resolve(request_host(headers));
+    let host = request_host(headers);
+    let upstream = state.sites.resolve(host);
     let Some(strategy) = select_strategy(op, &upstream.flavor) else {
         return error(
             StatusCode::NOT_IMPLEMENTED,
@@ -99,34 +106,92 @@ async fn handle(
         origin: &upstream.origin,
         flavor: &upstream.flavor,
     };
+    let compute = || compute_outcome(state, &op.id, host, strategy, ctx, params);
+
+    // A response that depends on who is asking must never be shared.
+    if op.auth != "none" || op.cache_seconds == 0 {
+        return respond(compute().await.map_err(Arc::new), None);
+    }
+    let Ok(relevant) = relevant_params(strategy, params) else {
+        return error(StatusCode::INTERNAL_SERVER_ERROR, "internal", "bad mapping");
+    };
+    // Only the parameters the mapping reads count, so junk query strings
+    // neither bypass the cache nor fill it.
+    let key = format!(
+        "{}|{}|{}|{}",
+        upstream.origin,
+        upstream.flavor,
+        op.id,
+        serde_json::to_string(&relevant).unwrap_or_default()
+    );
+    let ttl = Duration::from_secs(op.cache_seconds);
+    respond(
+        state.cache.get_or_compute(key, ttl, compute).await,
+        Some(ttl),
+    )
+}
+
+/// Fetches and maps one response. "Not found" is a result, anything else that
+/// goes wrong a failure.
+async fn compute_outcome(
+    state: &AppState,
+    op_id: &str,
+    host: &str,
+    strategy: &Strategy,
+    ctx: Context<'_>,
+    params: &BTreeMap<String, String>,
+) -> Result<Outcome, Failure> {
     let result = async {
         let responses = fetch(&state.client, ctx, strategy, params).await?;
         extract(strategy, &responses, ctx, params)
     }
     .await;
+    // Cloudflare replaces 502 and 504 bodies with its own page, so upstream
+    // failures answer 500 to keep our JSON error readable.
     match result {
-        Ok(value) => Json(value).into_response(),
+        Ok(value) => Ok(Outcome::Json(value.to_string().into())),
         Err(err) => {
-            // Cloudflare replaces 502 and 504 bodies with its own page, so
-            // upstream failures answer 500 to keep our JSON error readable.
-            eprintln!("{} (host {:?}): {err:#}", op.id, request_host(headers));
+            eprintln!("{op_id} (host {host:?}): {err:#}");
             match err.downcast_ref::<UpstreamStatus>() {
                 Some(UpstreamStatus(status))
                     if *status == reqwest::StatusCode::NOT_FOUND || status.is_redirection() =>
                 {
-                    error(StatusCode::NOT_FOUND, "not_found", "not found upstream")
+                    Ok(Outcome::NotFound)
                 }
-                Some(_) => error(
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "upstream_error",
-                    "upstream error",
-                ),
-                None => error(
-                    StatusCode::INTERNAL_SERVER_ERROR,
-                    "mapping_error",
-                    "could not read upstream",
-                ),
+                Some(_) => Err(Failure {
+                    status: StatusCode::INTERNAL_SERVER_ERROR,
+                    code: "upstream_error",
+                    message: "upstream error",
+                }),
+                None => Err(Failure {
+                    status: StatusCode::INTERNAL_SERVER_ERROR,
+                    code: "mapping_error",
+                    message: "could not read upstream",
+                }),
             }
         }
+    }
+}
+
+/// `ttl` is `Some` for a response that may be cached, by us and by browsers.
+fn respond(result: Result<Outcome, Arc<Failure>>, ttl: Option<Duration>) -> Response {
+    match result {
+        Ok(Outcome::Json(body)) => {
+            let cache_control = ttl.map_or_else(
+                || "no-store".to_owned(),
+                |ttl| format!("public, max-age={}", ttl.as_secs()),
+            );
+            (
+                StatusCode::OK,
+                [
+                    (header::CONTENT_TYPE, "application/json".to_owned()),
+                    (header::CACHE_CONTROL, cache_control),
+                ],
+                body.to_string(),
+            )
+                .into_response()
+        }
+        Ok(Outcome::NotFound) => error(StatusCode::NOT_FOUND, "not_found", "not found upstream"),
+        Err(failure) => error(failure.status, failure.code, failure.message),
     }
 }

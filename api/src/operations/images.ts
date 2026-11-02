@@ -95,6 +95,8 @@ export const getFeatured = defineOperation({
   philomena: {
     routes: ['GET /api/v1/json/images/featured'],
     auth: 'none',
+    // It changes once a day.
+    cacheSeconds: 600,
     strategies: [
       {
         kind: 'json',

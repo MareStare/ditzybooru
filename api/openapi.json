@@ -1221,6 +1221,7 @@
         },
         "x-philomena": {
           "auth": "none",
+          "cacheSeconds": 120,
           "routes": [
             "GET /api/v1/json/forums",
             "GET /api/v1/json/forums/:forum_id/topics"
@@ -1673,6 +1674,7 @@
         ],
         "x-philomena": {
           "auth": "none",
+          "cacheSeconds": 600,
           "routes": [
             "GET /api/v1/json/images/featured"
           ],
