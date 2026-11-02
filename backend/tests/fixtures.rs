@@ -36,8 +36,8 @@ fn fixtures_extract_and_validate() {
                 flavor: &instance.flavor,
             };
             let body = fs::read_to_string(&path).unwrap();
-            let value =
-                extract(strategy, &body, ctx).unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
+            let value = extract(strategy, &body, ctx, &op.examples)
+                .unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
             validate(&document, op, &value).unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
             replayed += 1;
         }

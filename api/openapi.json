@@ -130,6 +130,91 @@
         ],
         "type": "object"
       },
+      "MediaItem": {
+        "additionalProperties": false,
+        "properties": {
+          "aspectRatio": {
+            "type": "number"
+          },
+          "commentCount": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "downvotes": {
+            "type": "integer"
+          },
+          "faves": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "hiddenFromUsers": {
+            "type": "boolean"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "representations": {
+            "$ref": "#/components/schemas/Representations"
+          },
+          "score": {
+            "type": "integer"
+          },
+          "sourceUrls": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "spoilered": {
+            "type": "boolean"
+          },
+          "tagCount": {
+            "type": "integer"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "upvotes": {
+            "type": "integer"
+          },
+          "width": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "createdAt",
+          "width",
+          "height",
+          "aspectRatio",
+          "mimeType",
+          "tags",
+          "tagCount",
+          "score",
+          "upvotes",
+          "downvotes",
+          "faves",
+          "commentCount",
+          "sourceUrls",
+          "representations",
+          "spoilered",
+          "hiddenFromUsers"
+        ],
+        "type": "object"
+      },
       "Representations": {
         "additionalProperties": false,
         "properties": {
@@ -175,6 +260,34 @@
           "thumb",
           "thumbSmall",
           "thumbTiny"
+        ],
+        "type": "object"
+      },
+      "SearchPage": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MediaItem"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
         ],
         "type": "object"
       }
@@ -391,6 +504,167 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/images/{id}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "operationId": "searchImages",
+        "parameters": [
+          {
+            "description": "Search query, `*` for everything.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Sort field, e.g. `created_at`.",
+            "in": "query",
+            "name": "sf",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sd",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "filterId",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchPage"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Search images. Returns one page of results and the total match count.",
+        "tags": [
+          "search"
+        ],
+        "x-examples": {
+          "perPage": 2,
+          "q": "safe"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/search/images",
+            "GET /search"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/images",
+                  "map": {
+                    "aspectRatio": "/aspect_ratio",
+                    "commentCount": "/comment_count",
+                    "createdAt": "/created_at",
+                    "downvotes": "/downvotes",
+                    "faves": "/faves",
+                    "height": "/height",
+                    "hiddenFromUsers": "/hidden_from_users",
+                    "id": "/id",
+                    "mimeType": "/mime_type",
+                    "representations": {
+                      "from": "/representations",
+                      "map": {
+                        "full": "/full",
+                        "large": "/large",
+                        "medium": "/medium",
+                        "small": "/small",
+                        "tall": "/tall",
+                        "thumb": "/thumb",
+                        "thumbSmall": "/thumb_small",
+                        "thumbTiny": "/thumb_tiny"
+                      }
+                    },
+                    "score": "/score",
+                    "sourceUrls": "/source_urls",
+                    "spoilered": "/spoilered",
+                    "tagCount": "/tag_count",
+                    "tags": "/tags",
+                    "upvotes": "/upvotes",
+                    "width": "/width"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/images",
+                "query": {
+                  "filter_id": "{filterId}",
+                  "page": "{page|1}",
+                  "per_page": "{perPage|15}",
+                  "q": "{q|*}",
+                  "sd": "{sd|desc}",
+                  "sf": "{sf|created_at}"
+                }
               }
             }
           ]

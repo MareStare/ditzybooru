@@ -89,7 +89,7 @@ fn read(el: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
                 let parsed: Value = serde_json::from_str(v)
                     .with_context(|| format!("attribute {attr:?} is not JSON"))?;
                 match &spec.map {
-                    Some(map) => json::remap(&parsed, map, origin)?,
+                    Some(map) => json::remap(&parsed, map, origin, &BTreeMap::new())?,
                     None => parsed,
                 }
             }

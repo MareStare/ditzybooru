@@ -52,7 +52,28 @@ fn percent_encode(value: &str) -> String {
     out
 }
 
-fn fill(template: &str, params: &BTreeMap<String, String>) -> Result<String> {
+/// Splits `{name}` / `{name|default}` placeholders out of a template.
+fn placeholders(template: &str) -> Result<Vec<(&str, Option<&str>)>> {
+    let mut found = vec![];
+    let mut rest = template;
+    while let Some(start) = rest.find('{') {
+        let tail = rest.get(start + 1..).unwrap_or_default();
+        let end = tail
+            .find('}')
+            .ok_or_else(|| anyhow!("unclosed placeholder in {template:?}"))?;
+        let inner = tail.get(..end).unwrap_or_default();
+        found.push(
+            inner
+                .split_once('|')
+                .map_or((inner, None), |(n, d)| (n, Some(d))),
+        );
+        rest = tail.get(end + 1..).unwrap_or_default();
+    }
+    Ok(found)
+}
+
+/// Fills a template; `None` when a placeholder has neither a value nor a default.
+fn fill(template: &str, params: &BTreeMap<String, String>) -> Result<Option<String>> {
     let mut out = String::new();
     let mut rest = template;
     while let Some(start) = rest.find('{') {
@@ -61,15 +82,38 @@ fn fill(template: &str, params: &BTreeMap<String, String>) -> Result<String> {
         let end = tail
             .find('}')
             .ok_or_else(|| anyhow!("unclosed placeholder in {template:?}"))?;
-        let name = tail.get(1..end).unwrap_or_default();
-        let value = params
-            .get(name)
-            .ok_or_else(|| anyhow!("missing parameter {name:?}"))?;
+        let inner = tail.get(1..end).unwrap_or_default();
+        let (name, default) = inner
+            .split_once('|')
+            .map_or((inner, None), |(n, d)| (n, Some(d)));
+        let Some(value) = params.get(name).map(String::as_str).or(default) else {
+            return Ok(None);
+        };
         out.push_str(&percent_encode(value));
         rest = tail.get(end + 1..).unwrap_or_default();
     }
     out.push_str(rest);
-    Ok(out)
+    Ok(Some(out))
+}
+
+/// The request parameters plus the defaults declared in the strategy's
+/// templates for the ones that were not given.
+pub fn effective_params(
+    strategy: &Strategy,
+    params: &BTreeMap<String, String>,
+) -> Result<BTreeMap<String, String>> {
+    let request = strategy.request();
+    let mut all = params.clone();
+    let templates = std::iter::once(&request.path).chain(request.query.values());
+    for template in templates {
+        for (name, default) in placeholders(template)? {
+            if let Some(default) = default {
+                all.entry(name.to_owned())
+                    .or_insert_with(|| default.to_owned());
+            }
+        }
+    }
+    Ok(all)
 }
 
 /// Path plus query of the upstream request, with placeholders filled.
@@ -77,15 +121,17 @@ pub fn plan_request(
     request: &UpstreamRequest,
     params: &BTreeMap<String, String>,
 ) -> Result<String> {
-    let mut target = fill(&request.path, params)?;
-    for (i, (key, template)) in request.query.iter().enumerate() {
-        target.push(if i == 0 { '?' } else { '&' });
-        let _ = write!(
-            target,
-            "{}={}",
-            percent_encode(key),
-            fill(template, params)?
-        );
+    let mut target = fill(&request.path, params)?
+        .ok_or_else(|| anyhow!("missing path parameter in {:?}", request.path))?;
+    let mut separator = '?';
+    for (key, template) in &request.query {
+        // A query parameter whose value was not given is left out.
+        let Some(value) = fill(template, params)? else {
+            continue;
+        };
+        target.push(separator);
+        separator = '&';
+        let _ = write!(target, "{}={value}", percent_encode(key));
     }
     Ok(target)
 }
@@ -101,7 +147,11 @@ pub async fn fetch_body(
     if request.method != "GET" {
         bail!("only GET requests are executable so far");
     }
-    let url = format!("{}{}", ctx.origin, plan_request(request, params)?);
+    let url = format!(
+        "{}{}",
+        ctx.origin,
+        plan_request(request, &effective_params(strategy, params)?)?
+    );
     let response = client
         .get(&url)
         .send()
@@ -115,11 +165,21 @@ pub async fn fetch_body(
 }
 
 /// Turns a raw upstream body into our response document.
-pub fn extract(strategy: &Strategy, body: &str, ctx: Context<'_>) -> Result<Value> {
+pub fn extract(
+    strategy: &Strategy,
+    body: &str,
+    ctx: Context<'_>,
+    params: &BTreeMap<String, String>,
+) -> Result<Value> {
     match strategy {
         Strategy::Json(s) => {
             let doc: Value = serde_json::from_str(body).context("upstream body is not JSON")?;
-            json::remap(&doc, &s.map, ctx.origin)
+            json::remap(
+                &doc,
+                &s.map,
+                ctx.origin,
+                &effective_params(strategy, params)?,
+            )
         }
         Strategy::Html(s) => html::select(body, &s.select, ctx.origin),
         Strategy::Form(_) => bail!("form strategies are not executable yet"),
@@ -142,5 +202,55 @@ pub fn validate(document: &Document, op: &Operation, value: &Value) -> Result<()
         Ok(())
     } else {
         bail!("schema mismatch:\n  {}", errors.join("\n  "))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn request(query: &[(&str, &str)]) -> UpstreamRequest {
+        UpstreamRequest {
+            method: "GET".to_owned(),
+            path: "/search/{id}".to_owned(),
+            query: query
+                .iter()
+                .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+                .collect(),
+        }
+    }
+
+    fn params(pairs: &[(&str, &str)]) -> BTreeMap<String, String> {
+        pairs
+            .iter()
+            .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
+            .collect()
+    }
+
+    #[test]
+    fn query_uses_defaults_and_drops_missing_values() {
+        let req = request(&[
+            ("page", "{page|1}"),
+            ("q", "{q|*}"),
+            ("filter_id", "{filterId}"),
+        ]);
+        let target = plan_request(&req, &params(&[("id", "7"), ("q", "a b&c")])).unwrap();
+        assert_eq!(target, "/search/7?page=1&q=a%20b%26c");
+    }
+
+    #[test]
+    fn missing_path_parameter_is_an_error() {
+        plan_request(&request(&[]), &params(&[])).unwrap_err();
+    }
+
+    #[test]
+    fn effective_params_add_declared_defaults_only() {
+        let strategy: Strategy = serde_json::from_str(
+            r#"{"kind":"json","request":{"method":"GET","path":"/x/{id}",
+                "query":{"page":"{page|1}","q":"{q}"}},"map":{}}"#,
+        )
+        .unwrap();
+        let all = effective_params(&strategy, &params(&[("id", "3")])).unwrap();
+        assert_eq!(all, params(&[("id", "3"), ("page", "1")]));
     }
 }

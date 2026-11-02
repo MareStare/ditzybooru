@@ -1615,8 +1615,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "searchImages"
+    ],
     "note": ""
   },
   "GET /api/v1/json/search/posts": {
@@ -3105,8 +3107,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "searchImages"
+    ],
     "note": ""
   },
   "GET /search/reverse": {

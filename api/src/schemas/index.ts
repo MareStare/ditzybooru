@@ -41,4 +41,32 @@ const ImagePage = s.object({
   tags: s.array(s.ref('ImageTag'), 1),
 });
 
-export const schemas = { Representations, ImageTag, ImagePage, Error: ErrorBody };
+/** One image in a listing; mirrors the frontend's `Media`. */
+const MediaItem = s.object({
+  id: s.int(),
+  createdAt: s.dateTime(),
+  width: s.int(),
+  height: s.int(),
+  aspectRatio: s.number(),
+  mimeType: s.string(),
+  tags: s.array(s.string()),
+  tagCount: s.int(),
+  score: s.int(),
+  upvotes: s.int(),
+  downvotes: s.int(),
+  faves: s.int(),
+  commentCount: s.int(),
+  sourceUrls: s.array(s.string()),
+  representations: s.ref('Representations'),
+  spoilered: s.bool(),
+  hiddenFromUsers: s.bool(),
+});
+
+const SearchPage = s.object({
+  items: s.array(s.ref('MediaItem')),
+  total: s.int(),
+  page: s.int(),
+  perPage: s.int(),
+});
+
+export const schemas = { Representations, ImageTag, ImagePage, MediaItem, SearchPage, Error: ErrorBody };

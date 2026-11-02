@@ -4,7 +4,7 @@ use std::{collections::BTreeMap, sync::Arc};
 
 use axum::{
     Json, Router,
-    extract::{Path, State},
+    extract::{Path, Query, State},
     http::{HeaderMap, StatusCode, header},
     response::{IntoResponse, Response},
     routing::get,
@@ -44,11 +44,15 @@ pub fn router() -> Result<Router> {
         if op.method != "get" {
             continue;
         }
-        let handler = move |State(state): State<Arc<AppState>>,
-                            headers: HeaderMap,
-                            Path(params): Path<BTreeMap<String, String>>| async move {
-            handle(&state, index, &headers, &params).await
-        };
+        let handler =
+            move |State(state): State<Arc<AppState>>,
+                  headers: HeaderMap,
+                  Path(path): Path<BTreeMap<String, String>>,
+                  Query(mut params): Query<BTreeMap<String, String>>| async move {
+                // Path parameters win over query parameters of the same name.
+                params.extend(path);
+                handle(&state, index, &headers, &params).await
+            };
         router = router.route(&format!("/api/v1{}", op.path), get(handler));
     }
     Ok(router.with_state(state))
@@ -99,7 +103,7 @@ async fn handle(
     };
     let result = async {
         let body = fetch_body(&state.client, ctx, strategy, params).await?;
-        extract(strategy, &body, ctx)
+        extract(strategy, &body, ctx, params)
     }
     .await;
     match result {

@@ -74,7 +74,7 @@ async fn run() -> Result<bool> {
             };
             let result = async {
                 let body = fetch_body(&client, ctx, strategy, &op.examples).await?;
-                let value = extract(strategy, &body, ctx)?;
+                let value = extract(strategy, &body, ctx, &op.examples)?;
                 validate(&document, op, &value)?;
                 Ok::<_, anyhow::Error>(body)
             }
