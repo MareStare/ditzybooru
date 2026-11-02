@@ -8,6 +8,11 @@ frontend/.output
 # Directory where our scripts install binaries with dependencies we need.
 tools
 
+# Playwright run output. The baselines in frontend/e2e/__screenshots__ are tracked.
+frontend/test-results
+frontend/playwright-report
+frontend/blob-report
+
 # The impeccable skill rewrites this file on every live inject, so the only
 # way to keep its generated block out of the repo is to ignore the file.
 frontend/.gitignore

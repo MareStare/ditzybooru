@@ -7,6 +7,13 @@ set -euxo pipefail
 
 typos
 
+# Keep committed screenshot baselines losslessly optimized.
+mapfile -t staged_shots < <(git diff --cached --name-only --diff-filter=ACM -- 'frontend/e2e/__screenshots__/*.png')
+if [[ ${#staged_shots[@]} -gt 0 ]]; then
+  oxipng --opt max --strip all --quiet "${staged_shots[@]}"
+  git add -- "${staged_shots[@]}"
+fi
+
 mapfile -t staged_files < <(git diff --cached --name-only --diff-filter=ACMR)
 
 # Re-adding a partially staged file would also stage its unstaged changes.
