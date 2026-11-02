@@ -1,5 +1,7 @@
 use axum::{Router, routing::get};
 
+pub mod mapping;
+
 type Result<T = (), E = anyhow::Error> = std::result::Result<T, E>;
 
 pub async fn run() {

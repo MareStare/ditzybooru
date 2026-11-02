@@ -1498,7 +1498,7 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "mapped",
+    "status": "verified",
     "operations": [
       "getImage"
     ],
