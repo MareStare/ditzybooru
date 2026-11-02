@@ -1,3 +1,4 @@
+import { s } from '../dsl/schema.ts';
 import { listingOperation } from './listing.ts';
 
 export const listTags = listingOperation({
@@ -34,6 +35,11 @@ export const listComments = listingOperation({
   item: 'Comment',
   itemsKey: 'comments',
   htmlRoute: 'GET /comments',
+  extraParams: [
+    { name: 'sf', in: 'query', schema: s.string(), description: 'Sort field, e.g. `created_at`.' },
+    { name: 'sd', in: 'query', schema: s.enum('asc', 'desc') },
+  ],
+  extraQuery: { sf: '{sf|created_at}', sd: '{sd|desc}' },
   itemMap: {
     id: '/id',
     imageId: '/image_id',
@@ -45,7 +51,22 @@ export const listComments = listingOperation({
     author: '/author',
     avatarUrl: '/avatar',
     userId: '/user_id',
+    // Null when the active filter hides the image.
+    imageThumbTiny: { join: 'images', key: '/image_id', value: '/representations/thumb_tiny' },
   },
+  joins: [
+    {
+      name: 'images',
+      request: {
+        method: 'GET',
+        path: '/api/v1/json/search/images',
+        query: { q: '{imageIds}', per_page: '{imageIdsCount}' },
+      },
+      collect: { param: 'imageIds', from: '/comments', pick: '/image_id', prefix: 'id:', separator: ' || ' },
+      items: '/images',
+      key: '/id',
+    },
+  ],
 });
 
 export const listPosts = listingOperation({

@@ -1,4 +1,4 @@
-import type { JsonMap } from '../dsl/extract.ts';
+import type { JsonMap, JsonStrategy } from '../dsl/extract.ts';
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
 
@@ -21,6 +21,7 @@ interface ListingOptions {
   /** Extra upstream query entries, for `extraParams`. */
   extraQuery?: Record<string, string>;
   examples?: Record<string, string | number>;
+  joins?: JsonStrategy['joins'];
 }
 
 /** A paged listing page backed by the search API (`q`, `page`, `perPage`). */
@@ -62,6 +63,7 @@ export function listingOperation(options: ListingOptions) {
             perPage: { from: '$param:perPage', as: 'int' },
             items: { from: `/${options.itemsKey}`, map: options.itemMap },
           },
+          ...(options.joins ? { joins: options.joins } : {}),
         },
       ],
     },

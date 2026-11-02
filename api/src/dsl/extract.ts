@@ -25,7 +25,11 @@ interface SelectSpec {
 }
 
 /** JSON pointer remap (`a|b` tries pointer `a`, then `b`, for renamed fields): our field -> pointer into the upstream document, or a nested spec. */
-type JsonMapValue = string | { from: string; as?: Transform; map?: Record<string, JsonMapValue> };
+type JsonMapValue =
+  | string
+  | { from: string; as?: Transform; map?: Record<string, JsonMapValue> }
+  /** Finds the item of a join's follow-up response whose `join.key` equals this item's `key`, and takes its `value`. */
+  | { join: string; key: string; value: string };
 export type JsonMap = Record<string, JsonMapValue>;
 
 interface UpstreamRequest {
@@ -42,10 +46,31 @@ interface StrategyBase {
   flavors?: string[];
 }
 
-interface JsonStrategy extends StrategyBase {
+/** A second request made after the first, from values collected out of its response. */
+interface Join {
+  name: string;
+  /** `{<collect.param>}` and `{<collect.param>Count}` are filled in. */
+  request: UpstreamRequest;
+  collect: {
+    param: string;
+    /** Pointer to an array in the first response. */
+    from: string;
+    /** Pointer, inside each element, to the value to send. Values are unique. */
+    pick: string;
+    prefix?: string;
+    separator: string;
+  };
+  /** Pointer to the item array of the follow-up response. */
+  items: string;
+  /** Pointer, inside each item, to the value `lookup` rules match on. */
+  key: string;
+}
+
+export interface JsonStrategy extends StrategyBase {
   kind: 'json';
   request: UpstreamRequest;
   map: JsonMap;
+  joins?: Join[];
 }
 
 interface HtmlStrategy extends StrategyBase {

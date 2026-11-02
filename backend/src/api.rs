@@ -13,9 +13,7 @@ use serde_json::json;
 
 use crate::{
     Result,
-    mapping::{
-        Context, Document, OPENAPI_JSON, UpstreamStatus, extract, fetch_body, select_strategy,
-    },
+    mapping::{Context, Document, OPENAPI_JSON, UpstreamStatus, extract, fetch, select_strategy},
     sites::Sites,
 };
 
@@ -102,8 +100,8 @@ async fn handle(
         flavor: &upstream.flavor,
     };
     let result = async {
-        let body = fetch_body(&state.client, ctx, strategy, params).await?;
-        extract(strategy, &body, ctx, params)
+        let responses = fetch(&state.client, ctx, strategy, params).await?;
+        extract(strategy, &responses, ctx, params)
     }
     .await;
     match result {

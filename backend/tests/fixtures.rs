@@ -2,7 +2,9 @@
 
 use std::{collections::BTreeMap, fs, path::PathBuf};
 
-use backend::mapping::{Context, Document, OPENAPI_JSON, extract, select_strategy, validate};
+use backend::mapping::{
+    Context, Document, OPENAPI_JSON, Responses, Strategy, extract, select_strategy, validate,
+};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -27,6 +29,10 @@ fn fixtures_extract_and_validate() {
         for entry in entries {
             let path = entry.unwrap().path();
             let id = path.file_stem().unwrap().to_str().unwrap();
+            // `<op>.<join>.json` files are read with their operation.
+            if id.contains('.') {
+                continue;
+            }
             let op = document
                 .operation(id)
                 .unwrap_or_else(|| panic!("fixture {path:?} has no operation"));
@@ -35,8 +41,19 @@ fn fixtures_extract_and_validate() {
                 origin: &instance.origin,
                 flavor: &instance.flavor,
             };
-            let body = fs::read_to_string(&path).unwrap();
-            let value = extract(strategy, &body, ctx, &op.examples)
+            let mut responses = Responses {
+                main: fs::read_to_string(&path).unwrap(),
+                ..Responses::default()
+            };
+            if let Strategy::Json(json) = strategy {
+                for join in &json.joins {
+                    let sidecar = dir.join(format!("{id}.{}.json", join.name));
+                    if let Ok(body) = fs::read_to_string(sidecar) {
+                        responses.joins.insert(join.name.clone(), body);
+                    }
+                }
+            }
+            let value = extract(strategy, &responses, ctx, &op.examples)
                 .unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
             validate(&document, op, &value).unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
             replayed += 1;

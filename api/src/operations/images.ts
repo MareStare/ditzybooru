@@ -1,6 +1,7 @@
 import type { FieldSpec, Transform } from '../dsl/extract.ts';
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
+import { mediaFields } from './media.ts';
 
 const container = '.image-show-container';
 
@@ -103,6 +104,27 @@ export const getImage = defineOperation({
           },
           tags: { from: '/image/tags', map: { name: '' } },
         },
+      },
+    ],
+  },
+});
+
+/** The image Philomena features today, for the home page. */
+export const getFeatured = defineOperation({
+  operationId: 'getFeatured',
+  path: '/images/featured',
+  method: 'get',
+  summary: 'The featured image of the day.',
+  tags: ['images'],
+  response: s.ref('Media'),
+  philomena: {
+    routes: ['GET /api/v1/json/images/featured'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'json',
+        request: { method: 'GET', path: '/api/v1/json/images/featured' },
+        map: mediaFields('/image'),
       },
     ],
   },

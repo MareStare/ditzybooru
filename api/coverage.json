@@ -1511,8 +1511,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getFeatured"
+    ],
     "note": ""
   },
   "GET /api/v1/json/oembed": {

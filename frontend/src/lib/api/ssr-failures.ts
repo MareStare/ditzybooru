@@ -40,8 +40,3 @@ export function failedOnServer(queryClient: QueryClient, queryKey: QueryKey): bo
   }
   return failedHashes.has(hashKey(queryKey));
 }
-
-/** Returns `true` only on the first call for a query that failed during SSR. */
-export function takeFailedOnServer(queryKey: QueryKey): boolean {
-  return failedHashes.delete(hashKey(queryKey));
-}

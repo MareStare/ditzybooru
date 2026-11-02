@@ -1,5 +1,6 @@
 import { s } from '../dsl/schema.ts';
 import { listingOperation } from './listing.ts';
+import { mediaFields } from './media.ts';
 
 export const searchImages = listingOperation({
   operationId: 'searchImages',
@@ -16,35 +17,5 @@ export const searchImages = listingOperation({
     { name: 'filterId', in: 'query', schema: s.int() },
   ],
   extraQuery: { sf: '{sf|created_at}', sd: '{sd|desc}', filter_id: '{filterId}' },
-  itemMap: {
-    id: '/id',
-    createdAt: '/created_at',
-    width: '/width',
-    height: '/height',
-    aspectRatio: '/aspect_ratio',
-    mimeType: '/mime_type',
-    tags: '/tags',
-    tagCount: '/tag_count',
-    score: '/score',
-    upvotes: '/upvotes',
-    downvotes: '/downvotes',
-    faves: '/faves',
-    commentCount: '/comment_count',
-    sourceUrls: '/source_urls',
-    representations: {
-      from: '/representations',
-      map: {
-        full: '/full',
-        tall: '/tall',
-        large: '/large',
-        medium: '/medium',
-        small: '/small',
-        thumb: '/thumb',
-        thumbSmall: '/thumb_small',
-        thumbTiny: '/thumb_tiny',
-      },
-    },
-    spoilered: '/spoilered',
-    hiddenFromUsers: '/hidden_from_users',
-  },
+  itemMap: mediaFields(),
 });

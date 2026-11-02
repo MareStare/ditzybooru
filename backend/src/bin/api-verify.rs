@@ -7,9 +7,7 @@
 use std::{collections::BTreeMap, fs, path::PathBuf, process::ExitCode};
 
 use anyhow::{Context as _, Result};
-use backend::mapping::{
-    Context, Document, Strategy, extract, fetch_body, select_strategy, validate,
-};
+use backend::mapping::{Context, Document, Strategy, extract, fetch, select_strategy, validate};
 use serde::Deserialize;
 use serde_json::Value;
 
@@ -73,8 +71,8 @@ async fn run() -> Result<bool> {
                 flavor: &instance.flavor,
             };
             let result = async {
-                let body = fetch_body(&client, ctx, strategy, &op.examples).await?;
-                let value = extract(strategy, &body, ctx, &op.examples)?;
+                let responses = fetch(&client, ctx, strategy, &op.examples).await?;
+                let value = extract(strategy, &responses, ctx, &op.examples)?;
                 validate(&document, op, &value)?;
                 if value
                     .get("items")
@@ -83,11 +81,11 @@ async fn run() -> Result<bool> {
                 {
                     anyhow::bail!("`items` is empty, so no item fields were checked; seed data");
                 }
-                Ok::<_, anyhow::Error>(body)
+                Ok::<_, anyhow::Error>(responses)
             }
             .await;
             match result {
-                Ok(body) => {
+                Ok(responses) => {
                     let ext = if matches!(strategy, Strategy::Html(_)) {
                         "html"
                     } else {
@@ -95,7 +93,11 @@ async fn run() -> Result<bool> {
                     };
                     let dir = api_dir.join("fixtures").join(name);
                     fs::create_dir_all(&dir)?;
-                    fs::write(dir.join(format!("{}.{ext}", op.id)), body)?;
+                    fs::write(dir.join(format!("{}.{ext}", op.id)), responses.main)?;
+                    // A join's follow-up response goes beside it as `<op>.<join>.json`.
+                    for (join, body) in responses.joins {
+                        fs::write(dir.join(format!("{}.{join}.json", op.id)), body)?;
+                    }
                     println!("OK   {label}");
                     passed.push(name);
                 }

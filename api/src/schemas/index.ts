@@ -101,6 +101,8 @@ const Comment = s.object({
   avatarUrl: s.string(),
   /** `null` for anonymous comments. */
   userId: s.nullable(s.int()),
+  /** The tiny thumbnail of the image; `null` when the active filter hides it. */
+  imageThumbTiny: s.nullable(s.uri()),
 });
 
 const Post = s.object({

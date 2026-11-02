@@ -102,8 +102,13 @@ pub fn effective_params(
     strategy: &Strategy,
     params: &BTreeMap<String, String>,
 ) -> Result<BTreeMap<String, String>> {
-    let request = strategy.request();
     let mut all = params.clone();
+    add_defaults(strategy.request(), &mut all)?;
+    Ok(all)
+}
+
+/// Inserts the defaults a request's templates declare for missing parameters.
+fn add_defaults(request: &UpstreamRequest, all: &mut BTreeMap<String, String>) -> Result<()> {
     let templates = std::iter::once(&request.path).chain(request.query.values());
     for template in templates {
         for (name, default) in placeholders(template)? {
@@ -113,7 +118,7 @@ pub fn effective_params(
             }
         }
     }
-    Ok(all)
+    Ok(())
 }
 
 /// Path plus query of the upstream request, with placeholders filled.
@@ -136,22 +141,25 @@ pub fn plan_request(
     Ok(target)
 }
 
-/// Performs the strategy's request and returns the raw response body.
-pub async fn fetch_body(
+/// A strategy's upstream responses: the main body plus one per join.
+#[derive(Debug, Default)]
+pub struct Responses {
+    /// Body of the strategy's own request.
+    pub main: String,
+    /// Body of each join's follow-up request, by join name.
+    pub joins: BTreeMap<String, String>,
+}
+
+async fn get_text(
     client: &reqwest::Client,
     ctx: Context<'_>,
-    strategy: &Strategy,
+    request: &UpstreamRequest,
     params: &BTreeMap<String, String>,
 ) -> Result<String> {
-    let request = strategy.request();
     if request.method != "GET" {
         bail!("only GET requests are executable so far");
     }
-    let url = format!(
-        "{}{}",
-        ctx.origin,
-        plan_request(request, &effective_params(strategy, params)?)?
-    );
+    let url = format!("{}{}", ctx.origin, plan_request(request, params)?);
     let response = client
         .get(&url)
         .send()
@@ -164,24 +172,73 @@ pub async fn fetch_body(
     Ok(response.text().await?)
 }
 
-/// Turns a raw upstream body into our response document.
+/// Performs the strategy's request, then its joins' follow-up requests.
+pub async fn fetch(
+    client: &reqwest::Client,
+    ctx: Context<'_>,
+    strategy: &Strategy,
+    params: &BTreeMap<String, String>,
+) -> Result<Responses> {
+    let all = effective_params(strategy, params)?;
+    let main = get_text(client, ctx, strategy.request(), &all).await?;
+    let mut joins = BTreeMap::new();
+    if let Strategy::Json(json_strategy) = strategy
+        && !json_strategy.joins.is_empty()
+    {
+        let doc: Value = serde_json::from_str(&main).context("upstream body is not JSON")?;
+        for join in &json_strategy.joins {
+            let values = json::collect_values(&doc, &join.collect)?;
+            if values.is_empty() {
+                continue;
+            }
+            let mut join_params = all.clone();
+            add_defaults(&join.request, &mut join_params)?;
+            join_params.insert(
+                format!("{}Count", join.collect.param),
+                values.len().to_string(),
+            );
+            join_params.insert(
+                join.collect.param.clone(),
+                values.join(&join.collect.separator),
+            );
+            let body = get_text(client, ctx, &join.request, &join_params).await?;
+            joins.insert(join.name.clone(), body);
+        }
+    }
+    Ok(Responses { main, joins })
+}
+
+/// Turns the upstream responses into our response document.
 pub fn extract(
     strategy: &Strategy,
-    body: &str,
+    responses: &Responses,
     ctx: Context<'_>,
     params: &BTreeMap<String, String>,
 ) -> Result<Value> {
     match strategy {
         Strategy::Json(s) => {
-            let doc: Value = serde_json::from_str(body).context("upstream body is not JSON")?;
+            let doc: Value =
+                serde_json::from_str(&responses.main).context("upstream body is not JSON")?;
+            let mut tables = BTreeMap::new();
+            for join in &s.joins {
+                if let Some(body) = responses.joins.get(&join.name) {
+                    tables.insert(
+                        join.name.clone(),
+                        json::JoinTable::parse(body, &join.items, &join.key)?,
+                    );
+                }
+            }
             json::remap(
                 &doc,
                 &s.map,
-                ctx.origin,
-                &effective_params(strategy, params)?,
+                json::RemapCtx {
+                    origin: ctx.origin,
+                    params: &effective_params(strategy, params)?,
+                    joins: &tables,
+                },
             )
         }
-        Strategy::Html(s) => html::select(body, &s.select, ctx.origin),
+        Strategy::Html(s) => html::select(&responses.main, &s.select, ctx.origin),
         Strategy::Form(_) => bail!("form strategies are not executable yet"),
     }
 }

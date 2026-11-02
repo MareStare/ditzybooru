@@ -44,6 +44,17 @@
           "imageId": {
             "type": "integer"
           },
+          "imageThumbTiny": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "updatedAt": {
             "format": "date-time",
             "type": "string"
@@ -69,7 +80,8 @@
           "body",
           "author",
           "avatarUrl",
-          "userId"
+          "userId",
+          "imageThumbTiny"
         ],
         "type": "object"
       },
@@ -837,6 +849,27 @@
             "schema": {
               "type": "integer"
             }
+          },
+          {
+            "description": "Sort field, e.g. `created_at`.",
+            "in": "query",
+            "name": "sf",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sd",
+            "required": false,
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -877,6 +910,28 @@
           ],
           "strategies": [
             {
+              "joins": [
+                {
+                  "collect": {
+                    "from": "/comments",
+                    "param": "imageIds",
+                    "pick": "/image_id",
+                    "prefix": "id:",
+                    "separator": " || "
+                  },
+                  "items": "/images",
+                  "key": "/id",
+                  "name": "images",
+                  "request": {
+                    "method": "GET",
+                    "path": "/api/v1/json/search/images",
+                    "query": {
+                      "per_page": "{imageIdsCount}",
+                      "q": "{imageIds}"
+                    }
+                  }
+                }
+              ],
               "kind": "json",
               "map": {
                 "items": {
@@ -890,6 +945,11 @@
                     "editReason": "/edit_reason",
                     "id": "/id",
                     "imageId": "/image_id",
+                    "imageThumbTiny": {
+                      "join": "images",
+                      "key": "/image_id",
+                      "value": "/representations/thumb_tiny"
+                    },
                     "updatedAt": "/updated_at",
                     "userId": "/user_id"
                   }
@@ -910,7 +970,9 @@
                 "query": {
                   "page": "{page|1}",
                   "per_page": "{perPage|15}",
-                  "q": "{q|*}"
+                  "q": "{q|*}",
+                  "sd": "{sd|desc}",
+                  "sf": "{sf|created_at}"
                 }
               }
             }
@@ -1340,6 +1402,83 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/images/{id}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/images/featured": {
+      "get": {
+        "operationId": "getFeatured",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Media"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The featured image of the day.",
+        "tags": [
+          "images"
+        ],
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/images/featured"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "aspectRatio": "/image/aspect_ratio",
+                "commentCount": "/image/comment_count",
+                "createdAt": "/image/created_at",
+                "downvotes": "/image/downvotes",
+                "faves": "/image/faves",
+                "height": "/image/height",
+                "hiddenFromUsers": "/image/hidden_from_users",
+                "id": "/image/id",
+                "mimeType": "/image/mime_type",
+                "representations": {
+                  "from": "/image/representations",
+                  "map": {
+                    "full": "/full",
+                    "large": "/large",
+                    "medium": "/medium",
+                    "small": "/small",
+                    "tall": "/tall",
+                    "thumb": "/thumb",
+                    "thumbSmall": "/thumb_small",
+                    "thumbTiny": "/thumb_tiny"
+                  }
+                },
+                "score": "/image/score",
+                "sourceUrls": "/image/source_urls",
+                "spoilered": "/image/spoilered",
+                "tagCount": "/image/tag_count",
+                "tags": "/image/tags",
+                "upvotes": "/image/upvotes",
+                "width": "/image/width"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/images/featured"
               }
             }
           ]

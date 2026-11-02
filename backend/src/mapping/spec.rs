@@ -131,6 +131,40 @@ pub struct JsonStrategy {
     pub request: UpstreamRequest,
     /// Our field -> upstream pointer.
     pub map: BTreeMap<String, JsonMapValue>,
+    /// Follow-up requests whose results `map` can look items up in.
+    #[serde(default)]
+    pub joins: Vec<Join>,
+}
+
+/// A second request, made after the first, from values collected out of it.
+#[derive(Debug, Deserialize)]
+pub struct Join {
+    /// Name referenced by `lookup` rules.
+    pub name: String,
+    /// Request template; `collect.param` and `<param>Count` are filled in.
+    pub request: UpstreamRequest,
+    /// Which values of the first response to send.
+    pub collect: Collect,
+    /// Pointer to the item array of the follow-up response.
+    pub items: String,
+    /// Pointer, inside each item, to the value `lookup` rules match on.
+    pub key: String,
+}
+
+/// Unique values picked out of the first response.
+#[derive(Debug, Deserialize)]
+pub struct Collect {
+    /// Name of the parameter that receives the joined values.
+    pub param: String,
+    /// Pointer to the array in the first response.
+    pub from: String,
+    /// Pointer, inside each element, to the value to send.
+    pub pick: String,
+    /// Put in front of every value.
+    #[serde(default)]
+    pub prefix: String,
+    /// Put between the values.
+    pub separator: String,
 }
 
 /// A value in a [`JsonStrategy`] map.
@@ -139,6 +173,15 @@ pub struct JsonStrategy {
 pub enum JsonMapValue {
     /// A JSON pointer into the current document.
     Pointer(String),
+    /// Looks the current item up in a join's follow-up response.
+    Lookup {
+        /// Join name.
+        join: String,
+        /// Pointer, in the current item, to the value to find.
+        key: String,
+        /// Pointer, in the matching joined item, to the value to take.
+        value: String,
+    },
     /// A nested pointer with optional remap or transform.
     Nested {
         /// Pointer to the sub-document.
