@@ -17,7 +17,7 @@
  * color - every other rule here is about markup, which does not.
  *
  * Usage:
- *   npm test                           # builds, serves, checks
+ *   pnpm test                          # builds, serves, checks
  *   A11Y_URL=http://localhost:5173 …   # check a running dev server instead
  *   CHROME_PATH=/path/to/chrome …      # if playwright's browser is not installed
  */
@@ -112,7 +112,7 @@ async function launchBrowser(): Promise<Browser> {
     return await chromium.launch(executablePath ? { executablePath } : {});
   } catch (cause) {
     throw new Error(
-      'Could not launch Chromium. Run `npm run browsers:install`, or set CHROME_PATH to a Chrome binary.',
+      'Could not launch Chromium. Run `pnpm run browsers:install`, or set CHROME_PATH to a Chrome binary.',
       { cause },
     );
   }

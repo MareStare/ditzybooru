@@ -1,7 +1,7 @@
-- Developer may already run `npm run dev` server. Never kill it, reuse it.
+- Developer may already run `pnpm run dev` server. Never kill it, reuse it.
 - Project unreleased: make breaking changes freely for clean code. No backwards compatibility, no deprecations.
 - Use regular dash instead of em-dash everywhere.
-- Before changing TanStack Router, Start, Query or devtools code, read the matching `node_modules/@tanstack/*/skills/**/SKILL.md`. It matches the installed version.
+- Before changing TanStack Router, Start, Query or devtools code, read the matching `frontend/node_modules/@tanstack/*/skills/**/SKILL.md`. It matches the installed version.
 
 ## Terminology
 

@@ -2,21 +2,18 @@
   "name": "ditzybooru",
   "private": true,
   "type": "module",
-  "workspaces": [
-    "frontend"
-  ],
   "engines": {
     "node": "^24"
   },
   "scripts": {
-    "dev": "npm run dev --workspace frontend",
-    "build": "npm run build --workspace frontend",
-    "preview": "npm run preview --workspace frontend",
-    "deploy": "npm run deploy --workspace frontend",
-    "type-check": "npm run type-check --workspace frontend",
-    "test": "npm run test --workspace frontend",
-    "check:a11y": "npm run check:a11y --workspace frontend",
-    "browsers:install": "npm run browsers:install --workspace frontend --",
+    "dev": "pnpm --filter frontend run dev",
+    "build": "pnpm --filter frontend run build",
+    "preview": "pnpm --filter frontend run preview",
+    "deploy": "pnpm --filter frontend run deploy",
+    "type-check": "pnpm --filter frontend run type-check",
+    "test": "pnpm --filter frontend run test",
+    "check:a11y": "pnpm --filter frontend run check:a11y",
+    "browsers:install": "pnpm --filter frontend run browsers:install",
     "lint": "eslint --max-warnings 0",
     "knip": "knip",
     "fmt": "prettier --write .",
@@ -35,8 +32,5 @@
     "typescript": "^6.0",
     "typescript-eslint": "^8.69.0"
   },
-  "allowScripts": {
-    "workerd@1.20260828.1": true,
-    "esbuild@0.28.1": true
-  }
+  "packageManager": "pnpm@12.14.0"
 }

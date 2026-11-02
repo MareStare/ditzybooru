@@ -1,0 +1,19 @@
+packages:
+  - frontend
+
+# Supply-chain hardening: refuse any package version published less than 14
+# days ago (the value is in minutes). Applies to `pnpm add`, `pnpm install`
+# resolution and `pnpm dlx` alike.
+minimumReleaseAge: 20160
+
+# Only these packages may run install scripts.
+allowBuilds:
+  esbuild: true
+  unrs-resolver: false
+  workerd: true
+
+permissions:
+  '@tanstack/devtools-vite':
+    skills: false
+  '@tanstack/react-start':
+    skills: false

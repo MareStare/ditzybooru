@@ -20,6 +20,6 @@ for file in "${staged_files[@]}"; do
 done
 
 if [[ ${#fully_staged_files[@]} -gt 0 ]]; then
-  npm exec -- prettier --write --ignore-unknown "${fully_staged_files[@]}"
+  pnpm exec prettier --write --ignore-unknown "${fully_staged_files[@]}"
   git add -- "${fully_staged_files[@]}"
 fi

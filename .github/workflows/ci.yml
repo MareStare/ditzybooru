@@ -6,38 +6,37 @@ on:
   push:
     branches: [main]
 
-env:
-  # Tools run only from the lockfile. `npx` fails for a package not installed.
-  npm_config_yes: false
-
 jobs:
   typescript-lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v6
+      # Reads the pnpm version from `packageManager` in package.json.
+      - uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10
+
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version-file: package.json
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
-      - run: npm run fmt:check
-      - run: npm run type-check
-      - run: npm run lint
-      - run: npm run knip
-      - run: npm run build
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run fmt:check
+      - run: pnpm run type-check
+      - run: pnpm run lint
+      - run: pnpm run knip
+      - run: pnpm run build
 
       # Structural a11y via axe-core plus a contrast audit over all 18
       # theme combinations. `playwright-core` ships no browser of its own, so
-      # one is fetched here rather than on every `npm ci`.
-      - run: npm run browsers:install -- --with-deps
-      - run: npm run test
+      # one is fetched here rather than on every `pnpm install`.
+      - run: pnpm run browsers:install -- --with-deps
+      - run: pnpm run test
 
   # Check for typos in the repository based on a static dictionary
   typos:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - run: ./scripts/install/typos.sh
       - run: typos
