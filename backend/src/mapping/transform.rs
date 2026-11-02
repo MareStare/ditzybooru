@@ -57,9 +57,25 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
     }
 }
 
+/// Whether `url` starts with a scheme such as `https:` or `data:`.
+fn has_scheme(url: &str) -> bool {
+    url.split_once(':').is_some_and(|(scheme, _)| {
+        scheme
+            .chars()
+            .next()
+            .is_some_and(|c| c.is_ascii_alphabetic())
+            && scheme
+                .chars()
+                .all(|c| c.is_ascii_alphanumeric() || matches!(c, '+' | '-' | '.'))
+    })
+}
+
 fn resolve_url(origin: &str, url: &str) -> String {
-    if url.starts_with("http://") || url.starts_with("https://") {
+    if has_scheme(url) {
         url.to_owned()
+    } else if url.starts_with("//") {
+        let scheme = origin.split_once(':').map_or("https", |(scheme, _)| scheme);
+        format!("{scheme}:{url}")
     } else if url.starts_with('/') {
         format!("{origin}{url}")
     } else {
@@ -77,4 +93,30 @@ fn slugify(text: &str) -> String {
         }
     }
     slug.trim_matches('-').to_owned()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn urls_resolve_against_the_origin() {
+        let origin = "http://localhost:8080";
+        assert_eq!(
+            resolve_url(origin, "https://cdn.test/a.png"),
+            "https://cdn.test/a.png"
+        );
+        assert_eq!(
+            resolve_url(origin, "//cdn.test/a.png"),
+            "http://cdn.test/a.png"
+        );
+        assert_eq!(
+            resolve_url(origin, "/img/a.png"),
+            "http://localhost:8080/img/a.png"
+        );
+        assert_eq!(
+            resolve_url(origin, "img/a.png"),
+            "http://localhost:8080/img/a.png"
+        );
+    }
 }

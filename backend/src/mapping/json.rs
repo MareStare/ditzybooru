@@ -61,7 +61,12 @@ pub fn remap(
 fn apply_rule(doc: &Value, rule: &JsonMapValue, ctx: RemapCtx<'_>) -> Result<Value> {
     match rule {
         JsonMapValue::Pointer(pointer) => lookup(doc, pointer).cloned(),
-        JsonMapValue::Lookup { join, key, value } => {
+        JsonMapValue::Lookup {
+            join,
+            key,
+            value,
+            transform: name,
+        } => {
             let table = ctx
                 .joins
                 .get(join)
@@ -69,13 +74,17 @@ fn apply_rule(doc: &Value, rule: &JsonMapValue, ctx: RemapCtx<'_>) -> Result<Val
             let wanted = lookup(doc, key)?;
             // An item the follow-up did not return (e.g. hidden by the
             // filter) yields null.
-            Ok(table
+            let found = table
                 .items
                 .iter()
                 .find(|item| item.pointer(&table.key) == Some(wanted))
                 .and_then(|item| lookup(item, value).ok())
                 .cloned()
-                .unwrap_or(Value::Null))
+                .unwrap_or(Value::Null);
+            match name {
+                Some(name) => transform::apply(name, &found, ctx.origin),
+                None => Ok(found),
+            }
         }
         JsonMapValue::Nested {
             from,

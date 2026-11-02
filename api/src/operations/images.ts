@@ -1,7 +1,7 @@
 import type { FieldSpec, Transform } from '../dsl/extract.ts';
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
-import { mediaFields } from './media.ts';
+import { mediaFields, representationFields } from './media.ts';
 
 const container = '.image-show-container';
 
@@ -43,20 +43,7 @@ export const getImage = defineOperation({
             faves: data('faves', 'int'),
             commentCount: data('comment-count', 'int'),
             sourceUrls: { ...data('source-urls'), json: true },
-            representations: {
-              ...data('uris'),
-              json: true,
-              map: {
-                full: '/full',
-                tall: '/tall',
-                large: '/large',
-                medium: '/medium',
-                small: '/small',
-                thumb: '/thumb',
-                thumbSmall: '/thumb_small',
-                thumbTiny: '/thumb_tiny',
-              },
-            },
+            representations: { ...data('uris'), json: true, map: representationFields() },
             tags: {
               sel: '.tag-list .tag[data-tag-id]',
               many: true,
@@ -89,19 +76,7 @@ export const getImage = defineOperation({
           faves: '/image/faves',
           commentCount: '/image/comment_count',
           sourceUrls: '/image/source_urls',
-          representations: {
-            from: '/image/representations',
-            map: {
-              full: '/full',
-              tall: '/tall',
-              large: '/large',
-              medium: '/medium',
-              small: '/small',
-              thumb: '/thumb',
-              thumbSmall: '/thumb_small',
-              thumbTiny: '/thumb_tiny',
-            },
-          },
+          representations: { from: '/image/representations', map: representationFields() },
           tags: { from: '/image/tags', map: { name: '' } },
         },
       },

@@ -1,5 +1,6 @@
 import { s } from '../dsl/schema.ts';
 import { listingOperation } from './listing.ts';
+import { urlAt } from './media.ts';
 
 export const listTags = listingOperation({
   operationId: 'listTags',
@@ -23,7 +24,7 @@ export const listTags = listingOperation({
     aliasedTag: '/aliased_tag',
     impliedTags: '/implied_tags',
     impliedByTags: '/implied_by_tags',
-    spoilerImageUrl: '/spoiler_image_uri',
+    spoilerImageUrl: urlAt('/spoiler_image_uri'),
   },
 });
 
@@ -49,10 +50,15 @@ export const listComments = listingOperation({
     editReason: '/edit_reason',
     body: '/body',
     author: '/author',
-    avatarUrl: '/avatar',
+    avatarUrl: urlAt('/avatar'),
     userId: '/user_id',
     // Null when the active filter hides the image.
-    imageThumbTiny: { join: 'images', key: '/image_id', value: '/representations/thumb_tiny' },
+    imageThumbTiny: {
+      join: 'images',
+      key: '/image_id',
+      value: '/representations/thumb_tiny',
+      as: 'url',
+    },
   },
   joins: [
     {
@@ -85,7 +91,7 @@ export const listPosts = listingOperation({
     editReason: '/edit_reason',
     body: '/body',
     author: '/author',
-    avatarUrl: '/avatar',
+    avatarUrl: urlAt('/avatar'),
     userId: '/user_id',
   },
 });

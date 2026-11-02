@@ -29,7 +29,7 @@ type JsonMapValue =
   | string
   | { from: string; as?: Transform; map?: Record<string, JsonMapValue> }
   /** Finds the item of a join's follow-up response whose `join.key` equals this item's `key`, and takes its `value`. */
-  | { join: string; key: string; value: string };
+  | { join: string; key: string; value: string; as?: Transform };
 export type JsonMap = Record<string, JsonMapValue>;
 
 interface UpstreamRequest {

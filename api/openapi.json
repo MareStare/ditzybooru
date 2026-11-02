@@ -938,7 +938,10 @@
                   "from": "/comments",
                   "map": {
                     "author": "/author",
-                    "avatarUrl": "/avatar",
+                    "avatarUrl": {
+                      "as": "url",
+                      "from": "/avatar"
+                    },
                     "body": "/body",
                     "createdAt": "/created_at",
                     "editedAt": "/edited_at",
@@ -946,6 +949,7 @@
                     "id": "/id",
                     "imageId": "/image_id",
                     "imageThumbTiny": {
+                      "as": "url",
                       "join": "images",
                       "key": "/image_id",
                       "value": "/representations/thumb_tiny"
@@ -1296,14 +1300,38 @@
                     "attr": "data-uris",
                     "json": true,
                     "map": {
-                      "full": "/full",
-                      "large": "/large",
-                      "medium": "/medium",
-                      "small": "/small",
-                      "tall": "/tall",
-                      "thumb": "/thumb",
-                      "thumbSmall": "/thumb_small",
-                      "thumbTiny": "/thumb_tiny"
+                      "full": {
+                        "as": "url",
+                        "from": "/full"
+                      },
+                      "large": {
+                        "as": "url",
+                        "from": "/large"
+                      },
+                      "medium": {
+                        "as": "url",
+                        "from": "/medium"
+                      },
+                      "small": {
+                        "as": "url",
+                        "from": "/small"
+                      },
+                      "tall": {
+                        "as": "url",
+                        "from": "/tall"
+                      },
+                      "thumb": {
+                        "as": "url",
+                        "from": "/thumb"
+                      },
+                      "thumbSmall": {
+                        "as": "url",
+                        "from": "/thumb_small"
+                      },
+                      "thumbTiny": {
+                        "as": "url",
+                        "from": "/thumb_tiny"
+                      }
                     },
                     "sel": ".image-show-container"
                   },
@@ -1377,14 +1405,38 @@
                 "representations": {
                   "from": "/image/representations",
                   "map": {
-                    "full": "/full",
-                    "large": "/large",
-                    "medium": "/medium",
-                    "small": "/small",
-                    "tall": "/tall",
-                    "thumb": "/thumb",
-                    "thumbSmall": "/thumb_small",
-                    "thumbTiny": "/thumb_tiny"
+                    "full": {
+                      "as": "url",
+                      "from": "/full"
+                    },
+                    "large": {
+                      "as": "url",
+                      "from": "/large"
+                    },
+                    "medium": {
+                      "as": "url",
+                      "from": "/medium"
+                    },
+                    "small": {
+                      "as": "url",
+                      "from": "/small"
+                    },
+                    "tall": {
+                      "as": "url",
+                      "from": "/tall"
+                    },
+                    "thumb": {
+                      "as": "url",
+                      "from": "/thumb"
+                    },
+                    "thumbSmall": {
+                      "as": "url",
+                      "from": "/thumb_small"
+                    },
+                    "thumbTiny": {
+                      "as": "url",
+                      "from": "/thumb_tiny"
+                    }
                   }
                 },
                 "score": "/image/score",
@@ -1458,14 +1510,38 @@
                 "representations": {
                   "from": "/image/representations",
                   "map": {
-                    "full": "/full",
-                    "large": "/large",
-                    "medium": "/medium",
-                    "small": "/small",
-                    "tall": "/tall",
-                    "thumb": "/thumb",
-                    "thumbSmall": "/thumb_small",
-                    "thumbTiny": "/thumb_tiny"
+                    "full": {
+                      "as": "url",
+                      "from": "/full"
+                    },
+                    "large": {
+                      "as": "url",
+                      "from": "/large"
+                    },
+                    "medium": {
+                      "as": "url",
+                      "from": "/medium"
+                    },
+                    "small": {
+                      "as": "url",
+                      "from": "/small"
+                    },
+                    "tall": {
+                      "as": "url",
+                      "from": "/tall"
+                    },
+                    "thumb": {
+                      "as": "url",
+                      "from": "/thumb"
+                    },
+                    "thumbSmall": {
+                      "as": "url",
+                      "from": "/thumb_small"
+                    },
+                    "thumbTiny": {
+                      "as": "url",
+                      "from": "/thumb_tiny"
+                    }
                   }
                 },
                 "score": "/image/score",
@@ -1560,7 +1636,10 @@
                   "from": "/posts",
                   "map": {
                     "author": "/author",
-                    "avatarUrl": "/avatar",
+                    "avatarUrl": {
+                      "as": "url",
+                      "from": "/avatar"
+                    },
                     "body": "/body",
                     "createdAt": "/created_at",
                     "editedAt": "/edited_at",
@@ -1709,14 +1788,38 @@
                     "representations": {
                       "from": "/representations",
                       "map": {
-                        "full": "/full",
-                        "large": "/large",
-                        "medium": "/medium",
-                        "small": "/small",
-                        "tall": "/tall",
-                        "thumb": "/thumb",
-                        "thumbSmall": "/thumb_small",
-                        "thumbTiny": "/thumb_tiny"
+                        "full": {
+                          "as": "url",
+                          "from": "/full"
+                        },
+                        "large": {
+                          "as": "url",
+                          "from": "/large"
+                        },
+                        "medium": {
+                          "as": "url",
+                          "from": "/medium"
+                        },
+                        "small": {
+                          "as": "url",
+                          "from": "/small"
+                        },
+                        "tall": {
+                          "as": "url",
+                          "from": "/tall"
+                        },
+                        "thumb": {
+                          "as": "url",
+                          "from": "/thumb"
+                        },
+                        "thumbSmall": {
+                          "as": "url",
+                          "from": "/thumb_small"
+                        },
+                        "thumbTiny": {
+                          "as": "url",
+                          "from": "/thumb_tiny"
+                        }
                       }
                     },
                     "score": "/score",
@@ -1842,7 +1945,10 @@
                     "namespace": "/namespace",
                     "shortDescription": "/short_description",
                     "slug": "/slug",
-                    "spoilerImageUrl": "/spoiler_image_uri"
+                    "spoilerImageUrl": {
+                      "as": "url",
+                      "from": "/spoiler_image_uri"
+                    }
                   }
                 },
                 "page": {

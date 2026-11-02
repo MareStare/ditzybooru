@@ -181,6 +181,9 @@ pub enum JsonMapValue {
         key: String,
         /// Pointer, in the matching joined item, to the value to take.
         value: String,
+        /// Transform to apply to the value.
+        #[serde(rename = "as")]
+        transform: Option<String>,
     },
     /// A nested pointer with optional remap or transform.
     Nested {
