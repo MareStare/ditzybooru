@@ -6,7 +6,9 @@ import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, X
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { useCurrentUser } from '#/hooks/use-current-user';
+import { useSite } from '#/hooks/use-site';
 import { primaryNav } from '#/lib/mock/site';
+import { BrandMark } from './BrandMark';
 import { DisplaySettingsControls } from './DisplaySettings';
 
 const accountLinks: Array<{ label: string; href: string }> = [
@@ -42,6 +44,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   const user = useCurrentUser();
+  const site = useSite();
 
   const overlay = (
     <div className="drawer" role="dialog" aria-modal="true" aria-label="Navigation menu">
@@ -50,8 +53,8 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
       <nav className="drawer__panel">
         <div className="drawer__head">
           <span className="nav-brand">
-            <span className="nav-brand__mark" aria-hidden="true" />
-            <span className="nav-brand__name">Ditzybooru</span>
+            <BrandMark />
+            <span className="nav-brand__name">{site.name}</span>
           </span>
           <Button variant="ghost" icon onClick={onClose} aria-label="Close menu">
             <X size={18} />

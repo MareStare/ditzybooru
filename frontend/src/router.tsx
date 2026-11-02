@@ -2,6 +2,7 @@ import { QueryClient, defaultShouldDehydrateQuery } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter } from '@tanstack/react-router';
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query';
 
+import { currentSite, setBrowserSite } from '#/lib/current-site';
 import { markFailedOnServer, serverFailures } from '#/lib/api/ssr-failures';
 
 import { routeTree } from './route-tree.gen';
@@ -32,8 +33,9 @@ export function getRouter() {
     // Query owns the cache. A second copy in the router would answer the same
     // question with staler data depending on which one was asked.
     defaultPreloadStaleTime: 0,
-    dehydrate: () => ({ serverFailures: serverFailures(queryClient) }),
+    dehydrate: () => ({ serverFailures: serverFailures(queryClient), site: currentSite() }),
     hydrate: dehydrated => {
+      setBrowserSite(dehydrated.site);
       markFailedOnServer(dehydrated.serverFailures);
     },
   });

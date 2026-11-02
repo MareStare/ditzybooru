@@ -98,7 +98,12 @@
 .nav-brand__mark::before {
   /* Drawn by CSS so the link's visible text is the name alone, which its
    * accessible name has to contain. */
-  content: 'D';
+  content: attr(data-initial);
+}
+
+.nav-brand__mark--logo {
+  object-fit: contain;
+  background-color: transparent;
 }
 
 .nav-brand__name {

@@ -1,6 +1,6 @@
 import { createContext, use, useSyncExternalStore } from 'react';
 
-import { DEFAULT_SETTINGS } from '#/lib/settings';
+import { unwrap } from '#/lib/assertions';
 import type { Settings } from '#/lib/settings';
 import { getSettings, subscribeSettings } from '#/lib/settings-store';
 
@@ -11,11 +11,11 @@ import { getSettings, subscribeSettings } from '#/lib/settings-store';
  * from the same cookie, so both renders produce the same markup and hydration
  * has nothing to reconcile.
  */
-export const SsrSettingsContext = createContext<Settings>(DEFAULT_SETTINGS);
+export const SsrSettingsContext = createContext<Settings | null>(null);
 
 /** The current settings, kept in step across every component showing them.
  *  Writes go through `lib/settingsStore`. */
 export function useSettings(): Settings {
-  const ssrSettings = use(SsrSettingsContext);
+  const ssrSettings = unwrap(use(SsrSettingsContext));
   return useSyncExternalStore(subscribeSettings, getSettings, () => ssrSettings);
 }

@@ -7,12 +7,19 @@
 
 import { HttpClient } from '#/lib/http/http-client';
 import type { RequestParams } from '#/lib/http/http-client';
+import { currentSite } from '#/lib/current-site';
 
-/** The Philomena server the site reads from. TODO: make this configurable so
- *  the frontend can be self-hosted against another instance. */
-const API_ORIGIN = 'https://derpibooru.org';
+/** One client per origin, so a rate limit on one site does not stop the others. */
+const clients = new Map<string, HttpClient>();
 
-const http = new HttpClient(API_ORIGIN, { tracingHeaders: import.meta.env.SSR });
+function clientFor(origin: string): HttpClient {
+  let client = clients.get(origin);
+  if (client === undefined) {
+    client = new HttpClient(origin, { tracingHeaders: import.meta.env.SSR });
+    clients.set(origin, client);
+  }
+  return client;
+}
 
 /** Browsers do not let a page set `User-Agent`. */
 const headers: Record<string, string> = import.meta.env.SSR
@@ -25,5 +32,5 @@ const headers: Record<string, string> = import.meta.env.SSR
 export type QueryParams = NonNullable<RequestParams['query']>;
 
 export function get<TResponse>(path: string, query: QueryParams): Promise<TResponse> {
-  return http.fetchJson<TResponse>(`/api/v1/json/${path}`, { query, headers });
+  return clientFor(currentSite().origin).fetchJson<TResponse>(`/api/v1/json/${path}`, { query, headers });
 }

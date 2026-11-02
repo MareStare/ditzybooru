@@ -123,8 +123,9 @@ export function DisplaySettingsControls() {
         const value = onScreen[control.id] ?? stored;
         // A `system` default has no label of its own: what it restores to is
         // whichever stop the OS currently picks.
+        const defaultValue = control.defaultValue();
         const defaultLabel =
-          control.defaultLabel ?? control.options.find(option => option.value === systemValue[control.id])?.label;
+          control.defaultLabel() ?? control.options.find(option => option.value === systemValue[control.id])?.label;
 
         return (
           <div className={cn('display-setting', pending && 'display-setting--pending')} key={control.id}>
@@ -175,10 +176,10 @@ export function DisplaySettingsControls() {
               <ResetButton
                 setting={control.label}
                 defaultLabel={defaultLabel}
-                fromSystem={control.defaultValue === 'system'}
-                disabled={stored === control.defaultValue}
+                fromSystem={defaultValue === 'system'}
+                disabled={stored === defaultValue}
                 onReset={() => {
-                  control.write(control.defaultValue);
+                  control.write(defaultValue);
                 }}
               />
             </div>

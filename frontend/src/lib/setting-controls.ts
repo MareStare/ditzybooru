@@ -14,7 +14,7 @@ import { unwrap } from '#/lib/assertions';
 import { THEME_COLORS, THEME_LIGHTNESS_OPTIONS } from '#/lib/theme';
 import { DEFAULT_DISPLAY_SETTINGS, DISPLAY_SETTING_CONTROLS } from '#/lib/display-settings';
 import type { DisplaySettingRange, DisplaySettings } from '#/lib/display-settings';
-import { DEFAULT_SETTINGS } from '#/lib/settings';
+import { defaultSettings } from '#/lib/settings';
 import {
   setDisplaySetting,
   setMotionPreference,
@@ -60,12 +60,12 @@ export interface SettingControl {
    * it at the boundary, which is sound because the only values a widget can
    * produce are the ones in `options` directly above it. */
   write: (value: string | number) => void;
-  defaultValue: string | number;
+  defaultValue: () => string | number;
   /** What the reset button names as the value it would restore. `undefined` for
    *  the two settings whose default is `system`: what that restores to is the
    *  OS's answer, which only a browser can give, so `DisplaySettings` fills it
    *  in from the resolved value once it has one. */
-  defaultLabel: string | undefined;
+  defaultLabel: () => string | undefined;
 }
 
 /** Keyed by `DisplaySettingControl.key`, so a new slider setting fails to
@@ -90,8 +90,8 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     write: value => {
       setThemeLightnessPreference(value as ThemeLightnessPreference);
     },
-    defaultValue: DEFAULT_SETTINGS.lightness,
-    defaultLabel: undefined,
+    defaultValue: () => defaultSettings().lightness,
+    defaultLabel: () => undefined,
   },
   {
     id: 'hue',
@@ -103,8 +103,8 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     write: value => {
       setThemeColor(value as ThemeColor);
     },
-    defaultValue: DEFAULT_SETTINGS.color,
-    defaultLabel: unwrap(THEME_COLORS.find(entry => entry.id === DEFAULT_SETTINGS.color)).label,
+    defaultValue: () => defaultSettings().color,
+    defaultLabel: () => unwrap(THEME_COLORS.find(entry => entry.id === defaultSettings().color)).label,
   },
   ...DISPLAY_SETTING_CONTROLS.map(control => ({
     id: control.key,
@@ -117,8 +117,8 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     write: (value: string | number) => {
       setDisplaySetting(control, Number(value));
     },
-    defaultValue: DEFAULT_DISPLAY_SETTINGS[control.key],
-    defaultLabel: String(DEFAULT_DISPLAY_SETTINGS[control.key]),
+    defaultValue: () => DEFAULT_DISPLAY_SETTINGS[control.key],
+    defaultLabel: () => String(DEFAULT_DISPLAY_SETTINGS[control.key]),
   })),
   {
     id: 'motion',
@@ -133,7 +133,7 @@ export const SETTING_CONTROLS: Array<SettingControl> = [
     write: value => {
       setMotionPreference(value as MotionPreference);
     },
-    defaultValue: DEFAULT_SETTINGS.motion,
-    defaultLabel: undefined,
+    defaultValue: () => defaultSettings().motion,
+    defaultLabel: () => undefined,
   },
 ];

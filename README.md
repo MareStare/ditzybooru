@@ -28,6 +28,12 @@ Run this if you are using Claude Code:
 pnpm run bootstrap-claude
 ```
 
+## Multiple sites
+
+One running instance can front several Philomena sites. The `Host` of each request picks the site: where it reads from, what it calls itself, its logo and its starting accent color. A host that is not configured gets `derpibooru.org`.
+
+Copy `sites.example.json` to `sites.local.json` (gitignored, in the repository root, or point `SITES_FILE` at it) and map your hosts to origins. An entry may be just an origin, or an object that also sets `name`, `logo` and `themeColor`. Anything not set by hand is read from the live site's home page. The server caches that for a day (and in `.site-cache.json`), so requests never wait on it. Only the Node build (`BUILD_TARGET=node`) reads the file; the Cloudflare build serves the default site.
+
 ## License
 
 <sup>

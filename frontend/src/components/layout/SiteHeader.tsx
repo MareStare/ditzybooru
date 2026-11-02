@@ -3,10 +3,12 @@ import { Link } from '@tanstack/react-router';
 import { Bell, ChevronDown, Filter, Mail, Menu as MenuIcon, Upload } from 'lucide-react';
 
 import { useCurrentUser } from '#/hooks/use-current-user';
+import { useSite } from '#/hooks/use-site';
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
 import { Menu, MenuLink, MenuSeparator } from '#/components/ui/Menu';
+import { BrandMark } from './BrandMark';
 import { HeaderNav } from './HeaderNav';
 import { MobileMenu } from './MobileMenu';
 import { SearchBar } from './SearchBar';
@@ -105,6 +107,7 @@ function UserMenu() {
 
 /** The sticky application header: brand, search and user actions + nav bar. */
 export function SiteHeader() {
+  const site = useSite();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -127,9 +130,9 @@ export function SiteHeader() {
             <MenuIcon size={18} />
           </Button>
 
-          <Link to="/" className="nav-brand" aria-label="Ditzybooru home">
-            <span className="nav-brand__mark" aria-hidden="true" />
-            <span className="nav-brand__name">Ditzybooru</span>
+          <Link to="/" className="nav-brand" aria-label={`${site.name} home`}>
+            <BrandMark />
+            <span className="nav-brand__name">{site.name}</span>
           </Link>
 
           <Link

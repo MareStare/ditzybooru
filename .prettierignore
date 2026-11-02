@@ -6,3 +6,4 @@ pnpm-lock.yaml
 /api/coverage.json
 /api/inventory
 /api/fixtures
+/frontend/src/lib/fixtures

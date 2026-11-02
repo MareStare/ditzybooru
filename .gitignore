@@ -28,3 +28,7 @@ frontend/.gitignore
 # Local personal developer settings
 .claude/settings.local.json
 CLAUDE.local.md
+
+# Per-instance multi-site config and the branding cache it produces.
+sites.local.json
+.site-cache.json

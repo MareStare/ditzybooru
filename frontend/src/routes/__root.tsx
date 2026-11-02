@@ -6,7 +6,9 @@ import type { QueryClient } from '@tanstack/react-query';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
+import { SiteContext } from '#/hooks/use-site';
 import { SsrSettingsContext, useSettings } from '#/hooks/use-settings';
+import { currentSite } from '#/lib/current-site';
 import { readSettings, settingsAttributes } from '#/lib/settings';
 import fredokaLatin from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
 
@@ -18,9 +20,10 @@ import '#/styles/index.css';
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   // Read once per request rather than per component, so the whole tree renders
   // from one snapshot of the cookie.
-  beforeLoad: () => ({ settings: readSettings() }),
-  head: () => ({
+  beforeLoad: () => ({ site: currentSite(), settings: readSettings() }),
+  head: ({ match }) => ({
     links: [
+      ...(match.context.site.logo === null ? [] : [{ rel: 'icon', href: match.context.site.logo }]),
       // The font is declared inside the stylesheet, so without this the browser
       // cannot even ask for it until the CSS has downloaded and parsed - a whole
       // round trip during which the text paints in `system-ui` and then swaps.
@@ -44,19 +47,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: 'UTF-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
-      { title: 'Ditzybooru' },
+      { title: match.context.site.name },
     ],
   }),
   component: RootComponent,
 });
 
 function RootComponent() {
-  const { settings } = Route.useRouteContext();
+  const { settings, site } = Route.useRouteContext();
 
   return (
-    <SsrSettingsContext value={settings}>
-      <Document />
-    </SsrSettingsContext>
+    <SiteContext value={site}>
+      <SsrSettingsContext value={settings}>
+        <Document />
+      </SsrSettingsContext>
+    </SiteContext>
   );
 }
 

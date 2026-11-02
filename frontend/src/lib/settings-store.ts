@@ -16,21 +16,20 @@ import type { ComponentSettingControl, ComponentSettings } from '#/lib/component
 import { displaySettingsAreDefault, sanitizeDisplaySetting } from '#/lib/display-settings';
 import type { DisplaySettingControl } from '#/lib/display-settings';
 import type { DataSourceKind } from '#/lib/api/types';
-import { DEFAULT_SETTINGS, readSettings, writeSettingsCookie } from '#/lib/settings';
+import { defaultSettings, readSettings, writeSettingsCookie } from '#/lib/settings';
 import type { Settings } from '#/lib/settings';
 import { preferredMotion } from '#/lib/motion';
 import type { MotionPreference } from '#/lib/motion';
 import { preferredLightness } from '#/lib/theme';
 import type { ThemeColor, ThemeLightnessPreference } from '#/lib/theme';
 
-let current: Settings = DEFAULT_SETTINGS;
+/** Read on first use rather than at import: the defaults depend on the site,
+ *  which the browser learns from the server's dehydrated state. */
+let current: Settings | undefined;
 const listeners = new Set<() => void>();
 
-if (typeof document !== 'undefined') {
-  current = readSettings();
-}
-
 export function getSettings(): Settings {
+  current ??= readSettings();
   return current;
 }
 
@@ -44,7 +43,7 @@ export function subscribeSettings(listener: () => void): () => void {
 /** Persists and publishes a change. React re-renders `<html>` from the store,
  *  so nothing here touches the DOM. */
 function updateSettings(change: (settings: Settings) => Settings): void {
-  current = change(current);
+  current = change(getSettings());
   writeSettingsCookie(current);
   for (const listener of listeners) listener();
 }
@@ -87,14 +86,15 @@ export function setDataSource(dataSource: DataSourceKind): void {
  *  though those are set on their own cards. The data source is left alone -
  *  it is a developer switch rather than part of the site's appearance. */
 export function resetSettings(): void {
-  updateSettings(settings => ({ ...DEFAULT_SETTINGS, dataSource: settings.dataSource }));
+  updateSettings(settings => ({ ...defaultSettings(), dataSource: settings.dataSource }));
 }
 
 export function settingsAreDefault(settings: Settings): boolean {
+  const defaults = defaultSettings();
   return (
-    settings.lightness === DEFAULT_SETTINGS.lightness &&
-    settings.color === DEFAULT_SETTINGS.color &&
-    settings.motion === DEFAULT_SETTINGS.motion &&
+    settings.lightness === defaults.lightness &&
+    settings.color === defaults.color &&
+    settings.motion === defaults.motion &&
     displaySettingsAreDefault(settings.display) &&
     componentSettingsAreDefault(settings.components)
   );

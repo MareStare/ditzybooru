@@ -30,7 +30,8 @@ import { DEFAULT_DISPLAY_SETTINGS, displaySettingProperties, sanitizeDisplaySett
 import type { DisplaySettings } from '#/lib/display-settings';
 import { DEFAULT_MOTION_PREFERENCE, motionProperties } from '#/lib/motion';
 import type { MotionPreference } from '#/lib/motion';
-import { DEFAULT_THEME_COLOR, DEFAULT_THEME_LIGHTNESS_PREFERENCE, THEME_COLORS } from '#/lib/theme';
+import { currentSite } from '#/lib/current-site';
+import { DEFAULT_THEME_LIGHTNESS_PREFERENCE, THEME_COLORS } from '#/lib/theme';
 import type { ThemeColor, ThemeLightness, ThemeLightnessPreference } from '#/lib/theme';
 
 export interface Settings {
@@ -44,14 +45,20 @@ export interface Settings {
   dataSource: DataSourceKind;
 }
 
-export const DEFAULT_SETTINGS: Settings = {
-  lightness: DEFAULT_THEME_LIGHTNESS_PREFERENCE,
-  color: DEFAULT_THEME_COLOR,
-  motion: DEFAULT_MOTION_PREFERENCE,
-  display: DEFAULT_DISPLAY_SETTINGS,
-  components: DEFAULT_COMPONENT_SETTINGS,
-  dataSource: 'live',
-};
+/**
+ * What a visitor who has chosen nothing gets. Not a constant: the accent is the
+ * site's own, so each site on one instance starts with its own color.
+ */
+export function defaultSettings(): Settings {
+  return {
+    lightness: DEFAULT_THEME_LIGHTNESS_PREFERENCE,
+    color: currentSite().themeColor,
+    motion: DEFAULT_MOTION_PREFERENCE,
+    display: DEFAULT_DISPLAY_SETTINGS,
+    components: DEFAULT_COMPONENT_SETTINGS,
+    dataSource: 'live',
+  };
+}
 
 const SETTINGS_COOKIE = 'ditzy-settings';
 
@@ -107,28 +114,29 @@ function isThemeColor(value: unknown): value is ThemeColor {
 /** Rejects anything a control could not have produced, so a hand-edited cookie
  *  can never reach the stylesheet as something absurd. */
 function parseSettings(raw: string | undefined): Settings {
+  const defaults = defaultSettings();
   if (raw === undefined) {
-    return DEFAULT_SETTINGS;
+    return defaults;
   }
 
   let parsed: unknown;
   try {
     parsed = JSON.parse(decodeURIComponent(raw));
   } catch {
-    return DEFAULT_SETTINGS;
+    return defaults;
   }
   if (typeof parsed !== 'object' || parsed === null) {
-    return DEFAULT_SETTINGS;
+    return defaults;
   }
 
   const stored = parsed as Partial<Record<keyof Settings, unknown>>;
   return {
-    lightness: isThemeLightnessPreference(stored.lightness) ? stored.lightness : DEFAULT_SETTINGS.lightness,
-    color: isThemeColor(stored.color) ? stored.color : DEFAULT_SETTINGS.color,
-    motion: isMotionPreference(stored.motion) ? stored.motion : DEFAULT_SETTINGS.motion,
+    lightness: isThemeLightnessPreference(stored.lightness) ? stored.lightness : defaults.lightness,
+    color: isThemeColor(stored.color) ? stored.color : defaults.color,
+    motion: isMotionPreference(stored.motion) ? stored.motion : defaults.motion,
     display: sanitizeDisplaySettings(stored.display),
     components: sanitizeComponentSettings(stored.components),
-    dataSource: isDataSourceKind(stored.dataSource) ? stored.dataSource : DEFAULT_SETTINGS.dataSource,
+    dataSource: isDataSourceKind(stored.dataSource) ? stored.dataSource : defaults.dataSource,
   };
 }
 
@@ -139,16 +147,17 @@ function omitDefaults<TSettings extends object>(settings: TSettings, defaults: T
 }
 
 function settingsPayload(settings: Settings): Record<string, unknown> {
+  const defaults = defaultSettings();
   const display = omitDefaults(settings.display, DEFAULT_DISPLAY_SETTINGS);
   const components = omitDefaults(settings.components, DEFAULT_COMPONENT_SETTINGS);
 
   return {
-    ...(settings.lightness === DEFAULT_SETTINGS.lightness ? {} : { lightness: settings.lightness }),
-    ...(settings.color === DEFAULT_SETTINGS.color ? {} : { color: settings.color }),
-    ...(settings.motion === DEFAULT_SETTINGS.motion ? {} : { motion: settings.motion }),
+    ...(settings.lightness === defaults.lightness ? {} : { lightness: settings.lightness }),
+    ...(settings.color === defaults.color ? {} : { color: settings.color }),
+    ...(settings.motion === defaults.motion ? {} : { motion: settings.motion }),
     ...(Object.keys(display).length === 0 ? {} : { display }),
     ...(Object.keys(components).length === 0 ? {} : { components }),
-    ...(settings.dataSource === DEFAULT_SETTINGS.dataSource ? {} : { dataSource: settings.dataSource }),
+    ...(settings.dataSource === defaults.dataSource ? {} : { dataSource: settings.dataSource }),
   };
 }
 

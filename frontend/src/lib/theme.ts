@@ -26,7 +26,6 @@ export type ThemeColor = 'red' | 'orange' | 'yellow' | 'green' | 'teal' | 'blue'
 const DARK_SCHEME_QUERY = '(prefers-color-scheme: dark)';
 
 export const DEFAULT_THEME_LIGHTNESS_PREFERENCE: ThemeLightnessPreference = 'system';
-export const DEFAULT_THEME_COLOR: ThemeColor = 'blue';
 
 /** The stops the picker offers. `system` is deliberately absent: it is the
  *  default, and the reset button beside the track is what returns to it. */
