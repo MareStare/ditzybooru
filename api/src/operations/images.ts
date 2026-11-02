@@ -25,6 +25,7 @@ export const getImage = defineOperation({
     strategies: [
       {
         kind: 'html',
+        flavors: ['philomena', 'furbooru'],
         request: { method: 'GET', path: '/images/{id}' },
         template: 'lib/philomena_web/templates/image/show.html.slime',
         select: {
@@ -67,6 +68,40 @@ export const getImage = defineOperation({
               },
             },
           },
+        },
+      },
+      {
+        // Derpibooru serves its HTML pages behind a bot challenge.
+        kind: 'json',
+        flavors: ['derpibooru'],
+        request: { method: 'GET', path: '/api/v1/json/images/{id}' },
+        map: {
+          id: '/image/id',
+          createdAt: '/image/first_seen_at',
+          width: '/image/width',
+          height: '/image/height',
+          aspectRatio: '/image/aspect_ratio',
+          tagCount: '/image/tag_count',
+          score: '/image/score',
+          upvotes: '/image/upvotes',
+          downvotes: '/image/downvotes',
+          faves: '/image/faves',
+          commentCount: '/image/comment_count',
+          sourceUrls: '/image/source_urls',
+          representations: {
+            from: '/image/representations',
+            map: {
+              full: '/full',
+              tall: '/tall',
+              large: '/large',
+              medium: '/medium',
+              small: '/small',
+              thumb: '/thumb',
+              thumbSmall: '/thumb_small',
+              thumbTiny: '/thumb_tiny',
+            },
+          },
+          tags: { from: '/image/tags', map: { name: '' } },
         },
       },
     ],

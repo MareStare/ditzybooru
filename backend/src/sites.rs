@@ -19,7 +19,7 @@ const DEFAULT_ORIGIN: &str = "https://derpibooru.org";
 pub struct Upstream {
     /// Origin without a trailing slash.
     pub origin: String,
-    /// Strategy flavor, e.g. `philomena` or `furbooru`.
+    /// Strategy flavor: `philomena`, `furbooru` or `derpibooru`.
     pub flavor: String,
 }
 
@@ -48,6 +48,9 @@ fn upstream(origin: &str, flavor: Option<String>) -> Upstream {
     let flavor = flavor.unwrap_or_else(|| {
         if origin.contains("furbooru") {
             "furbooru"
+        } else if origin.contains("derpibooru.org") {
+            // Its HTML pages sit behind a bot challenge, so only the JSON API works.
+            "derpibooru"
         } else {
             "philomena"
         }
@@ -138,6 +141,6 @@ mod tests {
 
         let unknown = sites.resolve("nope.example.org");
         assert_eq!(unknown.origin, DEFAULT_ORIGIN);
-        assert_eq!(unknown.flavor, "philomena");
+        assert_eq!(unknown.flavor, "derpibooru");
     }
 }

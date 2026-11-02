@@ -126,11 +126,7 @@
           }
         },
         "required": [
-          "id",
-          "name",
-          "slug",
-          "category",
-          "imageCount"
+          "name"
         ],
         "type": "object"
       },
@@ -240,6 +236,10 @@
           ],
           "strategies": [
             {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
               "kind": "html",
               "request": {
                 "method": "GET",
@@ -349,6 +349,49 @@
                 }
               },
               "template": "lib/philomena_web/templates/image/show.html.slime"
+            },
+            {
+              "flavors": [
+                "derpibooru"
+              ],
+              "kind": "json",
+              "map": {
+                "aspectRatio": "/image/aspect_ratio",
+                "commentCount": "/image/comment_count",
+                "createdAt": "/image/first_seen_at",
+                "downvotes": "/image/downvotes",
+                "faves": "/image/faves",
+                "height": "/image/height",
+                "id": "/image/id",
+                "representations": {
+                  "from": "/image/representations",
+                  "map": {
+                    "full": "/full",
+                    "large": "/large",
+                    "medium": "/medium",
+                    "small": "/small",
+                    "tall": "/tall",
+                    "thumb": "/thumb",
+                    "thumbSmall": "/thumb_small",
+                    "thumbTiny": "/thumb_tiny"
+                  }
+                },
+                "score": "/image/score",
+                "sourceUrls": "/image/source_urls",
+                "tagCount": "/image/tag_count",
+                "tags": {
+                  "from": "/image/tags",
+                  "map": {
+                    "name": ""
+                  }
+                },
+                "upvotes": "/image/upvotes",
+                "width": "/image/width"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/images/{id}"
+              }
             }
           ]
         }

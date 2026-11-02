@@ -105,6 +105,8 @@ async fn handle(
     match result {
         Ok(value) => Json(value).into_response(),
         Err(err) => {
+            // Cloudflare replaces 502 and 504 bodies with its own page, so
+            // upstream failures answer 500 to keep our JSON error readable.
             eprintln!("{} (host {:?}): {err:#}", op.id, request_host(headers));
             match err.downcast_ref::<UpstreamStatus>() {
                 Some(UpstreamStatus(status))
@@ -112,9 +114,13 @@ async fn handle(
                 {
                     error(StatusCode::NOT_FOUND, "not_found", "not found upstream")
                 }
-                Some(_) => error(StatusCode::BAD_GATEWAY, "upstream_error", "upstream error"),
+                Some(_) => error(
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    "upstream_error",
+                    "upstream error",
+                ),
                 None => error(
-                    StatusCode::BAD_GATEWAY,
+                    StatusCode::INTERNAL_SERVER_ERROR,
                     "mapping_error",
                     "could not read upstream",
                 ),

@@ -16,11 +16,12 @@ const ErrorBody = s.object({
 });
 
 const ImageTag = s.object({
-  id: s.int(),
   name: s.string(),
-  slug: s.string(),
-  category: s.nullable(s.string()),
-  imageCount: s.int(),
+  // Only the HTML page carries these; Derpibooru's JSON API has the names only.
+  id: s.optional(s.int()),
+  slug: s.optional(s.string()),
+  category: s.optional(s.nullable(s.string())),
+  imageCount: s.optional(s.int()),
 });
 
 const ImagePage = s.object({

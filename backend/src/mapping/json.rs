@@ -27,9 +27,16 @@ fn apply_rule(doc: &Value, rule: &JsonMapValue, origin: &str) -> Result<Value> {
             map,
         } => {
             let sub = lookup(doc, from)?;
-            let value = match map {
-                Some(map) => remap(sub, map, origin)?,
-                None => sub.clone(),
+            let value = match (map, sub) {
+                // A map over an array applies to every element.
+                (Some(map), Value::Array(items)) => Value::Array(
+                    items
+                        .iter()
+                        .map(|item| remap(item, map, origin))
+                        .collect::<Result<_>>()?,
+                ),
+                (Some(map), _) => remap(sub, map, origin)?,
+                (None, _) => sub.clone(),
             };
             match name {
                 Some(name) => transform::apply(name, &value, origin),

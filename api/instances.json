@@ -8,5 +8,9 @@
     "origin": "http://localhost:8081",
     "flavor": "furbooru",
     "appContainer": "philomena-furbooru_app_1"
+  },
+  "derpibooru": {
+    "origin": "https://derpibooru.org",
+    "flavor": "derpibooru"
   }
 }

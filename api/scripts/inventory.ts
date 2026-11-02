@@ -7,7 +7,8 @@ import type { Area, CoverageEntry, RouteClass } from '../src/coverage.ts';
 interface Instance {
   origin: string;
   flavor: string;
-  appContainer: string;
+  /** Container to run `mix phx.routes` in; absent for remote-only instances. */
+  appContainer?: string;
 }
 
 interface Route {
@@ -72,6 +73,7 @@ const coverage: Record<string, CoverageEntry> = existsSync(coveragePath)
 const seen = new Set<string>();
 
 for (const [name, instance] of Object.entries(instances)) {
+  if (!instance.appContainer) continue;
   const output = execFileSync('podman', ['exec', instance.appContainer, 'mix', 'phx.routes'], {
     encoding: 'utf8',
     maxBuffer: 64 * 1024 * 1024,
