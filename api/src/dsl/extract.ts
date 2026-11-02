@@ -1,9 +1,9 @@
 /** Closed set of named value transforms; implemented once, in the Rust engine. */
-type Transform =
+export type Transform =
   'int' | 'float' | 'bool' | 'date' | 'url' | 'slug' | 'relativeTime' | `split:${string}` | `join:${string}`;
 
 /** HTML field extractor. `sel` is CSS relative to the parent; exactly one reader applies. */
-interface FieldSpec {
+export interface FieldSpec {
   sel?: string;
   attr?: string;
   text?: true;
