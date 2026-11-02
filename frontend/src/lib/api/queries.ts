@@ -40,3 +40,10 @@ export function recentCommentsQuery(kind: DataSourceKind, limit: number) {
     queryFn: () => dataSource(kind).recentComments(limit),
   });
 }
+
+export function recentTopicsQuery(kind: DataSourceKind, limit: number) {
+  return queryOptions({
+    queryKey: ['forums', kind, 'recent-topics', limit],
+    queryFn: () => dataSource(kind).recentTopics(limit),
+  });
+}

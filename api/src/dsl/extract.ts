@@ -66,11 +66,30 @@ interface Join {
   key: string;
 }
 
+/** One request per element of the first response, merged into a single list. */
+interface Fanout {
+  /** Pointer to the array in the first response. */
+  from: string;
+  /** Filled from `bind` for each element. */
+  request: UpstreamRequest;
+  /** Parameter name -> pointer, inside the element, to its value. */
+  bind: Record<string, string>;
+  /** Pointer to the item array in each response. */
+  items: string;
+  /** Pointer, inside each item, to the value the merged list is sorted by. */
+  sortBy: string;
+  descending?: boolean;
+  /** Name of a request parameter that caps the merged list. */
+  limit?: string;
+}
+
 export interface JsonStrategy extends StrategyBase {
   kind: 'json';
   request: UpstreamRequest;
   map: JsonMap;
   joins?: Join[];
+  /** When set, `map` runs on `{ items: [{ parent, item }] }`: `parent` is the element of the first response, `item` an entry of its follow-up. */
+  fanout?: Fanout;
 }
 
 interface HtmlStrategy extends StrategyBase {

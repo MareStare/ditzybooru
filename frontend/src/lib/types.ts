@@ -76,13 +76,14 @@ export interface Forum {
 }
 
 export interface ForumTopic {
-  id: number;
-  title: string;
   slug: string;
+  title: string;
   sticky: boolean;
-  forum: Forum;
-  lastPost: null | {
-    id: number;
-    author: Attribution;
-  };
+  locked: boolean;
+  postCount: number;
+  /** When the latest reply was posted. */
+  lastRepliedAt: string;
+  /** Who started the topic. The API does not say who replied last. */
+  author: string;
+  forum: Pick<Forum, 'name' | 'slug'>;
 }

@@ -134,6 +134,31 @@ pub struct JsonStrategy {
     /// Follow-up requests whose results `map` can look items up in.
     #[serde(default)]
     pub joins: Vec<Join>,
+    /// One request per element of the first response, merged into one list.
+    /// When present, `map` runs on the merged `{"items": [{"parent", "item"}]}`
+    /// document instead of on the first response.
+    pub fanout: Option<Fanout>,
+}
+
+/// A request repeated for every element of the first response.
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct Fanout {
+    /// Pointer to the array in the first response.
+    pub from: String,
+    /// Request template, filled from `bind` for each element.
+    pub request: UpstreamRequest,
+    /// Parameter name -> pointer, inside the element, to its value.
+    pub bind: BTreeMap<String, String>,
+    /// Pointer to the item array in each response.
+    pub items: String,
+    /// Pointer, inside each item, to the value the merged list is sorted by.
+    pub sort_by: String,
+    /// Sort newest or largest first.
+    #[serde(default)]
+    pub descending: bool,
+    /// Name of a request parameter that caps the merged list, if given.
+    pub limit: Option<String>,
 }
 
 /// A second request, made after the first, from values collected out of it.

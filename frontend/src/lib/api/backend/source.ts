@@ -9,7 +9,7 @@
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { get } from '#/lib/api/backend/client';
 import type { DataSource, MediaPage, MediaSearchParams } from '#/lib/api/types';
-import type { Attribution, Comment, Media, MimeType } from '#/lib/types';
+import type { Attribution, Comment, ForumTopic, Media, MimeType } from '#/lib/types';
 
 /** The API rejects anything larger. */
 const MAX_PER_PAGE = 50;
@@ -123,4 +123,11 @@ async function recentComments(limit: number): Promise<Array<Comment>> {
   );
 }
 
-export const apiSource: DataSource = { searchMedia, featuredMedia, trendingMedia, recentComments };
+async function recentTopics(limit: number): Promise<Array<ForumTopic>> {
+  const response = await get<{ items: Array<ForumTopic> }>('/forum-activity', {
+    limit: Math.min(limit, MAX_PER_PAGE),
+  });
+  return response.items;
+}
+
+export const apiSource: DataSource = { searchMedia, featuredMedia, trendingMedia, recentComments, recentTopics };

@@ -1,28 +1,23 @@
+import { useQuery } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { MessagesSquare, Pin } from 'lucide-react';
 
-import { topics } from '#/lib/mock/data';
-import type { ForumTopic } from '#/lib/types';
+import { Button } from '#/components/ui/Button';
 import { PanelList } from '#/components/ui/Panel';
+import { RelativeTime } from '#/components/ui/RelativeTime';
+import { useDataSource } from '#/hooks/use-data-source';
+import { useInView } from '#/hooks/use-in-view';
+import { recentTopicsQuery } from '#/lib/api/queries';
+import type { ForumTopic } from '#/lib/types';
 import { SidebarBlock } from './SidebarBlock';
-import { UserAttribution } from './UserAttribution';
+
+/** How many topics the block holds. */
+const FORUM_TOPIC_COUNT = 6;
 
 function TopicStrip({ topic }: { topic: ForumTopic }) {
   return (
     <li className="forum-topic">
       {topic.sticky ? <Pin className="forum-topic__pin" size={12} /> : null}
-      {topic.lastPost ? (
-        <>
-          <UserAttribution author={topic.lastPost.author} />{' '}
-          <Link
-            // @ts-expect-error TODO: route not built yet
-            to={`/forums/${topic.forum.slug}/topics/${topic.slug}?post_id=${topic.lastPost.id}#post_${topic.lastPost.id}`}
-            className="forum-topic__meta"
-          >
-            replied to
-          </Link>{' '}
-        </>
-      ) : null}
       <Link
         // @ts-expect-error TODO: route not built yet
         to={`/forums/${topic.forum.slug}/topics/${topic.slug}`}
@@ -37,20 +32,60 @@ function TopicStrip({ topic }: { topic: ForumTopic }) {
         className="forum-topic__meta"
       >
         {topic.forum.name}
-      </Link>
+      </Link>{' '}
+      <RelativeTime className="forum-topic__meta" dateTime={topic.lastRepliedAt} />
     </li>
   );
 }
 
-/** "Forum Activity" block: recently active topics. */
+/**
+ * "Forum Activity" block: recently active topics.
+ *
+ * The slowest request on the page - the backend asks every forum - so it is
+ * neither in the route loader nor in the server render. It loads in the browser
+ * once the block is near the viewport, and not at all for a visitor who never
+ * scrolls to it.
+ */
 export function ForumActivityBlock() {
-  return (
-    <SidebarBlock title="Forum Activity" href="/forums" icon={<MessagesSquare size={16} />}>
+  const kind = useDataSource();
+  const [ref, inView] = useInView();
+  const {
+    data: topics,
+    isError,
+    refetch,
+  } = useQuery({ ...recentTopicsQuery(kind, FORUM_TOPIC_COUNT), enabled: inView });
+
+  let body;
+  if (topics !== undefined) {
+    body = (
       <PanelList>
         {topics.map(topic => (
-          <TopicStrip key={topic.id} topic={topic} />
+          <TopicStrip key={`${topic.forum.slug}/${topic.slug}`} topic={topic} />
         ))}
       </PanelList>
-    </SidebarBlock>
+    );
+  } else if (isError) {
+    body = (
+      <div className="forum-activity__status">
+        <span className="forum-topic__meta">Could not load forum activity.</span>
+        <Button
+          onClick={() => {
+            void refetch();
+          }}
+        >
+          Retry
+        </Button>
+      </div>
+    );
+  } else {
+    body = <div className="forum-activity__status forum-topic__meta">Loading&hellip;</div>;
+  }
+
+  return (
+    <div ref={ref}>
+      <SidebarBlock title="Forum Activity" href="/forums" icon={<MessagesSquare size={16} />}>
+        {body}
+      </SidebarBlock>
+    </div>
   );
 }

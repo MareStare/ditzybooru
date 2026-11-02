@@ -6,8 +6,8 @@
  * against data that does not change under it.
  */
 
-import { comments, featuredImage, images, topScoring, totalImages } from '#/lib/mock/data';
-import type { Comment, Media } from '#/lib/types';
+import { comments, featuredImage, images, topScoring, topics, totalImages } from '#/lib/mock/data';
+import type { Comment, ForumTopic, Media } from '#/lib/types';
 import type { DataSource, MediaPage, MediaSearchParams } from '#/lib/api/types';
 
 export const mockSource: DataSource = {
@@ -27,5 +27,9 @@ export const mockSource: DataSource = {
 
   async recentComments(limit: number): Promise<Array<Comment>> {
     return comments.slice(0, limit);
+  },
+
+  async recentTopics(limit: number): Promise<Array<ForumTopic>> {
+    return topics.slice(0, limit);
   },
 };

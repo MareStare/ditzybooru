@@ -98,6 +98,10 @@ async fn run() -> Result<bool> {
                     for (join, body) in responses.joins {
                         fs::write(dir.join(format!("{}.{join}.json", op.id)), body)?;
                     }
+                    // So is each fan-out response, as `<op>.fanout<index>.json`.
+                    for (index, body) in responses.fanout.iter().enumerate() {
+                        fs::write(dir.join(format!("{}.fanout{index}.json", op.id)), body)?;
+                    }
                     println!("OK   {label}");
                     passed.push(name);
                 }

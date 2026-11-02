@@ -53,6 +53,13 @@ fn fixtures_extract_and_validate() {
                     }
                 }
             }
+            for index in 0.. {
+                let Ok(body) = fs::read_to_string(dir.join(format!("{id}.fanout{index}.json")))
+                else {
+                    break;
+                };
+                responses.fanout.push(body);
+            }
             let value = extract(strategy, &responses, ctx, &op.examples)
                 .unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));
             validate(&document, op, &value).unwrap_or_else(|e| panic!("{name}/{id}: {e:#}"));

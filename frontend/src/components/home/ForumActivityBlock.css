@@ -23,3 +23,15 @@
 .forum-topic__meta:hover {
   color: var(--text-color);
 }
+
+/* Shown in place of the list while it loads or has failed. The height is about
+ * that of the list, so the blocks below do not jump when it arrives. */
+.forum-activity__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 8rem;
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+}

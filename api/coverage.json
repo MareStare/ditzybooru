@@ -1420,8 +1420,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getForumActivity"
+    ],
     "note": ""
   },
   "GET /api/v1/json/forums/:forum_id/topics": {
@@ -1433,8 +1435,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getForumActivity"
+    ],
     "note": ""
   },
   "GET /api/v1/json/forums/:forum_id/topics/:id": {

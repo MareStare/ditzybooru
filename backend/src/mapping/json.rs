@@ -6,7 +6,7 @@ use anyhow::{Context as _, anyhow};
 use serde_json::{Map, Value};
 
 use super::{
-    spec::{Collect, JsonMapValue},
+    spec::{Collect, Fanout, JsonMapValue},
     transform,
 };
 use crate::Result;
@@ -123,6 +123,84 @@ fn apply_rule(doc: &Value, rule: &JsonMapValue, ctx: RemapCtx<'_>) -> Result<Val
     }
 }
 
+/// Merges the fan-out responses into `{"items": [{"parent", "item"}]}`, sorted
+/// and capped as `fanout` says. An empty body is a request that failed; it is
+/// skipped so one broken element does not fail the whole list.
+pub fn merge_fanout(
+    main: &Value,
+    fanout: &Fanout,
+    bodies: &[String],
+    params: &BTreeMap<String, String>,
+) -> Result<Value> {
+    let parents = lookup(main, &fanout.from)?
+        .as_array()
+        .ok_or_else(|| anyhow!("fanout source {:?} is not an array", fanout.from))?;
+    let mut merged: Vec<Value> = vec![];
+    for (parent, body) in parents.iter().zip(bodies) {
+        if body.is_empty() {
+            continue;
+        }
+        let doc: Value = serde_json::from_str(body).context("fanout body is not JSON")?;
+        let items = lookup(&doc, &fanout.items)?
+            .as_array()
+            .ok_or_else(|| anyhow!("fanout items {:?} is not an array", fanout.items))?;
+        for item in items {
+            merged.push(serde_json::json!({ "parent": parent, "item": item }));
+        }
+    }
+    let sort_key = |entry: &Value| -> Value {
+        entry
+            .pointer("/item")
+            .and_then(|item| lookup(item, &fanout.sort_by).ok())
+            .cloned()
+            .unwrap_or(Value::Null)
+    };
+    merged.sort_by(|a, b| {
+        let ordering = compare(&sort_key(a), &sort_key(b));
+        if fanout.descending {
+            ordering.reverse()
+        } else {
+            ordering
+        }
+    });
+    if let Some(limit) = fanout.limit.as_ref().and_then(|name| params.get(name)) {
+        merged.truncate(
+            limit
+                .parse::<usize>()
+                .context("fanout limit is not a number")?,
+        );
+    }
+    Ok(serde_json::json!({ "items": merged }))
+}
+
+/// Orders numbers numerically and everything else as text (ISO timestamps
+/// sort correctly that way).
+fn compare(a: &Value, b: &Value) -> std::cmp::Ordering {
+    match (a.as_f64(), b.as_f64()) {
+        (Some(x), Some(y)) => x.total_cmp(&y),
+        _ => a
+            .as_str()
+            .unwrap_or_default()
+            .cmp(b.as_str().unwrap_or_default()),
+    }
+}
+
+/// The array at `pointer`.
+pub fn elements<'a>(doc: &'a Value, pointer: &str) -> Result<&'a [Value]> {
+    lookup(doc, pointer)?
+        .as_array()
+        .map(Vec::as_slice)
+        .ok_or_else(|| anyhow!("{pointer:?} is not an array"))
+}
+
+/// The value at `pointer` as text, for use in a request.
+pub fn scalar(doc: &Value, pointer: &str) -> Result<String> {
+    let value = lookup(doc, pointer)?;
+    Ok(value
+        .as_str()
+        .map_or_else(|| value.to_string(), str::to_owned))
+}
+
 /// The unique values `collect` picks out of `doc`, prefixed, in first-seen order.
 pub fn collect_values(doc: &Value, collect: &Collect) -> Result<Vec<String>> {
     let elements = lookup(doc, &collect.from)?
@@ -166,5 +244,34 @@ mod tests {
             "old"
         );
         lookup(&doc, "/missing|/gone").unwrap_err();
+    }
+
+    #[test]
+    fn fanout_merges_sorts_and_caps() {
+        let fanout: Fanout = serde_json::from_value(json!({
+            "from": "/forums",
+            "request": { "method": "GET", "path": "/x" },
+            "bind": {},
+            "items": "/topics",
+            "sortBy": "/at",
+            "descending": true,
+            "limit": "limit"
+        }))
+        .unwrap();
+        let main = json!({ "forums": [{ "n": "a" }, { "n": "b" }, { "n": "c" }] });
+        let bodies = vec![
+            r#"{"topics":[{"at":"2026-01-01"},{"at":"2026-03-01"}]}"#.to_owned(),
+            String::new(), // a failed request is skipped
+            r#"{"topics":[{"at":"2026-02-01"}]}"#.to_owned(),
+        ];
+        let params = BTreeMap::from([("limit".to_owned(), "2".to_owned())]);
+        let merged = merge_fanout(&main, &fanout, &bodies, &params).unwrap();
+        assert_eq!(
+            merged,
+            json!({ "items": [
+                { "parent": { "n": "a" }, "item": { "at": "2026-03-01" } },
+                { "parent": { "n": "c" }, "item": { "at": "2026-02-01" } },
+            ]})
+        );
     }
 }

@@ -104,6 +104,11 @@ pub fn effective_params(
 ) -> Result<BTreeMap<String, String>> {
     let mut all = params.clone();
     add_defaults(strategy.request(), &mut all)?;
+    if let Strategy::Json(json_strategy) = strategy
+        && let Some(fanout) = &json_strategy.fanout
+    {
+        add_defaults(&fanout.request, &mut all)?;
+    }
     Ok(all)
 }
 
@@ -148,6 +153,9 @@ pub struct Responses {
     pub main: String,
     /// Body of each join's follow-up request, by join name.
     pub joins: BTreeMap<String, String>,
+    /// Body of each fan-out request, in the order of the first response's
+    /// elements. Empty when that request failed.
+    pub fanout: Vec<String>,
 }
 
 async fn get_text(
@@ -205,8 +213,43 @@ pub async fn fetch(
             joins.insert(join.name.clone(), body);
         }
     }
-    Ok(Responses { main, joins })
+    let mut fanout_bodies = vec![];
+    if let Strategy::Json(json_strategy) = strategy
+        && let Some(fanout) = &json_strategy.fanout
+    {
+        let doc: Value = serde_json::from_str(&main).context("upstream body is not JSON")?;
+        let parents = json::elements(&doc, &fanout.from)?;
+        let requests = parents.iter().take(MAX_FANOUT).map(|parent| {
+            let mut request_params = all.clone();
+            add_defaults(&fanout.request, &mut request_params)?;
+            for (name, pointer) in &fanout.bind {
+                request_params.insert(name.clone(), json::scalar(parent, pointer)?);
+            }
+            Ok::<_, anyhow::Error>(request_params)
+        });
+        let requests: Vec<_> = requests.collect::<Result<_>>()?;
+        let results = futures_util::future::join_all(
+            requests
+                .iter()
+                .map(|request_params| get_text(client, ctx, &fanout.request, request_params)),
+        )
+        .await;
+        for result in results {
+            fanout_bodies.push(result.unwrap_or_else(|err| {
+                eprintln!("fanout request failed: {err:#}");
+                String::new()
+            }));
+        }
+    }
+    Ok(Responses {
+        main,
+        joins,
+        fanout: fanout_bodies,
+    })
 }
+
+/// The most fan-out requests one response may cause.
+const MAX_FANOUT: usize = 20;
 
 /// Turns the upstream responses into our response document.
 pub fn extract(
@@ -228,12 +271,17 @@ pub fn extract(
                     );
                 }
             }
+            let all = effective_params(strategy, params)?;
+            let doc = match &s.fanout {
+                Some(fanout) => json::merge_fanout(&doc, fanout, &responses.fanout, &all)?,
+                None => doc,
+            };
             json::remap(
                 &doc,
                 &s.map,
                 json::RemapCtx {
                     origin: ctx.origin,
-                    params: &effective_params(strategy, params)?,
+                    params: &all,
                     joins: &tables,
                 },
             )

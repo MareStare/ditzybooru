@@ -247,6 +247,87 @@
         ],
         "type": "object"
       },
+      "ForumActivity": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ForumTopic"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ForumTopic": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "authorId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "forum": {
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "slug": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "slug",
+              "name"
+            ],
+            "type": "object"
+          },
+          "lastRepliedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "postCount": {
+            "type": "integer"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "sticky": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "sticky",
+          "locked",
+          "postCount",
+          "lastRepliedAt",
+          "author",
+          "authorId",
+          "forum"
+        ],
+        "type": "object"
+      },
       "Gallery": {
         "additionalProperties": false,
         "properties": {
@@ -1089,6 +1170,107 @@
                   "per_page": "{perPage|15}",
                   "q": "{q|*}"
                 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forum-activity": {
+      "get": {
+        "operationId": "getForumActivity",
+        "parameters": [
+          {
+            "description": "At most 50. Default 6.",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForumActivity"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Recently active forum topics across every forum, newest reply first.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "limit": 4
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums",
+            "GET /api/v1/json/forums/:forum_id/topics"
+          ],
+          "strategies": [
+            {
+              "fanout": {
+                "bind": {
+                  "forum": "/short_name"
+                },
+                "descending": true,
+                "from": "/forums",
+                "items": "/topics",
+                "limit": "limit",
+                "request": {
+                  "method": "GET",
+                  "path": "/api/v1/json/forums/{forum}/topics",
+                  "query": {
+                    "page": "1",
+                    "per_page": "{limit|6}"
+                  }
+                },
+                "sortBy": "/last_replied_to_at"
+              },
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/items",
+                  "map": {
+                    "author": "/item/author",
+                    "authorId": "/item/user_id",
+                    "forum": {
+                      "from": "/parent",
+                      "map": {
+                        "name": "/name",
+                        "slug": "/short_name"
+                      }
+                    },
+                    "lastRepliedAt": "/item/last_replied_to_at",
+                    "locked": "/item/locked",
+                    "postCount": "/item/post_count",
+                    "slug": "/item/slug",
+                    "sticky": "/item/sticky",
+                    "title": "/item/title"
+                  }
+                }
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums"
               }
             }
           ]

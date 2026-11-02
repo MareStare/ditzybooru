@@ -6,7 +6,7 @@
  * a running page without a component knowing which one it got.
  */
 
-import type { Comment, Media } from '#/lib/types';
+import type { Comment, ForumTopic, Media } from '#/lib/types';
 
 /** Which backend the site reads from. `mock` is the bundled data with a
  *  signed-in user, `mock-anonymous` the same data browsed signed out. */
@@ -33,4 +33,7 @@ export interface DataSource {
   /** Top scoring images of the last few days, for the "Trending" block. */
   trendingMedia: (limit: number) => Promise<Array<Media>>;
   recentComments: (limit: number) => Promise<Array<Comment>>;
+  /** The latest forum topics across every forum. Slower than the rest, so
+   *  callers load it lazily rather than in a route loader. */
+  recentTopics: (limit: number) => Promise<Array<ForumTopic>>;
 }

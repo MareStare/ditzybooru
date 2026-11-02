@@ -141,6 +141,19 @@ const Filter = s.object({
   spoileredComplex: s.nullable(s.string()),
 });
 
+const ForumTopic = s.object({
+  slug: s.string(),
+  title: s.string(),
+  sticky: s.bool(),
+  locked: s.bool(),
+  postCount: s.int(),
+  lastRepliedAt: s.dateTime(),
+  /** Who started the topic. The API does not name the last poster. */
+  author: s.string(),
+  authorId: s.nullable(s.int()),
+  forum: s.object({ slug: s.string(), name: s.string() }),
+});
+
 export const schemas = {
   Representations,
   ImageTag,
@@ -151,6 +164,8 @@ export const schemas = {
   Post,
   Gallery,
   Filter,
+  ForumTopic,
+  ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
   MediaResults: results('Media'),
   TagResults: results('Tag'),
   CommentResults: results('Comment'),
