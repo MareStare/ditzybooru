@@ -6,6 +6,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
+import { bundleBudget } from './bundle-budget.ts';
 
 /**
  * Where the server runs. Cloudflare Workers by default. `BUILD_TARGET=node`
@@ -96,5 +97,6 @@ export default defineConfig({
     ...(serverTarget === 'node' ? [nitro()] : []),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
+    bundleBudget(),
   ],
 });
