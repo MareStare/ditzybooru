@@ -1,5 +1,6 @@
 import { s } from '../dsl/schema.ts';
 import { listingOperation } from './listing.ts';
+import { commentMap, filterMap, postMap } from './maps.ts';
 import { urlAt } from './media.ts';
 
 export const listTags = listingOperation({
@@ -42,16 +43,7 @@ export const listComments = listingOperation({
   ],
   extraQuery: { sf: '{sf|created_at}', sd: '{sd|desc}' },
   itemMap: {
-    id: '/id',
-    imageId: '/image_id',
-    createdAt: '/created_at',
-    updatedAt: '/updated_at',
-    editedAt: '/edited_at',
-    editReason: '/edit_reason',
-    body: '/body',
-    author: '/author',
-    avatarUrl: urlAt('/avatar'),
-    userId: '/user_id',
+    ...commentMap,
     // Null when the active filter hides the image.
     imageThumbTiny: {
       join: 'images',
@@ -83,17 +75,7 @@ export const listPosts = listingOperation({
   item: 'Post',
   itemsKey: 'posts',
   htmlRoute: 'GET /posts',
-  itemMap: {
-    id: '/id',
-    createdAt: '/created_at',
-    updatedAt: '/updated_at',
-    editedAt: '/edited_at',
-    editReason: '/edit_reason',
-    body: '/body',
-    author: '/author',
-    avatarUrl: urlAt('/avatar'),
-    userId: '/user_id',
-  },
+  itemMap: postMap,
 });
 
 export const listGalleries = listingOperation({
@@ -124,17 +106,5 @@ export const listFilters = listingOperation({
   item: 'Filter',
   itemsKey: 'filters',
   htmlRoute: 'GET /filters',
-  itemMap: {
-    id: '/id',
-    name: '/name',
-    description: '/description',
-    public: '/public',
-    system: '/system',
-    userCount: '/user_count',
-    userId: '/user_id',
-    hiddenTagIds: '/hidden_tag_ids',
-    spoileredTagIds: '/spoilered_tag_ids',
-    hiddenComplex: '/hidden_complex',
-    spoileredComplex: '/spoilered_complex',
-  },
+  itemMap: filterMap,
 });

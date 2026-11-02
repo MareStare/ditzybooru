@@ -89,7 +89,7 @@ const Tag = s.object({
   spoilerImageUrl: s.nullable(s.string()),
 });
 
-const Comment = s.object({
+const commentFields = {
   id: s.int(),
   imageId: s.int(),
   createdAt: s.dateTime(),
@@ -101,6 +101,13 @@ const Comment = s.object({
   avatarUrl: s.string(),
   /** `null` for anonymous comments. */
   userId: s.nullable(s.int()),
+};
+
+/** One comment, as the comment page shows it. */
+const CommentDetail = s.object(commentFields);
+
+const Comment = s.object({
+  ...commentFields,
   /** The tiny thumbnail of the image; `null` when the active filter hides it. */
   imageThumbTiny: s.nullable(s.uri()),
 });
@@ -141,6 +148,27 @@ const Filter = s.object({
   spoileredComplex: s.nullable(s.string()),
 });
 
+const Forum = s.object({
+  slug: s.string(),
+  name: s.string(),
+  description: s.string(),
+  postCount: s.int(),
+  topicCount: s.int(),
+});
+
+const Topic = s.object({
+  slug: s.string(),
+  title: s.string(),
+  sticky: s.bool(),
+  locked: s.bool(),
+  postCount: s.int(),
+  viewCount: s.int(),
+  lastRepliedAt: s.dateTime(),
+  /** Who started the topic. */
+  author: s.string(),
+  authorId: s.nullable(s.int()),
+});
+
 const ForumTopic = s.object({
   slug: s.string(),
   title: s.string(),
@@ -161,9 +189,12 @@ export const schemas = {
   Media,
   Tag,
   Comment,
+  CommentDetail,
   Post,
   Gallery,
   Filter,
+  Forum,
+  Topic,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
   MediaResults: results('Media'),
@@ -172,5 +203,6 @@ export const schemas = {
   PostResults: results('Post'),
   GalleryResults: results('Gallery'),
   FilterResults: results('Filter'),
+  FilterList: s.object({ items: s.array(s.ref('Filter')) }),
   Error: ErrorBody,
 };

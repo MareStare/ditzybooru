@@ -1368,8 +1368,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getComment"
+    ],
     "note": ""
   },
   "GET /api/v1/json/filters/:id": {
@@ -1381,8 +1383,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getFilter"
+    ],
     "note": ""
   },
   "GET /api/v1/json/filters/system": {
@@ -1394,8 +1398,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listSystemFilters"
+    ],
     "note": ""
   },
   "GET /api/v1/json/filters/user": {
@@ -1450,8 +1456,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getTopic"
+    ],
     "note": ""
   },
   "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts": {
@@ -1463,8 +1471,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listTopicPosts"
+    ],
     "note": ""
   },
   "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts/:id": {
@@ -1476,8 +1486,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getPost"
+    ],
     "note": ""
   },
   "GET /api/v1/json/forums/:id": {
@@ -1489,8 +1501,10 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getForum"
+    ],
     "note": ""
   },
   "GET /api/v1/json/images/:id": {

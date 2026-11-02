@@ -85,6 +85,78 @@
         ],
         "type": "object"
       },
+      "CommentDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "avatarUrl": {
+            "type": "string"
+          },
+          "body": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "editedAt": {
+            "oneOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "editReason": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "imageId": {
+            "type": "integer"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "userId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "imageId",
+          "createdAt",
+          "updatedAt",
+          "editedAt",
+          "editReason",
+          "body",
+          "author",
+          "avatarUrl",
+          "userId"
+        ],
+        "type": "object"
+      },
       "CommentResults": {
         "additionalProperties": false,
         "properties": {
@@ -219,6 +291,22 @@
         ],
         "type": "object"
       },
+      "FilterList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Filter"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
       "FilterResults": {
         "additionalProperties": false,
         "properties": {
@@ -244,6 +332,34 @@
           "total",
           "page",
           "perPage"
+        ],
+        "type": "object"
+      },
+      "Forum": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "postCount": {
+            "type": "integer"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "topicCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "postCount",
+          "topicCount"
         ],
         "type": "object"
       },
@@ -891,6 +1007,58 @@
           "perPage"
         ],
         "type": "object"
+      },
+      "Topic": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "authorId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastRepliedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "locked": {
+            "type": "boolean"
+          },
+          "postCount": {
+            "type": "integer"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "sticky": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          },
+          "viewCount": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "sticky",
+          "locked",
+          "postCount",
+          "viewCount",
+          "lastRepliedAt",
+          "author",
+          "authorId"
+        ],
+        "type": "object"
       }
     }
   },
@@ -1065,6 +1233,80 @@
         }
       }
     },
+    "/comments/{id}": {
+      "get": {
+        "operationId": "getComment",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CommentDetail"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "One image comment.",
+        "tags": [
+          "comments"
+        ],
+        "x-examples": {
+          "id": 1
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/comments/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "author": "/comment/author",
+                "avatarUrl": {
+                  "as": "url",
+                  "from": "/comment/avatar"
+                },
+                "body": "/comment/body",
+                "createdAt": "/comment/created_at",
+                "editedAt": "/comment/edited_at",
+                "editReason": "/comment/edit_reason",
+                "id": "/comment/id",
+                "imageId": "/comment/image_id",
+                "updatedAt": "/comment/updated_at",
+                "userId": "/comment/user_id"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/comments/{id}"
+              }
+            }
+          ]
+        }
+      }
+    },
     "/filters": {
       "get": {
         "operationId": "listFilters",
@@ -1176,6 +1418,143 @@
         }
       }
     },
+    "/filters/{id}": {
+      "get": {
+        "operationId": "getFilter",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Filter"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "One filter, with the tags it hides and spoilers.",
+        "tags": [
+          "filters"
+        ],
+        "x-examples": {
+          "id": 1
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/filters/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "description": "/filter/description",
+                "hiddenComplex": "/filter/hidden_complex",
+                "hiddenTagIds": "/filter/hidden_tag_ids",
+                "id": "/filter/id",
+                "name": "/filter/name",
+                "public": "/filter/public",
+                "spoileredComplex": "/filter/spoilered_complex",
+                "spoileredTagIds": "/filter/spoilered_tag_ids",
+                "system": "/filter/system",
+                "userCount": "/filter/user_count",
+                "userId": "/filter/user_id"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/filters/{id}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/filters/system": {
+      "get": {
+        "operationId": "listSystemFilters",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The filters the site provides to everyone.",
+        "tags": [
+          "filters"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/filters/system"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/filters",
+                  "map": {
+                    "description": "/description",
+                    "hiddenComplex": "/hidden_complex",
+                    "hiddenTagIds": "/hidden_tag_ids",
+                    "id": "/id",
+                    "name": "/name",
+                    "public": "/public",
+                    "spoileredComplex": "/spoilered_complex",
+                    "spoileredTagIds": "/spoilered_tag_ids",
+                    "system": "/system",
+                    "userCount": "/user_count",
+                    "userId": "/user_id"
+                  }
+                }
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/filters/system"
+              }
+            }
+          ]
+        }
+      }
+    },
     "/forum-activity": {
       "get": {
         "operationId": "getForumActivity",
@@ -1272,6 +1651,360 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/forums"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums/{forum}": {
+      "get": {
+        "operationId": "getForum",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forum",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Forum"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "One forum: its name, description and counters.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "forum": "dis"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "description": "/forum/description",
+                "name": "/forum/name",
+                "postCount": "/forum/post_count",
+                "slug": "/forum/short_name",
+                "topicCount": "/forum/topic_count"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums/{forum}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums/{forum}/{topic}": {
+      "get": {
+        "operationId": "getTopic",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forum",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "topic",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Topic"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "One forum topic: its title, flags and counters.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "forum": "dis",
+          "topic": "example-topic"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums/:forum_id/topics/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "author": "/topic/author",
+                "authorId": "/topic/user_id",
+                "lastRepliedAt": "/topic/last_replied_to_at",
+                "locked": "/topic/locked",
+                "postCount": "/topic/post_count",
+                "slug": "/topic/slug",
+                "sticky": "/topic/sticky",
+                "title": "/topic/title",
+                "viewCount": "/topic/view_count"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums/{forum}/topics/{topic}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums/{forum}/{topic}/posts": {
+      "get": {
+        "operationId": "listTopicPosts",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forum",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "topic",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PostResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The posts of a topic, oldest first.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "forum": "dis",
+          "perPage": 2,
+          "topic": "example-topic"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/posts",
+                  "map": {
+                    "author": "/author",
+                    "avatarUrl": {
+                      "as": "url",
+                      "from": "/avatar"
+                    },
+                    "body": "/body",
+                    "createdAt": "/created_at",
+                    "editedAt": "/edited_at",
+                    "editReason": "/edit_reason",
+                    "id": "/id",
+                    "updatedAt": "/updated_at",
+                    "userId": "/user_id"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums/{forum}/topics/{topic}/posts",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|25}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums/{forum}/{topic}/posts/{post}": {
+      "get": {
+        "operationId": "getPost",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forum",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "topic",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "post",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "One forum post.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "forum": "dis",
+          "post": 1,
+          "topic": "example-topic"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "author": "/post/author",
+                "avatarUrl": {
+                  "as": "url",
+                  "from": "/post/avatar"
+                },
+                "body": "/post/body",
+                "createdAt": "/post/created_at",
+                "editedAt": "/post/edited_at",
+                "editReason": "/post/edit_reason",
+                "id": "/post/id",
+                "updatedAt": "/post/updated_at",
+                "userId": "/post/user_id"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums/{forum}/topics/{topic}/posts/{post}"
               }
             }
           ]
