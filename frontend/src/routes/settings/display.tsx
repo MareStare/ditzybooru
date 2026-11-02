@@ -346,27 +346,19 @@ function FeedbackSpecimen() {
   return (
     <Section title="Notices & badges" size="wide">
       <Notice>
-        <span>
-          <NoticeTitle>Heads up</NoticeTitle>
-          Your filter is hiding 42 images on this page.
-        </span>
+        <NoticeTitle>Heads up</NoticeTitle>
+        Your filter is hiding 42 images on this page.
       </Notice>
       <Notice variant="success">
-        <span>
-          <NoticeTitle>Upload complete</NoticeTitle>
-          Your image is now in the moderation queue.
-        </span>
+        <NoticeTitle>Upload complete</NoticeTitle>
+        Your image is now in the moderation queue.
       </Notice>
       <Notice variant="warning">
-        <span>
-          <NoticeTitle>Tag conflict</NoticeTitle>
-          This image has both <code>safe</code> and <code>suggestive</code>.
-        </span>
+        <NoticeTitle>Tag conflict</NoticeTitle>
+        This image has both <code>safe</code> and <code>suggestive</code>.
       </Notice>
       <Notice variant="danger">
-        <span>
-          <NoticeTitle>Upload rejected</NoticeTitle>A duplicate of this image already exists.
-        </span>
+        <NoticeTitle>Upload rejected</NoticeTitle>A duplicate of this image already exists.
       </Notice>
       <div className="display-page-row">
         <Badge>Member</Badge>

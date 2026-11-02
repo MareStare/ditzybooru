@@ -11,8 +11,17 @@ type Props<TElement extends keyof React.JSX.IntrinsicElements> = Omit<ComponentP
 };
 
 /** An inline message attached to the thing it is about. */
-export function Notice({ variant = 'default', className, ...props }: Props<'div'> & { variant?: NoticeVariant }) {
-  return <div className={cn('notice', variant !== 'default' && `notice--${variant}`, className)} {...props} />;
+export function Notice({
+  variant = 'default',
+  className,
+  children,
+  ...props
+}: Props<'div'> & { variant?: NoticeVariant }) {
+  return (
+    <div className={cn('notice', variant !== 'default' && `notice--${variant}`, className)} {...props}>
+      <span>{children}</span>
+    </div>
+  );
 }
 
 export function NoticeTitle({ className, ...props }: Props<'strong'>) {
