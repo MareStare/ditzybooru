@@ -40,6 +40,22 @@ jobs:
       - run: pnpm run browsers:install --with-deps
       - run: pnpm run test
 
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # With no arguments, installs the toolchain `rust-toolchain.toml` pins.
+      - run: rustup toolchain install
+
+      # Caches the registry and `target`, keyed on the lockfile and toolchain.
+      - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2.9.2
+
+      - run: cargo fmt --check
+      - run: cargo clippy --all-targets --locked -- -D warnings
+      - run: cargo build --release --locked
+      - run: cargo test --locked
+
   # Check for typos in the repository based on a static dictionary
   typos:
     runs-on: ubuntu-latest
