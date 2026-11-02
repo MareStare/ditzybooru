@@ -54,7 +54,7 @@ function UserMenu() {
         to="/notifications"
         className="nav-link nav-link--badged nav__bottom-nav-hidden"
         title="Notifications"
-        aria-label="Notifications"
+        aria-label="Notifications, 3 new"
       >
         <Bell size={16} />
         <span className="nav-link__badge">3</span>
@@ -127,8 +127,8 @@ export function SiteHeader() {
             <MenuIcon size={18} />
           </Button>
 
-          <Link to="/" className="nav-brand" aria-label="Home">
-            <span className="nav-brand__mark">D</span>
+          <Link to="/" className="nav-brand" aria-label="Ditzybooru home">
+            <span className="nav-brand__mark" aria-hidden="true" />
             <span className="nav-brand__name">Ditzybooru</span>
           </Link>
 

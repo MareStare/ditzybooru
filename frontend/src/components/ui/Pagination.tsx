@@ -206,13 +206,13 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
       >
         {chevron === '«' || chevron === '‹' ? (
           <>
-            {chevron}
+            <span className="page-chevron" aria-hidden="true" data-chevron={chevron} />
             <span className="page-word">{name}</span>
           </>
         ) : (
           <>
             <span className="page-word">{name}</span>
-            {chevron}
+            <span className="page-chevron" aria-hidden="true" data-chevron={chevron} />
           </>
         )}
       </button>
@@ -253,7 +253,7 @@ export function Pagination({ page, pageCount, onPageChange, label, back = true, 
       {back ? (
         <>
           {stepButton(1, 'First', 'First page', '«')}
-          {stepButton(Math.max(page - 1, 1), 'Prev', 'Previous page', '‹')}
+          {stepButton(Math.max(page - 1, 1), 'Prev', 'Prev page', '‹')}
         </>
       ) : null}
 

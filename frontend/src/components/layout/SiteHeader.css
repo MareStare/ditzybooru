@@ -95,6 +95,12 @@
   font-weight: var(--weight-bold);
 }
 
+.nav-brand__mark::before {
+  /* Drawn by CSS so the link's visible text is the name alone, which its
+   * accessible name has to contain. */
+  content: 'D';
+}
+
 .nav-brand__name {
   font-family: var(--font-display);
   font-size: var(--text-lg);

@@ -100,6 +100,12 @@
     border-color var(--duration) var(--ease-out);
 }
 
+.page-chevron::before {
+  /* Drawn by CSS, not written in the markup: the button's visible text then
+   * stays the word alone, which its accessible name has to contain. */
+  content: attr(data-chevron);
+}
+
 .page-link:hover:not(:disabled, [aria-current='page']) {
   border-color: var(--border-color-strong);
   background-color: var(--surface-hover);

@@ -50,7 +50,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
       <nav className="drawer__panel">
         <div className="drawer__head">
           <span className="nav-brand">
-            <span className="nav-brand__mark">D</span>
+            <span className="nav-brand__mark" aria-hidden="true" />
             <span className="nav-brand__name">Ditzybooru</span>
           </span>
           <Button variant="ghost" icon onClick={onClose} aria-label="Close menu">
