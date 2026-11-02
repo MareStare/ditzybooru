@@ -13,7 +13,7 @@ use std::{
 
 use anyhow::{Context as _, Result};
 use backend::mapping::{
-    Context, Document, Responses, Strategy, extract, fetch, select_strategy, validate,
+    Context, Document, Responses, Strategy, Throttle, extract, fetch, select_strategy, validate,
 };
 use serde::Deserialize;
 use serde_json::Value;
@@ -112,7 +112,8 @@ async fn run() -> Result<bool> {
                 flavor: &instance.flavor,
             };
             let result = async {
-                let responses = fetch(&client, ctx, strategy, &op.examples).await?;
+                let responses =
+                    fetch(&client, &Throttle::default(), ctx, strategy, &op.examples).await?;
                 let value = extract(strategy, &responses, ctx, &op.examples)?;
                 validate(&document, op, &value)?;
                 if value

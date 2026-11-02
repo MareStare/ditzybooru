@@ -15,8 +15,8 @@ use crate::{
     Result,
     cache::{Failure, Outcome, ResponseCache},
     mapping::{
-        Context, Document, OPENAPI_JSON, Strategy, UpstreamStatus, extract, fetch, relevant_params,
-        select_strategy,
+        Context, Document, OPENAPI_JSON, RateLimited, Strategy, Throttle, UpstreamStatus, extract,
+        fetch, relevant_params, select_strategy,
     },
     sites::Sites,
 };
@@ -27,6 +27,7 @@ struct AppState {
     client: reqwest::Client,
     sites: Sites,
     cache: ResponseCache,
+    throttle: Throttle,
 }
 
 /// Builds the `/api/v1` router.
@@ -41,6 +42,7 @@ pub fn router() -> Result<Router> {
             .build()?,
         sites: Sites::load()?,
         cache: ResponseCache::default(),
+        throttle: Throttle::default(),
     });
 
     let mut router = Router::new();
@@ -142,7 +144,7 @@ async fn compute_outcome(
     params: &BTreeMap<String, String>,
 ) -> Result<Outcome, Failure> {
     let result = async {
-        let responses = fetch(&state.client, ctx, strategy, params).await?;
+        let responses = fetch(&state.client, &state.throttle, ctx, strategy, params).await?;
         extract(strategy, &responses, ctx, params)
     }
     .await;
@@ -152,6 +154,14 @@ async fn compute_outcome(
         Ok(value) => Ok(Outcome::Json(value.to_string().into())),
         Err(err) => {
             eprintln!("{op_id} (host {host:?}): {err:#}");
+            if let Some(limited) = err.downcast_ref::<RateLimited>() {
+                return Err(Failure {
+                    status: StatusCode::TOO_MANY_REQUESTS,
+                    code: "rate_limited",
+                    message: "the upstream is rate limiting, try again later",
+                    retry_after: Some(limited.retry_after.as_secs().max(1)),
+                });
+            }
             match err.downcast_ref::<UpstreamStatus>() {
                 Some(UpstreamStatus(status))
                     if *status == reqwest::StatusCode::NOT_FOUND || status.is_redirection() =>
@@ -162,11 +172,13 @@ async fn compute_outcome(
                     status: StatusCode::INTERNAL_SERVER_ERROR,
                     code: "upstream_error",
                     message: "upstream error",
+                    retry_after: None,
                 }),
                 None => Err(Failure {
                     status: StatusCode::INTERNAL_SERVER_ERROR,
                     code: "mapping_error",
                     message: "could not read upstream",
+                    retry_after: None,
                 }),
             }
         }
@@ -192,6 +204,14 @@ fn respond(result: Result<Outcome, Arc<Failure>>, ttl: Option<Duration>) -> Resp
                 .into_response()
         }
         Ok(Outcome::NotFound) => error(StatusCode::NOT_FOUND, "not_found", "not found upstream"),
-        Err(failure) => error(failure.status, failure.code, failure.message),
+        Err(failure) => {
+            let mut response = error(failure.status, failure.code, failure.message);
+            if let Some(seconds) = failure.retry_after {
+                response
+                    .headers_mut()
+                    .insert(header::RETRY_AFTER, seconds.into());
+            }
+            response
+        }
     }
 }

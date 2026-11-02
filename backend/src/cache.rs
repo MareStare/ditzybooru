@@ -35,6 +35,8 @@ pub struct Failure {
     pub status: StatusCode,
     pub code: &'static str,
     pub message: &'static str,
+    /// Seconds after which the client may try again.
+    pub retry_after: Option<u64>,
 }
 
 #[derive(Debug, Clone)]
@@ -175,6 +177,7 @@ mod tests {
                         status: StatusCode::INTERNAL_SERVER_ERROR,
                         code: "upstream_error",
                         message: "upstream error",
+                        retry_after: None,
                     })
                 })
                 .await

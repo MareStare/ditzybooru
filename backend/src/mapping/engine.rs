@@ -8,6 +8,7 @@ use serde_json::Value;
 use super::{
     html, json,
     spec::{Document, Operation, Strategy, UpstreamRequest},
+    throttle::{RateLimited, Throttle},
 };
 use crate::Result;
 
@@ -185,6 +186,7 @@ pub struct Responses {
 
 async fn get_text(
     client: &reqwest::Client,
+    throttle: &Throttle,
     ctx: Context<'_>,
     request: &UpstreamRequest,
     params: &BTreeMap<String, String>,
@@ -193,12 +195,22 @@ async fn get_text(
         bail!("only GET requests are executable so far");
     }
     let url = format!("{}{}", ctx.origin, plan_request(request, params)?);
+    // Held until the body is read, so the cap covers the whole transfer.
+    let _slot = throttle.acquire(ctx.origin).await?;
     let response = client
         .get(&url)
         .send()
         .await
         .with_context(|| format!("GET {url}"))?;
     let status = response.status();
+    if status == reqwest::StatusCode::TOO_MANY_REQUESTS {
+        let retry_after = response
+            .headers()
+            .get(reqwest::header::RETRY_AFTER)
+            .and_then(|value| value.to_str().ok());
+        let retry_after = throttle.cool_down(ctx.origin, retry_after);
+        return Err(anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}")));
+    }
     if !status.is_success() {
         return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
     }
@@ -208,12 +220,13 @@ async fn get_text(
 /// Performs the strategy's request, then its joins' follow-up requests.
 pub async fn fetch(
     client: &reqwest::Client,
+    throttle: &Throttle,
     ctx: Context<'_>,
     strategy: &Strategy,
     params: &BTreeMap<String, String>,
 ) -> Result<Responses> {
     let all = effective_params(strategy, params)?;
-    let main = get_text(client, ctx, strategy.request(), &all).await?;
+    let main = get_text(client, throttle, ctx, strategy.request(), &all).await?;
     let mut joins = BTreeMap::new();
     if let Strategy::Json(json_strategy) = strategy
         && !json_strategy.joins.is_empty()
@@ -234,7 +247,7 @@ pub async fn fetch(
                 join.collect.param.clone(),
                 values.join(&join.collect.separator),
             );
-            let body = get_text(client, ctx, &join.request, &join_params).await?;
+            let body = get_text(client, throttle, ctx, &join.request, &join_params).await?;
             joins.insert(join.name.clone(), body);
         }
     }
@@ -253,11 +266,9 @@ pub async fn fetch(
             Ok::<_, anyhow::Error>(request_params)
         });
         let requests: Vec<_> = requests.collect::<Result<_>>()?;
-        let results = futures_util::future::join_all(
-            requests
-                .iter()
-                .map(|request_params| get_text(client, ctx, &fanout.request, request_params)),
-        )
+        let results = futures_util::future::join_all(requests.iter().map(|request_params| {
+            get_text(client, throttle, ctx, &fanout.request, request_params)
+        }))
         .await;
         for result in results {
             fanout_bodies.push(result.unwrap_or_else(|err| {

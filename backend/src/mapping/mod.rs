@@ -13,6 +13,7 @@ mod engine;
 mod html;
 mod json;
 mod spec;
+mod throttle;
 mod transform;
 
 pub use engine::{
@@ -20,6 +21,7 @@ pub use engine::{
     select_strategy, validate,
 };
 pub use spec::{Document, Operation, Strategy};
+pub use throttle::{RateLimited, Throttle};
 
 /// The tracked `OpenAPI` document, embedded at build time.
 pub const OPENAPI_JSON: &str = include_str!("../../../api/openapi.json");
