@@ -13,11 +13,14 @@ pub async fn run() {
 async fn try_run() -> Result {
     let app = Router::new().route("/", get(|| async { "Hello, World!" }));
 
-    let port = 3000;
+    // Loopback by default: a reverse proxy is the public entry point.
+    let host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_owned());
+    let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_owned());
+    let addr = format!("{host}:{port}");
 
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{port}")).await?;
+    let listener = tokio::net::TcpListener::bind(&addr).await?;
 
-    eprintln!("Listening on port {port}...");
+    eprintln!("Listening on {addr}...");
     axum::serve(listener, app).await?;
 
     Ok(())
