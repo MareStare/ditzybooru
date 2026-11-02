@@ -197,6 +197,12 @@ importers:
         specifier: ^8.71.2
         version: 8.71.2(eslint@10.13.0(jiti@2.7.0)(supports-color@10.2.2))(supports-color@10.2.2)(typescript@6.0.3)
 
+  api:
+    devDependencies:
+      '@types/node':
+        specifier: ^24
+        version: 24.19.2
+
   frontend:
     dependencies:
       '@fontsource-variable/fredoka':

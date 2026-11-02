@@ -1,0 +1,2702 @@
+[
+  {
+    "method": "GET",
+    "path": "/sessions/new",
+    "controller": "PhilomenaWeb.SessionController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/sessions",
+    "controller": "PhilomenaWeb.SessionController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/sessions/totp/new",
+    "controller": "PhilomenaWeb.Session.TotpController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/sessions/totp",
+    "controller": "PhilomenaWeb.Session.TotpController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/registrations/new",
+    "controller": "PhilomenaWeb.RegistrationController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/registrations",
+    "controller": "PhilomenaWeb.RegistrationController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/passwords/:id/edit",
+    "controller": "PhilomenaWeb.PasswordController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/passwords/new",
+    "controller": "PhilomenaWeb.PasswordController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/passwords",
+    "controller": "PhilomenaWeb.PasswordController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/passwords/:id",
+    "controller": "PhilomenaWeb.PasswordController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/passwords/:id",
+    "controller": "PhilomenaWeb.PasswordController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/confirmations/new",
+    "controller": "PhilomenaWeb.ConfirmationController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/confirmations/:id",
+    "controller": "PhilomenaWeb.ConfirmationController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/confirmations",
+    "controller": "PhilomenaWeb.ConfirmationController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/confirmations/:id",
+    "controller": "PhilomenaWeb.ConfirmationController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/confirmations/:id",
+    "controller": "PhilomenaWeb.ConfirmationController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/unlocks/new",
+    "controller": "PhilomenaWeb.UnlockController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/unlocks/:id",
+    "controller": "PhilomenaWeb.UnlockController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/unlocks",
+    "controller": "PhilomenaWeb.UnlockController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/registrations/edit",
+    "controller": "PhilomenaWeb.RegistrationController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/registrations",
+    "controller": "PhilomenaWeb.RegistrationController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/registrations",
+    "controller": "PhilomenaWeb.RegistrationController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/sessions",
+    "controller": "PhilomenaWeb.SessionController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/registrations/totp/edit",
+    "controller": "PhilomenaWeb.Registration.TotpController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/registrations/totp",
+    "controller": "PhilomenaWeb.Registration.TotpController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/registrations/totp",
+    "controller": "PhilomenaWeb.Registration.TotpController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/registrations/name/edit",
+    "controller": "PhilomenaWeb.Registration.NameController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/registrations/name",
+    "controller": "PhilomenaWeb.Registration.NameController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/registrations/name",
+    "controller": "PhilomenaWeb.Registration.NameController",
+    "action": "update"
+  },
+  {
+    "method": "PATCH",
+    "path": "/registrations/password",
+    "controller": "PhilomenaWeb.Registration.PasswordController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/registrations/password",
+    "controller": "PhilomenaWeb.Registration.PasswordController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/registrations/email/:id",
+    "controller": "PhilomenaWeb.Registration.EmailController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/registrations/email",
+    "controller": "PhilomenaWeb.Registration.EmailController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/rss/watched",
+    "controller": "PhilomenaWeb.Api.Rss.WatchedController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/images/featured",
+    "controller": "PhilomenaWeb.Api.Json.Image.FeaturedController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/images/:id",
+    "controller": "PhilomenaWeb.Api.Json.ImageController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/json/images",
+    "controller": "PhilomenaWeb.Api.Json.ImageController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/json/search/reverse",
+    "controller": "PhilomenaWeb.Api.Json.Search.ReverseController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/images",
+    "controller": "PhilomenaWeb.Api.Json.Search.ImageController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/tags",
+    "controller": "PhilomenaWeb.Api.Json.Search.TagController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/posts",
+    "controller": "PhilomenaWeb.Api.Json.Search.PostController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/comments",
+    "controller": "PhilomenaWeb.Api.Json.Search.CommentController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/galleries",
+    "controller": "PhilomenaWeb.Api.Json.Search.GalleryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search/filters",
+    "controller": "PhilomenaWeb.Api.Json.Search.FilterController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/search",
+    "controller": "PhilomenaWeb.Api.Json.Search.ImageController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/oembed",
+    "controller": "PhilomenaWeb.Api.Json.OembedController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/tags/:id",
+    "controller": "PhilomenaWeb.Api.Json.TagController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/comments/:id",
+    "controller": "PhilomenaWeb.Api.Json.CommentController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/posts/:id",
+    "controller": "PhilomenaWeb.Api.Json.PostController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/profiles/:id",
+    "controller": "PhilomenaWeb.Api.Json.ProfileController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/filters/user",
+    "controller": "PhilomenaWeb.Api.Json.Filter.UserFilterController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/filters/system",
+    "controller": "PhilomenaWeb.Api.Json.Filter.SystemFilterController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/filters/:id",
+    "controller": "PhilomenaWeb.Api.Json.FilterController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums",
+    "controller": "PhilomenaWeb.Api.Json.ForumController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums/:id",
+    "controller": "PhilomenaWeb.Api.Json.ForumController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums/:forum_id/topics",
+    "controller": "PhilomenaWeb.Api.Json.Forum.TopicController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums/:forum_id/topics/:id",
+    "controller": "PhilomenaWeb.Api.Json.Forum.TopicController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums/:forum_id/topics/:topic_id/posts",
+    "controller": "PhilomenaWeb.Api.Json.Forum.Topic.PostController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/json/forums/:forum_id/topics/:topic_id/posts/:id",
+    "controller": "PhilomenaWeb.Api.Json.Forum.Topic.PostController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/channels/nsfw",
+    "controller": "PhilomenaWeb.Channel.NsfwController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/channels/nsfw",
+    "controller": "PhilomenaWeb.Channel.NsfwController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/notifications/unread",
+    "controller": "PhilomenaWeb.Notification.UnreadController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/notifications/categories/:id",
+    "controller": "PhilomenaWeb.Notification.CategoryController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/notifications",
+    "controller": "PhilomenaWeb.NotificationController",
+    "action": "index"
+  },
+  {
+    "method": "DELETE",
+    "path": "/notifications/:id",
+    "controller": "PhilomenaWeb.NotificationController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/conversations",
+    "controller": "PhilomenaWeb.ConversationController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/conversations/new",
+    "controller": "PhilomenaWeb.ConversationController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/conversations/:id",
+    "controller": "PhilomenaWeb.ConversationController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations",
+    "controller": "PhilomenaWeb.ConversationController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/conversations/:conversation_id/reports/new",
+    "controller": "PhilomenaWeb.Conversation.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations/:conversation_id/reports",
+    "controller": "PhilomenaWeb.Conversation.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations/:conversation_id/messages",
+    "controller": "PhilomenaWeb.Conversation.MessageController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations/:conversation_id/messages/:message_id/approve",
+    "controller": "PhilomenaWeb.Conversation.Message.ApproveController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations/:conversation_id/read",
+    "controller": "PhilomenaWeb.Conversation.ReadController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/conversations/:conversation_id/read",
+    "controller": "PhilomenaWeb.Conversation.ReadController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/conversations/:conversation_id/hide",
+    "controller": "PhilomenaWeb.Conversation.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/conversations/:conversation_id/hide",
+    "controller": "PhilomenaWeb.Conversation.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/vote",
+    "controller": "PhilomenaWeb.Image.VoteController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/vote",
+    "controller": "PhilomenaWeb.Image.VoteController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/fave",
+    "controller": "PhilomenaWeb.Image.FaveController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/fave",
+    "controller": "PhilomenaWeb.Image.FaveController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/hide",
+    "controller": "PhilomenaWeb.Image.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/hide",
+    "controller": "PhilomenaWeb.Image.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/approve",
+    "controller": "PhilomenaWeb.Image.ApproveController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/subscription",
+    "controller": "PhilomenaWeb.Image.SubscriptionController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/subscription",
+    "controller": "PhilomenaWeb.Image.SubscriptionController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/read",
+    "controller": "PhilomenaWeb.Image.ReadController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/comments/:id/edit",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/comments/:id",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/comments/:id",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comments/:comment_id/hide",
+    "controller": "PhilomenaWeb.Image.Comment.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/comments/:comment_id/hide",
+    "controller": "PhilomenaWeb.Image.Comment.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comments/:comment_id/delete",
+    "controller": "PhilomenaWeb.Image.Comment.DeleteController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comments/:comment_id/approve",
+    "controller": "PhilomenaWeb.Image.Comment.ApproveController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/delete",
+    "controller": "PhilomenaWeb.Image.DeleteController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/delete",
+    "controller": "PhilomenaWeb.Image.DeleteController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/delete",
+    "controller": "PhilomenaWeb.Image.DeleteController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/delete",
+    "controller": "PhilomenaWeb.Image.DeleteController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/tamper",
+    "controller": "PhilomenaWeb.Image.TamperController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/hash",
+    "controller": "PhilomenaWeb.Image.HashController",
+    "action": "delete"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/source_history",
+    "controller": "PhilomenaWeb.Image.SourceHistoryController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/repair",
+    "controller": "PhilomenaWeb.Image.RepairController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/feature",
+    "controller": "PhilomenaWeb.Image.FeatureController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/file",
+    "controller": "PhilomenaWeb.Image.FileController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/file",
+    "controller": "PhilomenaWeb.Image.FileController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/scratchpad/edit",
+    "controller": "PhilomenaWeb.Image.ScratchpadController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/scratchpad",
+    "controller": "PhilomenaWeb.Image.ScratchpadController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/scratchpad",
+    "controller": "PhilomenaWeb.Image.ScratchpadController",
+    "action": "update"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/uploader",
+    "controller": "PhilomenaWeb.Image.UploaderController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/uploader",
+    "controller": "PhilomenaWeb.Image.UploaderController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/anonymous",
+    "controller": "PhilomenaWeb.Image.AnonymousController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/anonymous",
+    "controller": "PhilomenaWeb.Image.AnonymousController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/destroy",
+    "controller": "PhilomenaWeb.Image.DestroyController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comment_lock",
+    "controller": "PhilomenaWeb.Image.CommentLockController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/comment_lock",
+    "controller": "PhilomenaWeb.Image.CommentLockController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/description_lock",
+    "controller": "PhilomenaWeb.Image.DescriptionLockController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/description_lock",
+    "controller": "PhilomenaWeb.Image.DescriptionLockController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/tag_lock",
+    "controller": "PhilomenaWeb.Image.TagLockController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/tag_lock",
+    "controller": "PhilomenaWeb.Image.TagLockController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/tag_lock",
+    "controller": "PhilomenaWeb.Image.TagLockController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/tag_lock",
+    "controller": "PhilomenaWeb.Image.TagLockController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/tag_lock",
+    "controller": "PhilomenaWeb.Image.TagLockController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/new",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/forums/:forum_id/topics/:id",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/forums/:forum_id/topics/:id",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/subscription",
+    "controller": "PhilomenaWeb.Topic.SubscriptionController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/subscription",
+    "controller": "PhilomenaWeb.Topic.SubscriptionController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/read",
+    "controller": "PhilomenaWeb.Topic.ReadController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/move",
+    "controller": "PhilomenaWeb.Topic.MoveController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/stick",
+    "controller": "PhilomenaWeb.Topic.StickController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/stick",
+    "controller": "PhilomenaWeb.Topic.StickController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/lock",
+    "controller": "PhilomenaWeb.Topic.LockController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/lock",
+    "controller": "PhilomenaWeb.Topic.LockController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/hide",
+    "controller": "PhilomenaWeb.Topic.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/hide",
+    "controller": "PhilomenaWeb.Topic.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:id/edit",
+    "controller": "PhilomenaWeb.Topic.PostController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:id",
+    "controller": "PhilomenaWeb.Topic.PostController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:id",
+    "controller": "PhilomenaWeb.Topic.PostController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/hide",
+    "controller": "PhilomenaWeb.Topic.Post.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/hide",
+    "controller": "PhilomenaWeb.Topic.Post.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/delete",
+    "controller": "PhilomenaWeb.Topic.Post.DeleteController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/approve",
+    "controller": "PhilomenaWeb.Topic.Post.ApproveController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:topic_id/poll/edit",
+    "controller": "PhilomenaWeb.Topic.PollController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/forums/:forum_id/topics/:topic_id/poll",
+    "controller": "PhilomenaWeb.Topic.PollController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/forums/:forum_id/topics/:topic_id/poll",
+    "controller": "PhilomenaWeb.Topic.PollController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:topic_id/poll/votes",
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/poll/votes",
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/topics/:topic_id/poll/votes/:id",
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/subscription",
+    "controller": "PhilomenaWeb.Forum.SubscriptionController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/forums/:forum_id/subscription",
+    "controller": "PhilomenaWeb.Forum.SubscriptionController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission/edit",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission/new",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/commission",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/commission",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/commission",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/profiles/:profile_id/commission",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission/items/:id/edit",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission/items/new",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/commission/items",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/commission/items/:id",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/commission/items/:id",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/profiles/:profile_id/commission/items/:id",
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission/reports/new",
+    "controller": "PhilomenaWeb.Profile.Commission.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/commission/reports",
+    "controller": "PhilomenaWeb.Profile.Commission.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/description/edit",
+    "controller": "PhilomenaWeb.Profile.DescriptionController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/description",
+    "controller": "PhilomenaWeb.Profile.DescriptionController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/description",
+    "controller": "PhilomenaWeb.Profile.DescriptionController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/scratchpad/edit",
+    "controller": "PhilomenaWeb.Profile.ScratchpadController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/scratchpad",
+    "controller": "PhilomenaWeb.Profile.ScratchpadController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/scratchpad",
+    "controller": "PhilomenaWeb.Profile.ScratchpadController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/artist_links",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/artist_links/:id/edit",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/artist_links/new",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/artist_links/:id",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/artist_links",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/artist_links/:id",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/artist_links/:id",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/profiles/:profile_id/artist_links/:id",
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/awards/:id/edit",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/awards/new",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/awards",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/profiles/:profile_id/awards/:id",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/profiles/:profile_id/awards/:id",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/profiles/:profile_id/awards/:id",
+    "controller": "PhilomenaWeb.Profile.AwardController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/details",
+    "controller": "PhilomenaWeb.Profile.DetailController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/ip_history",
+    "controller": "PhilomenaWeb.Profile.IpHistoryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/fp_history",
+    "controller": "PhilomenaWeb.Profile.FpHistoryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/aliases",
+    "controller": "PhilomenaWeb.Profile.AliasController",
+    "action": "index"
+  },
+  {
+    "method": "PATCH",
+    "path": "/filters/spoiler_type",
+    "controller": "PhilomenaWeb.Filter.SpoilerTypeController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/filters/spoiler_type",
+    "controller": "PhilomenaWeb.Filter.SpoilerTypeController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/filters/hide",
+    "controller": "PhilomenaWeb.Filter.HideController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/filters/hide",
+    "controller": "PhilomenaWeb.Filter.HideController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/filters/spoiler",
+    "controller": "PhilomenaWeb.Filter.SpoilerController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/filters/spoiler",
+    "controller": "PhilomenaWeb.Filter.SpoilerController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/tags/:tag_id/watch",
+    "controller": "PhilomenaWeb.Tag.WatchController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/tags/:tag_id/watch",
+    "controller": "PhilomenaWeb.Tag.WatchController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:tag_id/details",
+    "controller": "PhilomenaWeb.Tag.DetailController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/avatar/edit",
+    "controller": "PhilomenaWeb.AvatarController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/avatar",
+    "controller": "PhilomenaWeb.AvatarController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/avatar",
+    "controller": "PhilomenaWeb.AvatarController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/avatar",
+    "controller": "PhilomenaWeb.AvatarController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/reports",
+    "controller": "PhilomenaWeb.ReportController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/galleries/:id/edit",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/galleries/new",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/galleries",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/galleries/:id",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/galleries/:id",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/galleries/:id",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/galleries/:gallery_id/images",
+    "controller": "PhilomenaWeb.Gallery.ImageController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/galleries/:gallery_id/images",
+    "controller": "PhilomenaWeb.Gallery.ImageController",
+    "action": "delete"
+  },
+  {
+    "method": "PATCH",
+    "path": "/galleries/:gallery_id/order",
+    "controller": "PhilomenaWeb.Gallery.OrderController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/galleries/:gallery_id/order",
+    "controller": "PhilomenaWeb.Gallery.OrderController",
+    "action": "update"
+  },
+  {
+    "method": "POST",
+    "path": "/galleries/:gallery_id/read",
+    "controller": "PhilomenaWeb.Gallery.ReadController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/galleries/:gallery_id/subscription",
+    "controller": "PhilomenaWeb.Gallery.SubscriptionController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/galleries/:gallery_id/subscription",
+    "controller": "PhilomenaWeb.Gallery.SubscriptionController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/channels/:channel_id/read",
+    "controller": "PhilomenaWeb.Channel.ReadController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/channels/:channel_id/subscription",
+    "controller": "PhilomenaWeb.Channel.SubscriptionController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/channels/:channel_id/subscription",
+    "controller": "PhilomenaWeb.Channel.SubscriptionController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/dnp/:id/edit",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/dnp/new",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/dnp",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/dnp/:id",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/dnp/:id",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/ip_profiles/:id",
+    "controller": "PhilomenaWeb.IpProfileController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/ip_profiles/:ip_profile_id/tag_changes",
+    "controller": "PhilomenaWeb.IpProfile.TagChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/ip_profiles/:ip_profile_id/source_changes",
+    "controller": "PhilomenaWeb.IpProfile.SourceChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/fingerprint_profiles/:id",
+    "controller": "PhilomenaWeb.FingerprintProfileController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/fingerprint_profiles/:fingerprint_profile_id/tag_changes",
+    "controller": "PhilomenaWeb.FingerprintProfile.TagChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/fingerprint_profiles/:fingerprint_profile_id/source_changes",
+    "controller": "PhilomenaWeb.FingerprintProfile.SourceChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/moderation_logs",
+    "controller": "PhilomenaWeb.ModerationLogController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/reports",
+    "controller": "PhilomenaWeb.Admin.ReportController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/reports/:id",
+    "controller": "PhilomenaWeb.Admin.ReportController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/reports/:report_id/claim",
+    "controller": "PhilomenaWeb.Admin.Report.ClaimController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/reports/:report_id/claim",
+    "controller": "PhilomenaWeb.Admin.Report.ClaimController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/reports/:report_id/close",
+    "controller": "PhilomenaWeb.Admin.Report.CloseController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/approvals",
+    "controller": "PhilomenaWeb.Admin.ApprovalController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/artist_links",
+    "controller": "PhilomenaWeb.Admin.ArtistLinkController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/artist_links/:artist_link_id/verification",
+    "controller": "PhilomenaWeb.Admin.ArtistLink.VerificationController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/artist_links/:artist_link_id/contact",
+    "controller": "PhilomenaWeb.Admin.ArtistLink.ContactController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/artist_links/:artist_link_id/reject",
+    "controller": "PhilomenaWeb.Admin.ArtistLink.RejectController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/dnp_entries",
+    "controller": "PhilomenaWeb.Admin.DnpEntryController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/dnp_entries/:dnp_entry_id/transition",
+    "controller": "PhilomenaWeb.Admin.DnpEntry.TransitionController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/user_bans",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/user_bans/:id/edit",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/user_bans/new",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/user_bans",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/user_bans/:id",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/user_bans/:id",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/user_bans/:id",
+    "controller": "PhilomenaWeb.Admin.UserBanController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/subnet_bans",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/subnet_bans/:id/edit",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/subnet_bans/new",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/subnet_bans",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/subnet_bans/:id",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/subnet_bans/:id",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/subnet_bans/:id",
+    "controller": "PhilomenaWeb.Admin.SubnetBanController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/fingerprint_bans",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/fingerprint_bans/:id/edit",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/fingerprint_bans/new",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/fingerprint_bans",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/fingerprint_bans/:id",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/fingerprint_bans/:id",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/fingerprint_bans/:id",
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/site_notices",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/site_notices/:id/edit",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/site_notices/new",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/site_notices",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/site_notices/:id",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/site_notices/:id",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/site_notices/:id",
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/adverts",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/adverts/:id/edit",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/adverts/new",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/adverts",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/adverts/:id",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/adverts/:id",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/adverts/:id",
+    "controller": "PhilomenaWeb.Admin.AdvertController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/adverts/:advert_id/image/edit",
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/adverts/:advert_id/image",
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/adverts/:advert_id/image",
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/forums",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/forums/:id/edit",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/forums/new",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/forums",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/forums/:id",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/forums/:id",
+    "controller": "PhilomenaWeb.Admin.ForumController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/badges",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/badges/:id/edit",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/badges/new",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/badges",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/badges/:id",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/badges/:id",
+    "controller": "PhilomenaWeb.Admin.BadgeController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/badges/:badge_id/users",
+    "controller": "PhilomenaWeb.Admin.Badge.UserController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/badges/:badge_id/image/edit",
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/badges/:badge_id/image",
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/badges/:badge_id/image",
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/mod_notes",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/mod_notes/:id/edit",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/mod_notes/new",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/mod_notes",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/mod_notes/:id",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/mod_notes/:id",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/mod_notes/:id",
+    "controller": "PhilomenaWeb.Admin.ModNoteController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/users",
+    "controller": "PhilomenaWeb.Admin.UserController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/users/:id/edit",
+    "controller": "PhilomenaWeb.Admin.UserController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/users/:id",
+    "controller": "PhilomenaWeb.Admin.UserController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/users/:id",
+    "controller": "PhilomenaWeb.Admin.UserController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/avatar",
+    "controller": "PhilomenaWeb.Admin.User.AvatarController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/activation",
+    "controller": "PhilomenaWeb.Admin.User.ActivationController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/activation",
+    "controller": "PhilomenaWeb.Admin.User.ActivationController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/verification",
+    "controller": "PhilomenaWeb.Admin.User.VerificationController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/verification",
+    "controller": "PhilomenaWeb.Admin.User.VerificationController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/unlock",
+    "controller": "PhilomenaWeb.Admin.User.UnlockController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/users/:user_id/erase/new",
+    "controller": "PhilomenaWeb.Admin.User.EraseController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/erase",
+    "controller": "PhilomenaWeb.Admin.User.EraseController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/api_key",
+    "controller": "PhilomenaWeb.Admin.User.ApiKeyController",
+    "action": "delete"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/downvotes",
+    "controller": "PhilomenaWeb.Admin.User.DownvoteController",
+    "action": "delete"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/votes",
+    "controller": "PhilomenaWeb.Admin.User.VoteController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/wipe",
+    "controller": "PhilomenaWeb.Admin.User.WipeController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/users/:user_id/force_filter/new",
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/users/:user_id/force_filter",
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/admin/users/:user_id/force_filter",
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController",
+    "action": "delete"
+  },
+  {
+    "method": "PATCH",
+    "path": "/admin/batch/tags",
+    "controller": "PhilomenaWeb.Admin.Batch.TagController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/admin/batch/tags",
+    "controller": "PhilomenaWeb.Admin.Batch.TagController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/donations/user/:id",
+    "controller": "PhilomenaWeb.Admin.Donation.UserController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/donations",
+    "controller": "PhilomenaWeb.Admin.DonationController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/admin/donations",
+    "controller": "PhilomenaWeb.Admin.DonationController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/duplicate_reports/:duplicate_report_id/accept",
+    "controller": "PhilomenaWeb.DuplicateReport.AcceptController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/duplicate_reports/:duplicate_report_id/accept_reverse",
+    "controller": "PhilomenaWeb.DuplicateReport.AcceptReverseController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/duplicate_reports/:duplicate_report_id/reject",
+    "controller": "PhilomenaWeb.DuplicateReport.RejectController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/duplicate_reports/:duplicate_report_id/claim",
+    "controller": "PhilomenaWeb.DuplicateReport.ClaimController",
+    "action": "create"
+  },
+  {
+    "method": "DELETE",
+    "path": "/duplicate_reports/:duplicate_report_id/claim",
+    "controller": "PhilomenaWeb.DuplicateReport.ClaimController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:id/edit",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/tags/:id",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/tags/:id",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/tags/:id",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:tag_id/image/edit",
+    "controller": "PhilomenaWeb.Tag.ImageController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/tags/:tag_id/image",
+    "controller": "PhilomenaWeb.Tag.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/tags/:tag_id/image",
+    "controller": "PhilomenaWeb.Tag.ImageController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/tags/:tag_id/image",
+    "controller": "PhilomenaWeb.Tag.ImageController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:tag_id/alias/edit",
+    "controller": "PhilomenaWeb.Tag.AliasController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/tags/:tag_id/alias",
+    "controller": "PhilomenaWeb.Tag.AliasController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/tags/:tag_id/alias",
+    "controller": "PhilomenaWeb.Tag.AliasController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/tags/:tag_id/alias",
+    "controller": "PhilomenaWeb.Tag.AliasController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/tags/:tag_id/reindex",
+    "controller": "PhilomenaWeb.Tag.ReindexController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/tag_changes/revert",
+    "controller": "PhilomenaWeb.TagChange.RevertController",
+    "action": "create"
+  },
+  {
+    "method": "POST",
+    "path": "/tag_changes/full_revert",
+    "controller": "PhilomenaWeb.TagChange.FullRevertController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/pages",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/pages/:id/edit",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/pages/new",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/pages",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/pages/:id",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/pages/:id",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/channels/:id/edit",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/channels/new",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/channels",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/channels/:id",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/channels/:id",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/channels/:id",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/",
+    "controller": "PhilomenaWeb.ActivityController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/activity",
+    "controller": "PhilomenaWeb.ActivityController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/images/scrape",
+    "controller": "PhilomenaWeb.Image.ScrapeController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/random",
+    "controller": "PhilomenaWeb.Image.RandomController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/images",
+    "controller": "PhilomenaWeb.ImageController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/images/new",
+    "controller": "PhilomenaWeb.ImageController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:id",
+    "controller": "PhilomenaWeb.ImageController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/images",
+    "controller": "PhilomenaWeb.ImageController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/related",
+    "controller": "PhilomenaWeb.Image.RelatedController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/comments",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/comments/:id",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comments",
+    "controller": "PhilomenaWeb.Image.CommentController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/comments/:comment_id/reports/new",
+    "controller": "PhilomenaWeb.Image.Comment.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/comments/:comment_id/reports",
+    "controller": "PhilomenaWeb.Image.Comment.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/comments/:comment_id/history",
+    "controller": "PhilomenaWeb.Image.Comment.HistoryController",
+    "action": "index"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/tags",
+    "controller": "PhilomenaWeb.Image.TagController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/tags",
+    "controller": "PhilomenaWeb.Image.TagController",
+    "action": "update"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/sources",
+    "controller": "PhilomenaWeb.Image.SourceController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/sources",
+    "controller": "PhilomenaWeb.Image.SourceController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/tag_changes",
+    "controller": "PhilomenaWeb.Image.TagChangeController",
+    "action": "index"
+  },
+  {
+    "method": "DELETE",
+    "path": "/images/:image_id/tag_changes/:id",
+    "controller": "PhilomenaWeb.Image.TagChangeController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/source_changes",
+    "controller": "PhilomenaWeb.Image.SourceChangeController",
+    "action": "index"
+  },
+  {
+    "method": "PATCH",
+    "path": "/images/:image_id/description",
+    "controller": "PhilomenaWeb.Image.DescriptionController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/images/:image_id/description",
+    "controller": "PhilomenaWeb.Image.DescriptionController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/navigate",
+    "controller": "PhilomenaWeb.Image.NavigateController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/reports/new",
+    "controller": "PhilomenaWeb.Image.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/images/:image_id/reports",
+    "controller": "PhilomenaWeb.Image.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/reporting",
+    "controller": "PhilomenaWeb.Image.ReportingController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/images/:image_id/favorites",
+    "controller": "PhilomenaWeb.Image.FavoriteController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/autocomplete/tags",
+    "controller": "PhilomenaWeb.Autocomplete.TagController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/autocomplete/compiled",
+    "controller": "PhilomenaWeb.Autocomplete.CompiledController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/fetch/tags",
+    "controller": "PhilomenaWeb.Fetch.TagController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/themes",
+    "controller": "PhilomenaWeb.ThemeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/tags",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:id",
+    "controller": "PhilomenaWeb.TagController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/tags/:tag_id/tag_changes",
+    "controller": "PhilomenaWeb.Tag.TagChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/search/reverse",
+    "controller": "PhilomenaWeb.Search.ReverseController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/search/reverse",
+    "controller": "PhilomenaWeb.Search.ReverseController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/search",
+    "controller": "PhilomenaWeb.SearchController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/forums",
+    "controller": "PhilomenaWeb.ForumController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:id",
+    "controller": "PhilomenaWeb.ForumController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:id",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/posts",
+    "controller": "PhilomenaWeb.Topic.PostController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/reports/new",
+    "controller": "PhilomenaWeb.Topic.Post.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/reports",
+    "controller": "PhilomenaWeb.Topic.Post.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/forums/:forum_id/topics/:topic_id/posts/:post_id/history",
+    "controller": "PhilomenaWeb.Topic.Post.HistoryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/comments",
+    "controller": "PhilomenaWeb.CommentController",
+    "action": "index"
+  },
+  {
+    "method": "PATCH",
+    "path": "/filters/current",
+    "controller": "PhilomenaWeb.Filter.CurrentController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/filters/current",
+    "controller": "PhilomenaWeb.Filter.CurrentController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/filters/clear_recent",
+    "controller": "PhilomenaWeb.Filter.ClearRecentController",
+    "action": "delete"
+  },
+  {
+    "method": "GET",
+    "path": "/filters",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/filters/:id/edit",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "edit"
+  },
+  {
+    "method": "GET",
+    "path": "/filters/new",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "new"
+  },
+  {
+    "method": "GET",
+    "path": "/filters/:id",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/filters",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "create"
+  },
+  {
+    "method": "PATCH",
+    "path": "/filters/:id",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/filters/:id",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "update"
+  },
+  {
+    "method": "DELETE",
+    "path": "/filters/:id",
+    "controller": "PhilomenaWeb.FilterController",
+    "action": "delete"
+  },
+  {
+    "method": "POST",
+    "path": "/filters/:filter_id/public",
+    "controller": "PhilomenaWeb.Filter.PublicController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:id",
+    "controller": "PhilomenaWeb.ProfileController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/reports/new",
+    "controller": "PhilomenaWeb.Profile.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/profiles/:profile_id/reports",
+    "controller": "PhilomenaWeb.Profile.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/commission",
+    "controller": "PhilomenaWeb.Profile.CommissionController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/tag_changes",
+    "controller": "PhilomenaWeb.Profile.TagChangeController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/profiles/:profile_id/source_changes",
+    "controller": "PhilomenaWeb.Profile.SourceChangeController",
+    "action": "index"
+  },
+  {
+    "method": "POST",
+    "path": "/posts/preview",
+    "controller": "PhilomenaWeb.Post.PreviewController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/posts",
+    "controller": "PhilomenaWeb.PostController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/commissions",
+    "controller": "PhilomenaWeb.CommissionController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/galleries",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/galleries/:id",
+    "controller": "PhilomenaWeb.GalleryController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/galleries/:gallery_id/reports/new",
+    "controller": "PhilomenaWeb.Gallery.ReportController",
+    "action": "new"
+  },
+  {
+    "method": "POST",
+    "path": "/galleries/:gallery_id/reports",
+    "controller": "PhilomenaWeb.Gallery.ReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/adverts/:id",
+    "controller": "PhilomenaWeb.AdvertController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/pages/:id",
+    "controller": "PhilomenaWeb.PageController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/pages/:page_id/history",
+    "controller": "PhilomenaWeb.Page.HistoryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/dnp",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/dnp/:id",
+    "controller": "PhilomenaWeb.DnpEntryController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/staff",
+    "controller": "PhilomenaWeb.StaffController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/channels",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/channels/:id",
+    "controller": "PhilomenaWeb.ChannelController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/settings/edit",
+    "controller": "PhilomenaWeb.SettingController",
+    "action": "edit"
+  },
+  {
+    "method": "PATCH",
+    "path": "/settings",
+    "controller": "PhilomenaWeb.SettingController",
+    "action": "update"
+  },
+  {
+    "method": "PUT",
+    "path": "/settings",
+    "controller": "PhilomenaWeb.SettingController",
+    "action": "update"
+  },
+  {
+    "method": "GET",
+    "path": "/duplicate_reports",
+    "controller": "PhilomenaWeb.DuplicateReportController",
+    "action": "index"
+  },
+  {
+    "method": "GET",
+    "path": "/duplicate_reports/:id",
+    "controller": "PhilomenaWeb.DuplicateReportController",
+    "action": "show"
+  },
+  {
+    "method": "POST",
+    "path": "/duplicate_reports",
+    "controller": "PhilomenaWeb.DuplicateReportController",
+    "action": "create"
+  },
+  {
+    "method": "GET",
+    "path": "/:id",
+    "controller": "PhilomenaWeb.ImageController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/:forum_id/:id",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/:forum_id/:id/:page",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "show"
+  },
+  {
+    "method": "GET",
+    "path": "/:forum_id/:id/post/:post_id",
+    "controller": "PhilomenaWeb.TopicController",
+    "action": "show"
+  }
+]

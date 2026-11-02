@@ -1,5 +1,6 @@
 packages:
   - frontend
+  - api
 
 # Supply-chain hardening: refuse any package version published less than 14
 # days ago (the value is in minutes). Applies to `pnpm add`, `pnpm install`

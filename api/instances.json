@@ -1,0 +1,12 @@
+{
+  "philomena": {
+    "origin": "http://localhost:8080",
+    "flavor": "philomena",
+    "appContainer": "philomena_app_1"
+  },
+  "furbooru": {
+    "origin": "http://localhost:8081",
+    "flavor": "furbooru",
+    "appContainer": "philomena-furbooru_app_1"
+  }
+}

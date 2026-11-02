@@ -1,0 +1,6039 @@
+{
+  "DELETE /admin/adverts/:id": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/fingerprint_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/mod_notes/:id": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/reports/:report_id/claim": {
+    "controller": "PhilomenaWeb.Admin.Report.ClaimController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/site_notices/:id": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/subnet_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/user_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/activation": {
+    "controller": "PhilomenaWeb.Admin.User.ActivationController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/api_key": {
+    "controller": "PhilomenaWeb.Admin.User.ApiKeyController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/avatar": {
+    "controller": "PhilomenaWeb.Admin.User.AvatarController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/downvotes": {
+    "controller": "PhilomenaWeb.Admin.User.DownvoteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/force_filter": {
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/verification": {
+    "controller": "PhilomenaWeb.Admin.User.VerificationController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /admin/users/:user_id/votes": {
+    "controller": "PhilomenaWeb.Admin.User.VoteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /avatar": {
+    "controller": "PhilomenaWeb.AvatarController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /channels/:channel_id/subscription": {
+    "controller": "PhilomenaWeb.Channel.SubscriptionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /channels/:id": {
+    "controller": "PhilomenaWeb.ChannelController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /channels/nsfw": {
+    "controller": "PhilomenaWeb.Channel.NsfwController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /conversations/:conversation_id/hide": {
+    "controller": "PhilomenaWeb.Conversation.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /conversations/:conversation_id/read": {
+    "controller": "PhilomenaWeb.Conversation.ReadController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /deactivations": {
+    "controller": "PhilomenaWeb.DeactivationController#delete",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /duplicate_reports/:duplicate_report_id/claim": {
+    "controller": "PhilomenaWeb.DuplicateReport.ClaimController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /filters/:id": {
+    "controller": "PhilomenaWeb.FilterController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /filters/clear_recent": {
+    "controller": "PhilomenaWeb.Filter.ClearRecentController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /filters/hide": {
+    "controller": "PhilomenaWeb.Filter.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /filters/spoiler": {
+    "controller": "PhilomenaWeb.Filter.SpoilerController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/subscription": {
+    "controller": "PhilomenaWeb.Forum.SubscriptionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/hide": {
+    "controller": "PhilomenaWeb.Topic.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/lock": {
+    "controller": "PhilomenaWeb.Topic.LockController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/poll/votes/:id": {
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/posts/:post_id/hide": {
+    "controller": "PhilomenaWeb.Topic.Post.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/stick": {
+    "controller": "PhilomenaWeb.Topic.StickController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /forums/:forum_id/topics/:topic_id/subscription": {
+    "controller": "PhilomenaWeb.Topic.SubscriptionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /galleries/:gallery_id/images": {
+    "controller": "PhilomenaWeb.Gallery.ImageController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /galleries/:gallery_id/subscription": {
+    "controller": "PhilomenaWeb.Gallery.SubscriptionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /galleries/:id": {
+    "controller": "PhilomenaWeb.GalleryController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/anonymous": {
+    "controller": "PhilomenaWeb.Image.AnonymousController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/comment_lock": {
+    "controller": "PhilomenaWeb.Image.CommentLockController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/comments/:comment_id/hide": {
+    "controller": "PhilomenaWeb.Image.Comment.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/delete": {
+    "controller": "PhilomenaWeb.Image.DeleteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/description_lock": {
+    "controller": "PhilomenaWeb.Image.DescriptionLockController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/fave": {
+    "controller": "PhilomenaWeb.Image.FaveController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/hash": {
+    "controller": "PhilomenaWeb.Image.HashController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/hide": {
+    "controller": "PhilomenaWeb.Image.HideController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/source_history": {
+    "controller": "PhilomenaWeb.Image.SourceHistoryController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/subscription": {
+    "controller": "PhilomenaWeb.Image.SubscriptionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/tag_changes/:id": {
+    "controller": "PhilomenaWeb.Image.TagChangeController#delete",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/tag_lock": {
+    "controller": "PhilomenaWeb.Image.TagLockController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /images/:image_id/vote": {
+    "controller": "PhilomenaWeb.Image.VoteController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /notifications/:id": {
+    "controller": "PhilomenaWeb.NotificationController#delete",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /profiles/:profile_id/artist_links/:id": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#delete",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /profiles/:profile_id/awards/:id": {
+    "controller": "PhilomenaWeb.Profile.AwardController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /profiles/:profile_id/commission": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /profiles/:profile_id/commission/items/:id": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /sessions": {
+    "controller": "PhilomenaWeb.SessionController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /tag_changes/:id": {
+    "controller": "PhilomenaWeb.TagChangeController#delete",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /tags/:id": {
+    "controller": "PhilomenaWeb.TagController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /tags/:tag_id/alias": {
+    "controller": "PhilomenaWeb.Tag.AliasController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /tags/:tag_id/image": {
+    "controller": "PhilomenaWeb.Tag.ImageController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "DELETE /tags/:tag_id/watch": {
+    "controller": "PhilomenaWeb.Tag.WatchController#delete",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /": {
+    "controller": "PhilomenaWeb.ActivityController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /:forum_id/:id": {
+    "controller": "PhilomenaWeb.TopicController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /:forum_id/:id/:page": {
+    "controller": "PhilomenaWeb.TopicController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /:forum_id/:id/post/:post_id": {
+    "controller": "PhilomenaWeb.TopicController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /:id": {
+    "controller": "PhilomenaWeb.ImageController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /activity": {
+    "controller": "PhilomenaWeb.ActivityController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/adverts": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/adverts/:advert_id/image/edit": {
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/adverts/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/adverts/new": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/approvals": {
+    "controller": "PhilomenaWeb.Admin.ApprovalController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/artist_links": {
+    "controller": "PhilomenaWeb.Admin.ArtistLinkController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/badges": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/badges/:badge_id/image/edit": {
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/badges/:badge_id/users": {
+    "controller": "PhilomenaWeb.Admin.Badge.UserController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/badges/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/badges/new": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/dnp_entries": {
+    "controller": "PhilomenaWeb.Admin.DnpEntryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/donations": {
+    "controller": "PhilomenaWeb.Admin.DonationController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/donations/user/:id": {
+    "controller": "PhilomenaWeb.Admin.Donation.UserController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/fingerprint_bans": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/fingerprint_bans/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/fingerprint_bans/new": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/forums": {
+    "controller": "PhilomenaWeb.Admin.ForumController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/forums/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.ForumController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/forums/new": {
+    "controller": "PhilomenaWeb.Admin.ForumController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/mod_notes": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/mod_notes/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/mod_notes/new": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/reports": {
+    "controller": "PhilomenaWeb.Admin.ReportController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/reports/:id": {
+    "controller": "PhilomenaWeb.Admin.ReportController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/site_notices": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/site_notices/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/site_notices/new": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/subnet_bans": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/subnet_bans/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/subnet_bans/new": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/user_bans": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/user_bans/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/user_bans/new": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/users": {
+    "controller": "PhilomenaWeb.Admin.UserController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/users/:id/edit": {
+    "controller": "PhilomenaWeb.Admin.UserController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/users/:user_id/erase/new": {
+    "controller": "PhilomenaWeb.Admin.User.EraseController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /admin/users/:user_id/force_filter/new": {
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /adverts/:id": {
+    "controller": "PhilomenaWeb.AdvertController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/comments/:id": {
+    "controller": "PhilomenaWeb.Api.Json.CommentController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/filters/:id": {
+    "controller": "PhilomenaWeb.Api.Json.FilterController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/filters/system": {
+    "controller": "PhilomenaWeb.Api.Json.Filter.SystemFilterController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/filters/user": {
+    "controller": "PhilomenaWeb.Api.Json.Filter.UserFilterController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums": {
+    "controller": "PhilomenaWeb.Api.Json.ForumController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums/:forum_id/topics": {
+    "controller": "PhilomenaWeb.Api.Json.Forum.TopicController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums/:forum_id/topics/:id": {
+    "controller": "PhilomenaWeb.Api.Json.Forum.TopicController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts": {
+    "controller": "PhilomenaWeb.Api.Json.Forum.Topic.PostController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums/:forum_id/topics/:topic_id/posts/:id": {
+    "controller": "PhilomenaWeb.Api.Json.Forum.Topic.PostController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/forums/:id": {
+    "controller": "PhilomenaWeb.Api.Json.ForumController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/images/:id": {
+    "controller": "PhilomenaWeb.Api.Json.ImageController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "mapped",
+    "operations": [
+      "getImage"
+    ],
+    "note": ""
+  },
+  "GET /api/v1/json/images/featured": {
+    "controller": "PhilomenaWeb.Api.Json.Image.FeaturedController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/oembed": {
+    "controller": "PhilomenaWeb.Api.Json.OembedController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/posts/:id": {
+    "controller": "PhilomenaWeb.Api.Json.PostController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/profiles/:id": {
+    "controller": "PhilomenaWeb.Api.Json.ProfileController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search": {
+    "controller": "PhilomenaWeb.Api.Json.Search.ImageController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/comments": {
+    "controller": "PhilomenaWeb.Api.Json.Search.CommentController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/filters": {
+    "controller": "PhilomenaWeb.Api.Json.Search.FilterController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/galleries": {
+    "controller": "PhilomenaWeb.Api.Json.Search.GalleryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/images": {
+    "controller": "PhilomenaWeb.Api.Json.Search.ImageController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/posts": {
+    "controller": "PhilomenaWeb.Api.Json.Search.PostController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/search/tags": {
+    "controller": "PhilomenaWeb.Api.Json.Search.TagController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/json/tags/:id": {
+    "controller": "PhilomenaWeb.Api.Json.TagController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /api/v1/rss/watched": {
+    "controller": "PhilomenaWeb.Api.Rss.WatchedController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "rss",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /autocomplete/compiled": {
+    "controller": "PhilomenaWeb.Autocomplete.CompiledController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /autocomplete/tags": {
+    "controller": "PhilomenaWeb.Autocomplete.TagController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /avatar/edit": {
+    "controller": "PhilomenaWeb.AvatarController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /channels": {
+    "controller": "PhilomenaWeb.ChannelController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /channels/:id": {
+    "controller": "PhilomenaWeb.ChannelController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /channels/:id/edit": {
+    "controller": "PhilomenaWeb.ChannelController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /channels/new": {
+    "controller": "PhilomenaWeb.ChannelController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /comments": {
+    "controller": "PhilomenaWeb.CommentController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /commissions": {
+    "controller": "PhilomenaWeb.CommissionController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /confirmations/:id": {
+    "controller": "PhilomenaWeb.ConfirmationController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /confirmations/new": {
+    "controller": "PhilomenaWeb.ConfirmationController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /conversations": {
+    "controller": "PhilomenaWeb.ConversationController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /conversations/:conversation_id/reports/new": {
+    "controller": "PhilomenaWeb.Conversation.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /conversations/:id": {
+    "controller": "PhilomenaWeb.ConversationController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /conversations/new": {
+    "controller": "PhilomenaWeb.ConversationController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /deactivations": {
+    "controller": "PhilomenaWeb.DeactivationController#show",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /dnp": {
+    "controller": "PhilomenaWeb.DnpEntryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /dnp/:id": {
+    "controller": "PhilomenaWeb.DnpEntryController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /dnp/:id/edit": {
+    "controller": "PhilomenaWeb.DnpEntryController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /dnp/new": {
+    "controller": "PhilomenaWeb.DnpEntryController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /duplicate_reports": {
+    "controller": "PhilomenaWeb.DuplicateReportController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /duplicate_reports/:id": {
+    "controller": "PhilomenaWeb.DuplicateReportController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /fetch/tags": {
+    "controller": "PhilomenaWeb.Fetch.TagController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /filters": {
+    "controller": "PhilomenaWeb.FilterController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /filters/:id": {
+    "controller": "PhilomenaWeb.FilterController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /filters/:id/edit": {
+    "controller": "PhilomenaWeb.FilterController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /filters/new": {
+    "controller": "PhilomenaWeb.FilterController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /fingerprint_profiles/:fingerprint_profile_id/source_changes": {
+    "controller": "PhilomenaWeb.FingerprintProfile.SourceChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /fingerprint_profiles/:fingerprint_profile_id/tag_changes": {
+    "controller": "PhilomenaWeb.FingerprintProfile.TagChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /fingerprint_profiles/:id": {
+    "controller": "PhilomenaWeb.FingerprintProfileController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums": {
+    "controller": "PhilomenaWeb.ForumController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:id": {
+    "controller": "PhilomenaWeb.TopicController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:topic_id/poll/edit": {
+    "controller": "PhilomenaWeb.Topic.PollController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:topic_id/poll/votes": {
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:topic_id/posts/:id/edit": {
+    "controller": "PhilomenaWeb.Topic.PostController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:topic_id/posts/:post_id/history": {
+    "controller": "PhilomenaWeb.Topic.Post.HistoryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/:topic_id/posts/:post_id/reports/new": {
+    "controller": "PhilomenaWeb.Topic.Post.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:forum_id/topics/new": {
+    "controller": "PhilomenaWeb.TopicController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /forums/:id": {
+    "controller": "PhilomenaWeb.ForumController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /galleries": {
+    "controller": "PhilomenaWeb.GalleryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /galleries/:gallery_id/reports/new": {
+    "controller": "PhilomenaWeb.Gallery.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /galleries/:id": {
+    "controller": "PhilomenaWeb.GalleryController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /galleries/:id/edit": {
+    "controller": "PhilomenaWeb.GalleryController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /galleries/new": {
+    "controller": "PhilomenaWeb.GalleryController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images": {
+    "controller": "PhilomenaWeb.ImageController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:id": {
+    "controller": "PhilomenaWeb.ImageController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/comments": {
+    "controller": "PhilomenaWeb.Image.CommentController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/comments/:comment_id/history": {
+    "controller": "PhilomenaWeb.Image.Comment.HistoryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/comments/:comment_id/reports/new": {
+    "controller": "PhilomenaWeb.Image.Comment.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/comments/:id": {
+    "controller": "PhilomenaWeb.Image.CommentController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/comments/:id/edit": {
+    "controller": "PhilomenaWeb.Image.CommentController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/favorites": {
+    "controller": "PhilomenaWeb.Image.FavoriteController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/navigate": {
+    "controller": "PhilomenaWeb.Image.NavigateController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/related": {
+    "controller": "PhilomenaWeb.Image.RelatedController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/reporting": {
+    "controller": "PhilomenaWeb.Image.ReportingController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/reports/new": {
+    "controller": "PhilomenaWeb.Image.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/scratchpad/edit": {
+    "controller": "PhilomenaWeb.Image.ScratchpadController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/source_changes": {
+    "controller": "PhilomenaWeb.Image.SourceChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/tag_changes": {
+    "controller": "PhilomenaWeb.Image.TagChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/:image_id/tag_lock": {
+    "controller": "PhilomenaWeb.Image.TagLockController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/new": {
+    "controller": "PhilomenaWeb.ImageController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /images/random": {
+    "controller": "PhilomenaWeb.Image.RandomController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /ip_profiles/:id": {
+    "controller": "PhilomenaWeb.IpProfileController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /ip_profiles/:ip_profile_id/source_changes": {
+    "controller": "PhilomenaWeb.IpProfile.SourceChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /ip_profiles/:ip_profile_id/tag_changes": {
+    "controller": "PhilomenaWeb.IpProfile.TagChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /moderation_logs": {
+    "controller": "PhilomenaWeb.ModerationLogController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /notifications": {
+    "controller": "PhilomenaWeb.NotificationController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /notifications/categories/:id": {
+    "controller": "PhilomenaWeb.Notification.CategoryController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /notifications/unread": {
+    "controller": "PhilomenaWeb.Notification.UnreadController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /pages": {
+    "controller": "PhilomenaWeb.PageController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /pages/:id": {
+    "controller": "PhilomenaWeb.PageController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /pages/:id/edit": {
+    "controller": "PhilomenaWeb.PageController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /pages/:page_id/history": {
+    "controller": "PhilomenaWeb.Page.HistoryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /pages/new": {
+    "controller": "PhilomenaWeb.PageController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /passwords/:id/edit": {
+    "controller": "PhilomenaWeb.PasswordController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /passwords/new": {
+    "controller": "PhilomenaWeb.PasswordController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /posts": {
+    "controller": "PhilomenaWeb.PostController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:id": {
+    "controller": "PhilomenaWeb.ProfileController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/aliases": {
+    "controller": "PhilomenaWeb.Profile.AliasController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/artist_links": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/artist_links/:id": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/artist_links/:id/edit": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/artist_links/new": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/awards/:id/edit": {
+    "controller": "PhilomenaWeb.Profile.AwardController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/awards/new": {
+    "controller": "PhilomenaWeb.Profile.AwardController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission/edit": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission/items/:id/edit": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission/items/new": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission/new": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/commission/reports/new": {
+    "controller": "PhilomenaWeb.Profile.Commission.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/description/edit": {
+    "controller": "PhilomenaWeb.Profile.DescriptionController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/details": {
+    "controller": "PhilomenaWeb.Profile.DetailController#index",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/fp_history": {
+    "controller": "PhilomenaWeb.Profile.FpHistoryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/ip_history": {
+    "controller": "PhilomenaWeb.Profile.IpHistoryController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/reports/new": {
+    "controller": "PhilomenaWeb.Profile.ReportController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/scratchpad/edit": {
+    "controller": "PhilomenaWeb.Profile.ScratchpadController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/source_changes": {
+    "controller": "PhilomenaWeb.Profile.SourceChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /profiles/:profile_id/tag_changes": {
+    "controller": "PhilomenaWeb.Profile.TagChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /reactivations/:id": {
+    "controller": "PhilomenaWeb.ReactivationController#show",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-page",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /registrations/edit": {
+    "controller": "PhilomenaWeb.RegistrationController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /registrations/email/:id": {
+    "controller": "PhilomenaWeb.Registration.EmailController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /registrations/name/edit": {
+    "controller": "PhilomenaWeb.Registration.NameController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /registrations/new": {
+    "controller": "PhilomenaWeb.RegistrationController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /registrations/totp/edit": {
+    "controller": "PhilomenaWeb.Registration.TotpController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /reports": {
+    "controller": "PhilomenaWeb.ReportController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /rules": {
+    "controller": "PhilomenaWeb.RuleController#index",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /rules/:id": {
+    "controller": "PhilomenaWeb.RuleController#show",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /rules/:id/edit": {
+    "controller": "PhilomenaWeb.RuleController#edit",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /rules/new": {
+    "controller": "PhilomenaWeb.RuleController#new",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /search": {
+    "controller": "PhilomenaWeb.SearchController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /search/reverse": {
+    "controller": "PhilomenaWeb.Search.ReverseController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /sessions/new": {
+    "controller": "PhilomenaWeb.SessionController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /sessions/totp/new": {
+    "controller": "PhilomenaWeb.Session.TotpController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /settings/edit": {
+    "controller": "PhilomenaWeb.SettingController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /staff": {
+    "controller": "PhilomenaWeb.StaffController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tag_changes": {
+    "controller": "PhilomenaWeb.TagChangeController#index",
+    "instances": [
+      "philomena"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags": {
+    "controller": "PhilomenaWeb.TagController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:id": {
+    "controller": "PhilomenaWeb.TagController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:id/edit": {
+    "controller": "PhilomenaWeb.TagController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:tag_id/alias/edit": {
+    "controller": "PhilomenaWeb.Tag.AliasController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:tag_id/details": {
+    "controller": "PhilomenaWeb.Tag.DetailController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:tag_id/image/edit": {
+    "controller": "PhilomenaWeb.Tag.ImageController#edit",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /tags/:tag_id/tag_changes": {
+    "controller": "PhilomenaWeb.Tag.TagChangeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /themes": {
+    "controller": "PhilomenaWeb.ThemeController#index",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "public",
+    "phase": 3,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /unlocks/:id": {
+    "controller": "PhilomenaWeb.UnlockController#show",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-page",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "GET /unlocks/new": {
+    "controller": "PhilomenaWeb.UnlockController#new",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "html-form",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/adverts/:advert_id/image": {
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/adverts/:id": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/badges/:badge_id/image": {
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/badges/:id": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/batch/tags": {
+    "controller": "PhilomenaWeb.Admin.Batch.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/fingerprint_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/forums/:id": {
+    "controller": "PhilomenaWeb.Admin.ForumController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/mod_notes/:id": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/site_notices/:id": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/subnet_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/user_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /admin/users/:id": {
+    "controller": "PhilomenaWeb.Admin.UserController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /avatar": {
+    "controller": "PhilomenaWeb.AvatarController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /channels/:id": {
+    "controller": "PhilomenaWeb.ChannelController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /confirmations/:id": {
+    "controller": "PhilomenaWeb.ConfirmationController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /dnp/:id": {
+    "controller": "PhilomenaWeb.DnpEntryController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /filters/:id": {
+    "controller": "PhilomenaWeb.FilterController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /filters/current": {
+    "controller": "PhilomenaWeb.Filter.CurrentController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /filters/spoiler_type": {
+    "controller": "PhilomenaWeb.Filter.SpoilerTypeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /forums/:forum_id/topics/:id": {
+    "controller": "PhilomenaWeb.TopicController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /forums/:forum_id/topics/:topic_id/poll": {
+    "controller": "PhilomenaWeb.Topic.PollController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /forums/:forum_id/topics/:topic_id/posts/:id": {
+    "controller": "PhilomenaWeb.Topic.PostController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /galleries/:gallery_id/order": {
+    "controller": "PhilomenaWeb.Gallery.OrderController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /galleries/:id": {
+    "controller": "PhilomenaWeb.GalleryController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/comments/:id": {
+    "controller": "PhilomenaWeb.Image.CommentController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/delete": {
+    "controller": "PhilomenaWeb.Image.DeleteController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/description": {
+    "controller": "PhilomenaWeb.Image.DescriptionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/file": {
+    "controller": "PhilomenaWeb.Image.FileController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/scratchpad": {
+    "controller": "PhilomenaWeb.Image.ScratchpadController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/sources": {
+    "controller": "PhilomenaWeb.Image.SourceController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/tag_lock": {
+    "controller": "PhilomenaWeb.Image.TagLockController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/tags": {
+    "controller": "PhilomenaWeb.Image.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /images/:image_id/uploader": {
+    "controller": "PhilomenaWeb.Image.UploaderController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /pages/:id": {
+    "controller": "PhilomenaWeb.PageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /passwords/:id": {
+    "controller": "PhilomenaWeb.PasswordController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/artist_links/:id": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/awards/:id": {
+    "controller": "PhilomenaWeb.Profile.AwardController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/commission": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/commission/items/:id": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/description": {
+    "controller": "PhilomenaWeb.Profile.DescriptionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /profiles/:profile_id/scratchpad": {
+    "controller": "PhilomenaWeb.Profile.ScratchpadController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /registrations": {
+    "controller": "PhilomenaWeb.RegistrationController#update",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /registrations/name": {
+    "controller": "PhilomenaWeb.Registration.NameController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /registrations/password": {
+    "controller": "PhilomenaWeb.Registration.PasswordController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /registrations/totp": {
+    "controller": "PhilomenaWeb.Registration.TotpController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /rules/:id": {
+    "controller": "PhilomenaWeb.RuleController#update",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /settings": {
+    "controller": "PhilomenaWeb.SettingController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /tags/:id": {
+    "controller": "PhilomenaWeb.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /tags/:tag_id/alias": {
+    "controller": "PhilomenaWeb.Tag.AliasController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PATCH /tags/:tag_id/image": {
+    "controller": "PhilomenaWeb.Tag.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/adverts": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/artist_links/:artist_link_id/contact": {
+    "controller": "PhilomenaWeb.Admin.ArtistLink.ContactController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/artist_links/:artist_link_id/reject": {
+    "controller": "PhilomenaWeb.Admin.ArtistLink.RejectController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/artist_links/:artist_link_id/verification": {
+    "controller": "PhilomenaWeb.Admin.ArtistLink.VerificationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/badges": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/dnp_entries/:dnp_entry_id/transition": {
+    "controller": "PhilomenaWeb.Admin.DnpEntry.TransitionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/donations": {
+    "controller": "PhilomenaWeb.Admin.DonationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/fingerprint_bans": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/forums": {
+    "controller": "PhilomenaWeb.Admin.ForumController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/mod_notes": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/reports/:report_id/claim": {
+    "controller": "PhilomenaWeb.Admin.Report.ClaimController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/reports/:report_id/close": {
+    "controller": "PhilomenaWeb.Admin.Report.CloseController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/site_notices": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/subnet_bans": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/user_bans": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/activation": {
+    "controller": "PhilomenaWeb.Admin.User.ActivationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/erase": {
+    "controller": "PhilomenaWeb.Admin.User.EraseController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/force_filter": {
+    "controller": "PhilomenaWeb.Admin.User.ForceFilterController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/unlock": {
+    "controller": "PhilomenaWeb.Admin.User.UnlockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/verification": {
+    "controller": "PhilomenaWeb.Admin.User.VerificationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /admin/users/:user_id/wipe": {
+    "controller": "PhilomenaWeb.Admin.User.WipeController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /api/v1/json/images": {
+    "controller": "PhilomenaWeb.Api.Json.ImageController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /api/v1/json/search/reverse": {
+    "controller": "PhilomenaWeb.Api.Json.Search.ReverseController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "api-json",
+    "area": "public",
+    "phase": 1,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /channels": {
+    "controller": "PhilomenaWeb.ChannelController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /channels/:channel_id/read": {
+    "controller": "PhilomenaWeb.Channel.ReadController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /channels/:channel_id/subscription": {
+    "controller": "PhilomenaWeb.Channel.SubscriptionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /channels/nsfw": {
+    "controller": "PhilomenaWeb.Channel.NsfwController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /confirmations": {
+    "controller": "PhilomenaWeb.ConfirmationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations": {
+    "controller": "PhilomenaWeb.ConversationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations/:conversation_id/hide": {
+    "controller": "PhilomenaWeb.Conversation.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations/:conversation_id/messages": {
+    "controller": "PhilomenaWeb.Conversation.MessageController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations/:conversation_id/messages/:message_id/approve": {
+    "controller": "PhilomenaWeb.Conversation.Message.ApproveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations/:conversation_id/read": {
+    "controller": "PhilomenaWeb.Conversation.ReadController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /conversations/:conversation_id/reports": {
+    "controller": "PhilomenaWeb.Conversation.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /dnp": {
+    "controller": "PhilomenaWeb.DnpEntryController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /duplicate_reports": {
+    "controller": "PhilomenaWeb.DuplicateReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /duplicate_reports/:duplicate_report_id/accept": {
+    "controller": "PhilomenaWeb.DuplicateReport.AcceptController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /duplicate_reports/:duplicate_report_id/accept_reverse": {
+    "controller": "PhilomenaWeb.DuplicateReport.AcceptReverseController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /duplicate_reports/:duplicate_report_id/claim": {
+    "controller": "PhilomenaWeb.DuplicateReport.ClaimController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /duplicate_reports/:duplicate_report_id/reject": {
+    "controller": "PhilomenaWeb.DuplicateReport.RejectController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /filters": {
+    "controller": "PhilomenaWeb.FilterController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /filters/:filter_id/public": {
+    "controller": "PhilomenaWeb.Filter.PublicController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /filters/hide": {
+    "controller": "PhilomenaWeb.Filter.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /filters/spoiler": {
+    "controller": "PhilomenaWeb.Filter.SpoilerController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /fingerprint_profiles/:fingerprint_profile_id/tag_changes/revert": {
+    "controller": "PhilomenaWeb.FingerprintProfile.TagChange.RevertController#create",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/subscription": {
+    "controller": "PhilomenaWeb.Forum.SubscriptionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics": {
+    "controller": "PhilomenaWeb.TopicController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/hide": {
+    "controller": "PhilomenaWeb.Topic.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/lock": {
+    "controller": "PhilomenaWeb.Topic.LockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/move": {
+    "controller": "PhilomenaWeb.Topic.MoveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/poll/votes": {
+    "controller": "PhilomenaWeb.Topic.Poll.VoteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/posts": {
+    "controller": "PhilomenaWeb.Topic.PostController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/posts/:post_id/approve": {
+    "controller": "PhilomenaWeb.Topic.Post.ApproveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/posts/:post_id/delete": {
+    "controller": "PhilomenaWeb.Topic.Post.DeleteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/posts/:post_id/hide": {
+    "controller": "PhilomenaWeb.Topic.Post.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/posts/:post_id/reports": {
+    "controller": "PhilomenaWeb.Topic.Post.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/read": {
+    "controller": "PhilomenaWeb.Topic.ReadController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/stick": {
+    "controller": "PhilomenaWeb.Topic.StickController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /forums/:forum_id/topics/:topic_id/subscription": {
+    "controller": "PhilomenaWeb.Topic.SubscriptionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /galleries": {
+    "controller": "PhilomenaWeb.GalleryController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /galleries/:gallery_id/images": {
+    "controller": "PhilomenaWeb.Gallery.ImageController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /galleries/:gallery_id/read": {
+    "controller": "PhilomenaWeb.Gallery.ReadController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /galleries/:gallery_id/reports": {
+    "controller": "PhilomenaWeb.Gallery.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /galleries/:gallery_id/subscription": {
+    "controller": "PhilomenaWeb.Gallery.SubscriptionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images": {
+    "controller": "PhilomenaWeb.ImageController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/anonymous": {
+    "controller": "PhilomenaWeb.Image.AnonymousController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/approve": {
+    "controller": "PhilomenaWeb.Image.ApproveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comment_lock": {
+    "controller": "PhilomenaWeb.Image.CommentLockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comments": {
+    "controller": "PhilomenaWeb.Image.CommentController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comments/:comment_id/approve": {
+    "controller": "PhilomenaWeb.Image.Comment.ApproveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comments/:comment_id/delete": {
+    "controller": "PhilomenaWeb.Image.Comment.DeleteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comments/:comment_id/hide": {
+    "controller": "PhilomenaWeb.Image.Comment.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/comments/:comment_id/reports": {
+    "controller": "PhilomenaWeb.Image.Comment.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/delete": {
+    "controller": "PhilomenaWeb.Image.DeleteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/description_lock": {
+    "controller": "PhilomenaWeb.Image.DescriptionLockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/destroy": {
+    "controller": "PhilomenaWeb.Image.DestroyController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/fave": {
+    "controller": "PhilomenaWeb.Image.FaveController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/feature": {
+    "controller": "PhilomenaWeb.Image.FeatureController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/hide": {
+    "controller": "PhilomenaWeb.Image.HideController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/read": {
+    "controller": "PhilomenaWeb.Image.ReadController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/repair": {
+    "controller": "PhilomenaWeb.Image.RepairController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/reports": {
+    "controller": "PhilomenaWeb.Image.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/subscription": {
+    "controller": "PhilomenaWeb.Image.SubscriptionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/tag_lock": {
+    "controller": "PhilomenaWeb.Image.TagLockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/tamper": {
+    "controller": "PhilomenaWeb.Image.TamperController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/:image_id/vote": {
+    "controller": "PhilomenaWeb.Image.VoteController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /images/scrape": {
+    "controller": "PhilomenaWeb.Image.ScrapeController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /ip_profiles/:ip_profile_id/tag_changes/revert": {
+    "controller": "PhilomenaWeb.IpProfile.TagChange.RevertController#create",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /pages": {
+    "controller": "PhilomenaWeb.PageController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /passwords": {
+    "controller": "PhilomenaWeb.PasswordController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /posts/preview": {
+    "controller": "PhilomenaWeb.Post.PreviewController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/artist_links": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/awards": {
+    "controller": "PhilomenaWeb.Profile.AwardController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/commission": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/commission/items": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/commission/reports": {
+    "controller": "PhilomenaWeb.Profile.Commission.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/reports": {
+    "controller": "PhilomenaWeb.Profile.ReportController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /profiles/:profile_id/tag_changes/revert": {
+    "controller": "PhilomenaWeb.Profile.TagChange.RevertController#create",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /reactivations": {
+    "controller": "PhilomenaWeb.ReactivationController#create",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /registrations": {
+    "controller": "PhilomenaWeb.RegistrationController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /registrations/email": {
+    "controller": "PhilomenaWeb.Registration.EmailController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /rules": {
+    "controller": "PhilomenaWeb.RuleController#create",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /search/reverse": {
+    "controller": "PhilomenaWeb.Search.ReverseController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /sessions": {
+    "controller": "PhilomenaWeb.SessionController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /sessions/totp": {
+    "controller": "PhilomenaWeb.Session.TotpController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /tag_changes/full_revert": {
+    "controller": "PhilomenaWeb.TagChange.FullRevertController#create",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /tag_changes/revert": {
+    "controller": "PhilomenaWeb.TagChange.RevertController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /tags/:tag_id/reindex": {
+    "controller": "PhilomenaWeb.Tag.ReindexController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /tags/:tag_id/watch": {
+    "controller": "PhilomenaWeb.Tag.WatchController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "POST /unlocks": {
+    "controller": "PhilomenaWeb.UnlockController#create",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/adverts/:advert_id/image": {
+    "controller": "PhilomenaWeb.Admin.Advert.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/adverts/:id": {
+    "controller": "PhilomenaWeb.Admin.AdvertController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/badges/:badge_id/image": {
+    "controller": "PhilomenaWeb.Admin.Badge.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/badges/:id": {
+    "controller": "PhilomenaWeb.Admin.BadgeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/batch/tags": {
+    "controller": "PhilomenaWeb.Admin.Batch.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/fingerprint_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.FingerprintBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/forums/:id": {
+    "controller": "PhilomenaWeb.Admin.ForumController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/mod_notes/:id": {
+    "controller": "PhilomenaWeb.Admin.ModNoteController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/site_notices/:id": {
+    "controller": "PhilomenaWeb.Admin.SiteNoticeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/subnet_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.SubnetBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/user_bans/:id": {
+    "controller": "PhilomenaWeb.Admin.UserBanController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /admin/users/:id": {
+    "controller": "PhilomenaWeb.Admin.UserController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "admin",
+    "phase": 8,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /avatar": {
+    "controller": "PhilomenaWeb.AvatarController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /channels/:id": {
+    "controller": "PhilomenaWeb.ChannelController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /confirmations/:id": {
+    "controller": "PhilomenaWeb.ConfirmationController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /dnp/:id": {
+    "controller": "PhilomenaWeb.DnpEntryController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /filters/:id": {
+    "controller": "PhilomenaWeb.FilterController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /filters/current": {
+    "controller": "PhilomenaWeb.Filter.CurrentController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /filters/spoiler_type": {
+    "controller": "PhilomenaWeb.Filter.SpoilerTypeController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /forums/:forum_id/topics/:id": {
+    "controller": "PhilomenaWeb.TopicController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /forums/:forum_id/topics/:topic_id/poll": {
+    "controller": "PhilomenaWeb.Topic.PollController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /forums/:forum_id/topics/:topic_id/posts/:id": {
+    "controller": "PhilomenaWeb.Topic.PostController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /galleries/:gallery_id/order": {
+    "controller": "PhilomenaWeb.Gallery.OrderController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /galleries/:id": {
+    "controller": "PhilomenaWeb.GalleryController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/comments/:id": {
+    "controller": "PhilomenaWeb.Image.CommentController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/delete": {
+    "controller": "PhilomenaWeb.Image.DeleteController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/description": {
+    "controller": "PhilomenaWeb.Image.DescriptionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/file": {
+    "controller": "PhilomenaWeb.Image.FileController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/scratchpad": {
+    "controller": "PhilomenaWeb.Image.ScratchpadController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/sources": {
+    "controller": "PhilomenaWeb.Image.SourceController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/tag_lock": {
+    "controller": "PhilomenaWeb.Image.TagLockController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/tags": {
+    "controller": "PhilomenaWeb.Image.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /images/:image_id/uploader": {
+    "controller": "PhilomenaWeb.Image.UploaderController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /pages/:id": {
+    "controller": "PhilomenaWeb.PageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /passwords/:id": {
+    "controller": "PhilomenaWeb.PasswordController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/artist_links/:id": {
+    "controller": "PhilomenaWeb.Profile.ArtistLinkController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/awards/:id": {
+    "controller": "PhilomenaWeb.Profile.AwardController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/commission": {
+    "controller": "PhilomenaWeb.Profile.CommissionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/commission/items/:id": {
+    "controller": "PhilomenaWeb.Profile.Commission.ItemController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/description": {
+    "controller": "PhilomenaWeb.Profile.DescriptionController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /profiles/:profile_id/scratchpad": {
+    "controller": "PhilomenaWeb.Profile.ScratchpadController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /registrations": {
+    "controller": "PhilomenaWeb.RegistrationController#update",
+    "instances": [
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /registrations/name": {
+    "controller": "PhilomenaWeb.Registration.NameController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /registrations/password": {
+    "controller": "PhilomenaWeb.Registration.PasswordController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /registrations/totp": {
+    "controller": "PhilomenaWeb.Registration.TotpController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "auth",
+    "phase": 4,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /rules/:id": {
+    "controller": "PhilomenaWeb.RuleController#update",
+    "instances": [
+      "philomena"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /settings": {
+    "controller": "PhilomenaWeb.SettingController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /tags/:id": {
+    "controller": "PhilomenaWeb.TagController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /tags/:tag_id/alias": {
+    "controller": "PhilomenaWeb.Tag.AliasController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "moderator",
+    "phase": 7,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  },
+  "PUT /tags/:tag_id/image": {
+    "controller": "PhilomenaWeb.Tag.ImageController#update",
+    "instances": [
+      "philomena",
+      "furbooru"
+    ],
+    "class": "mutation",
+    "area": "public",
+    "phase": 6,
+    "status": "todo",
+    "operations": [],
+    "note": ""
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "inventory": "node --experimental-strip-types scripts/inventory.ts",
+    "next": "node --experimental-strip-types scripts/next.ts",
+    "build": "node --experimental-strip-types scripts/build.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24"
+  }
+}

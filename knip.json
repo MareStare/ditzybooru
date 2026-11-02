@@ -1,4 +1,8 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
-  "ignore": ["frontend/src/route-tree.gen.ts"]
+  "ignore": ["frontend/src/route-tree.gen.ts"],
+  "ignoreBinaries": ["podman"],
+  "workspaces": {
+    "api": { "entry": ["scripts/*.ts"] }
+  }
 }
