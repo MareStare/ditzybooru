@@ -1498,11 +1498,9 @@
     "class": "api-json",
     "area": "public",
     "phase": 1,
-    "status": "verified",
-    "operations": [
-      "getImage"
-    ],
-    "note": ""
+    "status": "skipped",
+    "operations": [],
+    "note": "Superseded by getImage: the image page carries the same data plus per-tag counts, in one request."
   },
   "GET /api/v1/json/images/featured": {
     "controller": "PhilomenaWeb.Api.Json.Image.FeaturedController#show",
@@ -2266,8 +2264,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getImage"
+    ],
     "note": ""
   },
   "GET /images/:image_id/comments": {

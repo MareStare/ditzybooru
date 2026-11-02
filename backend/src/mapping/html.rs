@@ -7,6 +7,7 @@ use scraper::{ElementRef, Html, Selector};
 use serde_json::{Map, Value};
 
 use super::{
+    json,
     spec::{FieldSpec, SelectSpec},
     transform,
 };
@@ -84,8 +85,14 @@ fn read(el: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
     }
     let raw = if let Some(attr) = &spec.attr {
         match el.value().attr(attr) {
-            Some(v) if spec.json => serde_json::from_str(v)
-                .with_context(|| format!("attribute {attr:?} is not JSON"))?,
+            Some(v) if spec.json => {
+                let parsed: Value = serde_json::from_str(v)
+                    .with_context(|| format!("attribute {attr:?} is not JSON"))?;
+                match &spec.map {
+                    Some(map) => json::remap(&parsed, map, origin)?,
+                    None => parsed,
+                }
+            }
             Some(v) => Value::String(v.to_owned()),
             None if spec.optional => return Ok(Value::Null),
             None => bail!("attribute {attr:?} missing"),

@@ -11,6 +11,8 @@ interface FieldSpec {
   exists?: true;
   /** Parse the attribute as JSON (e.g. `data-uris`). */
   json?: true;
+  /** Remap the parsed JSON attribute; pointers are relative to its root. */
+  map?: JsonMap;
   many?: true;
   optional?: true;
   as?: Transform;

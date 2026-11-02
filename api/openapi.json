@@ -26,7 +26,7 @@
         ],
         "type": "object"
       },
-      "Image": {
+      "ImagePage": {
         "additionalProperties": false,
         "properties": {
           "aspectRatio": {
@@ -39,23 +39,14 @@
             "format": "date-time",
             "type": "string"
           },
-          "description": {
-            "type": "string"
-          },
           "downvotes": {
             "type": "integer"
           },
           "faves": {
             "type": "integer"
           },
-          "format": {
-            "type": "string"
-          },
           "height": {
             "type": "integer"
-          },
-          "hiddenFromUsers": {
-            "type": "boolean"
           },
           "id": {
             "type": "integer"
@@ -70,29 +61,18 @@
             "items": {
               "type": "string"
             },
+            "minItems": 0,
             "type": "array"
-          },
-          "spoilered": {
-            "type": "boolean"
           },
           "tagCount": {
             "type": "integer"
           },
           "tags": {
             "items": {
-              "type": "string"
+              "$ref": "#/components/schemas/ImageTag"
             },
+            "minItems": 1,
             "type": "array"
-          },
-          "uploader": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
           },
           "upvotes": {
             "type": "integer"
@@ -107,8 +87,6 @@
           "width",
           "height",
           "aspectRatio",
-          "format",
-          "tags",
           "tagCount",
           "score",
           "upvotes",
@@ -116,11 +94,43 @@
           "faves",
           "commentCount",
           "sourceUrls",
-          "description",
-          "uploader",
           "representations",
-          "spoilered",
-          "hiddenFromUsers"
+          "tags"
+        ],
+        "type": "object"
+      },
+      "ImageTag": {
+        "additionalProperties": false,
+        "properties": {
+          "category": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "imageCount": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "slug": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "category",
+          "imageCount"
         ],
         "type": "object"
       },
@@ -199,7 +209,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Image"
+                  "$ref": "#/components/schemas/ImagePage"
                 }
               }
             },
@@ -216,7 +226,7 @@
             "description": "Error"
           }
         },
-        "summary": "Fetch one image with its metadata.",
+        "summary": "Fetch the image page: metadata, counters, media URLs and tags.",
         "tags": [
           "images"
         ],
@@ -226,48 +236,119 @@
         "x-philomena": {
           "auth": "none",
           "routes": [
-            "GET /api/v1/json/images/:id"
+            "GET /images/:id"
           ],
           "strategies": [
             {
-              "kind": "json",
-              "map": {
-                "aspectRatio": "/image/aspect_ratio",
-                "commentCount": "/image/comment_count",
-                "createdAt": "/image/first_seen_at",
-                "description": "/image/description",
-                "downvotes": "/image/downvotes",
-                "faves": "/image/faves",
-                "format": "/image/format",
-                "height": "/image/height",
-                "hiddenFromUsers": "/image/hidden_from_users",
-                "id": "/image/id",
-                "representations": {
-                  "from": "/image/representations",
-                  "map": {
-                    "full": "/full",
-                    "large": "/large",
-                    "medium": "/medium",
-                    "small": "/small",
-                    "tall": "/tall",
-                    "thumb": "/thumb",
-                    "thumbSmall": "/thumb_small",
-                    "thumbTiny": "/thumb_tiny"
-                  }
-                },
-                "score": "/image/score",
-                "sourceUrls": "/image/source_urls",
-                "spoilered": "/image/spoilered",
-                "tagCount": "/image/tag_count",
-                "tags": "/image/tags",
-                "uploader": "/image/uploader",
-                "upvotes": "/image/upvotes",
-                "width": "/image/width"
-              },
+              "kind": "html",
               "request": {
                 "method": "GET",
-                "path": "/api/v1/json/images/{id}"
-              }
+                "path": "/images/{id}"
+              },
+              "select": {
+                "fields": {
+                  "aspectRatio": {
+                    "as": "float",
+                    "attr": "data-aspect-ratio",
+                    "sel": ".image-show-container"
+                  },
+                  "commentCount": {
+                    "as": "int",
+                    "attr": "data-comment-count",
+                    "sel": ".image-show-container"
+                  },
+                  "createdAt": {
+                    "attr": "data-created-at",
+                    "sel": ".image-show-container"
+                  },
+                  "downvotes": {
+                    "as": "int",
+                    "attr": "data-downvotes",
+                    "sel": ".image-show-container"
+                  },
+                  "faves": {
+                    "as": "int",
+                    "attr": "data-faves",
+                    "sel": ".image-show-container"
+                  },
+                  "height": {
+                    "as": "int",
+                    "attr": "data-height",
+                    "sel": ".image-show-container"
+                  },
+                  "id": {
+                    "as": "int",
+                    "attr": "data-image-id",
+                    "sel": ".image-show-container"
+                  },
+                  "representations": {
+                    "attr": "data-uris",
+                    "json": true,
+                    "map": {
+                      "full": "/full",
+                      "large": "/large",
+                      "medium": "/medium",
+                      "small": "/small",
+                      "tall": "/tall",
+                      "thumb": "/thumb",
+                      "thumbSmall": "/thumb_small",
+                      "thumbTiny": "/thumb_tiny"
+                    },
+                    "sel": ".image-show-container"
+                  },
+                  "score": {
+                    "as": "int",
+                    "attr": "data-score",
+                    "sel": ".image-show-container"
+                  },
+                  "sourceUrls": {
+                    "attr": "data-source-urls",
+                    "json": true,
+                    "sel": ".image-show-container"
+                  },
+                  "tagCount": {
+                    "as": "int",
+                    "attr": "data-tag-count",
+                    "sel": ".image-show-container"
+                  },
+                  "tags": {
+                    "fields": {
+                      "category": {
+                        "attr": "data-tag-category",
+                        "optional": true
+                      },
+                      "id": {
+                        "as": "int",
+                        "attr": "data-tag-id"
+                      },
+                      "imageCount": {
+                        "as": "int",
+                        "sel": ".tag__count",
+                        "text": true
+                      },
+                      "name": {
+                        "attr": "data-tag-name"
+                      },
+                      "slug": {
+                        "attr": "data-tag-slug"
+                      }
+                    },
+                    "many": true,
+                    "sel": ".tag-list .tag[data-tag-id]"
+                  },
+                  "upvotes": {
+                    "as": "int",
+                    "attr": "data-upvotes",
+                    "sel": ".image-show-container"
+                  },
+                  "width": {
+                    "as": "int",
+                    "attr": "data-width",
+                    "sel": ".image-show-container"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/image/show.html.slime"
             }
           ]
         }

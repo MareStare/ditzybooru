@@ -22,6 +22,10 @@ upstream route and is the resume point.
 
 ## Conventions
 
+- One endpoint per page of the live site, not a fine-grained REST API. An
+  endpoint returns everything its page shows, served from whichever upstream
+  route renders that page (HTML scrape, or the JSON API when it carries the
+  same data). Routes made redundant by a page endpoint are `skipped` with a note.
 - Our API lives under `/api/v1`, camelCase fields, numeric ids, one pagination
   envelope `{ items, total, page, perPage }`, one error envelope.
 - Selector preference: `data-*` / `js-*` hooks, then ids, then structural

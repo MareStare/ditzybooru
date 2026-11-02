@@ -23,7 +23,7 @@ export const s = {
   uri: () => make<string>({ type: 'string', format: 'uri-reference' }),
   enum: <const TValues extends readonly string[]>(...values: TValues) =>
     make<TValues[number]>({ type: 'string', enum: values }),
-  array: <T>(item: Schema<T>) => make<T[]>({ type: 'array', items: item.json }),
+  array: <T>(item: Schema<T>, minItems = 0) => make<T[]>({ type: 'array', items: item.json, minItems }),
   nullable: <T>(inner: Schema<T>) => make<T | null>({ oneOf: [inner.json, { type: 'null' }] }),
   /** Marks an object property as not required. */
   optional: <T>(inner: Schema<T>) => ({ ...inner, optional: true as const }),

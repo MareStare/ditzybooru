@@ -191,6 +191,8 @@ pub struct FieldSpec {
     /// Parse the attribute as JSON.
     #[serde(default)]
     pub json: bool,
+    /// Remap the parsed JSON attribute, pointers relative to its root.
+    pub map: Option<BTreeMap<String, JsonMapValue>>,
     /// Produce an array of every match.
     #[serde(default)]
     pub many: bool,
