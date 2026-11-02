@@ -176,8 +176,18 @@ beforeAll(async () => {
     // `buildApp`, not `build`: `build` builds the client alone and leaves the
     // server bundle from the run before it, whose manifest then points at
     // client asset hashes that no longer exist - and the page loads unstyled.
-    const builder = await createBuilder({ root: projectRoot, logLevel: 'warn' });
-    await builder.buildApp();
+    //
+    // Vitest sets `NODE_ENV=test`, which Vite then keeps for the build. That
+    // makes `import.meta.env.DEV` true in the bundle, and the root route links
+    // the dev-only stylesheet that a build does not have.
+    const nodeEnv = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'production';
+    try {
+      const builder = await createBuilder({ root: projectRoot, logLevel: 'warn' });
+      await builder.buildApp();
+    } finally {
+      process.env.NODE_ENV = nodeEnv;
+    }
     preview = await vitePreview({
       root: projectRoot,
       logLevel: 'warn',

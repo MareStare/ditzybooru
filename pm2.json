@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "Ditzybooru:Frontend",
+      "cwd": "frontend",
+      "script": ".output/server/index.mjs",
+      "env": { "HOST": "127.0.0.1", "PORT": "3710" }
+    },
+    {
+      "name": "Ditzybooru:Backend",
+      "script": "target/release/backend",
+      "env": { "HOST": "127.0.0.1", "PORT": "3711" }
+    }
+  ]
+}

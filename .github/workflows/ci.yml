@@ -26,6 +26,8 @@ jobs:
       - run: pnpm run lint
       - run: pnpm run knip
       - run: pnpm run build
+      # The self-hosted target, so a break in it shows up here and not on deploy.
+      - run: BUILD_TARGET=node pnpm run build
 
       # Structural a11y via axe-core plus a contrast audit over all 18
       # theme combinations. `playwright-core` ships no browser of its own, so

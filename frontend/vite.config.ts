@@ -1,10 +1,18 @@
 import { execFileSync } from 'node:child_process';
 import { defineConfig } from 'vite';
 import { cloudflare } from '@cloudflare/vite-plugin';
+import { nitro } from 'nitro/vite';
 import { tanstackStart } from '@tanstack/react-start/plugin/vite';
 import { devtools } from '@tanstack/devtools-vite';
 import viteReact, { reactCompilerPreset } from '@vitejs/plugin-react';
 import babel from '@rolldown/plugin-babel';
+
+/**
+ * Where the server runs. Cloudflare Workers by default. `BUILD_TARGET=node`
+ * builds a standalone Node server into `.output` instead, for a self-hosted
+ * deploy (see `deploy.conf`).
+ */
+const serverTarget = process.env.BUILD_TARGET === 'node' ? 'node' : 'cloudflare';
 
 /** The JS floor, deliberately low. Lower than the CSS floor below on purpose -
  *  see the TODO there. */
@@ -39,8 +47,11 @@ function git(...args: Array<string>): string {
   return execFileSync('git', args, { encoding: 'utf8' }).trim();
 }
 
-const commitSha = git('rev-parse', '--short=12', 'HEAD');
-const commitDate = new Date(git('show', '--no-patch', '--format=%cI', 'HEAD')).toISOString().replace(/\.\d{3}Z$/, 'Z');
+/** The deploy checks the code out without a `.git`, so it passes these in. */
+const commitSha = process.env.COMMIT_SHA ?? git('rev-parse', '--short=12', 'HEAD');
+const commitDate = new Date(process.env.COMMIT_DATE ?? git('show', '--no-patch', '--format=%cI', 'HEAD'))
+  .toISOString()
+  .replace(/\.\d{3}Z$/, 'Z');
 
 export default defineConfig({
   define: {
@@ -61,13 +72,13 @@ export default defineConfig({
   build: { cssMinify: 'lightningcss' },
   resolve: { tsconfigPaths: true },
   environments: {
-    // Scoped to the browser build: the Worker runs on workerd, and handing it
-    // this list collides with the target the Cloudflare plugin sets.
+    // Scoped to the browser build: the server runs on workerd or Node, and
+    // handing either this list collides with the target its plugin sets.
     client: { build: { target: buildTarget } },
   },
   plugins: [
     devtools(),
-    cloudflare({ viteEnvironment: { name: 'ssr' } }),
+    ...(serverTarget === 'cloudflare' ? [cloudflare({ viteEnvironment: { name: 'ssr' } })] : []),
     tanstackStart({
       // Workaround for https://github.com/TanStack/router/issues/7794 (fix
       // pending in https://github.com/TanStack/router/pull/7830): Start's
@@ -82,6 +93,7 @@ export default defineConfig({
         semicolons: true,
       },
     }),
+    ...(serverTarget === 'node' ? [nitro()] : []),
     viteReact(),
     babel({ presets: [reactCompilerPreset()] }),
   ],
