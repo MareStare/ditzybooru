@@ -86,6 +86,19 @@ fn apply_rule(doc: &Value, rule: &JsonMapValue, ctx: RemapCtx<'_>) -> Result<Val
                 None => Ok(found),
             }
         }
+        JsonMapValue::JoinedItems { join, map } => {
+            // A follow-up that had nothing to ask for was never sent.
+            let items = ctx
+                .joins
+                .get(join)
+                .map_or(&[][..], |table| &table.items[..]);
+            Ok(Value::Array(
+                items
+                    .iter()
+                    .map(|item| remap(item, map, ctx))
+                    .collect::<Result<_>>()?,
+            ))
+        }
         JsonMapValue::Nested {
             from,
             transform: name,
@@ -234,6 +247,40 @@ mod tests {
     use serde_json::json;
 
     use super::*;
+
+    #[test]
+    fn joined_items_are_remapped_and_default_to_empty() {
+        let map: BTreeMap<String, JsonMapValue> = serde_json::from_value(
+            json!({ "title": "/title", "images": { "join": "images", "map": { "id": "/id" } } }),
+        )
+        .unwrap();
+        let params = BTreeMap::new();
+        let doc = json!({ "title": "g" });
+
+        let table =
+            JoinTable::parse(r#"{"images":[{"id":7},{"id":9}]}"#, "/images", "/id").unwrap();
+        let joins = BTreeMap::from([("images".to_owned(), table)]);
+        let ctx = RemapCtx {
+            origin: "",
+            params: &params,
+            joins: &joins,
+        };
+        assert_eq!(
+            remap(&doc, &map, ctx).unwrap(),
+            json!({ "title": "g", "images": [{ "id": 7 }, { "id": 9 }] })
+        );
+
+        let none = BTreeMap::new();
+        let ctx = RemapCtx {
+            origin: "",
+            params: &params,
+            joins: &none,
+        };
+        assert_eq!(
+            remap(&doc, &map, ctx).unwrap().get("images"),
+            Some(&json!([]))
+        );
+    }
 
     #[test]
     fn alternatives_pick_the_first_existing_pointer() {

@@ -38,7 +38,9 @@ type JsonMapValue =
   | string
   | { from: string; as?: Transform; map?: Record<string, JsonMapValue> }
   /** Finds the item of a join's follow-up response whose `join.key` equals this item's `key`, and takes its `value`. */
-  | { join: string; key: string; value: string; as?: Transform };
+  | { join: string; key: string; value: string; as?: Transform }
+  /** Every item of a join's follow-up response, remapped by `map`. An empty list when the follow-up was not sent. */
+  | { join: string; map: Record<string, JsonMapValue> };
 export type JsonMap = Record<string, JsonMapValue>;
 
 interface UpstreamRequest {
@@ -97,6 +99,8 @@ export interface JsonStrategy extends StrategyBase {
   request: UpstreamRequest;
   map: JsonMap;
   joins?: Join[];
+  /** Pointer to an array in the first response; when it is empty the page does not exist (answers 404). */
+  notFoundWhenEmpty?: string;
   /** When set, `map` runs on `{ items: [{ parent, item }] }`: `parent` is the element of the first response, `item` an entry of its follow-up. */
   fanout?: Fanout;
 }

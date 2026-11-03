@@ -134,6 +134,20 @@ const Gallery = s.object({
   userId: s.int(),
 });
 
+const GalleryPage = s.object({
+  id: s.int(),
+  title: s.string(),
+  description: s.string(),
+  spoilerWarning: s.string(),
+  thumbnailId: s.int(),
+  user: s.string(),
+  userId: s.int(),
+  page: s.int(),
+  perPage: s.int(),
+  /** This page of the gallery's images, in gallery order. */
+  images: s.array(s.ref('Media')),
+});
+
 const Filter = s.object({
   id: s.int(),
   name: s.string(),
@@ -254,6 +268,7 @@ export const schemas = {
   CommentDetail,
   Post,
   Gallery,
+  GalleryPage,
   Filter,
   Forum,
   Topic,

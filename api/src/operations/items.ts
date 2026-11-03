@@ -1,6 +1,6 @@
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
-import { urlAt } from './media.ts';
+import { mediaFields, urlAt } from './media.ts';
 import { commentMap, filterMap, postMap, tagMap, under } from './maps.ts';
 
 export const getComment = defineOperation({
@@ -201,6 +201,76 @@ export const getEmbed = defineOperation({
           score: '/derpibooru_score',
           commentCount: '/derpibooru_comments',
           tags: '/derpibooru_tags',
+        },
+      },
+    ],
+  },
+});
+
+export const getGallery = defineOperation({
+  operationId: 'getGallery',
+  path: '/galleries/{id}',
+  method: 'get',
+  summary: 'The gallery page: the gallery and one page of its images, in gallery order.',
+  tags: ['galleries'],
+  params: [
+    { name: 'id', in: 'path', schema: s.int(), required: true },
+    { name: 'page', in: 'query', schema: s.int() },
+    { name: 'perPage', in: 'query', schema: s.int(), description: 'At most 50.' },
+  ],
+  response: s.ref('GalleryPage'),
+  examples: { id: 1, perPage: 2 },
+  philomena: {
+    routes: ['GET /galleries/:id', 'GET /api/v1/json/search/galleries', 'GET /api/v1/json/search/images'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'json',
+        // There is no JSON route for one gallery, so ask the search for it.
+        request: {
+          method: 'GET',
+          path: '/api/v1/json/search/galleries',
+          query: { q: 'id:{id}', per_page: '1' },
+        },
+        notFoundWhenEmpty: '/galleries',
+        joins: [
+          {
+            name: 'images',
+            request: {
+              method: 'GET',
+              path: '/api/v1/json/search/images',
+              // Sorting by `gallery_id:N` is the gallery's own order.
+              query: {
+                q: '{galleryQuery}',
+                sf: 'gallery_id:{id}',
+                sd: 'asc',
+                page: '{page|1}',
+                per_page: '{perPage|15}',
+              },
+            },
+            collect: {
+              param: 'galleryQuery',
+              from: '/galleries',
+              pick: '/id',
+              prefix: 'gallery_id:',
+              separator: ' || ',
+            },
+            items: '/images',
+            key: '/id',
+          },
+        ],
+        map: {
+          id: '/galleries/0/id',
+          title: '/galleries/0/title',
+          description: '/galleries/0/description',
+          spoilerWarning: '/galleries/0/spoiler_warning',
+          thumbnailId: '/galleries/0/thumbnail_id',
+          // Renamed from `user` to `creator` in Philomena 1.3.
+          user: '/galleries/0/creator|/galleries/0/user',
+          userId: '/galleries/0/creator_id|/galleries/0/user_id',
+          page: { from: '$param:page', as: 'int' },
+          perPage: { from: '$param:perPage', as: 'int' },
+          images: { join: 'images', map: mediaFields() },
         },
       },
     ],

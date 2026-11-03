@@ -623,6 +623,58 @@
         ],
         "type": "object"
       },
+      "GalleryPage": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/Media"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "spoilerWarning": {
+            "type": "string"
+          },
+          "thumbnailId": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "user": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "spoilerWarning",
+          "thumbnailId",
+          "user",
+          "userId",
+          "page",
+          "perPage",
+          "images"
+        ],
+        "type": "object"
+      },
       "GalleryResults": {
         "additionalProperties": false,
         "properties": {
@@ -2505,6 +2557,190 @@
                   "page": "{page|1}",
                   "per_page": "{perPage|15}",
                   "q": "{q|*}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/galleries/{id}": {
+      "get": {
+        "operationId": "getGallery",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GalleryPage"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The gallery page: the gallery and one page of its images, in gallery order.",
+        "tags": [
+          "galleries"
+        ],
+        "x-examples": {
+          "id": 1,
+          "perPage": 2
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /galleries/:id",
+            "GET /api/v1/json/search/galleries",
+            "GET /api/v1/json/search/images"
+          ],
+          "strategies": [
+            {
+              "joins": [
+                {
+                  "collect": {
+                    "from": "/galleries",
+                    "param": "galleryQuery",
+                    "pick": "/id",
+                    "prefix": "gallery_id:",
+                    "separator": " || "
+                  },
+                  "items": "/images",
+                  "key": "/id",
+                  "name": "images",
+                  "request": {
+                    "method": "GET",
+                    "path": "/api/v1/json/search/images",
+                    "query": {
+                      "page": "{page|1}",
+                      "per_page": "{perPage|15}",
+                      "q": "{galleryQuery}",
+                      "sd": "asc",
+                      "sf": "gallery_id:{id}"
+                    }
+                  }
+                }
+              ],
+              "kind": "json",
+              "map": {
+                "description": "/galleries/0/description",
+                "id": "/galleries/0/id",
+                "images": {
+                  "join": "images",
+                  "map": {
+                    "aspectRatio": "/aspect_ratio",
+                    "commentCount": "/comment_count",
+                    "createdAt": "/created_at",
+                    "downvotes": "/downvotes",
+                    "faves": "/faves",
+                    "height": "/height",
+                    "hiddenFromUsers": "/hidden_from_users",
+                    "id": "/id",
+                    "mimeType": "/mime_type",
+                    "representations": {
+                      "from": "/representations",
+                      "map": {
+                        "full": {
+                          "as": "url",
+                          "from": "/full"
+                        },
+                        "large": {
+                          "as": "url",
+                          "from": "/large"
+                        },
+                        "medium": {
+                          "as": "url",
+                          "from": "/medium"
+                        },
+                        "small": {
+                          "as": "url",
+                          "from": "/small"
+                        },
+                        "tall": {
+                          "as": "url",
+                          "from": "/tall"
+                        },
+                        "thumb": {
+                          "as": "url",
+                          "from": "/thumb"
+                        },
+                        "thumbSmall": {
+                          "as": "url",
+                          "from": "/thumb_small"
+                        },
+                        "thumbTiny": {
+                          "as": "url",
+                          "from": "/thumb_tiny"
+                        }
+                      }
+                    },
+                    "score": "/score",
+                    "sourceUrls": "/source_urls",
+                    "spoilered": "/spoilered",
+                    "tagCount": "/tag_count",
+                    "tags": "/tags",
+                    "upvotes": "/upvotes",
+                    "width": "/width"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "spoilerWarning": "/galleries/0/spoiler_warning",
+                "thumbnailId": "/galleries/0/thumbnail_id",
+                "title": "/galleries/0/title",
+                "user": "/galleries/0/creator|/galleries/0/user",
+                "userId": "/galleries/0/creator_id|/galleries/0/user_id"
+              },
+              "notFoundWhenEmpty": "/galleries",
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/galleries",
+                "query": {
+                  "per_page": "1",
+                  "q": "id:{id}"
                 }
               }
             }

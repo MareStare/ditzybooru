@@ -105,10 +105,13 @@ pub fn effective_params(
 ) -> Result<BTreeMap<String, String>> {
     let mut all = params.clone();
     add_defaults(strategy.request(), &mut all)?;
-    if let Strategy::Json(json_strategy) = strategy
-        && let Some(fanout) = &json_strategy.fanout
-    {
-        add_defaults(&fanout.request, &mut all)?;
+    if let Strategy::Json(json_strategy) = strategy {
+        if let Some(fanout) = &json_strategy.fanout {
+            add_defaults(&fanout.request, &mut all)?;
+        }
+        for join in &json_strategy.joins {
+            add_defaults(&join.request, &mut all)?;
+        }
     }
     Ok(all)
 }
@@ -330,6 +333,14 @@ pub fn extract(
         Strategy::Json(s) => {
             let doc: Value =
                 serde_json::from_str(&responses.main).context("upstream body is not JSON")?;
+            if let Some(pointer) = &s.not_found_when_empty
+                && json::elements(&doc, pointer)?.is_empty()
+            {
+                return Err(
+                    anyhow::Error::new(UpstreamStatus(reqwest::StatusCode::NOT_FOUND))
+                        .context("no such page"),
+                );
+            }
             let mut tables = BTreeMap::new();
             for join in &s.joins {
                 if let Some(body) = responses.joins.get(&join.name) {
@@ -414,6 +425,35 @@ mod tests {
     #[test]
     fn missing_path_parameter_is_an_error() {
         plan_request(&request(&[]), &params(&[])).unwrap_err();
+    }
+
+    #[test]
+    fn an_empty_search_is_a_missing_page() {
+        let strategy: Strategy = serde_json::from_str(
+            r#"{"kind":"json","request":{"method":"GET","path":"/x"},
+                "notFoundWhenEmpty":"/items","map":{"n":"/total"}}"#,
+        )
+        .unwrap();
+        let ctx = Context {
+            origin: "http://x",
+            flavor: "philomena",
+        };
+        let extract_body = |body: &str| {
+            let responses = Responses {
+                main: body.to_owned(),
+                ..Responses::default()
+            };
+            extract(&strategy, &responses, ctx, &BTreeMap::new())
+        };
+        let err = extract_body(r#"{"items":[],"total":0}"#).unwrap_err();
+        assert!(matches!(
+            err.downcast_ref::<UpstreamStatus>(),
+            Some(UpstreamStatus(status)) if *status == reqwest::StatusCode::NOT_FOUND
+        ));
+        assert_eq!(
+            extract_body(r#"{"items":[1],"total":1}"#).unwrap(),
+            serde_json::json!({ "n": 1 })
+        );
     }
 
     #[test]

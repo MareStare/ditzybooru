@@ -90,7 +90,7 @@ const fn default_cache_seconds() -> u64 {
 #[serde(tag = "kind", rename_all = "lowercase")]
 pub enum Strategy {
     /// Remap the official JSON API.
-    Json(JsonStrategy),
+    Json(Box<JsonStrategy>),
     /// Scrape server-rendered HTML.
     Html(HtmlStrategy),
     /// Submit a form (not executable yet).
@@ -146,6 +146,10 @@ pub struct JsonStrategy {
     /// When present, `map` runs on the merged `{"items": [{"parent", "item"}]}`
     /// document instead of on the first response.
     pub fanout: Option<Fanout>,
+    /// Pointer to an array in the first response. When it is empty the page
+    /// does not exist, which answers "not found" rather than a mapping error.
+    #[serde(rename = "notFoundWhenEmpty")]
+    pub not_found_when_empty: Option<String>,
 }
 
 /// A request repeated for every element of the first response.
@@ -217,6 +221,14 @@ pub enum JsonMapValue {
         /// Transform to apply to the value.
         #[serde(rename = "as")]
         transform: Option<String>,
+    },
+    /// Every item of a join's follow-up response, remapped. An empty list when
+    /// the follow-up was not needed (nothing to ask for).
+    JoinedItems {
+        /// Join name.
+        join: String,
+        /// Remap of each joined item, pointers relative to the item.
+        map: BTreeMap<String, Self>,
     },
     /// A nested pointer with optional remap or transform.
     Nested {
