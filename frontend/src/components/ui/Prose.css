@@ -92,3 +92,17 @@
 .prose .image-show img {
   max-inline-size: 100%;
 }
+
+/* A spoiler stays hidden until it is looked at. */
+.prose .spoiler {
+  background-color: var(--text-color);
+  color: transparent;
+  border-radius: var(--radius-xs);
+  transition: color var(--duration-fast) var(--ease-out);
+}
+
+.prose .spoiler:hover,
+.prose .spoiler:focus-within {
+  background-color: transparent;
+  color: inherit;
+}

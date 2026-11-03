@@ -12,6 +12,9 @@ import {
   fetchForum,
   fetchForums,
   fetchForumTopics,
+  fetchImageActivity,
+  fetchImageComments,
+  fetchImagePage,
   fetchRules,
   fetchStaff,
   fetchStaticPage,
@@ -119,4 +122,21 @@ export function topicPageQuery(forum: string, topic: string, page: number) {
     queryFn: () => fetchTopicPage(forum, topic, page),
     placeholderData: keepPreviousData,
   });
+}
+
+export function imagePageQuery(id: number) {
+  return queryOptions({ queryKey: ['content', 'image', id], queryFn: () => fetchImagePage(id) });
+}
+
+export function imageCommentsQuery(id: number, page: number) {
+  return queryOptions({
+    queryKey: ['content', 'image', id, 'comments', page],
+    queryFn: () => fetchImageComments(id, page),
+    placeholderData: keepPreviousData,
+  });
+}
+
+/** What the visitor has done to an image. Browser only: it needs their cookie. */
+export function imageActivityQuery(id: number) {
+  return queryOptions({ queryKey: ['session', 'image', id], queryFn: () => fetchImageActivity(id) });
 }

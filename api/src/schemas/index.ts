@@ -39,6 +39,35 @@ const ImagePage = s.object({
   sourceUrls: s.array(s.string()),
   representations: s.ref('Representations'),
   tags: s.array(s.ref('ImageTag'), 1),
+  mimeType: s.string(),
+  sizeBytes: s.int(),
+  /** Who uploaded it; `null` for an anonymous upload. */
+  uploader: s.optional(s.nullable(s.string())),
+  /** The path segment of the uploader's profile. */
+  uploaderSlug: s.optional(s.nullable(s.string())),
+  /** The description as HTML cleaned by the backend: safe to render. */
+  descriptionHtml: s.optional(s.nullable(s.string())),
+  /** The description as the uploader wrote it (markdown), where the site's HTML is not available. */
+  description: s.optional(s.string()),
+});
+
+const ImageComments = s.object({
+  /** Every comment of the image, across pages. */
+  total: s.int(),
+  items: s.array(s.ref('RenderedPost')),
+});
+
+/** What the signed-in visitor did to an image, as the site's page records it. */
+const ImageInteractions = s.object({
+  interactions: s.array(
+    s.object({
+      image_id: s.int(),
+      interaction_type: s.enum('faved', 'voted', 'hidden'),
+      /** `up` or `down` for a vote; empty for a fave or a hide. */
+      value: s.nullable(s.string()),
+      user_id: s.optional(s.int()),
+    }),
+  ),
 });
 
 /** One image in a listing; mirrors the frontend's `Media`. */
@@ -304,8 +333,8 @@ const ImageCounters = s.object({
   faves: s.int(),
 });
 
-/** One post of a topic page. Philomena sites give rendered text, Derpibooru only the markup the author wrote. */
-const TopicPost = s.object({
+/** One forum post or image comment. Philomena sites give rendered text, Derpibooru only the markup the author wrote. */
+const RenderedPost = s.object({
   id: s.int(),
   author: s.string(),
   /** The path segment of the author's profile, or `null` for an anonymous post. */
@@ -328,7 +357,7 @@ const TopicPage = s.object({
   startedAt: s.optional(s.dateTime()),
   /** Every post of the topic, across pages. */
   postCount: s.int(),
-  posts: s.array(s.ref('TopicPost')),
+  posts: s.array(s.ref('RenderedPost')),
 });
 
 const Channel = s.object({
@@ -360,6 +389,8 @@ export const schemas = {
   Representations,
   ImageTag,
   ImagePage,
+  ImageComments,
+  ImageInteractions,
   Media,
   Tag,
   Comment,
@@ -380,7 +411,7 @@ export const schemas = {
   Session,
   LoginCaptcha,
   ImageCounters,
-  TopicPost,
+  RenderedPost,
   TopicPage,
   Channel,
   ForumTopic,

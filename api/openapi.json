@@ -723,6 +723,26 @@
         ],
         "type": "object"
       },
+      "ImageComments": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/RenderedPost"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "items"
+        ],
+        "type": "object"
+      },
       "ImageCounters": {
         "additionalProperties": false,
         "properties": {
@@ -747,6 +767,54 @@
         ],
         "type": "object"
       },
+      "ImageInteractions": {
+        "additionalProperties": false,
+        "properties": {
+          "interactions": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "image_id": {
+                  "type": "integer"
+                },
+                "interaction_type": {
+                  "enum": [
+                    "faved",
+                    "voted",
+                    "hidden"
+                  ],
+                  "type": "string"
+                },
+                "user_id": {
+                  "type": "integer"
+                },
+                "value": {
+                  "oneOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "image_id",
+                "interaction_type",
+                "value"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "interactions"
+        ],
+        "type": "object"
+      },
       "ImagePage": {
         "additionalProperties": false,
         "properties": {
@@ -760,6 +828,19 @@
             "format": "date-time",
             "type": "string"
           },
+          "description": {
+            "type": "string"
+          },
+          "descriptionHtml": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "downvotes": {
             "type": "integer"
           },
@@ -772,10 +853,16 @@
           "id": {
             "type": "integer"
           },
+          "mimeType": {
+            "type": "string"
+          },
           "representations": {
             "$ref": "#/components/schemas/Representations"
           },
           "score": {
+            "type": "integer"
+          },
+          "sizeBytes": {
             "type": "integer"
           },
           "sourceUrls": {
@@ -794,6 +881,26 @@
             },
             "minItems": 1,
             "type": "array"
+          },
+          "uploader": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "uploaderSlug": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "upvotes": {
             "type": "integer"
@@ -816,7 +923,9 @@
           "commentCount",
           "sourceUrls",
           "representations",
-          "tags"
+          "tags",
+          "mimeType",
+          "sizeBytes"
         ],
         "type": "object"
       },
@@ -1263,6 +1372,54 @@
           "uploadsCount",
           "links",
           "awards"
+        ],
+        "type": "object"
+      },
+      "RenderedPost": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "authorSlug": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "body": {
+            "type": "string"
+          },
+          "bodyHtml": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "author",
+          "createdAt"
         ],
         "type": "object"
       },
@@ -1764,7 +1921,7 @@
           },
           "posts": {
             "items": {
-              "$ref": "#/components/schemas/TopicPost"
+              "$ref": "#/components/schemas/RenderedPost"
             },
             "minItems": 0,
             "type": "array"
@@ -1788,54 +1945,6 @@
           "author",
           "postCount",
           "posts"
-        ],
-        "type": "object"
-      },
-      "TopicPost": {
-        "additionalProperties": false,
-        "properties": {
-          "author": {
-            "type": "string"
-          },
-          "authorSlug": {
-            "oneOf": [
-              {
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "avatarUrl": {
-            "oneOf": [
-              {
-                "format": "uri-reference",
-                "type": "string"
-              },
-              {
-                "type": "null"
-              }
-            ]
-          },
-          "body": {
-            "type": "string"
-          },
-          "bodyHtml": {
-            "type": "string"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string"
-          },
-          "id": {
-            "type": "integer"
-          }
-        },
-        "required": [
-          "id",
-          "author",
-          "createdAt"
         ],
         "type": "object"
       },
@@ -3666,6 +3775,12 @@
                     "attr": "data-created-at",
                     "sel": ".image-show-container"
                   },
+                  "descriptionHtml": {
+                    "as": "sanitizedHtml",
+                    "html": true,
+                    "optional": true,
+                    "sel": ".image-description .block__content"
+                  },
                   "downvotes": {
                     "as": "int",
                     "attr": "data-downvotes",
@@ -3685,6 +3800,10 @@
                     "as": "int",
                     "attr": "data-image-id",
                     "sel": ".image-show-container"
+                  },
+                  "mimeType": {
+                    "attr": "data-mime-type",
+                    "sel": ".image-target"
                   },
                   "representations": {
                     "attr": "data-uris",
@@ -3730,6 +3849,11 @@
                     "attr": "data-score",
                     "sel": ".image-show-container"
                   },
+                  "sizeBytes": {
+                    "as": "int",
+                    "attr": "data-image-size",
+                    "sel": ".image-target"
+                  },
                   "sourceUrls": {
                     "attr": "data-source-urls",
                     "json": true,
@@ -3765,6 +3889,17 @@
                     "many": true,
                     "sel": ".tag-list .tag[data-tag-id]"
                   },
+                  "uploader": {
+                    "optional": true,
+                    "sel": ".image_uploader strong",
+                    "text": true
+                  },
+                  "uploaderSlug": {
+                    "as": "lastSegment",
+                    "attr": "href",
+                    "optional": true,
+                    "sel": ".image_uploader strong a"
+                  },
                   "upvotes": {
                     "as": "int",
                     "attr": "data-upvotes",
@@ -3788,10 +3923,12 @@
                 "aspectRatio": "/image/aspect_ratio",
                 "commentCount": "/image/comment_count",
                 "createdAt": "/image/first_seen_at",
+                "description": "/image/description",
                 "downvotes": "/image/downvotes",
                 "faves": "/image/faves",
                 "height": "/image/height",
                 "id": "/image/id",
+                "mimeType": "/image/mime_type",
                 "representations": {
                   "from": "/image/representations",
                   "map": {
@@ -3830,6 +3967,7 @@
                   }
                 },
                 "score": "/image/score",
+                "sizeBytes": "/image/size",
                 "sourceUrls": "/image/source_urls",
                 "tagCount": "/image/tag_count",
                 "tags": {
@@ -3838,12 +3976,165 @@
                     "name": ""
                   }
                 },
+                "uploader": "/image/uploader",
                 "upvotes": "/image/upvotes",
                 "width": "/image/width"
               },
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/images/{id}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/images/{id}/comments": {
+      "get": {
+        "operationId": "listImageComments",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageComments"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The comments of an image, 25 to a page, as the image page lists them.",
+        "tags": [
+          "images"
+        ],
+        "x-examples": {
+          "id": 1
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /images/:image_id/comments"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/images/{id}/comments",
+                "query": {
+                  "page": "{page|1}"
+                }
+              },
+              "select": {
+                "fields": {
+                  "items": {
+                    "fields": {
+                      "author": {
+                        "sel": ".communication__body__sender-name strong",
+                        "text": true
+                      },
+                      "authorSlug": {
+                        "as": "lastSegment",
+                        "attr": "href",
+                        "optional": true,
+                        "sel": ".communication__body__sender-name strong a"
+                      },
+                      "avatarUrl": {
+                        "as": "url",
+                        "attr": "src",
+                        "optional": true,
+                        "sel": ".communication__body__avatar img"
+                      },
+                      "bodyHtml": {
+                        "as": "sanitizedHtml",
+                        "html": true,
+                        "sel": ".communication__body__text"
+                      },
+                      "createdAt": {
+                        "attr": "datetime",
+                        "sel": ".communication__options time"
+                      },
+                      "id": {
+                        "as": "lastInt",
+                        "attr": "id"
+                      }
+                    },
+                    "many": true,
+                    "sel": "article.communication"
+                  },
+                  "total": {
+                    "as": "lastInt",
+                    "sel": ".page__info .block__header__title",
+                    "text": true
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/image/comment/index.html.slime"
+            },
+            {
+              "flavors": [
+                "derpibooru"
+              ],
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/comments",
+                  "map": {
+                    "author": "/author",
+                    "avatarUrl": {
+                      "as": "url",
+                      "from": "/avatar"
+                    },
+                    "body": "/body",
+                    "createdAt": "/created_at",
+                    "id": "/id"
+                  }
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/search/comments",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "25",
+                  "q": "image_id:{id}",
+                  "sd": "asc",
+                  "sf": "created_at"
+                }
               }
             }
           ]
@@ -4141,6 +4432,79 @@
                   "upvotes": "/upvotes"
                 }
               }
+            }
+          ]
+        }
+      }
+    },
+    "/images/{id}/interactions": {
+      "get": {
+        "operationId": "getImageInteractions",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageInteractions"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "What the signed-in visitor has done to an image (fave, vote, hide), read from its page.",
+        "tags": [
+          "images"
+        ],
+        "x-examples": {
+          "id": 1
+        },
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "GET /images/:id"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/images/{id}"
+              },
+              "select": {
+                "fields": {
+                  "interactions": {
+                    "attr": "data-interactions",
+                    "json": true,
+                    "sel": ".js-datastore"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/layout/app.html.slime"
             }
           ]
         }

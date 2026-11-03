@@ -15,6 +15,7 @@ import { Route as SearchRouteImport } from './routes/search';
 import { Route as StaffRouteImport } from './routes/staff';
 import { Route as ForumsIndexRouteImport } from './routes/forums/index';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
+import { Route as ImagesIdRouteImport } from './routes/images/$id';
 import { Route as PagesSlugRouteImport } from './routes/pages/$slug';
 import { Route as SessionsNewRouteImport } from './routes/sessions/new';
 import { Route as SettingsAccountRouteImport } from './routes/settings/account';
@@ -52,6 +53,11 @@ const ForumsIndexRoute = ForumsIndexRouteImport.update({
 const GalleriesIdRoute = GalleriesIdRouteImport.update({
   id: '/galleries/$id',
   path: '/galleries/$id',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ImagesIdRoute = ImagesIdRouteImport.update({
+  id: '/images/$id',
+  path: '/images/$id',
   getParentRoute: () => rootRouteImport,
 } as any);
 const PagesSlugRoute = PagesSlugRouteImport.update({
@@ -101,6 +107,7 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
@@ -134,6 +142,7 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/staff'
     | '/galleries/$id'
+    | '/images/$id'
     | '/pages/$slug'
     | '/sessions/new'
     | '/settings/account'
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/staff'
     | '/galleries/$id'
+    | '/images/$id'
     | '/pages/$slug'
     | '/sessions/new'
     | '/settings/account'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/search'
     | '/staff'
     | '/galleries/$id'
+    | '/images/$id'
     | '/pages/$slug'
     | '/sessions/new'
     | '/settings/account'
@@ -201,6 +213,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute;
   StaffRoute: typeof StaffRoute;
   GalleriesIdRoute: typeof GalleriesIdRoute;
+  ImagesIdRoute: typeof ImagesIdRoute;
   PagesSlugRoute: typeof PagesSlugRoute;
   SessionsNewRoute: typeof SessionsNewRoute;
   SettingsAccountRoute: typeof SettingsAccountRoute;
@@ -254,6 +267,13 @@ declare module '@tanstack/react-router' {
       path: '/galleries/$id';
       fullPath: '/galleries/$id';
       preLoaderRoute: typeof GalleriesIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/images/$id': {
+      id: '/images/$id';
+      path: '/images/$id';
+      fullPath: '/images/$id';
+      preLoaderRoute: typeof ImagesIdRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/pages/$slug': {
@@ -321,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   StaffRoute: StaffRoute,
   GalleriesIdRoute: GalleriesIdRoute,
+  ImagesIdRoute: ImagesIdRoute,
   PagesSlugRoute: PagesSlugRoute,
   SessionsNewRoute: SessionsNewRoute,
   SettingsAccountRoute: SettingsAccountRoute,

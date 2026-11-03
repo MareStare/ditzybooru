@@ -1,6 +1,6 @@
 /** The site's own pages (rules, staff, static pages), read through our API. */
 
-import { get } from '#/lib/api/backend/client';
+import { get, post, remove } from '#/lib/api/backend/client';
 
 /** A static page such as the privacy policy. */
 export interface StaticPage {
@@ -75,7 +75,7 @@ export interface TopicList {
   items: Array<TopicSummary>;
 }
 
-export interface TopicPost {
+export interface RenderedPost {
   id: number;
   author: string;
   /** The path segment of the author's profile; `null` for an anonymous post. */
@@ -97,7 +97,7 @@ export interface TopicPage {
   startedAt?: string;
   /** Every post of the topic, across pages. */
   postCount: number;
-  posts: Array<TopicPost>;
+  posts: Array<RenderedPost>;
 }
 
 /** How many posts the site puts on a topic page. */
@@ -119,4 +119,109 @@ export function fetchForumTopics(slug: string, page: number, perPage: number): P
 
 export function fetchTopicPage(forum: string, topic: string, page: number): Promise<TopicPage> {
   return get<TopicPage>(`/forums/${encodeURIComponent(forum)}/topics/${encodeURIComponent(topic)}`, { page });
+}
+
+interface ImageTag {
+  name: string;
+  slug?: string;
+  category?: null | string;
+  imageCount?: number;
+}
+
+export interface ImagePage {
+  id: number;
+  createdAt: string;
+  width: number;
+  height: number;
+  aspectRatio: number;
+  tagCount: number;
+  score: number;
+  upvotes: number;
+  downvotes: number;
+  faves: number;
+  commentCount: number;
+  sourceUrls: Array<string>;
+  representations: {
+    full: string;
+    large: string;
+    medium: string;
+    thumb: string;
+  };
+  tags: Array<ImageTag>;
+  mimeType: string;
+  sizeBytes: number;
+  uploader?: null | string;
+  uploaderSlug?: null | string;
+  /** Cleaned by the backend: safe to render. */
+  descriptionHtml?: null | string;
+  /** The markup the uploader wrote, where the site's rendered text is not available. */
+  description?: string;
+}
+
+export interface ImageComments {
+  total: number;
+  items: Array<RenderedPost>;
+}
+
+/** The score and counters after a vote, fave or hide. */
+export interface ImageCounters {
+  score: number;
+  upvotes: number;
+  downvotes: number;
+  faves: number;
+}
+
+/** What the visitor has done to an image. */
+export interface ImageActivity {
+  faved: boolean;
+  voted: 'up' | 'down' | null;
+  hidden: boolean;
+}
+
+/** How many comments the site puts on a page. */
+export const COMMENTS_PER_PAGE = 25;
+
+export function fetchImagePage(id: number): Promise<ImagePage> {
+  return get<ImagePage>(`/images/${id}`);
+}
+
+export function fetchImageComments(id: number, page: number): Promise<ImageComments> {
+  return get<ImageComments>(`/images/${id}/comments`, { page });
+}
+
+/** Needs the visitor's session cookie; the browser sends it. */
+export async function fetchImageActivity(id: number): Promise<ImageActivity> {
+  const { interactions } = await get<{
+    interactions: Array<{ image_id: number; interaction_type: string; value: null | string }>;
+  }>(`/images/${id}/interactions`);
+  const mine = interactions.filter(entry => entry.image_id === id);
+  const voted = mine.find(entry => entry.interaction_type === 'voted');
+
+  return {
+    faved: mine.some(entry => entry.interaction_type === 'faved'),
+    voted: voted?.value === 'up' || voted?.value === 'down' ? voted.value : null,
+    hidden: mine.some(entry => entry.interaction_type === 'hidden'),
+  };
+}
+
+export type InteractionAction = 'upvote' | 'downvote' | 'unvote' | 'fave' | 'unfave' | 'hide' | 'unhide';
+
+/** Does what a button on the image page does. Answers the counters it leaves. */
+export function interact(id: number, action: InteractionAction): Promise<ImageCounters> {
+  switch (action) {
+    case 'upvote':
+      return post<ImageCounters>(`/images/${id}/vote`, { up: true });
+    case 'downvote':
+      return post<ImageCounters>(`/images/${id}/vote`, { up: false });
+    case 'unvote':
+      return remove<ImageCounters>(`/images/${id}/vote`);
+    case 'fave':
+      return post<ImageCounters>(`/images/${id}/fave`, {});
+    case 'unfave':
+      return remove<ImageCounters>(`/images/${id}/fave`);
+    case 'hide':
+      return post<ImageCounters>(`/images/${id}/hide`, {});
+    case 'unhide':
+      return remove<ImageCounters>(`/images/${id}/hide`);
+  }
 }

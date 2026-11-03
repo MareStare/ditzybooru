@@ -2342,7 +2342,8 @@
     "phase": 3,
     "status": "verified",
     "operations": [
-      "getImage"
+      "getImage",
+      "getImageInteractions"
     ],
     "note": ""
   },
@@ -2355,9 +2356,11 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "skipped",
-    "operations": [],
-    "note": "An image's comments: listComments with q=image_id:N."
+    "status": "verified",
+    "operations": [
+      "listImageComments"
+    ],
+    "note": ""
   },
   "GET /images/:image_id/comments/:comment_id/history": {
     "controller": "PhilomenaWeb.Image.Comment.HistoryController#index",

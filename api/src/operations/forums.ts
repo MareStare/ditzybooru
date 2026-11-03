@@ -1,5 +1,6 @@
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
+import { communicationFields } from './communication.ts';
 import { postMap, under } from './maps.ts';
 import { urlAt } from './media.ts';
 
@@ -138,23 +139,7 @@ export const getTopic = defineOperation({
               text: true,
               as: 'add:1',
             },
-            posts: {
-              sel: 'article.communication',
-              many: true,
-              fields: {
-                id: { attr: 'id', as: 'lastInt' },
-                author: { sel: '.communication__body__sender-name strong', text: true },
-                authorSlug: {
-                  sel: '.communication__body__sender-name strong a',
-                  attr: 'href',
-                  as: 'lastSegment',
-                  optional: true,
-                },
-                avatarUrl: { sel: '.communication__body__avatar img', attr: 'src', as: 'url', optional: true },
-                createdAt: { sel: '.communication__options time', attr: 'datetime' },
-                bodyHtml: { sel: '.communication__body__text', html: true, as: 'sanitizedHtml' },
-              },
-            },
+            posts: { sel: 'article.communication', many: true, fields: communicationFields() },
           },
         },
       },

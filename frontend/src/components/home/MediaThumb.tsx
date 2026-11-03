@@ -30,12 +30,7 @@ export function MediaThumb({ image, src, title, hidden = false, className }: Med
   const imageClass = cn('media-thumb__image', spoilered && 'media-thumb__image--spoilered');
 
   return (
-    <Link
-      // @ts-expect-error TODO: route not built yet
-      to={`/images/${image.id}`}
-      title={title}
-      className={cn('media-thumb', className)}
-    >
+    <Link to="/images/$id" params={{ id: image.id }} title={title} className={cn('media-thumb', className)}>
       {hidden || spoilered ? (
         <div className={cn('media-overlay', spoilered && 'media-overlay--spoilered')}>
           <EyeOff size={20} />

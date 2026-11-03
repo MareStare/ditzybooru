@@ -16,20 +16,12 @@ function CommentStrip({ comment }: { comment: Comment }) {
 
   return (
     <li className="comment-row">
-      <Link
-        // @ts-expect-error TODO: route not built yet
-        to={`/images/${imageId}`}
-        aria-label={`Image ${imageId}`}
-      >
+      <Link to="/images/$id" params={{ id: imageId }} aria-label={`Image ${imageId}`}>
         <img src={comment.imageThumbTiny} alt="" loading="lazy" className="comment-row__thumb" />
       </Link>
       <div className="comment-row__text">
         <div className="comment-row__head">
-          <Link
-            // @ts-expect-error TODO: route not built yet
-            to={`/images/${imageId}#comment_${comment.id}`}
-            className="comment-row__id"
-          >
+          <Link to="/images/$id" params={{ id: imageId }} hash={`comment_${comment.id}`} className="comment-row__id">
             #{imageId}
           </Link>{' '}
           <span className="comment-row__by">by</span> <UserAttribution author={comment.author} />

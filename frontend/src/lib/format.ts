@@ -32,3 +32,17 @@ export function initials(name: string): string {
     .map(word => word.charAt(0).toUpperCase())
     .join('');
 }
+
+const BYTE_UNITS = ['B', 'KiB', 'MiB', 'GiB'];
+
+/** A file size the way the sites show it: `1.11 MiB`. */
+export function formatBytes(bytes: number): string {
+  let value = bytes;
+  let unit = 0;
+  while (value >= 1024 && unit < BYTE_UNITS.length - 1) {
+    value /= 1024;
+    unit += 1;
+  }
+
+  return `${unit === 0 ? value : value.toFixed(2)} ${BYTE_UNITS[unit]}`;
+}

@@ -1,14 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 
-import { Avatar } from '#/components/ui/Avatar';
+import { CommunityPost } from '#/components/ui/CommunityPost';
 import { Pagination } from '#/components/ui/Pagination';
-import { Panel } from '#/components/ui/Panel';
-import { Prose } from '#/components/ui/Prose';
 import { QueryState } from '#/components/ui/QueryState';
 import { RelativeTime } from '#/components/ui/RelativeTime';
 import { useLiveQuery } from '#/hooks/use-live-query';
 import { POSTS_PER_PAGE } from '#/lib/api/backend/content';
-import type { TopicPost } from '#/lib/api/backend/content';
 import { prefetchLive } from '#/lib/api/prefetch';
 import { topicPageQuery } from '#/lib/api/queries';
 import { pageSearch } from '#/lib/page-search';
@@ -20,26 +17,6 @@ export const Route = createFileRoute('/forums/$forum/topics/$topic')({
   loader: ({ context, params, deps }) =>
     prefetchLive(context, topicPageQuery(params.forum, params.topic, deps.page ?? 1)),
 });
-
-function Post({ post }: { post: TopicPost }) {
-  return (
-    <Panel id={`post_${post.id}`} className="post">
-      <div className="post__body">
-        <div className="post__sender">
-          <Avatar name={post.author} src={post.avatarUrl ?? null} />
-          <strong>{post.author}</strong>
-          <RelativeTime className="content-page__meta" dateTime={post.createdAt} />
-        </div>
-        {post.bodyHtml === undefined ? (
-          // Only the markup the author wrote, as plain text.
-          <p className="post__plain">{post.body}</p>
-        ) : (
-          <Prose html={post.bodyHtml} />
-        )}
-      </div>
-    </Panel>
-  );
-}
 
 /** `/forums/:forum/topics/:topic`: a topic and one page of its posts. */
 function TopicPage() {
@@ -85,7 +62,7 @@ function TopicPage() {
                 />
               ) : null}
               {info.posts.map(post => (
-                <Post key={post.id} post={post} />
+                <CommunityPost key={post.id} post={post} idPrefix="post_" />
               ))}
               {pageCount > 1 ? (
                 <Pagination

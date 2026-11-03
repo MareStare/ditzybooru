@@ -235,13 +235,7 @@ export function MediaBox({ className, image, src = image.representations.thumb }
           </InteractionButton>
         </span>
 
-        <Link
-          // @ts-expect-error TODO: route not built yet
-          to={`/images/${image.id}`}
-          hash="comments"
-          title="Comments"
-          className="media-action"
-        >
+        <Link to="/images/$id" params={{ id: image.id }} hash="comments" title="Comments" className="media-action">
           <CommentBubble />
           <Int className="media-action__count" value={image.commentCount} />
         </Link>
