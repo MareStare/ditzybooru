@@ -100,6 +100,7 @@ export default defineConfig({
       ? [
           nitro({
             handlers: [{ route: '/api/v1/**', handler: fileURLToPath(new URL('./api-proxy.ts', import.meta.url)) }],
+            plugins: [fileURLToPath(new URL('./nitro-plugin.ts', import.meta.url))],
           }),
         ]
       : []),
