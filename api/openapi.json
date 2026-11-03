@@ -1516,6 +1516,38 @@
         ],
         "type": "object"
       },
+      "TagSuggestion": {
+        "additionalProperties": false,
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "tag": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "label",
+          "tag"
+        ],
+        "type": "object"
+      },
+      "TagSuggestionList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/TagSuggestion"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
       "Topic": {
         "additionalProperties": false,
         "properties": {
@@ -2079,7 +2111,8 @@
         "x-philomena": {
           "auth": "none",
           "routes": [
-            "GET /api/v1/json/filters/:id"
+            "GET /api/v1/json/filters/:id",
+            "GET /filters/:id"
           ],
           "strategies": [
             {
@@ -3746,7 +3779,8 @@
         "x-philomena": {
           "auth": "none",
           "routes": [
-            "GET /api/v1/json/profiles/:id"
+            "GET /api/v1/json/profiles/:id",
+            "GET /profiles/:id"
           ],
           "strategies": [
             {
@@ -4353,6 +4387,83 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/tags/{slug}"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/tags/suggest": {
+      "get": {
+        "operationId": "suggestTags",
+        "parameters": [
+          {
+            "description": "The start of a tag name. Upstream answers nothing for very short terms.",
+            "in": "query",
+            "name": "term",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagSuggestionList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Tag suggestions for the start of a tag name, for the search box.",
+        "tags": [
+          "tags"
+        ],
+        "x-examples": {
+          "term": "saf"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "cacheSeconds": 300,
+          "routes": [
+            "GET /autocomplete/tags"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "",
+                  "map": {
+                    "label": "/label",
+                    "tag": "/value"
+                  }
+                }
+              },
+              "request": {
+                "method": "GET",
+                "path": "/autocomplete/tags",
+                "query": {
+                  "term": "{term}"
+                }
               }
             }
           ]

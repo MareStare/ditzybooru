@@ -35,7 +35,7 @@ export const getFilter = defineOperation({
   response: s.ref('Filter'),
   examples: { id: 1 },
   philomena: {
-    routes: ['GET /api/v1/json/filters/:id'],
+    routes: ['GET /api/v1/json/filters/:id', 'GET /filters/:id'],
     auth: 'none',
     strategies: [
       {
@@ -123,7 +123,7 @@ export const getProfile = defineOperation({
   response: s.ref('Profile'),
   examples: { id: 4 },
   philomena: {
-    routes: ['GET /api/v1/json/profiles/:id'],
+    routes: ['GET /api/v1/json/profiles/:id', 'GET /profiles/:id'],
     auth: 'none',
     strategies: [
       {
@@ -273,6 +273,40 @@ export const getGallery = defineOperation({
           imageTotal: { join: 'images', at: '/total' },
           images: { join: 'images', map: mediaFields() },
         },
+      },
+    ],
+  },
+});
+
+export const suggestTags = defineOperation({
+  operationId: 'suggestTags',
+  path: '/tags/suggest',
+  method: 'get',
+  summary: 'Tag suggestions for the start of a tag name, for the search box.',
+  tags: ['tags'],
+  params: [
+    {
+      name: 'term',
+      in: 'query',
+      schema: s.string(),
+      required: true,
+      description: 'The start of a tag name. Upstream answers nothing for very short terms.',
+    },
+  ],
+  response: s.ref('TagSuggestionList'),
+  examples: { term: 'saf' },
+  // Typing triggers it, so keep it short-lived but shared between visitors.
+  philomena: {
+    routes: ['GET /autocomplete/tags'],
+    auth: 'none',
+    cacheSeconds: 300,
+    strategies: [
+      {
+        kind: 'json',
+        // The page-level route, not under `/api`: Derpibooru's sits behind the bot challenge.
+        flavors: ['philomena', 'furbooru'],
+        request: { method: 'GET', path: '/autocomplete/tags', query: { term: '{term}' } },
+        map: { items: { from: '', map: { label: '/label', tag: '/value' } } },
       },
     ],
   },

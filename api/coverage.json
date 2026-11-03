@@ -783,9 +783,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "The home page is assembled from searchImages, getFeatured, listComments and getForumActivity."
   },
   "GET /:forum_id/:id": {
     "controller": "PhilomenaWeb.TopicController#show",
@@ -796,9 +796,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "Short URL of a topic: getTopic and listTopicPosts serve it."
   },
   "GET /:forum_id/:id/:page": {
     "controller": "PhilomenaWeb.TopicController#show",
@@ -809,9 +809,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "A page of a topic: listTopicPosts with page."
   },
   "GET /:forum_id/:id/post/:post_id": {
     "controller": "PhilomenaWeb.TopicController#show",
@@ -822,9 +822,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "One post in a topic: getPost serves it."
   },
   "GET /:id": {
     "controller": "PhilomenaWeb.ImageController#show",
@@ -835,9 +835,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "Short URL of the image page: getImage serves it."
   },
   "GET /activity": {
     "controller": "PhilomenaWeb.ActivityController#index",
@@ -848,9 +848,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "Same page as the home page: see GET /."
   },
   "GET /admin/adverts": {
     "controller": "PhilomenaWeb.Admin.AdvertController#index",
@@ -1736,8 +1736,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "suggestTags"
+    ],
     "note": ""
   },
   "GET /avatar/edit": {
@@ -2040,8 +2042,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getFilter"
+    ],
     "note": ""
   },
   "GET /filters/:id/edit": {
@@ -2133,9 +2137,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "The topic page: getTopic for the topic, listTopicPosts for its posts."
   },
   "GET /forums/:forum_id/topics/:topic_id/poll/edit": {
     "controller": "PhilomenaWeb.Topic.PollController#edit",
@@ -2306,9 +2310,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "The all-images listing: searchImages with q=*."
   },
   "GET /images/:id": {
     "controller": "PhilomenaWeb.ImageController#show",
@@ -2334,9 +2338,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "An image's comments: listComments with q=image_id:N."
   },
   "GET /images/:image_id/comments/:comment_id/history": {
     "controller": "PhilomenaWeb.Image.Comment.HistoryController#index",
@@ -2373,9 +2377,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "One comment: getComment serves it."
   },
   "GET /images/:image_id/comments/:id/edit": {
     "controller": "PhilomenaWeb.Image.CommentController#edit",
@@ -2529,9 +2533,9 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
+    "status": "skipped",
     "operations": [],
-    "note": ""
+    "note": "A redirect to a random image. searchImages with sf=random gives the same image without a redirect."
   },
   "GET /ip_profiles/:id": {
     "controller": "PhilomenaWeb.IpProfileController#show",
@@ -2741,8 +2745,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getProfile"
+    ],
     "note": ""
   },
   "GET /profiles/:profile_id/aliases": {

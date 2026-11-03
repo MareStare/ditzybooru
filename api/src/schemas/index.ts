@@ -265,6 +265,13 @@ const StaticPage = s.object({
   bodyHtml: s.string(),
 });
 
+const TagSuggestion = s.object({
+  /** What the suggestion list shows, with the image count: `safe (6)`. */
+  label: s.string(),
+  /** The tag name to put in the query. */
+  tag: s.string(),
+});
+
 const Channel = s.object({
   id: s.int(),
   title: s.string(),
@@ -310,6 +317,7 @@ export const schemas = {
   StaffMember,
   StaffGroup,
   StaticPage,
+  TagSuggestion,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
@@ -322,6 +330,7 @@ export const schemas = {
   RuleList: s.object({ updatedAt: s.dateTime(), items: s.array(s.ref('Rule')) }),
   StaffPage: s.object({ groups: s.array(s.ref('StaffGroup')) }),
   ForumList: s.object({ items: s.array(s.ref('Forum')) }),
+  TagSuggestionList: s.object({ items: s.array(s.ref('TagSuggestion')) }),
   ChannelList: s.object({ items: s.array(s.ref('Channel')) }),
   FilterList: s.object({ items: s.array(s.ref('Filter')) }),
   Error: ErrorBody,
