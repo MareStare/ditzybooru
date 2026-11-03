@@ -185,6 +185,82 @@
         ],
         "type": "object"
       },
+      "Embed": {
+        "additionalProperties": false,
+        "properties": {
+          "authorName": {
+            "type": "string"
+          },
+          "authorUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          },
+          "commentCount": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "imageId": {
+            "type": "integer"
+          },
+          "imageUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          },
+          "providerName": {
+            "type": "string"
+          },
+          "providerUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          },
+          "score": {
+            "type": "integer"
+          },
+          "tags": {
+            "items": {
+              "type": "string"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "thumbnailHeight": {
+            "type": "integer"
+          },
+          "thumbnailUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          },
+          "thumbnailWidth": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "width": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "title",
+          "imageId",
+          "imageUrl",
+          "width",
+          "height",
+          "thumbnailUrl",
+          "thumbnailWidth",
+          "thumbnailHeight",
+          "authorName",
+          "authorUrl",
+          "providerName",
+          "providerUrl",
+          "score",
+          "commentCount",
+          "tags"
+        ],
+        "type": "object"
+      },
       "Error": {
         "additionalProperties": false,
         "properties": {
@@ -2615,6 +2691,98 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/images/featured"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/oembed": {
+      "get": {
+        "operationId": "getEmbed",
+        "parameters": [
+          {
+            "description": "An image page URL such as `https://example.org/images/1`. Only its path matters.",
+            "in": "query",
+            "name": "url",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Embed"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The embed card of an image page or image file URL, for link previews.",
+        "tags": [
+          "images"
+        ],
+        "x-examples": {
+          "url": "https://example.org/images/1"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/oembed"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "authorName": "/author_name",
+                "authorUrl": {
+                  "as": "url",
+                  "from": "/author_url"
+                },
+                "commentCount": "/derpibooru_comments",
+                "height": "/height",
+                "imageId": "/derpibooru_id",
+                "imageUrl": {
+                  "as": "url",
+                  "from": "/url"
+                },
+                "providerName": "/provider_name",
+                "providerUrl": {
+                  "as": "url",
+                  "from": "/provider_url"
+                },
+                "score": "/derpibooru_score",
+                "tags": "/derpibooru_tags",
+                "thumbnailHeight": "/thumbnail_height",
+                "thumbnailUrl": {
+                  "as": "url",
+                  "from": "/thumbnail_url"
+                },
+                "thumbnailWidth": "/thumbnail_width",
+                "title": "/title",
+                "width": "/width"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/oembed",
+                "query": {
+                  "url": "{url}"
+                }
               }
             }
           ]

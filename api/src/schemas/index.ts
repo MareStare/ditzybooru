@@ -200,6 +200,25 @@ const Profile = s.object({
   ),
 });
 
+/** The embed card of an image page, as oEmbed describes it. */
+const Embed = s.object({
+  title: s.string(),
+  imageId: s.int(),
+  imageUrl: s.uri(),
+  width: s.int(),
+  height: s.int(),
+  thumbnailUrl: s.uri(),
+  thumbnailWidth: s.int(),
+  thumbnailHeight: s.int(),
+  authorName: s.string(),
+  authorUrl: s.uri(),
+  providerName: s.string(),
+  providerUrl: s.uri(),
+  score: s.int(),
+  commentCount: s.int(),
+  tags: s.array(s.string()),
+});
+
 const ForumTopic = s.object({
   slug: s.string(),
   title: s.string(),
@@ -227,6 +246,7 @@ export const schemas = {
   Forum,
   Topic,
   Profile,
+  Embed,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
   MediaResults: results('Media'),

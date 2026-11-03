@@ -160,3 +160,49 @@ export const getProfile = defineOperation({
     ],
   },
 });
+
+export const getEmbed = defineOperation({
+  operationId: 'getEmbed',
+  path: '/oembed',
+  method: 'get',
+  summary: 'The embed card of an image page or image file URL, for link previews.',
+  tags: ['images'],
+  params: [
+    {
+      name: 'url',
+      in: 'query',
+      schema: s.string(),
+      required: true,
+      description: 'An image page URL such as `https://example.org/images/1`. Only its path matters.',
+    },
+  ],
+  response: s.ref('Embed'),
+  examples: { url: 'https://example.org/images/1' },
+  philomena: {
+    routes: ['GET /api/v1/json/oembed'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'json',
+        request: { method: 'GET', path: '/api/v1/json/oembed', query: { url: '{url}' } },
+        map: {
+          title: '/title',
+          imageId: '/derpibooru_id',
+          imageUrl: urlAt('/url'),
+          width: '/width',
+          height: '/height',
+          thumbnailUrl: urlAt('/thumbnail_url'),
+          thumbnailWidth: '/thumbnail_width',
+          thumbnailHeight: '/thumbnail_height',
+          authorName: '/author_name',
+          authorUrl: urlAt('/author_url'),
+          providerName: '/provider_name',
+          providerUrl: urlAt('/provider_url'),
+          score: '/derpibooru_score',
+          commentCount: '/derpibooru_comments',
+          tags: '/derpibooru_tags',
+        },
+      },
+    ],
+  },
+});
