@@ -327,7 +327,9 @@ async fn send(
             let retry_after = throttle.block(ctx.origin, BLOCKED_BACKOFF);
             return Err(fail(anyhow::Error::new(RateLimited { retry_after })));
         }
-        return Err(fail(anyhow::Error::new(UpstreamStatus(status))));
+        // The page says what went wrong; the visitor never sees it, the log does.
+        return Err(fail(anyhow::Error::new(UpstreamStatus(status)))
+            .context(format!("the page says: {}", html::snippet(&body, 300))));
     }
     // A submission answers with a redirect; the page it leads to is read next.
     if form.is_some() && status.is_redirection() {

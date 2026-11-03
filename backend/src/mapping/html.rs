@@ -64,6 +64,19 @@ fn following<'a>(scope: ElementRef<'a>, selector: &Selector) -> Option<ElementRe
         .find(|sibling| selector.matches(sibling))
 }
 
+/// The text of an HTML page on one line, cut to `limit` characters: enough to
+/// tell what an error page says, for a log.
+pub fn snippet(body: &str, limit: usize) -> String {
+    let document = Html::parse_document(body);
+    let text = document.root_element().text().collect::<Vec<_>>().join(" ");
+    text.split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
+        .chars()
+        .take(limit)
+        .collect()
+}
+
 /// The attribute `attr` of the first element matching `css`, if there is one.
 pub fn attribute(body: &str, css: &str, attr: &str) -> Result<Option<String>> {
     let document = Html::parse_document(body);
