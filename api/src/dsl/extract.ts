@@ -1,6 +1,15 @@
 /** Closed set of named value transforms; implemented once, in the Rust engine. */
 export type Transform =
-  'int' | 'float' | 'bool' | 'date' | 'url' | 'slug' | 'relativeTime' | `split:${string}` | `join:${string}`;
+  | 'int'
+  | 'lastInt'
+  | 'float'
+  | 'bool'
+  | 'date'
+  | 'url'
+  | 'slug'
+  | 'relativeTime'
+  | `split:${string}`
+  | `join:${string}`;
 
 /** HTML field extractor. `sel` is CSS relative to the parent; exactly one reader applies. */
 export interface FieldSpec {

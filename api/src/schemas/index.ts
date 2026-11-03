@@ -219,6 +219,18 @@ const Embed = s.object({
   tags: s.array(s.string()),
 });
 
+const Channel = s.object({
+  id: s.int(),
+  title: s.string(),
+  live: s.bool(),
+  /** Only known while the stream is live. */
+  viewers: s.nullable(s.int()),
+  nsfw: s.bool(),
+  thumbnailUrl: s.uri(),
+  /** The artist's tag name, if the channel has one. */
+  artistTag: s.nullable(s.string()),
+});
+
 const ForumTopic = s.object({
   slug: s.string(),
   title: s.string(),
@@ -247,6 +259,7 @@ export const schemas = {
   Topic,
   Profile,
   Embed,
+  Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
   MediaResults: results('Media'),
@@ -255,6 +268,7 @@ export const schemas = {
   PostResults: results('Post'),
   GalleryResults: results('Gallery'),
   FilterResults: results('Filter'),
+  ChannelList: s.object({ items: s.array(s.ref('Channel')) }),
   FilterList: s.object({ items: s.array(s.ref('Filter')) }),
   Error: ErrorBody,
 };

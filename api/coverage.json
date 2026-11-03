@@ -1759,8 +1759,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listChannels"
+    ],
     "note": ""
   },
   "GET /channels/:id": {

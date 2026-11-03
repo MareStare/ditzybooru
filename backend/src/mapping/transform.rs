@@ -53,6 +53,7 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
         "date" => Ok(Value::String(text)),
         "url" => Ok(Value::String(resolve_url(origin, &text))),
         "slug" => Ok(Value::String(slugify(&text))),
+        "lastInt" => Ok(last_int(&text).map_or(Value::Null, Value::from)),
         other => bail!("unsupported transform {other:?}"),
     }
 }
@@ -83,6 +84,14 @@ fn resolve_url(origin: &str, url: &str) -> String {
     }
 }
 
+/// The last run of digits in `text` ("/channels/42", "LIVE NOW 12 viewers"),
+/// or `None` when there is none.
+fn last_int(text: &str) -> Option<i64> {
+    text.split(|c: char| !c.is_ascii_digit())
+        .rfind(|run| !run.is_empty())
+        .and_then(|run| run.parse().ok())
+}
+
 fn slugify(text: &str) -> String {
     let mut slug = String::new();
     for c in text.chars().flat_map(char::to_lowercase) {
@@ -98,6 +107,14 @@ fn slugify(text: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn last_int_takes_the_final_number() {
+        let at = |text: &str| apply("lastInt", &Value::String(text.to_owned()), "").unwrap();
+        assert_eq!(at("/channels/42"), 42);
+        assert_eq!(at("LIVE NOW 12 viewers"), 12);
+        assert_eq!(at("OFF AIR"), Value::Null);
+    }
 
     #[test]
     fn urls_resolve_against_the_origin() {

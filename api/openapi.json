@@ -1,6 +1,73 @@
 {
   "components": {
     "schemas": {
+      "Channel": {
+        "additionalProperties": false,
+        "properties": {
+          "artistTag": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "live": {
+            "type": "boolean"
+          },
+          "nsfw": {
+            "type": "boolean"
+          },
+          "thumbnailUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "viewers": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "live",
+          "viewers",
+          "nsfw",
+          "thumbnailUrl",
+          "artistTag"
+        ],
+        "type": "object"
+      },
+      "ChannelList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Channel"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
       "Comment": {
         "additionalProperties": false,
         "properties": {
@@ -1288,6 +1355,114 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/channels": {
+      "get": {
+        "operationId": "listChannels",
+        "parameters": [
+          {
+            "description": "Search by channel name.",
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChannelList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The livestreams page: tracked streaming channels, live ones flagged.",
+        "tags": [
+          "channels"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /channels"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/channels",
+                "query": {
+                  "cq": "{q}"
+                }
+              },
+              "select": {
+                "fields": {
+                  "items": {
+                    "fields": {
+                      "artistTag": {
+                        "optional": true,
+                        "sel": "a[href^=\"/tags/\"]",
+                        "text": true
+                      },
+                      "id": {
+                        "as": "lastInt",
+                        "attr": "href",
+                        "sel": "a.media-box__header--link"
+                      },
+                      "live": {
+                        "exists": true,
+                        "sel": ".label--success"
+                      },
+                      "nsfw": {
+                        "exists": true,
+                        "sel": ".media-box__overlay"
+                      },
+                      "thumbnailUrl": {
+                        "as": "url",
+                        "attr": "src",
+                        "sel": ".media-box__content--channel img"
+                      },
+                      "title": {
+                        "attr": "title",
+                        "sel": "a.media-box__header--link"
+                      },
+                      "viewers": {
+                        "as": "lastInt",
+                        "sel": ".media-box__header--channel:has(.label)",
+                        "text": true
+                      }
+                    },
+                    "many": true,
+                    "sel": ".media-list .media-box"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/channel/index.html.slime"
+            }
+          ]
+        }
+      }
+    },
     "/comments": {
       "get": {
         "operationId": "listComments",
