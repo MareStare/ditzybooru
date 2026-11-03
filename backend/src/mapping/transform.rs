@@ -26,6 +26,12 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
             .with_context(|| format!("bad amount in {name:?}"))?;
         return Ok(last_int(&text).map_or(Value::Null, |n| Value::from(n + amount)));
     }
+    // `trimSuffix:TEXT`: the text without TEXT at its end ("Pleb's profile" -> "Pleb").
+    if let Some(suffix) = name.strip_prefix("trimSuffix:") {
+        return Ok(Value::String(
+            text.strip_suffix(suffix).unwrap_or(&text).trim().to_owned(),
+        ));
+    }
     if let Some(sep) = name.strip_prefix("split:") {
         let parts = text
             .split(sep)
@@ -180,6 +186,15 @@ mod tests {
         assert_eq!(at("1 replies"), 2);
         assert_eq!(at("0 replies"), 1);
         assert_eq!(at("no number"), Value::Null);
+    }
+
+    #[test]
+    fn trim_suffix_drops_the_end_when_it_is_there() {
+        let at = |text: &str| {
+            apply("trimSuffix:'s profile", &Value::String(text.to_owned()), "").unwrap()
+        };
+        assert_eq!(at("Pleb's profile"), "Pleb");
+        assert_eq!(at("Pleb"), "Pleb");
     }
 
     #[test]

@@ -123,3 +123,44 @@ export const getStaff = defineOperation({
     ],
   },
 });
+
+/** A user's profile page, by the slug in its path. */
+export const getProfilePage = defineOperation({
+  operationId: 'getProfilePage',
+  path: '/profiles/{slug}',
+  method: 'get',
+  summary: "The profile page: a user's name, avatar, about text and recent activity.",
+  tags: ['profiles'],
+  params: [{ name: 'slug', in: 'path', schema: s.string(), required: true }],
+  response: s.ref('ProfilePage'),
+  examples: { slug: 'Pleb' },
+  philomena: {
+    routes: ['GET /profiles/:id'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'html',
+        flavors: ['philomena', 'furbooru'],
+        request: { method: 'GET', path: '/profiles/{slug}' },
+        template: 'lib/philomena_web/templates/profile/show.html.slime',
+        select: {
+          fields: {
+            id: { sel: 'a[href^="/search?q=uploader_id"]', attr: 'href', as: 'lastInt' },
+            name: { sel: '.profile-top__name-header', text: true, as: "trimSuffix:'s profile" },
+            createdAt: { sel: '.profile-top__name-and-links time', attr: 'datetime' },
+            avatarUrl: { sel: '.profile-top__avatar img', attr: 'src', as: 'url', optional: true },
+            aboutHtml: { sel: '.profile-about', html: true, as: 'sanitizedHtml', optional: true },
+            stats: {
+              sel: '.table--stats tr',
+              many: true,
+              fields: {
+                label: { sel: '.table--stats__parameter', text: true },
+                value: { sel: '.table--stats__value', text: true, as: 'int' },
+              },
+            },
+          },
+        },
+      },
+    ],
+  },
+});

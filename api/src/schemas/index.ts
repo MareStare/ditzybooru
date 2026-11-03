@@ -126,6 +126,17 @@ const Tag = s.object({
   spoilerImageUrl: s.nullable(s.string()),
 });
 
+const ProfilePage = s.object({
+  id: s.int(),
+  name: s.string(),
+  createdAt: s.dateTime(),
+  avatarUrl: s.nullable(s.uri()),
+  /** What the user wrote about themselves; cleaned, so safe to render. */
+  aboutHtml: s.nullable(s.string()),
+  /** The last 90 days, as the site counts them. */
+  stats: s.array(s.object({ label: s.string(), value: s.int() })),
+});
+
 const commentFields = {
   id: s.int(),
   imageId: s.int(),
@@ -404,6 +415,7 @@ export const schemas = {
   Profile,
   Embed,
   Rule,
+  ProfilePage,
   StaffMember,
   StaffGroup,
   StaticPage,

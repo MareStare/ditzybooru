@@ -11,6 +11,7 @@ export type Transform =
   | 'url'
   | 'slug'
   | 'relativeTime'
+  | `trimSuffix:${string}`
   | `split:${string}`
   | `join:${string}`;
 

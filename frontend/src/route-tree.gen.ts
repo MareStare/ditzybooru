@@ -22,6 +22,7 @@ import { Route as GalleriesIndexRouteImport } from './routes/galleries/index';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
 import { Route as ImagesIdRouteImport } from './routes/images/$id';
 import { Route as PagesSlugRouteImport } from './routes/pages/$slug';
+import { Route as ProfilesSlugRouteImport } from './routes/profiles/$slug';
 import { Route as SessionsNewRouteImport } from './routes/sessions/new';
 import { Route as SettingsAccountRouteImport } from './routes/settings/account';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
@@ -96,6 +97,11 @@ const PagesSlugRoute = PagesSlugRouteImport.update({
   path: '/pages/$slug',
   getParentRoute: () => rootRouteImport,
 } as any);
+const ProfilesSlugRoute = ProfilesSlugRouteImport.update({
+  id: '/profiles/$slug',
+  path: '/profiles/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const SessionsNewRoute = SessionsNewRouteImport.update({
   id: '/sessions/new',
   path: '/sessions/new',
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
+  '/profiles/$slug': typeof ProfilesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
+  '/profiles/$slug': typeof ProfilesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
@@ -194,6 +202,7 @@ export interface FileRoutesById {
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
+  '/profiles/$slug': typeof ProfilesSlugRoute;
   '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
@@ -219,6 +228,7 @@ export interface FileRouteTypes {
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
+    | '/profiles/$slug'
     | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
@@ -242,6 +252,7 @@ export interface FileRouteTypes {
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
+    | '/profiles/$slug'
     | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
@@ -265,6 +276,7 @@ export interface FileRouteTypes {
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
+    | '/profiles/$slug'
     | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
@@ -289,6 +301,7 @@ export interface RootRouteChildren {
   GalleriesIdRoute: typeof GalleriesIdRoute;
   ImagesIdRoute: typeof ImagesIdRoute;
   PagesSlugRoute: typeof PagesSlugRoute;
+  ProfilesSlugRoute: typeof ProfilesSlugRoute;
   SessionsNewRoute: typeof SessionsNewRoute;
   SettingsAccountRoute: typeof SettingsAccountRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
@@ -396,6 +409,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PagesSlugRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/profiles/$slug': {
+      id: '/profiles/$slug';
+      path: '/profiles/$slug';
+      fullPath: '/profiles/$slug';
+      preLoaderRoute: typeof ProfilesSlugRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/sessions/new': {
       id: '/sessions/new';
       path: '/sessions/new';
@@ -465,6 +485,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleriesIdRoute: GalleriesIdRoute,
   ImagesIdRoute: ImagesIdRoute,
   PagesSlugRoute: PagesSlugRoute,
+  ProfilesSlugRoute: ProfilesSlugRoute,
   SessionsNewRoute: SessionsNewRoute,
   SettingsAccountRoute: SettingsAccountRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,

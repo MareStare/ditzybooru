@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, Link } from '@tanstack/react-router';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Panel } from '#/components/ui/Panel';
@@ -28,7 +28,14 @@ function Staff() {
                 {group.members.map(member => (
                   <Panel key={member.name} className="staff-member">
                     <Avatar name={member.name} src={member.avatarUrl} />
-                    <strong>{member.name}</strong>
+                    <strong>
+                      <Link
+                        to="/profiles/$slug"
+                        params={{ slug: decodeURIComponent(member.profileUrl.split('/').pop() ?? member.name) }}
+                      >
+                        {member.name}
+                      </Link>
+                    </strong>
                     <p className="staff-member__description">{member.description}</p>
                   </Panel>
                 ))}

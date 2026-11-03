@@ -6,11 +6,7 @@ import type { Attribution } from '#/lib/types';
 export function UserAttribution({ author }: { author: Attribution }) {
   if (author.user) {
     return (
-      <Link
-        // @ts-expect-error TODO: route not built yet
-        to={`/profiles/${author.user.slug}`}
-        className="user-attribution"
-      >
+      <Link to="/profiles/$slug" params={{ slug: author.user.slug }} className="user-attribution">
         {author.user.name}
       </Link>
     );

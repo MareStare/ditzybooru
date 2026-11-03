@@ -138,8 +138,8 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               ) : (
                 <>
                   <Link
-                    // @ts-expect-error TODO: route not built yet
-                    to={`/profiles/${user.slug}`}
+                    to="/profiles/$slug"
+                    params={{ slug: user.slug }}
                     className="drawer__link drawer__link--section"
                     onClick={onClose}
                   >

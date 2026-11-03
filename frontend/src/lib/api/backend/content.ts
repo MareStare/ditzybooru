@@ -335,3 +335,18 @@ export async function fetchNeighbour(id: number, query: string, rel: Neighbour):
 
   return items[0]?.id ?? null;
 }
+
+export interface ProfilePage {
+  id: number;
+  name: string;
+  createdAt: string;
+  avatarUrl: null | string;
+  /** Cleaned by the backend: safe to render. */
+  aboutHtml: null | string;
+  /** The last 90 days, as the site counts them. */
+  stats: Array<{ label: string; value: number }>;
+}
+
+export function fetchProfile(slug: string): Promise<ProfilePage> {
+  return get<ProfilePage>(`/profiles/${encodeURIComponent(slug)}`);
+}

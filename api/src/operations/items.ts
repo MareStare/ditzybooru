@@ -115,7 +115,7 @@ export const getTag = defineOperation({
 
 export const getProfile = defineOperation({
   operationId: 'getProfile',
-  path: '/profiles/{id}',
+  path: '/users/{id}',
   method: 'get',
   summary: 'The profile page: a user with counters, linked tags and awards.',
   tags: ['profiles'],

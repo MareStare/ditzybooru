@@ -2767,7 +2767,8 @@
     "phase": 3,
     "status": "verified",
     "operations": [
-      "getProfile"
+      "getProfile",
+      "getProfilePage"
     ],
     "note": ""
   },

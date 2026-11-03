@@ -152,3 +152,25 @@
   align-items: center;
   gap: var(--space-2);
 }
+
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.profile-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.profile-stats dt {
+  color: var(--text-muted, inherit);
+}
+
+.profile-stats dd {
+  margin: 0;
+  font-weight: 600;
+}

@@ -1375,6 +1375,71 @@
         ],
         "type": "object"
       },
+      "ProfilePage": {
+        "additionalProperties": false,
+        "properties": {
+          "aboutHtml": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "stats": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "label": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "label",
+                "value"
+              ],
+              "type": "object"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "createdAt",
+          "avatarUrl",
+          "aboutHtml",
+          "stats"
+        ],
+        "type": "object"
+      },
       "RenderedPost": {
         "additionalProperties": false,
         "properties": {
@@ -5143,16 +5208,16 @@
         }
       }
     },
-    "/profiles/{id}": {
+    "/profiles/{slug}": {
       "get": {
-        "operationId": "getProfile",
+        "operationId": "getProfilePage",
         "parameters": [
           {
             "in": "path",
-            "name": "id",
+            "name": "slug",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -5161,7 +5226,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Profile"
+                  "$ref": "#/components/schemas/ProfilePage"
                 }
               }
             },
@@ -5178,63 +5243,75 @@
             "description": "Error"
           }
         },
-        "summary": "The profile page: a user with counters, linked tags and awards.",
+        "summary": "The profile page: a user's name, avatar, about text and recent activity.",
         "tags": [
           "profiles"
         ],
         "x-examples": {
-          "id": 4
+          "slug": "Pleb"
         },
         "x-philomena": {
           "auth": "none",
           "routes": [
-            "GET /api/v1/json/profiles/:id",
             "GET /profiles/:id"
           ],
           "strategies": [
             {
-              "kind": "json",
-              "map": {
-                "avatarUrl": {
-                  "as": "url",
-                  "from": "/user/avatar_url"
-                },
-                "awards": {
-                  "from": "/user/awards",
-                  "map": {
-                    "awardedOn": "/awarded_on",
-                    "id": "/id",
-                    "imageUrl": {
-                      "as": "url",
-                      "from": "/image_url"
-                    },
-                    "label": "/label",
-                    "title": "/title"
-                  }
-                },
-                "commentsCount": "/user/comments_count",
-                "createdAt": "/user/created_at",
-                "description": "/user/description",
-                "id": "/user/id",
-                "links": {
-                  "from": "/user/links",
-                  "map": {
-                    "createdAt": "/created_at",
-                    "state": "/state",
-                    "tagId": "/tag_id"
-                  }
-                },
-                "name": "/user/name",
-                "postsCount": "/user/posts_count",
-                "role": "/user/role",
-                "slug": "/user/slug",
-                "topicsCount": "/user/topics_count",
-                "uploadsCount": "/user/uploads_count"
-              },
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
               "request": {
                 "method": "GET",
-                "path": "/api/v1/json/profiles/{id}"
-              }
+                "path": "/profiles/{slug}"
+              },
+              "select": {
+                "fields": {
+                  "aboutHtml": {
+                    "as": "sanitizedHtml",
+                    "html": true,
+                    "optional": true,
+                    "sel": ".profile-about"
+                  },
+                  "avatarUrl": {
+                    "as": "url",
+                    "attr": "src",
+                    "optional": true,
+                    "sel": ".profile-top__avatar img"
+                  },
+                  "createdAt": {
+                    "attr": "datetime",
+                    "sel": ".profile-top__name-and-links time"
+                  },
+                  "id": {
+                    "as": "lastInt",
+                    "attr": "href",
+                    "sel": "a[href^=\"/search?q=uploader_id\"]"
+                  },
+                  "name": {
+                    "as": "trimSuffix:'s profile",
+                    "sel": ".profile-top__name-header",
+                    "text": true
+                  },
+                  "stats": {
+                    "fields": {
+                      "label": {
+                        "sel": ".table--stats__parameter",
+                        "text": true
+                      },
+                      "value": {
+                        "as": "int",
+                        "sel": ".table--stats__value",
+                        "text": true
+                      }
+                    },
+                    "many": true,
+                    "sel": ".table--stats tr"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/profile/show.html.slime"
             }
           ]
         }
@@ -6398,6 +6475,103 @@
                 "query": {
                   "term": "{term}"
                 }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "operationId": "getProfile",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Profile"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The profile page: a user with counters, linked tags and awards.",
+        "tags": [
+          "profiles"
+        ],
+        "x-examples": {
+          "id": 4
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/profiles/:id",
+            "GET /profiles/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "avatarUrl": {
+                  "as": "url",
+                  "from": "/user/avatar_url"
+                },
+                "awards": {
+                  "from": "/user/awards",
+                  "map": {
+                    "awardedOn": "/awarded_on",
+                    "id": "/id",
+                    "imageUrl": {
+                      "as": "url",
+                      "from": "/image_url"
+                    },
+                    "label": "/label",
+                    "title": "/title"
+                  }
+                },
+                "commentsCount": "/user/comments_count",
+                "createdAt": "/user/created_at",
+                "description": "/user/description",
+                "id": "/user/id",
+                "links": {
+                  "from": "/user/links",
+                  "map": {
+                    "createdAt": "/created_at",
+                    "state": "/state",
+                    "tagId": "/tag_id"
+                  }
+                },
+                "name": "/user/name",
+                "postsCount": "/user/posts_count",
+                "role": "/user/role",
+                "slug": "/user/slug",
+                "topicsCount": "/user/topics_count",
+                "uploadsCount": "/user/uploads_count"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/profiles/{id}"
               }
             }
           ]

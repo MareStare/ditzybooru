@@ -14,6 +14,7 @@ import {
   fetchFilter,
   fetchGalleries,
   fetchNeighbour,
+  fetchProfile,
   fetchForum,
   fetchSystemFilters,
   fetchForums,
@@ -145,6 +146,10 @@ export function neighbourQuery(id: number, query: string, rel: Neighbour) {
     queryKey: ['content', 'image', id, 'neighbour', query, rel],
     queryFn: () => fetchNeighbour(id, query, rel),
   });
+}
+
+export function profileQuery(slug: string) {
+  return queryOptions({ queryKey: ['content', 'profile', slug], queryFn: () => fetchProfile(slug) });
 }
 
 export function forumsQuery() {
