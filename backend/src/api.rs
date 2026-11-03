@@ -38,6 +38,10 @@ pub fn router() -> Result<Router> {
         document: Document::parse(OPENAPI_JSON)?,
         client: reqwest::Client::builder()
             .user_agent("ditzybooru")
+            // An upstream that stops answering must not hold a visitor's
+            // request open until Cloudflare gives up on it.
+            .connect_timeout(Duration::from_secs(5))
+            .timeout(Duration::from_secs(25))
             // Philomena redirects missing or forbidden pages to the home page
             // or the login form; following it would scrape the wrong page.
             .redirect(reqwest::redirect::Policy::none())
@@ -245,6 +249,17 @@ async fn compute_outcome(
                     status: StatusCode::UNAUTHORIZED,
                     code: "api_key_invalid",
                     message: "the site does not accept this API key".into(),
+                    retry_after: None,
+                });
+            }
+            if err
+                .downcast_ref::<reqwest::Error>()
+                .is_some_and(reqwest::Error::is_timeout)
+            {
+                return Err(Failure {
+                    status: StatusCode::INTERNAL_SERVER_ERROR,
+                    code: "upstream_timeout",
+                    message: "the site took too long to answer".into(),
                     retry_after: None,
                 });
             }

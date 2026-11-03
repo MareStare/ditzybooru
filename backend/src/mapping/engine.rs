@@ -253,23 +253,15 @@ async fn get_text(
     }
 }
 
-/// One upstream request: a `GET`, or a form `POST` when `form` is given (names
-/// raw, values already percent-encoded). In the second case a redirect is the
-/// normal answer and its body is not read.
-async fn send(
+/// The request for `url`: the key (never in logs) and cookies added, and the
+/// form body when there is one.
+fn build_call(
     client: &reqwest::Client,
-    throttle: &Throttle,
     ctx: Context<'_>,
-    path: &str,
+    url: &str,
     form: Option<&[(String, String)]>,
-    redirect_ok: bool,
-) -> Result<Sent> {
-    let verb = if form.is_some() { "POST" } else { "GET" };
-    // Without the key: this is what errors and logs show.
-    let url = format!("{}{}", ctx.origin, path);
-    // Held until the body is read, so the cap covers the whole transfer.
-    let _slot = throttle.acquire(ctx.origin, path).await?;
-    let mut target = reqwest::Url::parse(&url).with_context(|| format!("{verb} {url}"))?;
+) -> Result<reqwest::RequestBuilder> {
+    let mut target = reqwest::Url::parse(url).with_context(|| format!("bad url {url}"))?;
     if let Some(key) = ctx.api_key {
         target.query_pairs_mut().append_pair("key", key);
     }
@@ -283,7 +275,7 @@ async fn send(
     if let Some(fields) = form {
         let encoded = fields
             .iter()
-            // Values are already encoded: `fill` did it, and so did the token below.
+            // Values are already encoded: `fill` did it, and so did the token.
             .map(|(name, value)| format!("{}={value}", percent_encode(name)))
             .collect::<Vec<_>>()
             .join("&");
@@ -294,17 +286,48 @@ async fn send(
             )
             .body(encoded);
     }
+    Ok(call)
+}
+
+/// One upstream request: a `GET`, or a form `POST` when `form` is given (names
+/// raw, values already percent-encoded). In the second case a redirect is the
+/// normal answer and its body is not read.
+async fn send(
+    client: &reqwest::Client,
+    throttle: &Throttle,
+    ctx: Context<'_>,
+    path: &str,
+    form: Option<&[(String, String)]>,
+    redirect_ok: bool,
+) -> Result<Sent> {
+    let verb = if form.is_some() { "POST" } else { "GET" };
+    let started = std::time::Instant::now();
+    // Without the key: this is what errors and logs show.
+    let url = format!("{}{}", ctx.origin, path);
+    // Held until the body is read, so the cap covers the whole transfer.
+    let _slot = throttle.acquire(ctx.origin, path).await?;
+    let call = build_call(client, ctx, &url, form)?;
     // A `reqwest` error names the URL it failed on, key included.
     let response = call
         .send()
         .await
         .map_err(reqwest::Error::without_url)
-        .with_context(|| format!("{verb} {url}"))?;
+        .with_context(|| {
+            format!(
+                "{verb} {url} (gave up after {} ms)",
+                started.elapsed().as_millis()
+            )
+        })?;
     if let Some(session) = ctx.session {
         session.absorb(response.headers());
     }
     let status = response.status();
-    let fail = |error: anyhow::Error| error.context(format!("{verb} {url}"));
+    let fail = |error: anyhow::Error| {
+        error.context(format!(
+            "{verb} {url} (answered after {} ms)",
+            started.elapsed().as_millis()
+        ))
+    };
     // A key Philomena does not know gets 403 on the key-only routes.
     if ctx.api_key.is_some()
         && matches!(
