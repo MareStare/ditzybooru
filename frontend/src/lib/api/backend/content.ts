@@ -243,3 +243,27 @@ export interface TagInfo {
 export function fetchTag(slug: string): Promise<TagInfo> {
   return get<TagInfo>(`/tags/${encodeURIComponent(slug)}`);
 }
+
+/** A filter: what it hides and what it spoilers. Tags come as ids only. */
+export interface FilterInfo {
+  id: number;
+  name: string;
+  description: string;
+  public: boolean;
+  system: boolean;
+  userCount: number;
+  hiddenTagIds: Array<number>;
+  spoileredTagIds: Array<number>;
+  hiddenComplex: null | string;
+  spoileredComplex: null | string;
+}
+
+export async function fetchSystemFilters(): Promise<Array<FilterInfo>> {
+  const { items } = await get<{ items: Array<FilterInfo> }>('/filters/system');
+
+  return items;
+}
+
+export function fetchFilter(id: number): Promise<FilterInfo> {
+  return get<FilterInfo>(`/filters/${id}`);
+}

@@ -13,6 +13,8 @@ import { Route as IndexRouteImport } from './routes/index';
 import { Route as RulesRouteImport } from './routes/rules';
 import { Route as SearchRouteImport } from './routes/search';
 import { Route as StaffRouteImport } from './routes/staff';
+import { Route as FiltersIndexRouteImport } from './routes/filters/index';
+import { Route as FiltersIdRouteImport } from './routes/filters/$id';
 import { Route as ForumsIndexRouteImport } from './routes/forums/index';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
 import { Route as ImagesIdRouteImport } from './routes/images/$id';
@@ -44,6 +46,16 @@ const SearchRoute = SearchRouteImport.update({
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const FiltersIndexRoute = FiltersIndexRouteImport.update({
+  id: '/filters/',
+  path: '/filters/',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const FiltersIdRoute = FiltersIdRouteImport.update({
+  id: '/filters/$id',
+  path: '/filters/$id',
   getParentRoute: () => rootRouteImport,
 } as any);
 const ForumsIndexRoute = ForumsIndexRouteImport.update({
@@ -112,6 +124,7 @@ export interface FileRoutesByFullPath {
   '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
+  '/filters/$id': typeof FiltersIdRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
@@ -120,6 +133,7 @@ export interface FileRoutesByFullPath {
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/tags/$slug': typeof TagsSlugRoute;
+  '/filters/': typeof FiltersIndexRoute;
   '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum/': typeof ForumsForumIndexRoute;
@@ -130,6 +144,7 @@ export interface FileRoutesByTo {
   '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
+  '/filters/$id': typeof FiltersIdRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
@@ -138,6 +153,7 @@ export interface FileRoutesByTo {
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/tags/$slug': typeof TagsSlugRoute;
+  '/filters': typeof FiltersIndexRoute;
   '/forums': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum': typeof ForumsForumIndexRoute;
@@ -149,6 +165,7 @@ export interface FileRoutesById {
   '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
   '/staff': typeof StaffRoute;
+  '/filters/$id': typeof FiltersIdRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
   '/images/$id': typeof ImagesIdRoute;
   '/pages/$slug': typeof PagesSlugRoute;
@@ -157,6 +174,7 @@ export interface FileRoutesById {
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/tags/$slug': typeof TagsSlugRoute;
+  '/filters/': typeof FiltersIndexRoute;
   '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum/': typeof ForumsForumIndexRoute;
@@ -169,6 +187,7 @@ export interface FileRouteTypes {
     | '/rules'
     | '/search'
     | '/staff'
+    | '/filters/$id'
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
@@ -177,6 +196,7 @@ export interface FileRouteTypes {
     | '/settings/developer'
     | '/settings/display'
     | '/tags/$slug'
+    | '/filters/'
     | '/forums/'
     | '/api/v1/$'
     | '/forums/$forum/'
@@ -187,6 +207,7 @@ export interface FileRouteTypes {
     | '/rules'
     | '/search'
     | '/staff'
+    | '/filters/$id'
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
@@ -195,6 +216,7 @@ export interface FileRouteTypes {
     | '/settings/developer'
     | '/settings/display'
     | '/tags/$slug'
+    | '/filters'
     | '/forums'
     | '/api/v1/$'
     | '/forums/$forum'
@@ -205,6 +227,7 @@ export interface FileRouteTypes {
     | '/rules'
     | '/search'
     | '/staff'
+    | '/filters/$id'
     | '/galleries/$id'
     | '/images/$id'
     | '/pages/$slug'
@@ -213,6 +236,7 @@ export interface FileRouteTypes {
     | '/settings/developer'
     | '/settings/display'
     | '/tags/$slug'
+    | '/filters/'
     | '/forums/'
     | '/api/v1/$'
     | '/forums/$forum/'
@@ -224,6 +248,7 @@ export interface RootRouteChildren {
   RulesRoute: typeof RulesRoute;
   SearchRoute: typeof SearchRoute;
   StaffRoute: typeof StaffRoute;
+  FiltersIdRoute: typeof FiltersIdRoute;
   GalleriesIdRoute: typeof GalleriesIdRoute;
   ImagesIdRoute: typeof ImagesIdRoute;
   PagesSlugRoute: typeof PagesSlugRoute;
@@ -232,6 +257,7 @@ export interface RootRouteChildren {
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
   TagsSlugRoute: typeof TagsSlugRoute;
+  FiltersIndexRoute: typeof FiltersIndexRoute;
   ForumsIndexRoute: typeof ForumsIndexRoute;
   ApiV1SplatRoute: typeof ApiV1SplatRoute;
   ForumsForumIndexRoute: typeof ForumsForumIndexRoute;
@@ -266,6 +292,20 @@ declare module '@tanstack/react-router' {
       path: '/staff';
       fullPath: '/staff';
       preLoaderRoute: typeof StaffRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/filters/': {
+      id: '/filters/';
+      path: '/filters';
+      fullPath: '/filters/';
+      preLoaderRoute: typeof FiltersIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/filters/$id': {
+      id: '/filters/$id';
+      path: '/filters/$id';
+      fullPath: '/filters/$id';
+      preLoaderRoute: typeof FiltersIdRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/forums/': {
@@ -360,6 +400,7 @@ const rootRouteChildren: RootRouteChildren = {
   RulesRoute: RulesRoute,
   SearchRoute: SearchRoute,
   StaffRoute: StaffRoute,
+  FiltersIdRoute: FiltersIdRoute,
   GalleriesIdRoute: GalleriesIdRoute,
   ImagesIdRoute: ImagesIdRoute,
   PagesSlugRoute: PagesSlugRoute,
@@ -368,6 +409,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
   TagsSlugRoute: TagsSlugRoute,
+  FiltersIndexRoute: FiltersIndexRoute,
   ForumsIndexRoute: ForumsIndexRoute,
   ApiV1SplatRoute: ApiV1SplatRoute,
   ForumsForumIndexRoute: ForumsForumIndexRoute,

@@ -100,13 +100,7 @@ function UserMenu() {
       >
         <Mail size={16} />
       </Link>
-      <Link
-        // @ts-expect-error TODO: route not built yet
-        to="/filters"
-        className="nav-link"
-        title="Filters"
-        aria-label="Filters"
-      >
+      <Link to="/filters" className="nav-link" title="Filters" aria-label="Filters">
         <Filter size={16} />
       </Link>
 

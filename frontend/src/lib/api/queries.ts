@@ -9,7 +9,9 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 import { dataSource } from '#/lib/api';
 import {
+  fetchFilter,
   fetchForum,
+  fetchSystemFilters,
   fetchForums,
   fetchTag,
   fetchForumTopics,
@@ -103,6 +105,14 @@ export function staffQuery() {
 
 export function tagQuery(slug: string) {
   return queryOptions({ queryKey: ['content', 'tag', slug], queryFn: () => fetchTag(slug) });
+}
+
+export function systemFiltersQuery() {
+  return queryOptions({ queryKey: ['content', 'filters', 'system'], queryFn: fetchSystemFilters });
+}
+
+export function filterQuery(id: number) {
+  return queryOptions({ queryKey: ['content', 'filter', id], queryFn: () => fetchFilter(id) });
 }
 
 export function forumsQuery() {
