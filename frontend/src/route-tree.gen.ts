@@ -21,6 +21,7 @@ import { Route as SessionsNewRouteImport } from './routes/sessions/new';
 import { Route as SettingsAccountRouteImport } from './routes/settings/account';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
+import { Route as TagsSlugRouteImport } from './routes/tags/$slug';
 import { Route as ApiV1SplatRouteImport } from './routes/api/v1/$';
 import { Route as ForumsForumIndexRouteImport } from './routes/forums/$forum/index';
 import { Route as ForumsForumTopicsTopicRouteImport } from './routes/forums/$forum/topics/$topic';
@@ -85,6 +86,11 @@ const SettingsDisplayRoute = SettingsDisplayRouteImport.update({
   path: '/settings/display',
   getParentRoute: () => rootRouteImport,
 } as any);
+const TagsSlugRoute = TagsSlugRouteImport.update({
+  id: '/tags/$slug',
+  path: '/tags/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const ApiV1SplatRoute = ApiV1SplatRouteImport.update({
   id: '/api/v1/$',
   path: '/api/v1/$',
@@ -113,6 +119,7 @@ export interface FileRoutesByFullPath {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/tags/$slug': typeof TagsSlugRoute;
   '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum/': typeof ForumsForumIndexRoute;
@@ -130,6 +137,7 @@ export interface FileRoutesByTo {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/tags/$slug': typeof TagsSlugRoute;
   '/forums': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum': typeof ForumsForumIndexRoute;
@@ -148,6 +156,7 @@ export interface FileRoutesById {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/tags/$slug': typeof TagsSlugRoute;
   '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
   '/forums/$forum/': typeof ForumsForumIndexRoute;
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
+    | '/tags/$slug'
     | '/forums/'
     | '/api/v1/$'
     | '/forums/$forum/'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
+    | '/tags/$slug'
     | '/forums'
     | '/api/v1/$'
     | '/forums/$forum'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
+    | '/tags/$slug'
     | '/forums/'
     | '/api/v1/$'
     | '/forums/$forum/'
@@ -219,6 +231,7 @@ export interface RootRouteChildren {
   SettingsAccountRoute: typeof SettingsAccountRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
+  TagsSlugRoute: typeof TagsSlugRoute;
   ForumsIndexRoute: typeof ForumsIndexRoute;
   ApiV1SplatRoute: typeof ApiV1SplatRoute;
   ForumsForumIndexRoute: typeof ForumsForumIndexRoute;
@@ -311,6 +324,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsDisplayRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/tags/$slug': {
+      id: '/tags/$slug';
+      path: '/tags/$slug';
+      fullPath: '/tags/$slug';
+      preLoaderRoute: typeof TagsSlugRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/api/v1/$': {
       id: '/api/v1/$';
       path: '/api/v1/$';
@@ -347,6 +367,7 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsAccountRoute: SettingsAccountRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
+  TagsSlugRoute: TagsSlugRoute,
   ForumsIndexRoute: ForumsIndexRoute,
   ApiV1SplatRoute: ApiV1SplatRoute,
   ForumsForumIndexRoute: ForumsForumIndexRoute,

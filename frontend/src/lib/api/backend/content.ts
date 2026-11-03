@@ -225,3 +225,21 @@ export function interact(id: number, action: InteractionAction): Promise<ImageCo
       return remove<ImageCounters>(`/images/${id}/hide`);
   }
 }
+
+/** A tag with what the site says about it. */
+export interface TagInfo {
+  name: string;
+  slug: string;
+  category: null | string;
+  shortDescription: null | string;
+  description: string;
+  imageCount: number;
+  aliases: Array<string>;
+  aliasedTag: null | string;
+  impliedTags: Array<string>;
+  impliedByTags: Array<string>;
+}
+
+export function fetchTag(slug: string): Promise<TagInfo> {
+  return get<TagInfo>(`/tags/${encodeURIComponent(slug)}`);
+}

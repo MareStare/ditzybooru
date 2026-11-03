@@ -11,6 +11,7 @@ import { dataSource } from '#/lib/api';
 import {
   fetchForum,
   fetchForums,
+  fetchTag,
   fetchForumTopics,
   fetchImageActivity,
   fetchImageComments,
@@ -98,6 +99,10 @@ export function rulesQuery() {
 
 export function staffQuery() {
   return queryOptions({ queryKey: ['content', 'staff'], queryFn: fetchStaff });
+}
+
+export function tagQuery(slug: string) {
+  return queryOptions({ queryKey: ['content', 'tag', slug], queryFn: () => fetchTag(slug) });
 }
 
 export function forumsQuery() {
