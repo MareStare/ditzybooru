@@ -182,7 +182,8 @@ export interface ImageActivity {
 export const COMMENTS_PER_PAGE = 25;
 
 export function fetchImagePage(id: number): Promise<ImagePage> {
-  return get<ImagePage>(`/images/${id}`);
+  // Asked afresh: the visitor's own vote may have changed the score since the browser kept this.
+  return get<ImagePage>(`/images/${id}`, {}, { fresh: true });
 }
 
 export function fetchImageComments(id: number, page: number): Promise<ImageComments> {

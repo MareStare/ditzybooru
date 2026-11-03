@@ -165,6 +165,31 @@ export const createSessionTotp = defineOperation({
   },
 });
 
+/** The visitor's API key, which the site shows to them on their account page. */
+export const getApiKey = defineOperation({
+  operationId: 'getApiKey',
+  path: '/session/api-key',
+  method: 'get',
+  summary: "The signed-in visitor's own API key, read from their account page.",
+  tags: ['session'],
+  params: [],
+  response: s.ref('ApiKey'),
+  examples: {},
+  philomena: {
+    routes: ['GET /registrations/edit'],
+    auth: 'session',
+    strategies: [
+      {
+        kind: 'html',
+        flavors: ['philomena', 'furbooru'],
+        request: { method: 'GET', path: '/registrations/edit' },
+        template: 'lib/philomena_web/templates/registration/edit.html.slime',
+        select: { fields: { apiKey: { sel: '#api-key code', text: true } } },
+      },
+    ],
+  },
+});
+
 export const deleteSession = defineOperation({
   operationId: 'deleteSession',
   path: '/session',

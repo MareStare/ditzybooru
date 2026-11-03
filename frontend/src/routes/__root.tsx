@@ -6,6 +6,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { BottomNav } from '#/components/layout/BottomNav';
 import { SiteHeader } from '#/components/layout/SiteHeader';
 import { SiteFooter } from '#/components/layout/SiteFooter';
+import { useOwnApiKey } from '#/hooks/use-own-api-key';
 import { SiteContext } from '#/hooks/use-site';
 import { SsrSettingsContext, useSettings } from '#/hooks/use-settings';
 import { currentSite } from '#/lib/current-site';
@@ -81,6 +82,7 @@ function RootComponent() {
  * calls `useSettings`. */
 function Document() {
   const settings = useSettings();
+  useOwnApiKey();
   const colorScheme = settings.lightness === 'system' ? 'light dark' : settings.lightness;
 
   return (

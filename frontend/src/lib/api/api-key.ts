@@ -12,6 +12,8 @@
 import { useSyncExternalStore } from 'react';
 
 const STORAGE_KEY = 'ditzy-api-key';
+/** Present while the saved key is one we fetched for a signed-in visitor, not one they typed in. */
+const AUTO_FLAG = 'ditzy-api-key-auto';
 
 const listeners = new Set<() => void>();
 
@@ -25,13 +27,28 @@ export function getApiKey(): string | null {
   }
 }
 
-/** Saves `key`, or forgets it when `null`. */
-export function setApiKey(key: string | null): void {
+/** Whether the saved key is the one we fetched for the signed-in visitor, so it goes when they sign out. */
+export function apiKeyIsAutomatic(): boolean {
+  try {
+    return localStorage.getItem(AUTO_FLAG) !== null;
+  } catch {
+    return false;
+  }
+}
+
+/** Saves `key`, or forgets it when `null`. `automatic` says we fetched it ourselves rather than the visitor typing it. */
+export function setApiKey(key: string | null, { automatic = false }: { automatic?: boolean } = {}): void {
   try {
     if (key === null) {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(AUTO_FLAG);
     } else {
       localStorage.setItem(STORAGE_KEY, key);
+      if (automatic) {
+        localStorage.setItem(AUTO_FLAG, '1');
+      } else {
+        localStorage.removeItem(AUTO_FLAG);
+      }
     }
   } catch {
     // Storage is blocked: the key lasts until the page is closed, nowhere.

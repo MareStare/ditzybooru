@@ -3065,8 +3065,10 @@
     "class": "html-form",
     "area": "auth",
     "phase": 4,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "getApiKey"
+    ],
     "note": ""
   },
   "GET /registrations/email/:id": {

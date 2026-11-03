@@ -49,10 +49,16 @@ interface GetOptions {
    * instead, to try one before saving it.
    */
   apiKey?: true | string;
+  /** Asks the origin again instead of trusting what the browser kept. */
+  fresh?: boolean;
 }
 
 /** `GET /api/v1<path>`. */
-export function get<TResponse>(path: string, query: QueryParams = {}, { apiKey }: GetOptions = {}): Promise<TResponse> {
+export function get<TResponse>(
+  path: string,
+  query: QueryParams = {},
+  { apiKey, fresh }: GetOptions = {},
+): Promise<TResponse> {
   const headers = requestHeaders();
   if (apiKey !== undefined) {
     const key = apiKey === true ? getApiKey() : apiKey;
@@ -62,7 +68,11 @@ export function get<TResponse>(path: string, query: QueryParams = {}, { apiKey }
     headers['X-Api-Key'] = key;
   }
 
-  return backend().fetchJson<TResponse>(`/api/v1${path}`, { query, headers });
+  return backend().fetchJson<TResponse>(`/api/v1${path}`, {
+    query,
+    headers,
+    ...(fresh === true ? { cache: 'no-cache' } : {}),
+  });
 }
 
 /** A request with a JSON body, for the endpoints that change something. The browser sends its cookies. */

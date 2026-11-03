@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
-import type { APIRequestContext, BrowserContext, Page } from '@playwright/test';
+import type { APIRequestContext, BrowserContext } from '@playwright/test';
+
+import { signIn } from './sign-in';
 
 /*
  * Voting, faving and hiding on the image page, checked against the site
@@ -8,8 +10,6 @@ import type { APIRequestContext, BrowserContext, Page } from '@playwright/test';
  */
 
 const UPSTREAM = process.env.LIVE_UPSTREAM;
-const EMAIL = process.env.LIVE_EMAIL ?? 'user@example.com';
-const PASSWORD = process.env.LIVE_PASSWORD ?? 'philomena123';
 const IMAGE = Number(process.env.LIVE_IMAGE ?? '1');
 
 test.skip(
@@ -55,17 +55,6 @@ async function upstreamActivity(request: APIRequestContext, context: BrowserCont
   };
 }
 
-async function signIn(page: Page) {
-  await page.goto('/sessions/new');
-  await page.waitForSelector('iframe[src*="hcaptcha"]');
-  await page.fill('#sign-in-email', EMAIL);
-  await page.fill('#sign-in-password', PASSWORD);
-  await page.locator('iframe[src*="hcaptcha"]').first().contentFrame().locator('#checkbox').click();
-  await expect(page.locator('form.developer-setting button[type=submit]')).toBeEnabled();
-  await page.click('form.developer-setting button[type=submit]');
-  await expect(page.locator('button[aria-label="User menu"]')).toBeVisible();
-}
-
 test('the buttons change the site, and the page tells the truth about it', async ({ page, context, request }) => {
   await signIn(page);
   await page.goto(`/images/${IMAGE}`);
@@ -96,6 +85,13 @@ test('the buttons change the site, and the page tells the truth about it', async
   expect(upvoted.upvotes).toBe(before.upvotes + 1);
   expect(upvoted.score).toBe(before.score + 1);
   expect(await upstreamActivity(request, context)).toMatchObject({ voted: 'up' });
+  await expect(page.locator('.image-page__score')).toHaveText(String(upvoted.score));
+
+  // Coming back to the page is a new page load: what we did must still show, and the score must be the site's.
+  await page.goto('/rules');
+  await page.goto(`/images/${IMAGE}`);
+  await expect(page.locator('.image-page__interactions[data-ready="true"]')).toBeVisible();
+  await expect(button('Upvote')).toHaveAttribute('aria-pressed', 'true');
   await expect(page.locator('.image-page__score')).toHaveText(String(upvoted.score));
 
   // Downvote replaces it.

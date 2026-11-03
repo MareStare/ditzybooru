@@ -1,6 +1,18 @@
 {
   "components": {
     "schemas": {
+      "ApiKey": {
+        "additionalProperties": false,
+        "properties": {
+          "apiKey": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "apiKey"
+        ],
+        "type": "object"
+      },
       "Channel": {
         "additionalProperties": false,
         "properties": {
@@ -5952,6 +5964,66 @@
                   }
                 }
               }
+            }
+          ]
+        }
+      }
+    },
+    "/session/api-key": {
+      "get": {
+        "operationId": "getApiKey",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiKey"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The signed-in visitor's own API key, read from their account page.",
+        "tags": [
+          "session"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "GET /registrations/edit"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/registrations/edit"
+              },
+              "select": {
+                "fields": {
+                  "apiKey": {
+                    "sel": "#api-key code",
+                    "text": true
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/registration/edit.html.slime"
             }
           ]
         }

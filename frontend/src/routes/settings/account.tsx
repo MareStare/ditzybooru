@@ -52,10 +52,11 @@ function AccountSettingsPage() {
       <h1 className="developer-page__title">Account</h1>
 
       <Notice>
-        <NoticeTitle>Signing in with an API key</NoticeTitle>
-        {site.name} asks for a captcha when you sign in, which only its own pages can show. Your personal API key, from
-        your account settings on {site.name}, does the same job here: it lets this site read things that are yours, like
-        the images your watched tags match. It stays in this browser and is sent only with the requests that need it.
+        <NoticeTitle>Your API key</NoticeTitle>
+        When you are signed in to {site.name} here, this site fetches your personal API key for you, so there is nothing
+        to enter. Where {site.name} would not take a sign-in (it asks for a captcha that only its own pages can show),
+        paste the key from your account settings on {site.name} instead. Either way it stays in this browser and is sent
+        only with the requests that need it.
       </Notice>
 
       <Panel>

@@ -182,6 +182,13 @@ async fn handle(
     let shareable = api_key.is_none() && matches!(op.auth.as_str(), "none" | "api-key-optional");
     if !shareable || op.cache_seconds == 0 {
         let result = compute().await.map_err(Arc::new);
+        // An action changes what the site would say about the image (its score,
+        // its comments), so what we kept of it is out of date.
+        if op.method != "get" && result.is_ok() {
+            state
+                .cache
+                .invalidate_prefix(format!("{}|{}|getImage|", upstream.origin, upstream.flavor));
+        }
         let cookies = session.map(Session::into_set_cookies).unwrap_or_default();
         return respond(result, None, &cookies, secure);
     }

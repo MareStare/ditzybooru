@@ -35,6 +35,12 @@ export class SignInRejected extends Error {}
 /** The site did not take the sign-in at all: it timed out or crashed on its side. Nothing the visitor typed is wrong. */
 export class SignInUnavailable extends Error {}
 
+/** The signed-in visitor's own API key, as the site shows it to them. */
+export async function fetchOwnApiKey(): Promise<string> {
+  const { apiKey } = await get<{ apiKey: string }>('/session/api-key');
+  return apiKey;
+}
+
 export function fetchSession(): Promise<Session> {
   return get<Session>('/session');
 }

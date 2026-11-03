@@ -78,12 +78,22 @@ impl Default for ResponseCache {
                 u32::try_from(key.len() + body).unwrap_or(u32::MAX)
             })
             .expire_after(PerEntryTtl)
+            .support_invalidation_closures()
             .build();
         Self { inner }
     }
 }
 
 impl ResponseCache {
+    /// Forgets every response whose key starts with `prefix`, so the next
+    /// request fetches it again (after a vote, the image's score has changed).
+    pub fn invalidate_prefix(&self, prefix: String) {
+        // Only fails if invalidation closures are not enabled, which `default` does.
+        let _ = self
+            .inner
+            .invalidate_entries_if(move |key, _| key.starts_with(&prefix));
+    }
+
     /// The cached outcome for `key`, or the result of `compute`, shared by every
     /// caller that asks while it runs. `ttl` is how long a success is kept.
     pub async fn get_or_compute<F, Fut>(
@@ -185,6 +195,23 @@ mod tests {
             assert_eq!(failure.code, "upstream_error");
         }
         assert_eq!(calls.load(Ordering::SeqCst), 2);
+    }
+
+    #[tokio::test]
+    async fn invalidating_a_prefix_forgets_only_what_starts_with_it() {
+        let cache = ResponseCache::default();
+        for key in ["a|getImage|1", "a|getImage|2", "a|listTags|1"] {
+            cache
+                .get_or_compute(key.to_owned(), TTL, || async { Ok(json("{}")) })
+                .await
+                .unwrap();
+        }
+        cache.invalidate_prefix("a|getImage|".to_owned());
+        // Removal is applied lazily; running the pending work makes it visible.
+        cache.inner.run_pending_tasks().await;
+        assert!(cache.inner.get("a|getImage|1").await.is_none());
+        assert!(cache.inner.get("a|getImage|2").await.is_none());
+        assert!(cache.inner.get("a|listTags|1").await.is_some());
     }
 
     #[tokio::test]

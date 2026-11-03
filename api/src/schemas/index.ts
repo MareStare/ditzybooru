@@ -333,6 +333,9 @@ const Session = s.object({
   secondFactorRequired: s.bool(),
 });
 
+/** The visitor's own key. Sent only to them, never kept or logged by us. */
+const ApiKey = s.object({ apiKey: s.string() });
+
 const LoginCaptcha = s.object({
   /** The hCaptcha site key to show a widget for, or `null` when the site asks for none. */
   siteKey: s.nullable(s.string()),
@@ -404,6 +407,7 @@ export const schemas = {
   ImagePage,
   ImageComments,
   ImageInteractions,
+  ApiKey,
   Media,
   Tag,
   Comment,
