@@ -639,6 +639,9 @@
             "minItems": 0,
             "type": "array"
           },
+          "imageTotal": {
+            "type": "integer"
+          },
           "page": {
             "type": "integer"
           },
@@ -671,6 +674,7 @@
           "userId",
           "page",
           "perPage",
+          "imageTotal",
           "images"
         ],
         "type": "object"
@@ -2719,6 +2723,10 @@
                     "upvotes": "/upvotes",
                     "width": "/width"
                   }
+                },
+                "imageTotal": {
+                  "at": "/total",
+                  "join": "images"
                 },
                 "page": {
                   "as": "int",

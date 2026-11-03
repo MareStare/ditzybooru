@@ -14,6 +14,7 @@ use crate::Result;
 /// A follow-up response, searchable by a key pointer.
 #[derive(Debug)]
 pub struct JoinTable {
+    root: Value,
     items: Vec<Value>,
     key: String,
 }
@@ -27,6 +28,7 @@ impl JoinTable {
             .ok_or_else(|| anyhow!("join items {items:?} is not an array"))?
             .clone();
         Ok(Self {
+            root: doc,
             items,
             key: key.to_owned(),
         })
@@ -85,6 +87,13 @@ fn apply_rule(doc: &Value, rule: &JsonMapValue, ctx: RemapCtx<'_>) -> Result<Val
                 Some(name) => transform::apply(name, &found, ctx.origin),
                 None => Ok(found),
             }
+        }
+        JsonMapValue::JoinedValue { join, at } => {
+            let table = ctx
+                .joins
+                .get(join)
+                .ok_or_else(|| anyhow!("join {join:?} has no response"))?;
+            lookup(&table.root, at).cloned()
         }
         JsonMapValue::JoinedItems { join, map } => {
             // A follow-up that had nothing to ask for was never sent.
@@ -250,15 +259,21 @@ mod tests {
 
     #[test]
     fn joined_items_are_remapped_and_default_to_empty() {
-        let map: BTreeMap<String, JsonMapValue> = serde_json::from_value(
-            json!({ "title": "/title", "images": { "join": "images", "map": { "id": "/id" } } }),
-        )
+        let map: BTreeMap<String, JsonMapValue> = serde_json::from_value(json!({
+            "title": "/title",
+            "n": { "join": "images", "at": "/total" },
+            "images": { "join": "images", "map": { "id": "/id" } }
+        }))
         .unwrap();
         let params = BTreeMap::new();
         let doc = json!({ "title": "g" });
 
-        let table =
-            JoinTable::parse(r#"{"images":[{"id":7},{"id":9}]}"#, "/images", "/id").unwrap();
+        let table = JoinTable::parse(
+            r#"{"total":2,"images":[{"id":7},{"id":9}]}"#,
+            "/images",
+            "/id",
+        )
+        .unwrap();
         let joins = BTreeMap::from([("images".to_owned(), table)]);
         let ctx = RemapCtx {
             origin: "",
@@ -267,7 +282,7 @@ mod tests {
         };
         assert_eq!(
             remap(&doc, &map, ctx).unwrap(),
-            json!({ "title": "g", "images": [{ "id": 7 }, { "id": 9 }] })
+            json!({ "title": "g", "n": 2, "images": [{ "id": 7 }, { "id": 9 }] })
         );
 
         let none = BTreeMap::new();
@@ -276,10 +291,14 @@ mod tests {
             params: &params,
             joins: &none,
         };
+        // Without a follow-up there are no items, and no total to read.
+        let no_total: BTreeMap<String, JsonMapValue> =
+            serde_json::from_value(json!({ "images": { "join": "images", "map": {} } })).unwrap();
         assert_eq!(
-            remap(&doc, &map, ctx).unwrap().get("images"),
-            Some(&json!([]))
+            remap(&doc, &no_total, ctx).unwrap(),
+            json!({ "images": [] })
         );
+        remap(&doc, &map, ctx).unwrap_err();
     }
 
     #[test]

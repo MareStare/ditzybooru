@@ -270,6 +270,7 @@ export const getGallery = defineOperation({
           userId: '/galleries/0/creator_id|/galleries/0/user_id',
           page: { from: '$param:page', as: 'int' },
           perPage: { from: '$param:perPage', as: 'int' },
+          imageTotal: { join: 'images', at: '/total' },
           images: { join: 'images', map: mediaFields() },
         },
       },

@@ -9,7 +9,8 @@
 import { TRENDING_WINDOW, searchSorts } from '#/lib/api/sorts';
 import { get } from '#/lib/api/backend/client';
 import type { DataSource, MediaPage, MediaSearchParams } from '#/lib/api/types';
-import type { Attribution, Comment, ForumTopic, Media, MimeType } from '#/lib/types';
+import { HttpError } from '#/lib/http/http-client';
+import type { Attribution, Comment, ForumTopic, Gallery, LiveStreamChannel, Media, MimeType } from '#/lib/types';
 
 /** The API rejects anything larger. */
 const MAX_PER_PAGE = 50;
@@ -130,4 +131,60 @@ async function recentTopics(limit: number): Promise<Array<ForumTopic>> {
   return response.items;
 }
 
-export const apiSource: DataSource = { searchMedia, featuredMedia, trendingMedia, recentComments, recentTopics };
+interface ApiChannel {
+  id: number;
+  title: string;
+  live: boolean;
+  viewers: null | number;
+  nsfw: boolean;
+}
+
+async function liveStreams(): Promise<Array<LiveStreamChannel> | null> {
+  try {
+    const response = await get<{ items: Array<ApiChannel> }>('/channels');
+    return response.items.map(raw => ({
+      id: raw.id,
+      title: raw.title,
+      isLive: raw.live,
+      nsfw: raw.nsfw,
+      viewers: raw.viewers ?? 0,
+    }));
+  } catch (error) {
+    // 501: this upstream has no such page (Derpibooru), which is an answer.
+    if (error instanceof HttpError && error.response.status === 501) {
+      return null;
+    }
+    throw error;
+  }
+}
+
+interface ApiGallery {
+  id: number;
+  title: string;
+  description: string;
+  user: string;
+  imageTotal: number;
+  images: Array<ApiMedia>;
+}
+
+async function gallery(id: number, page: number, perPage: number): Promise<Gallery> {
+  const raw = await get<ApiGallery>(`/galleries/${id}`, { page, perPage: Math.min(perPage, MAX_PER_PAGE) });
+  return {
+    id: raw.id,
+    title: raw.title,
+    description: raw.description,
+    creator: raw.user,
+    imageTotal: raw.imageTotal,
+    images: raw.images.flatMap(toMedia),
+  };
+}
+
+export const apiSource: DataSource = {
+  searchMedia,
+  featuredMedia,
+  trendingMedia,
+  recentComments,
+  recentTopics,
+  liveStreams,
+  gallery,
+};

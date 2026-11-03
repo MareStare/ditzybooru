@@ -6,7 +6,7 @@
  * a running page without a component knowing which one it got.
  */
 
-import type { Comment, ForumTopic, Media } from '#/lib/types';
+import type { Comment, ForumTopic, Gallery, LiveStreamChannel, Media } from '#/lib/types';
 
 /** Which backend the site reads from. `mock` is the bundled data with a
  *  signed-in user, `mock-anonymous` the same data browsed signed out. */
@@ -36,4 +36,8 @@ export interface DataSource {
   /** The latest forum topics across every forum. Slower than the rest, so
    *  callers load it lazily rather than in a route loader. */
   recentTopics: (limit: number) => Promise<Array<ForumTopic>>;
+  /** The tracked livestream channels, or `null` when this site has no such page. */
+  liveStreams: () => Promise<Array<LiveStreamChannel> | null>;
+  /** One page of a gallery. Rejects when there is no such gallery. */
+  gallery: (id: number, page: number, perPage: number) => Promise<Gallery>;
 }

@@ -40,7 +40,9 @@ type JsonMapValue =
   /** Finds the item of a join's follow-up response whose `join.key` equals this item's `key`, and takes its `value`. */
   | { join: string; key: string; value: string; as?: Transform }
   /** Every item of a join's follow-up response, remapped by `map`. An empty list when the follow-up was not sent. */
-  | { join: string; map: Record<string, JsonMapValue> };
+  | { join: string; map: Record<string, JsonMapValue> }
+  /** A value at `at` in the root of a join's follow-up response, e.g. its `total`. */
+  | { join: string; at: string };
 export type JsonMap = Record<string, JsonMapValue>;
 
 interface UpstreamRequest {

@@ -62,11 +62,22 @@ export interface Comment {
 export interface LiveStreamChannel {
   id: number;
   title: string;
-  shortName: string;
   isLive: boolean;
   nsfw: boolean;
+  /** Zero while off air. */
   viewers: number;
-  avatarUrl: null | string;
+}
+
+/** A gallery and one page of its images. */
+export interface Gallery {
+  id: number;
+  title: string;
+  description: string;
+  /** Who made the gallery. */
+  creator: string;
+  /** How many images the gallery holds across every page. */
+  imageTotal: number;
+  images: Array<Media>;
 }
 
 export interface Forum {

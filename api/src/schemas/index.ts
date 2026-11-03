@@ -144,6 +144,8 @@ const GalleryPage = s.object({
   userId: s.int(),
   page: s.int(),
   perPage: s.int(),
+  /** How many images the gallery holds across every page, as the active filter sees them. */
+  imageTotal: s.int(),
   /** This page of the gallery's images, in gallery order. */
   images: s.array(s.ref('Media')),
 });

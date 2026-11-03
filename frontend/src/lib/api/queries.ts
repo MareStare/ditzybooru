@@ -47,3 +47,18 @@ export function recentTopicsQuery(kind: DataSourceKind, limit: number) {
     queryFn: () => dataSource(kind).recentTopics(limit),
   });
 }
+
+export function liveStreamsQuery(kind: DataSourceKind) {
+  return queryOptions({
+    queryKey: ['channels', kind],
+    queryFn: () => dataSource(kind).liveStreams(),
+  });
+}
+
+export function galleryQuery(kind: DataSourceKind, id: number, page: number, perPage: number) {
+  return queryOptions({
+    queryKey: ['galleries', kind, id, page, perPage],
+    queryFn: () => dataSource(kind).gallery(id, page, perPage),
+    placeholderData: keepPreviousData,
+  });
+}

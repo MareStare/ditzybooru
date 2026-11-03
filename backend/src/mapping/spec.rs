@@ -230,6 +230,13 @@ pub enum JsonMapValue {
         /// Remap of each joined item, pointers relative to the item.
         map: BTreeMap<String, Self>,
     },
+    /// A value from the root of a join's follow-up response, e.g. its `total`.
+    JoinedValue {
+        /// Join name.
+        join: String,
+        /// Pointer into the follow-up response.
+        at: String,
+    },
     /// A nested pointer with optional remap or transform.
     Nested {
         /// Pointer to the sub-document.

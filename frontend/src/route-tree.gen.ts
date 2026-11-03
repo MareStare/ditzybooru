@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as SearchRouteImport } from './routes/search';
+import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
 import { Route as ApiV1SplatRouteImport } from './routes/api/v1/$';
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const GalleriesIdRoute = GalleriesIdRouteImport.update({
+  id: '/galleries/$id',
+  path: '/galleries/$id',
   getParentRoute: () => rootRouteImport,
 } as any);
 const SettingsDeveloperRoute = SettingsDeveloperRouteImport.update({
@@ -44,6 +50,7 @@ const ApiV1SplatRoute = ApiV1SplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/galleries/$id': typeof GalleriesIdRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/galleries/$id': typeof GalleriesIdRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -59,6 +67,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/galleries/$id': typeof GalleriesIdRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -66,14 +75,25 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
-    '/' | '/search' | '/settings/developer' | '/settings/display' | '/api/v1/$';
+    | '/'
+    | '/search'
+    | '/galleries/$id'
+    | '/settings/developer'
+    | '/settings/display'
+    | '/api/v1/$';
   fileRoutesByTo: FileRoutesByTo;
   to:
-    '/' | '/search' | '/settings/developer' | '/settings/display' | '/api/v1/$';
+    | '/'
+    | '/search'
+    | '/galleries/$id'
+    | '/settings/developer'
+    | '/settings/display'
+    | '/api/v1/$';
   id:
     | '__root__'
     | '/'
     | '/search'
+    | '/galleries/$id'
     | '/settings/developer'
     | '/settings/display'
     | '/api/v1/$';
@@ -82,6 +102,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   SearchRoute: typeof SearchRoute;
+  GalleriesIdRoute: typeof GalleriesIdRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
   ApiV1SplatRoute: typeof ApiV1SplatRoute;
@@ -101,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/search';
       fullPath: '/search';
       preLoaderRoute: typeof SearchRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/galleries/$id': {
+      id: '/galleries/$id';
+      path: '/galleries/$id';
+      fullPath: '/galleries/$id';
+      preLoaderRoute: typeof GalleriesIdRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/settings/developer': {
@@ -130,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SearchRoute: SearchRoute,
+  GalleriesIdRoute: GalleriesIdRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
   ApiV1SplatRoute: ApiV1SplatRoute,

@@ -46,3 +46,14 @@
 .channel-row__kern {
   margin-inline-start: 0.06em;
 }
+
+/* Shown in place of the list while it loads or has failed. */
+.live-streams__status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 6rem;
+  padding: var(--space-3);
+  font-size: var(--text-sm);
+}

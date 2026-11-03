@@ -111,7 +111,8 @@ function retryAfterMs(response: Response): number {
 }
 
 function isRetryable(error: Error): boolean {
-  return error instanceof HttpError && error.response.status >= 500;
+  // 501 is a verdict ("this upstream does not offer that"), not a hiccup.
+  return error instanceof HttpError && error.response.status >= 500 && error.response.status !== 501;
 }
 
 /**
