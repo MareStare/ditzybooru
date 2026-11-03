@@ -9,7 +9,10 @@ import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 import { dataSource } from '#/lib/api';
 import {
+  fetchChannels,
+  fetchComments,
   fetchFilter,
+  fetchGalleries,
   fetchForum,
   fetchSystemFilters,
   fetchForums,
@@ -113,6 +116,26 @@ export function systemFiltersQuery() {
 
 export function filterQuery(id: number) {
   return queryOptions({ queryKey: ['content', 'filter', id], queryFn: () => fetchFilter(id) });
+}
+
+export function channelsQuery() {
+  return queryOptions({ queryKey: ['content', 'channels'], queryFn: fetchChannels });
+}
+
+export function galleriesQuery(page: number, perPage: number) {
+  return queryOptions({
+    queryKey: ['content', 'galleries', page, perPage],
+    queryFn: () => fetchGalleries(page, perPage),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function commentsQuery(query: string, page: number, perPage: number) {
+  return queryOptions({
+    queryKey: ['content', 'comments', query, page, perPage],
+    queryFn: () => fetchComments(query, page, perPage),
+    placeholderData: keepPreviousData,
+  });
 }
 
 export function forumsQuery() {

@@ -267,3 +267,52 @@ export async function fetchSystemFilters(): Promise<Array<FilterInfo>> {
 export function fetchFilter(id: number): Promise<FilterInfo> {
   return get<FilterInfo>(`/filters/${id}`);
 }
+
+export interface ChannelEntry {
+  id: number;
+  title: string;
+  live: boolean;
+  viewers: null | number;
+  nsfw: boolean;
+  thumbnailUrl: string;
+  artistTag: null | string;
+}
+
+export async function fetchChannels(): Promise<Array<ChannelEntry>> {
+  const { items } = await get<{ items: Array<ChannelEntry> }>('/channels');
+
+  return items;
+}
+
+interface Listing<T> {
+  items: Array<T>;
+  total: number;
+  page: number;
+  perPage: number;
+}
+
+export interface GalleryEntry {
+  id: number;
+  title: string;
+  description: string;
+  user: string;
+  userId: number;
+}
+
+export function fetchGalleries(page: number, perPage: number): Promise<Listing<GalleryEntry>> {
+  return get<Listing<GalleryEntry>>('/galleries', { q: '*', page, perPage });
+}
+
+export interface CommentEntry {
+  id: number;
+  imageId: number;
+  createdAt: string;
+  body: string;
+  author: string;
+  avatarUrl: string;
+  imageThumbTiny: null | string;
+}
+
+export function fetchComments(query: string, page: number, perPage: number): Promise<Listing<CommentEntry>> {
+  return get<Listing<CommentEntry>>('/comments', { q: query, page, perPage });
+}
