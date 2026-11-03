@@ -8,6 +8,7 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 import { dataSource } from '#/lib/api';
+import { fetchRules, fetchStaff, fetchStaticPage } from '#/lib/api/backend/content';
 import type { DataSourceKind, MediaSearchParams } from '#/lib/api/types';
 
 export function mediaSearchQuery(kind: DataSourceKind, params: MediaSearchParams) {
@@ -69,4 +70,21 @@ export function watchedMediaQuery(kind: DataSourceKind, limit: number, signedInA
     queryKey: ['media', kind, 'watched', signedInAs, limit],
     queryFn: () => dataSource(kind).watchedMedia(limit),
   });
+}
+
+/*
+ * Pages that exist only on the live source: the site's own content, which has
+ * no mock. They are keyed by nothing but what they ask for.
+ */
+
+export function staticPageQuery(slug: string) {
+  return queryOptions({ queryKey: ['content', 'page', slug], queryFn: () => fetchStaticPage(slug) });
+}
+
+export function rulesQuery() {
+  return queryOptions({ queryKey: ['content', 'rules'], queryFn: fetchRules });
+}
+
+export function staffQuery() {
+  return queryOptions({ queryKey: ['content', 'staff'], queryFn: fetchStaff });
 }

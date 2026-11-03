@@ -106,8 +106,18 @@ fn placeholders(template: &str) -> Result<Vec<(&str, Option<&str>)>> {
     Ok(found)
 }
 
-/// Fills a template; `None` when a placeholder has neither a value nor a default.
+/// Fills a template, percent-encoding the values, for a URL or a form; `None`
+/// when a placeholder has neither a value nor a default.
 fn fill(template: &str, params: &BTreeMap<String, String>) -> Result<Option<String>> {
+    fill_with(template, params, true)
+}
+
+/// [`fill`], with the values as they are or encoded.
+fn fill_with(
+    template: &str,
+    params: &BTreeMap<String, String>,
+    encode: bool,
+) -> Result<Option<String>> {
     let mut out = String::new();
     let mut rest = template;
     while let Some(start) = rest.find('{') {
@@ -123,7 +133,11 @@ fn fill(template: &str, params: &BTreeMap<String, String>) -> Result<Option<Stri
         let Some(value) = params.get(name).map(String::as_str).or(default) else {
             return Ok(None);
         };
-        out.push_str(&percent_encode(value));
+        if encode {
+            out.push_str(&percent_encode(value));
+        } else {
+            out.push_str(value);
+        }
         rest = tail.get(end + 1..).unwrap_or_default();
     }
     out.push_str(rest);
@@ -226,6 +240,14 @@ pub struct Responses {
     pub location: Option<String>,
 }
 
+/// What a request carries.
+enum Payload<'a> {
+    /// Form fields: names raw, values already percent-encoded.
+    Form(&'a [(String, String)]),
+    /// A JSON body, and the CSRF token to send in a header.
+    Json { body: String, csrf: &'a str },
+}
+
 /// What a request came back with.
 enum Sent {
     Body(String),
@@ -259,32 +281,41 @@ fn build_call(
     client: &reqwest::Client,
     ctx: Context<'_>,
     url: &str,
-    form: Option<&[(String, String)]>,
+    payload: Option<&Payload<'_>>,
 ) -> Result<reqwest::RequestBuilder> {
     let mut target = reqwest::Url::parse(url).with_context(|| format!("bad url {url}"))?;
     if let Some(key) = ctx.api_key {
         target.query_pairs_mut().append_pair("key", key);
     }
-    let mut call = match form {
+    let mut call = match payload {
         Some(_) => client.post(target),
         None => client.get(target),
     };
     if let Some(cookies) = ctx.session.and_then(Session::cookie_header) {
         call = call.header(reqwest::header::COOKIE, cookies);
     }
-    if let Some(fields) = form {
-        let encoded = fields
-            .iter()
-            // Values are already encoded: `fill` did it, and so did the token.
-            .map(|(name, value)| format!("{}={value}", percent_encode(name)))
-            .collect::<Vec<_>>()
-            .join("&");
-        call = call
-            .header(
-                reqwest::header::CONTENT_TYPE,
-                "application/x-www-form-urlencoded",
-            )
-            .body(encoded);
+    match payload {
+        Some(Payload::Form(fields)) => {
+            let encoded = fields
+                .iter()
+                // Values are already encoded: `fill` did it, and so did the token.
+                .map(|(name, value)| format!("{}={value}", percent_encode(name)))
+                .collect::<Vec<_>>()
+                .join("&");
+            call = call
+                .header(
+                    reqwest::header::CONTENT_TYPE,
+                    "application/x-www-form-urlencoded",
+                )
+                .body(encoded);
+        }
+        Some(Payload::Json { body, csrf }) => {
+            call = call
+                .header(reqwest::header::CONTENT_TYPE, "application/json")
+                .header("x-csrf-token", *csrf)
+                .body(body.clone());
+        }
+        None => {}
     }
     Ok(call)
 }
@@ -297,16 +328,16 @@ async fn send(
     throttle: &Throttle,
     ctx: Context<'_>,
     path: &str,
-    form: Option<&[(String, String)]>,
+    payload: Option<&Payload<'_>>,
     redirect_ok: bool,
 ) -> Result<Sent> {
-    let verb = if form.is_some() { "POST" } else { "GET" };
+    let verb = if payload.is_some() { "POST" } else { "GET" };
     let started = std::time::Instant::now();
     // Without the key: this is what errors and logs show.
     let url = format!("{}{}", ctx.origin, path);
     // Held until the body is read, so the cap covers the whole transfer.
     let _slot = throttle.acquire(ctx.origin, path).await?;
-    let call = build_call(client, ctx, &url, form)?;
+    let call = build_call(client, ctx, &url, payload)?;
     // A `reqwest` error names the URL it failed on, key included.
     let response = call
         .send()
@@ -369,7 +400,7 @@ async fn send(
             .context(format!("the page says: {}", html::snippet(&body, 300))));
     }
     // A submission answers with a redirect; the page it leads to is read next.
-    if (form.is_some() || redirect_ok) && status.is_redirection() {
+    if (payload.is_some() || redirect_ok) && status.is_redirection() {
         let location = response
             .headers()
             .get(reqwest::header::LOCATION)
@@ -484,22 +515,62 @@ async fn fetch_form(
     let token = html::attribute(&page_html, &form.form.csrf.sel, &form.form.csrf.attr)?
         .ok_or_else(|| anyhow!("no CSRF token on {page}"))?;
 
-    // Form values go out percent-encoded; `fill` encodes the ones it fills.
-    let mut fields = vec![("_csrf_token".to_owned(), percent_encode(&token))];
-    // Phoenix reads the real verb of a form from `_method`.
-    if form.request.method != "POST" {
-        fields.push(("_method".to_owned(), percent_encode(&form.request.method)));
-    }
-    for (name, template) in &form.request.body {
-        if let Some(value) = fill(template, params)? {
-            fields.push((name.clone(), value));
+    let payload = if form.request.encoding.as_deref() == Some("json") {
+        let mut object = serde_json::Map::new();
+        for (name, template) in &form.request.body {
+            if let Some(value) = fill_with(template, params, false)? {
+                // The site's scripts send real booleans, and some forks
+                // compare against them.
+                let typed = match value.as_str() {
+                    "true" => Value::Bool(true),
+                    "false" => Value::Bool(false),
+                    _ => Value::String(value),
+                };
+                object.insert(name.clone(), typed);
+            }
         }
-    }
+        (None, Some(Value::Object(object).to_string()))
+    } else {
+        // Form values go out percent-encoded; `fill` encodes the ones it fills.
+        let mut fields = vec![("_csrf_token".to_owned(), percent_encode(&token))];
+        // Phoenix reads the real verb of a form from `_method`.
+        if form.request.method != "POST" {
+            fields.push(("_method".to_owned(), percent_encode(&form.request.method)));
+        }
+        for (name, template) in &form.request.body {
+            if let Some(value) = fill(template, params)? {
+                fields.push((name.clone(), value));
+            }
+        }
+        (Some(fields), None)
+    };
+    let sent = match &payload {
+        (Some(fields), _) => Payload::Form(fields),
+        (None, Some(body)) => Payload::Json {
+            body: body.clone(),
+            csrf: &token,
+        },
+        (None, None) => bail!("nothing to send"),
+    };
     let path = plan_request(&form.request, params)?;
-    let submitted = match send(client, throttle, ctx, &path, Some(&fields), true).await? {
+    let submitted = match send(client, throttle, ctx, &path, Some(&sent), true).await? {
         Sent::Body(body) => body,
+        // A JSON endpoint redirects a visitor it does not accept (no session,
+        // no fingerprint) to the home page.
+        Sent::Redirect(_) if form.result.json.is_some() => {
+            return Err(anyhow::Error::new(FormRejected(
+                "the site did not accept this: sign in again".to_owned(),
+            )));
+        }
         Sent::Redirect(_) => String::new(),
     };
+    if form.result.json.is_some() {
+        // The response itself is the result: there is no page to read.
+        return Ok(Responses {
+            submitted,
+            ..Responses::default()
+        });
+    }
 
     let result = fill(&form.result.page, params)?
         .ok_or_else(|| anyhow!("missing parameter in {:?}", form.result.page))?;
@@ -563,6 +634,20 @@ pub fn extract(
         }
         Strategy::Html(s) => html::select(&responses.main, &s.select, ctx.origin),
         Strategy::Form(form) => {
+            if let Some(map) = &form.result.json {
+                let doc: Value = serde_json::from_str(&responses.submitted)
+                    .context("the site's answer is not JSON")?;
+                let all = effective_params(strategy, params)?;
+                return json::remap(
+                    &doc,
+                    map,
+                    json::RemapCtx {
+                        origin: ctx.origin,
+                        params: &all,
+                        joins: &BTreeMap::new(),
+                    },
+                );
+            }
             if let Some(location) = &responses.location {
                 // A redirect can be the answer (to a second factor's form).
                 let path = location
@@ -631,6 +716,7 @@ mod tests {
                 .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
                 .collect(),
             body: BTreeMap::new(),
+            encoding: None,
         }
     }
 

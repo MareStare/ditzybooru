@@ -20,7 +20,7 @@ import {
 } from '#/lib/api/backend/session';
 import type { Session } from '#/lib/api/backend/session';
 
-export const Route = createFileRoute('/sign-in')({ component: SignInPage });
+export const Route = createFileRoute('/sessions/new')({ component: SignInPage });
 
 function SignInPage() {
   const site = useSite();

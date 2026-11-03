@@ -2,6 +2,7 @@
 export type Transform =
   | 'int'
   | 'lastInt'
+  | 'sanitizedHtml'
   | 'float'
   | 'bool'
   | 'date'
@@ -126,17 +127,21 @@ interface FormStrategy extends StrategyBase {
   /** The submission. A method other than `POST` is sent as a `POST` with a `_method` field. `body` fields whose placeholders have no value are left out. */
   request: UpstreamRequest;
   /** What is read afterwards, to see what the submission did. */
-  result: {
-    page: string;
-    select: SelectSpec;
-    /** Pointers to booleans in the extracted result; at least one must be true, or the submission counts as rejected. */
-    must?: string[];
-    /** When the page read afterwards redirects, the answer for a `Location` ending in the key: for a redirect that is itself the result (to a second factor's form). */
-    redirects?: Record<string, unknown>;
-    /** Selector of the messages that say why, on the result page or in the submission's own response. */
-    errors?: string;
-  };
+  result: FormResult;
 }
+
+type FormResult = (
+  | { page: string; select: SelectSpec }
+  /** An endpoint that answers in JSON: the submission's own response, mapped by `json`. */
+  | { json: JsonMap }
+) & {
+  /** Pointers to booleans in the extracted result; at least one must be true, or the submission counts as rejected. */
+  must?: string[];
+  /** When the page read afterwards redirects, the answer for a `Location` ending in the key: for a redirect that is itself the result (to a second factor's form). */
+  redirects?: Record<string, unknown>;
+  /** Selector of the messages that say why, on the result page or in the submission's own response. */
+  errors?: string;
+};
 
 export type Strategy = JsonStrategy | HtmlStrategy | FormStrategy;
 

@@ -723,6 +723,30 @@
         ],
         "type": "object"
       },
+      "ImageCounters": {
+        "additionalProperties": false,
+        "properties": {
+          "downvotes": {
+            "type": "integer"
+          },
+          "faves": {
+            "type": "integer"
+          },
+          "score": {
+            "type": "integer"
+          },
+          "upvotes": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "score",
+          "upvotes",
+          "downvotes",
+          "faves"
+        ],
+        "type": "object"
+      },
       "ImagePage": {
         "additionalProperties": false,
         "properties": {
@@ -3461,6 +3485,473 @@
         }
       }
     },
+    "/images/{id}/fave": {
+      "delete": {
+        "operationId": "unfaveImage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Take an image off the visitor’s faves.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "DELETE /images/:image_id/fave"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "DELETE",
+                "path": "/images/{id}/fave"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "post": {
+        "operationId": "faveImage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Fave an image.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "POST /images/:image_id/fave"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "POST",
+                "path": "/images/{id}/fave"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/images/{id}/hide": {
+      "delete": {
+        "operationId": "unhideImage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Stop hiding an image.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "DELETE /images/:image_id/hide"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "DELETE",
+                "path": "/images/{id}/hide"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "post": {
+        "operationId": "hideImage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Hide an image from the visitor’s own listings.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "POST /images/:image_id/hide"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "POST",
+                "path": "/images/{id}/hide"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/images/{id}/vote": {
+      "delete": {
+        "operationId": "removeVote",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Take back the visitor’s vote on an image.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "DELETE /images/:image_id/vote"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "DELETE",
+                "path": "/images/{id}/vote"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "post": {
+        "operationId": "voteImage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "up": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "up"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ImageCounters"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Upvote (`up: true`) or downvote (`up: false`) an image. Answers its counters.",
+        "tags": [
+          "interactions"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "POST /images/:image_id/vote"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "body": {
+                  "up": "{up}"
+                },
+                "encoding": "json",
+                "method": "POST",
+                "path": "/images/{id}/vote"
+              },
+              "result": {
+                "json": {
+                  "downvotes": "/downvotes",
+                  "faves": "/faves",
+                  "score": "/score",
+                  "upvotes": "/upvotes"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
     "/images/featured": {
       "get": {
         "operationId": "getFeatured",
@@ -3717,6 +4208,7 @@
                 "fields": {
                   "bodyHtml": {
                     "after": "p:has(a[href$=\"/history\"])",
+                    "as": "sanitizedHtml",
                     "html": true,
                     "rest": true
                   },
@@ -4069,10 +4561,12 @@
                   "items": {
                     "fields": {
                       "bodyHtml": {
+                        "as": "sanitizedHtml",
                         "html": true,
                         "sel": ".rule__body .walloftext"
                       },
                       "examplesHtml": {
+                        "as": "sanitizedHtml",
                         "html": true,
                         "optional": true,
                         "sel": ".rule__example .walloftext"

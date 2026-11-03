@@ -164,6 +164,9 @@ async fn handle(
                 .unwrap_or_default(),
         )
     });
+    if let Some(session) = &session {
+        session.ensure_fingerprint();
+    }
     let secure = headers
         .get("x-forwarded-proto")
         .is_some_and(|proto| proto == "https");
@@ -268,6 +271,35 @@ async fn compute_outcome(
                     if *status == reqwest::StatusCode::NOT_FOUND || status.is_redirection() =>
                 {
                     Ok(Outcome::NotFound)
+                }
+                // The site turned a request down: the visitor is not allowed,
+                // or what they sent is wrong.
+                Some(UpstreamStatus(status))
+                    if matches!(
+                        *status,
+                        reqwest::StatusCode::UNAUTHORIZED | reqwest::StatusCode::FORBIDDEN
+                    ) =>
+                {
+                    Err(Failure {
+                        status: StatusCode::UNAUTHORIZED,
+                        code: "not_allowed",
+                        message: "the site does not allow this: sign in first".into(),
+                        retry_after: None,
+                    })
+                }
+                Some(UpstreamStatus(status))
+                    if matches!(
+                        *status,
+                        reqwest::StatusCode::BAD_REQUEST
+                            | reqwest::StatusCode::UNPROCESSABLE_ENTITY
+                    ) =>
+                {
+                    Err(Failure {
+                        status: StatusCode::UNPROCESSABLE_ENTITY,
+                        code: "rejected",
+                        message: "the site turned this down".into(),
+                        retry_after: None,
+                    })
                 }
                 Some(_) => Err(Failure {
                     status: StatusCode::INTERNAL_SERVER_ERROR,

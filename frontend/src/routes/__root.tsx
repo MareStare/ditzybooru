@@ -51,7 +51,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
   }),
   component: RootComponent,
+  notFoundComponent: NotFound,
 });
+
+/** A path nothing answers, or a thing the site says is not there. The response is a 404. */
+function NotFound() {
+  return (
+    <div className="content-page">
+      <h1 className="content-page__title">Not found</h1>
+      <p className="content-page__meta">There is nothing at this address.</p>
+    </div>
+  );
+}
 
 function RootComponent() {
   const { settings, site } = Route.useRouteContext();

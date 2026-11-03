@@ -68,7 +68,7 @@ function UserMenu() {
         >
           Register
         </Link>
-        <Link to="/sign-in" className="nav-link">
+        <Link to="/sessions/new" className="nav-link">
           Login
         </Link>
       </>

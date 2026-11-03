@@ -247,9 +247,9 @@ const Rule = s.object({
   id: s.int(),
   title: s.string(),
   important: s.bool(),
-  /** The rule's text, as sanitized HTML. */
+  /** The rule's text, as HTML cleaned by the backend: safe to render. */
   bodyHtml: s.string(),
-  /** Worked examples, as sanitized HTML. */
+  /** Worked examples, as HTML cleaned by the backend: safe to render. */
   examplesHtml: s.nullable(s.string()),
 });
 
@@ -269,7 +269,7 @@ const StaffGroup = s.object({
 const StaticPage = s.object({
   title: s.string(),
   updatedAt: s.dateTime(),
-  /** The page's text, as sanitized HTML. */
+  /** The page's text, as HTML cleaned by the backend: safe to render. */
   bodyHtml: s.string(),
 });
 
@@ -294,6 +294,14 @@ const Session = s.object({
 const LoginCaptcha = s.object({
   /** The hCaptcha site key to show a widget for, or `null` when the site asks for none. */
   siteKey: s.nullable(s.string()),
+});
+
+/** An image's counters after something a visitor did to it. */
+const ImageCounters = s.object({
+  score: s.int(),
+  upvotes: s.int(),
+  downvotes: s.int(),
+  faves: s.int(),
 });
 
 const Channel = s.object({
@@ -344,6 +352,7 @@ export const schemas = {
   TagSuggestion,
   Session,
   LoginCaptcha,
+  ImageCounters,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),

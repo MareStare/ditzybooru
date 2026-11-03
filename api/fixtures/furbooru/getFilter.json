@@ -1,1 +1,1 @@
-{"filter":{"id":1,"name":"Default","public":false,"system":true,"description":"The site's default filter.","user_id":null,"spoilered_tag_ids":[3],"hidden_tag_ids":[4,6],"user_count":0,"hidden_complex":null,"spoilered_complex":null}}
+{"filter":{"id":1,"name":"Default","public":false,"system":true,"description":"The site's default filter.","spoilered_tag_ids":[3],"hidden_tag_ids":[4,6],"user_id":null,"user_count":0,"hidden_complex":null,"spoilered_complex":null}}

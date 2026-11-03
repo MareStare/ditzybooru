@@ -62,6 +62,7 @@
 @import '../components/ui/Notice.css';
 @import '../components/ui/Pagination.css';
 @import '../components/ui/Panel.css';
+@import '../components/ui/Prose.css';
 @import '../components/ui/ResetButton.css';
 @import '../components/ui/Segmented.css';
 @import '../components/ui/Slider.css';
@@ -93,6 +94,7 @@
 /* ---- Pages ------------------------------------------------------------- */
 
 @import '../routes/__root.css';
+@import '../routes/content.css';
 @import '../routes/index.css';
 @import '../routes/search.css';
 @import '../routes/settings/display.css';

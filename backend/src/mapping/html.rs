@@ -137,7 +137,11 @@ fn extract(scope: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Valu
         && spec.html
         && let Some(css) = &spec.after
     {
-        return rest_html(scope, css);
+        let markup = rest_html(scope, css)?;
+        return match &spec.transform {
+            Some(name) => transform::apply(name, &markup, origin),
+            None => Ok(markup),
+        };
     }
     let start: Vec<ElementRef<'_>> = match &spec.after {
         Some(css) => following(scope, &parse_selector(css)?)

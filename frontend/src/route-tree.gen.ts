@@ -10,9 +10,12 @@
 
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
+import { Route as RulesRouteImport } from './routes/rules';
 import { Route as SearchRouteImport } from './routes/search';
-import { Route as SignInRouteImport } from './routes/sign-in';
+import { Route as StaffRouteImport } from './routes/staff';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
+import { Route as PagesSlugRouteImport } from './routes/pages/$slug';
+import { Route as SessionsNewRouteImport } from './routes/sessions/new';
 import { Route as SettingsAccountRouteImport } from './routes/settings/account';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
@@ -23,19 +26,34 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any);
+const RulesRoute = RulesRouteImport.update({
+  id: '/rules',
+  path: '/rules',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any);
-const SignInRoute = SignInRouteImport.update({
-  id: '/sign-in',
-  path: '/sign-in',
+const StaffRoute = StaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
   getParentRoute: () => rootRouteImport,
 } as any);
 const GalleriesIdRoute = GalleriesIdRouteImport.update({
   id: '/galleries/$id',
   path: '/galleries/$id',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const PagesSlugRoute = PagesSlugRouteImport.update({
+  id: '/pages/$slug',
+  path: '/pages/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const SessionsNewRoute = SessionsNewRouteImport.update({
+  id: '/sessions/new',
+  path: '/sessions/new',
   getParentRoute: () => rootRouteImport,
 } as any);
 const SettingsAccountRoute = SettingsAccountRouteImport.update({
@@ -61,9 +79,12 @@ const ApiV1SplatRoute = ApiV1SplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
+  '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
-  '/sign-in': typeof SignInRoute;
+  '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/pages/$slug': typeof PagesSlugRoute;
+  '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
@@ -71,9 +92,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
+  '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
-  '/sign-in': typeof SignInRoute;
+  '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/pages/$slug': typeof PagesSlugRoute;
+  '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
@@ -82,9 +106,12 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
+  '/rules': typeof RulesRoute;
   '/search': typeof SearchRoute;
-  '/sign-in': typeof SignInRoute;
+  '/staff': typeof StaffRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/pages/$slug': typeof PagesSlugRoute;
+  '/sessions/new': typeof SessionsNewRoute;
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
@@ -94,9 +121,12 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
+    | '/rules'
     | '/search'
-    | '/sign-in'
+    | '/staff'
     | '/galleries/$id'
+    | '/pages/$slug'
+    | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
@@ -104,9 +134,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
+    | '/rules'
     | '/search'
-    | '/sign-in'
+    | '/staff'
     | '/galleries/$id'
+    | '/pages/$slug'
+    | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
@@ -114,9 +147,12 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/rules'
     | '/search'
-    | '/sign-in'
+    | '/staff'
     | '/galleries/$id'
+    | '/pages/$slug'
+    | '/sessions/new'
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
@@ -125,9 +161,12 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
+  RulesRoute: typeof RulesRoute;
   SearchRoute: typeof SearchRoute;
-  SignInRoute: typeof SignInRoute;
+  StaffRoute: typeof StaffRoute;
   GalleriesIdRoute: typeof GalleriesIdRoute;
+  PagesSlugRoute: typeof PagesSlugRoute;
+  SessionsNewRoute: typeof SessionsNewRoute;
   SettingsAccountRoute: typeof SettingsAccountRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
@@ -143,6 +182,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/rules': {
+      id: '/rules';
+      path: '/rules';
+      fullPath: '/rules';
+      preLoaderRoute: typeof RulesRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/search': {
       id: '/search';
       path: '/search';
@@ -150,11 +196,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport;
       parentRoute: typeof rootRouteImport;
     };
-    '/sign-in': {
-      id: '/sign-in';
-      path: '/sign-in';
-      fullPath: '/sign-in';
-      preLoaderRoute: typeof SignInRouteImport;
+    '/staff': {
+      id: '/staff';
+      path: '/staff';
+      fullPath: '/staff';
+      preLoaderRoute: typeof StaffRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/galleries/$id': {
@@ -162,6 +208,20 @@ declare module '@tanstack/react-router' {
       path: '/galleries/$id';
       fullPath: '/galleries/$id';
       preLoaderRoute: typeof GalleriesIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/pages/$slug': {
+      id: '/pages/$slug';
+      path: '/pages/$slug';
+      fullPath: '/pages/$slug';
+      preLoaderRoute: typeof PagesSlugRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/sessions/new': {
+      id: '/sessions/new';
+      path: '/sessions/new';
+      fullPath: '/sessions/new';
+      preLoaderRoute: typeof SessionsNewRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/settings/account': {
@@ -197,9 +257,12 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RulesRoute: RulesRoute,
   SearchRoute: SearchRoute,
-  SignInRoute: SignInRoute,
+  StaffRoute: StaffRoute,
   GalleriesIdRoute: GalleriesIdRoute,
+  PagesSlugRoute: PagesSlugRoute,
+  SessionsNewRoute: SessionsNewRoute,
   SettingsAccountRoute: SettingsAccountRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,

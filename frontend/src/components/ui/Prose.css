@@ -1,0 +1,75 @@
+/* Text the site wrote, in the markup its renderer makes. */
+.prose {
+  overflow-wrap: anywhere;
+  line-height: 1.55;
+}
+
+.prose > :first-child {
+  margin-block-start: 0;
+}
+
+.prose > :last-child {
+  margin-block-end: 0;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  margin-block: var(--space-4) var(--space-2);
+  line-height: var(--leading-tight);
+}
+
+.prose p,
+.prose ul,
+.prose ol,
+.prose blockquote,
+.prose pre,
+.prose table {
+  margin-block: 0 var(--space-3);
+}
+
+.prose ul,
+.prose ol {
+  padding-inline-start: var(--space-6);
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 3px solid var(--border-color-strong);
+  color: var(--text-muted);
+}
+
+.prose a {
+  text-decoration: underline;
+}
+
+.prose img {
+  max-inline-size: 100%;
+  block-size: auto;
+}
+
+.prose code,
+.prose pre {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-2) var(--space-3);
+  background-color: var(--surface-sunken);
+  border-radius: var(--radius-sm);
+}
+
+.prose table {
+  border-collapse: collapse;
+}
+
+.prose th,
+.prose td {
+  padding: var(--space-1) var(--space-2);
+  border: var(--border);
+  border-color: var(--border-color-subtle);
+}

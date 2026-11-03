@@ -540,8 +540,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "unfaveImage"
+    ],
     "note": ""
   },
   "DELETE /images/:image_id/hash": {
@@ -566,8 +568,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "unhideImage"
+    ],
     "note": ""
   },
   "DELETE /images/:image_id/source_history": {
@@ -630,8 +634,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "removeVote"
+    ],
     "note": ""
   },
   "DELETE /notifications/:id": {
@@ -5046,8 +5052,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "faveImage"
+    ],
     "note": ""
   },
   "POST /images/:image_id/feature": {
@@ -5072,8 +5080,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "hideImage"
+    ],
     "note": ""
   },
   "POST /images/:image_id/read": {
@@ -5163,8 +5173,10 @@
     "class": "mutation",
     "area": "public",
     "phase": 6,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "voteImage"
+    ],
     "note": ""
   },
   "POST /images/scrape": {

@@ -165,7 +165,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
                 <UserPlus size={16} />
                 Register
               </Link>
-              <Link to="/sign-in" className="drawer__link" onClick={onClose}>
+              <Link to="/sessions/new" className="drawer__link" onClick={onClose}>
                 <LogIn size={16} />
                 Login
               </Link>

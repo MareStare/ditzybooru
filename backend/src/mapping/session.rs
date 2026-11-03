@@ -15,6 +15,24 @@ use reqwest::header::{HeaderMap, SET_COOKIE};
 /// upstream.
 const CROSSING: &[&str] = &["_philomena_key", "_ses", "user_totp_auth"];
 
+/// `len` random lowercase hex digits. The standard hasher is seeded by the
+/// operating system for each `RandomState`, which is all an id needs.
+fn random_hex(len: usize) -> String {
+    use std::hash::{BuildHasher, Hasher, RandomState};
+
+    let state = RandomState::new();
+    let mut out = String::new();
+    let mut round = 0_u64;
+    while out.len() < len {
+        let mut hasher = state.build_hasher();
+        hasher.write_u64(round);
+        let _ = write!(out, "{:016x}", hasher.finish());
+        round += 1;
+    }
+    out.truncate(len);
+    out
+}
+
 /// A cookie the upstream set, to be passed on to the visitor.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SetCookie {
@@ -106,6 +124,36 @@ impl Session {
             jar: Mutex::new(jar),
             set: Mutex::new(vec![]),
         }
+    }
+
+    /// Makes sure the visitor has the `_ses` cookie, a stable id of the browser.
+    /// Philomena refuses writes without one: it is how it tells a browser it
+    /// has banned from one it has not. The real site computes it from the
+    /// browser's traits; a random one per browser is a weaker id, but stable,
+    /// and the browser keeps it for a year.
+    pub fn ensure_fingerprint(&self) {
+        let mut jar = self
+            .jar
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        if jar.contains_key("_ses") {
+            return;
+        }
+        // `d` and 14 lowercase hex digits, the form Philomena accepts.
+        let fingerprint = format!("d{}", random_hex(14));
+        jar.insert("_ses".to_owned(), fingerprint.clone());
+        drop(jar);
+        self.set
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(SetCookie {
+                name: "_ses".to_owned(),
+                value: fingerprint,
+                max_age: Some(60 * 60 * 24 * 365),
+                expires: None,
+                http_only: true,
+                same_site: Some("Lax".to_owned()),
+            });
     }
 
     /// The `Cookie` header for the next upstream request.
@@ -207,6 +255,33 @@ mod tests {
             "_philomena_key=new; Path=/; Max-Age=3600; HttpOnly; SameSite=Lax"
         );
         assert!(cookie.header(true).ends_with("; Secure"));
+    }
+
+    #[test]
+    fn a_visitor_without_a_fingerprint_gets_one_and_keeps_it() {
+        let session = Session::from_cookie_header("_philomena_key=k");
+        session.ensure_fingerprint();
+        let header = session.cookie_header().unwrap();
+        let (_, ses) = header.split_once("_ses=").unwrap();
+        // `d` and 14 lowercase hex digits.
+        assert_eq!(ses.len(), 15);
+        assert!(ses.starts_with('d'));
+        assert!(
+            ses.chars()
+                .skip(1)
+                .all(|c| c.is_ascii_hexdigit() && !c.is_ascii_uppercase())
+        );
+        let set = session.into_set_cookies();
+        assert_eq!(set.len(), 1, "the browser is told so it keeps it");
+
+        // One the visitor already has is left alone.
+        let session = Session::from_cookie_header("_ses=d0123456789abcd");
+        session.ensure_fingerprint();
+        assert_eq!(
+            session.cookie_header().as_deref(),
+            Some("_ses=d0123456789abcd")
+        );
+        assert_eq!(session.into_set_cookies(), vec![]);
     }
 
     #[test]

@@ -7,6 +7,12 @@ use crate::Result;
 
 /// Applies the transform `name` to `value`; `origin` resolves relative URLs.
 pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
+    if name == "sanitizedHtml" {
+        return Ok(match value {
+            Value::String(html) => Value::String(sanitize_html(html, origin)),
+            other => other.clone(),
+        });
+    }
     let text = match value {
         Value::String(s) => s.trim().to_owned(),
         Value::Null => return Ok(Value::Null),
@@ -58,6 +64,27 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
     }
 }
 
+/// Page text from the upstream, made safe to put on our page: only the
+/// markup a page of prose needs, links that open safely, and media addresses
+/// that point at the upstream (a relative `/img/...` would otherwise be read
+/// against our domain). Links stay relative, so a link to the upstream's
+/// `/rules` is a link to our `/rules`.
+fn sanitize_html(html: &str, origin: &str) -> String {
+    let origin = origin.to_owned();
+    ammonia::Builder::default()
+        .add_generic_attributes(["class"])
+        .link_rel(Some("noopener noreferrer nofollow"))
+        .attribute_filter(move |element, attribute, value| {
+            if element == "img" && attribute == "src" {
+                Some(resolve_url(&origin, value).into())
+            } else {
+                Some(value.into())
+            }
+        })
+        .clean(html)
+        .to_string()
+}
+
 /// Whether `url` starts with a scheme such as `https:` or `data:`.
 fn has_scheme(url: &str) -> bool {
     url.split_once(':').is_some_and(|(scheme, _)| {
@@ -107,6 +134,27 @@ fn slugify(text: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn page_text_is_made_safe_and_its_images_point_at_the_upstream() {
+        let html = r#"<div class="paragraph" onclick="steal()">Hi <a href="/rules" target="_blank">rules</a> <script>alert(1)</script><img src="/img/a.png" onerror="x()"><a href="javascript:alert(1)">bad</a></div>"#;
+        let clean = apply(
+            "sanitizedHtml",
+            &Value::String(html.to_owned()),
+            "https://site.example",
+        )
+        .unwrap();
+        let clean = clean.as_str().unwrap();
+        assert!(
+            !clean.contains("script") && !clean.contains("onclick") && !clean.contains("onerror")
+        );
+        assert!(!clean.contains("javascript:"));
+        assert!(clean.contains(r#"class="paragraph""#));
+        // A link stays ours; an image comes from the upstream.
+        assert!(clean.contains(r#"href="/rules""#));
+        assert!(clean.contains(r#"src="https://site.example/img/a.png""#));
+        assert!(clean.contains("noopener"));
+    }
 
     #[test]
     fn last_int_takes_the_final_number() {

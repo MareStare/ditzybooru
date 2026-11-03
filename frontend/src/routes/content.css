@@ -1,0 +1,72 @@
+/* The site's own pages: rules, staff, static pages. One narrow column. */
+.content-page {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: 52rem;
+  margin-inline: auto;
+  padding: var(--space-4);
+}
+
+.content-page__title {
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.content-page__meta {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.content-page__status {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* One rule. Its number is the anchor, so a link to `#3` lands on it. */
+.rule {
+  scroll-margin-block-start: calc(var(--header-h, 0px) + var(--space-3));
+}
+
+.rule__examples {
+  padding: var(--space-3);
+  border-block-start: var(--border);
+  border-color: var(--border-color-subtle);
+}
+
+.rule__examples summary {
+  cursor: pointer;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.staff-group {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.staff-group__title {
+  margin: 0;
+  font-size: var(--text-lg);
+}
+
+.staff-group__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  gap: var(--space-3);
+}
+
+.staff-member {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+}
+
+.staff-member__description {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}

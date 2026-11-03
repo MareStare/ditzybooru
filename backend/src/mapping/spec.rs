@@ -131,6 +131,10 @@ pub struct UpstreamRequest {
     /// placeholder has no value is left out.
     #[serde(default)]
     pub body: BTreeMap<String, String>,
+    /// `json` sends `body` as a JSON object (`true` and `false` as booleans)
+    /// with the CSRF token in a header, as the site's own scripts do; absent,
+    /// a form. Some forks read a vote's `up` only from a real JSON boolean.
+    pub encoding: Option<String>,
 }
 
 /// JSON pointer remap strategy.
@@ -266,7 +270,7 @@ pub struct HtmlStrategy {
 }
 
 /// Root selector plus the fields extracted from it.
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Default, Deserialize)]
 pub struct SelectSpec {
     /// CSS selector of the scope; the whole document when absent.
     pub root: Option<String>,
@@ -355,13 +359,18 @@ pub struct TokenSpec {
     pub attr: String,
 }
 
-/// The page read after a submission.
+/// What is read after a submission: the page it leads to, or, for an endpoint
+/// that answers in JSON, its own response.
 #[derive(Debug, Deserialize)]
 pub struct FormResult {
-    /// Path of the page, usually `/`.
+    /// Path of the page, usually `/`. Unused when `json` is set.
+    #[serde(default)]
     pub page: String,
-    /// What to take from it.
+    /// What to take from the page. Unused when `json` is set.
+    #[serde(default)]
     pub select: SelectSpec,
+    /// The submission's own response is JSON: this maps it.
+    pub json: Option<BTreeMap<String, JsonMapValue>>,
     /// Pointers to booleans in the extracted result. At least one must be true,
     /// or the submission counts as rejected. Empty accepts anything.
     #[serde(default)]
