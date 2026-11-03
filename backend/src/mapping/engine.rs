@@ -194,9 +194,10 @@ async fn get_text(
     if request.method != "GET" {
         bail!("only GET requests are executable so far");
     }
-    let url = format!("{}{}", ctx.origin, plan_request(request, params)?);
+    let path = plan_request(request, params)?;
+    let url = format!("{}{}", ctx.origin, path);
     // Held until the body is read, so the cap covers the whole transfer.
-    let _slot = throttle.acquire(ctx.origin).await?;
+    let _slot = throttle.acquire(ctx.origin, &path).await?;
     let response = client
         .get(&url)
         .send()
@@ -210,6 +211,29 @@ async fn get_text(
             .and_then(|value| value.to_str().ok());
         let retry_after = throttle.cool_down(ctx.origin, retry_after);
         return Err(anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}")));
+    }
+    // Philomena answers its anti-bot challenge with 501 and an HTML page, and
+    // a client that ignores it with 500 and an empty body for 15 minutes (any
+    // request in that time restarts the clock). Back off, do not retry.
+    let challenged = status == reqwest::StatusCode::NOT_IMPLEMENTED
+        && response
+            .headers()
+            .get(reqwest::header::CONTENT_TYPE)
+            .and_then(|value| value.to_str().ok())
+            .is_some_and(|value| value.starts_with("text/html"));
+    if challenged {
+        let retry_after = throttle.block(ctx.origin, CHALLENGE_BACKOFF);
+        return Err(anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}")));
+    }
+    if status == reqwest::StatusCode::INTERNAL_SERVER_ERROR {
+        let body = response.text().await.unwrap_or_default();
+        if body.is_empty() {
+            let retry_after = throttle.block(ctx.origin, BLOCKED_BACKOFF);
+            return Err(
+                anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}"))
+            );
+        }
+        return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
     }
     if !status.is_success() {
         return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
@@ -283,6 +307,14 @@ pub async fn fetch(
         fanout: fanout_bodies,
     })
 }
+
+/// How long to leave an origin alone after its anti-bot challenge. The
+/// documented minimum is 5 seconds.
+const CHALLENGE_BACKOFF: std::time::Duration = std::time::Duration::from_secs(15);
+
+/// How long to leave an origin alone once it blocks us. The documented block
+/// is 15 minutes; one more minute is the margin.
+const BLOCKED_BACKOFF: std::time::Duration = std::time::Duration::from_mins(16);
 
 /// The most fan-out requests one response may cause.
 const MAX_FANOUT: usize = 20;
