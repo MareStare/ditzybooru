@@ -1379,6 +1379,9 @@
               }
             ]
           },
+          "secondFactorRequired": {
+            "type": "boolean"
+          },
           "signedIn": {
             "type": "boolean"
           },
@@ -1398,7 +1401,8 @@
           "id",
           "name",
           "slug",
-          "role"
+          "role",
+          "secondFactorRequired"
         ],
         "type": "object"
       },
@@ -4348,7 +4352,9 @@
               },
               "result": {
                 "errors": ".flash--warning, .flash--danger, .flash--error, .alert",
-                "must": "/anonymous",
+                "must": [
+                  "/anonymous"
+                ],
                 "page": "/",
                 "select": {
                   "fields": {
@@ -4371,6 +4377,10 @@
                       "attr": "data-user-role",
                       "optional": true,
                       "sel": ".js-datastore"
+                    },
+                    "secondFactorRequired": {
+                      "exists": true,
+                      "sel": "form[action=\"/sessions/totp\"]"
                     },
                     "signedIn": {
                       "as": "bool",
@@ -4451,6 +4461,10 @@
                     "attr": "data-user-role",
                     "optional": true,
                     "sel": ".js-datastore"
+                  },
+                  "secondFactorRequired": {
+                    "exists": true,
+                    "sel": "form[action=\"/sessions/totp\"]"
                   },
                   "signedIn": {
                     "as": "bool",
@@ -4558,8 +4572,20 @@
               },
               "result": {
                 "errors": ".flash--warning, .flash--danger, .flash--error, .alert",
-                "must": "/signedIn",
+                "must": [
+                  "/signedIn"
+                ],
                 "page": "/",
+                "redirects": {
+                  "/sessions/totp/new": {
+                    "id": null,
+                    "name": null,
+                    "role": null,
+                    "secondFactorRequired": true,
+                    "signedIn": false,
+                    "slug": null
+                  }
+                },
                 "select": {
                   "fields": {
                     "id": {
@@ -4577,6 +4603,10 @@
                       "attr": "data-user-role",
                       "optional": true,
                       "sel": ".js-datastore"
+                    },
+                    "secondFactorRequired": {
+                      "exists": true,
+                      "sel": "form[action=\"/sessions/totp\"]"
                     },
                     "signedIn": {
                       "as": "bool",
@@ -4653,6 +4683,131 @@
                 }
               },
               "template": "lib/philomena_web/templates/session/new.html.slime"
+            }
+          ]
+        }
+      }
+    },
+    "/session/totp": {
+      "post": {
+        "operationId": "createSessionTotp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "rememberMe": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "code"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Finish signing in with the 2FA code, after `createSession` answered `secondFactorRequired`.",
+        "tags": [
+          "session"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "POST /sessions/totp",
+            "GET /sessions/totp/new"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "value",
+                  "sel": "input[name=_csrf_token]"
+                },
+                "page": "/sessions/totp/new"
+              },
+              "kind": "form",
+              "request": {
+                "body": {
+                  "user[remember_me]": "{rememberMe|false}",
+                  "user[twofactor_token]": "{code}"
+                },
+                "method": "POST",
+                "path": "/sessions/totp"
+              },
+              "result": {
+                "errors": ".flash--warning, .flash--danger, .flash--error, .alert",
+                "must": [
+                  "/signedIn"
+                ],
+                "page": "/",
+                "select": {
+                  "fields": {
+                    "id": {
+                      "as": "int",
+                      "attr": "data-user-id",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "name": {
+                      "attr": "data-user-name",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "role": {
+                      "attr": "data-user-role",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "secondFactorRequired": {
+                      "exists": true,
+                      "sel": "form[action=\"/sessions/totp\"]"
+                    },
+                    "signedIn": {
+                      "as": "bool",
+                      "attr": "data-user-is-signed-in",
+                      "sel": ".js-datastore"
+                    },
+                    "slug": {
+                      "attr": "data-user-slug",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    }
+                  }
+                }
+              }
             }
           ]
         }

@@ -13,7 +13,7 @@ use reqwest::header::{HeaderMap, SET_COOKIE};
 /// The only cookies that cross. Everything else the upstream sets stays out of
 /// the visitor's browser, and nothing else the browser holds reaches the
 /// upstream.
-const CROSSING: &[&str] = &["_philomena_key", "_ses"];
+const CROSSING: &[&str] = &["_philomena_key", "_ses", "user_totp_auth"];
 
 /// A cookie the upstream set, to be passed on to the visitor.
 #[derive(Debug, Clone, PartialEq, Eq)]

@@ -16,6 +16,8 @@ export interface Session {
   name: null | string;
   slug: null | string;
   role: null | string;
+  /** The password was right, but the site still wants the 2FA code. */
+  secondFactorRequired: boolean;
 }
 
 export interface SignInParams {
@@ -39,21 +41,31 @@ export async function fetchLoginCaptcha(): Promise<null | string> {
   return siteKey;
 }
 
-export async function signIn({ email, password, rememberMe, captchaToken }: SignInParams): Promise<Session> {
-  try {
-    return await post<Session>('/session', {
-      email,
-      password,
-      rememberMe,
-      ...(captchaToken === null ? {} : { captchaToken }),
-    });
-  } catch (error) {
-    if (error instanceof HttpError && error.response.status === 422) {
-      const body = (await error.response.clone().json()) as { error?: { message?: string } };
-      throw new SignInRejected(body.error?.message ?? 'The site turned this down.');
-    }
-    throw error;
+/** Turns the site's 422 into a {@link SignInRejected} with its own words; anything else passes. */
+async function rejection(error: unknown): Promise<never> {
+  if (error instanceof HttpError && error.response.status === 422) {
+    const body = (await error.response.clone().json()) as { error?: { message?: string } };
+    throw new SignInRejected(body.error?.message ?? 'The site turned this down.');
   }
+  throw error;
+}
+
+/**
+ * The first step. When the account has 2FA the answer has `secondFactorRequired`
+ * and the visitor is not signed in yet: {@link signInWithCode} finishes it.
+ */
+export async function signIn({ email, password, rememberMe, captchaToken }: SignInParams): Promise<Session> {
+  return post<Session>('/session', {
+    email,
+    password,
+    rememberMe,
+    ...(captchaToken === null ? {} : { captchaToken }),
+  }).catch(rejection);
+}
+
+/** The second step, with the code from the visitor's authenticator (or a backup code). */
+export async function signInWithCode(code: string, rememberMe: boolean): Promise<Session> {
+  return post<Session>('/session/totp', { code, rememberMe }).catch(rejection);
 }
 
 export function signOut(): Promise<Session> {

@@ -14,10 +14,22 @@ const sessionFields = {
   name: user('name'),
   slug: user('slug'),
   role: user('role'),
+  // Signed in with a password, but the site wants the 2FA code before it lets them in.
+  secondFactorRequired: { sel: 'form[action="/sessions/totp"]', exists: true },
 } satisfies Record<string, FieldSpec>;
 
 /** Philomena says why a form was turned down in flash messages and inline alerts. */
 const REJECTION = '.flash--warning, .flash--danger, .flash--error, .alert';
+
+/** What `createSession` answers when the password was right and a 2FA code is still needed. */
+const SECOND_FACTOR_ANSWER = {
+  signedIn: false,
+  id: null,
+  name: null,
+  slug: null,
+  role: null,
+  secondFactorRequired: true,
+};
 
 const TOKEN = { sel: 'meta[name=csrf-token]', attr: 'content' };
 
@@ -104,7 +116,47 @@ export const createSession = defineOperation({
             'h-captcha-response': '{captchaToken}',
           },
         },
-        result: { page: '/', select: { fields: sessionFields }, must: '/signedIn', errors: REJECTION },
+        // A user with 2FA is signed in only after the code: the site sends them to its form.
+        result: {
+          page: '/',
+          select: { fields: sessionFields },
+          must: ['/signedIn'],
+          redirects: { '/sessions/totp/new': { ...SECOND_FACTOR_ANSWER } },
+          errors: REJECTION,
+        },
+      },
+    ],
+  },
+});
+
+/** The second step of a sign-in for a user with 2FA. Needs the cookie the first step set. */
+export const createSessionTotp = defineOperation({
+  operationId: 'createSessionTotp',
+  path: '/session/totp',
+  method: 'post',
+  summary: 'Finish signing in with the 2FA code, after `createSession` answered `secondFactorRequired`.',
+  tags: ['session'],
+  body: s.object({
+    code: s.string(),
+    /** Whether the site should remember this device for the code. */
+    rememberMe: s.optional(s.bool()),
+  }),
+  response: s.ref('Session'),
+  philomena: {
+    routes: ['POST /sessions/totp', 'GET /sessions/totp/new'],
+    auth: 'session',
+    strategies: [
+      {
+        kind: 'form',
+        flavors: ['philomena', 'furbooru'],
+        // This page has no meta tag, only the form's own hidden field.
+        form: { page: '/sessions/totp/new', csrf: { sel: 'input[name=_csrf_token]', attr: 'value' } },
+        request: {
+          method: 'POST',
+          path: '/sessions/totp',
+          body: { 'user[twofactor_token]': '{code}', 'user[remember_me]': '{rememberMe|false}' },
+        },
+        result: { page: '/', select: { fields: sessionFields }, must: ['/signedIn'], errors: REJECTION },
       },
     ],
   },
@@ -130,7 +182,7 @@ export const deleteSession = defineOperation({
         result: {
           page: '/',
           select: { fields: { ...sessionFields, anonymous: { sel: 'a[href="/sessions/new"]', exists: true } } },
-          must: '/anonymous',
+          must: ['/anonymous'],
           errors: REJECTION,
         },
       },

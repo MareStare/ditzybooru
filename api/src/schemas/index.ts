@@ -287,6 +287,8 @@ const Session = s.object({
   name: s.nullable(s.string()),
   slug: s.nullable(s.string()),
   role: s.nullable(s.string()),
+  /** Signed in with the password, but the site still wants the 2FA code (`createSessionTotp`). */
+  secondFactorRequired: s.bool(),
 });
 
 const LoginCaptcha = s.object({

@@ -362,9 +362,15 @@ pub struct FormResult {
     pub page: String,
     /// What to take from it.
     pub select: SelectSpec,
-    /// Pointer to a boolean in the extracted result that must be true, or the
-    /// submission counts as rejected.
-    pub must: Option<String>,
+    /// Pointers to booleans in the extracted result. At least one must be true,
+    /// or the submission counts as rejected. Empty accepts anything.
+    #[serde(default)]
+    pub must: Vec<String>,
+    /// When the page read afterwards redirects, the result for a `Location`
+    /// ending in the key, by path: for a redirect that is itself the answer
+    /// (to a second factor's form, say).
+    #[serde(default)]
+    pub redirects: BTreeMap<String, Value>,
     /// Selector of the messages that say why, on the result page or in the
     /// submission's own response.
     pub errors: Option<String>,

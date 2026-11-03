@@ -221,6 +221,16 @@ pub struct Responses {
     /// For a form: the submission's own response, where a page that is shown
     /// again (rather than redirected from) says what was wrong.
     pub submitted: String,
+    /// For a form: where the page read afterwards redirected to, instead of
+    /// answering. Then `main` is empty.
+    pub location: Option<String>,
+}
+
+/// What a request came back with.
+enum Sent {
+    Body(String),
+    /// A redirect, with its `Location`. Only form flows expect these.
+    Redirect(String),
 }
 
 async fn get_text(
@@ -237,7 +247,10 @@ async fn get_text(
         );
     }
     let path = plan_request(request, params)?;
-    send(client, throttle, ctx, &path, None).await
+    match send(client, throttle, ctx, &path, None, false).await? {
+        Sent::Body(body) => Ok(body),
+        Sent::Redirect(_) => bail!("unexpected redirect"),
+    }
 }
 
 /// One upstream request: a `GET`, or a form `POST` when `form` is given (names
@@ -249,7 +262,8 @@ async fn send(
     ctx: Context<'_>,
     path: &str,
     form: Option<&[(String, String)]>,
-) -> Result<String> {
+    redirect_ok: bool,
+) -> Result<Sent> {
     let verb = if form.is_some() { "POST" } else { "GET" };
     // Without the key: this is what errors and logs show.
     let url = format!("{}{}", ctx.origin, path);
@@ -332,8 +346,14 @@ async fn send(
             .context(format!("the page says: {}", html::snippet(&body, 300))));
     }
     // A submission answers with a redirect; the page it leads to is read next.
-    if form.is_some() && status.is_redirection() {
-        return Ok(String::new());
+    if (form.is_some() || redirect_ok) && status.is_redirection() {
+        let location = response
+            .headers()
+            .get(reqwest::header::LOCATION)
+            .and_then(|value| value.to_str().ok())
+            .unwrap_or_default()
+            .to_owned();
+        return Ok(Sent::Redirect(location));
     }
     if !status.is_success() {
         return Err(fail(anyhow::Error::new(UpstreamStatus(status))));
@@ -342,7 +362,7 @@ async fn send(
     if ctx.api_key.is_some() && body.trim().is_empty() {
         return Err(fail(anyhow::Error::new(InvalidApiKey)));
     }
-    Ok(body)
+    Ok(Sent::Body(body))
 }
 
 /// Performs the strategy's request, then its joins' follow-up requests.
@@ -435,7 +455,9 @@ async fn fetch_form(
 ) -> Result<Responses> {
     let page = fill(&form.form.page, params)?
         .ok_or_else(|| anyhow!("missing parameter in {:?}", form.form.page))?;
-    let page_html = send(client, throttle, ctx, &page, None).await?;
+    let Sent::Body(page_html) = send(client, throttle, ctx, &page, None, false).await? else {
+        bail!("{page} redirected, so there is no form to fill");
+    };
     let token = html::attribute(&page_html, &form.form.csrf.sel, &form.form.csrf.attr)?
         .ok_or_else(|| anyhow!("no CSRF token on {page}"))?;
 
@@ -451,14 +473,21 @@ async fn fetch_form(
         }
     }
     let path = plan_request(&form.request, params)?;
-    let submitted = send(client, throttle, ctx, &path, Some(&fields)).await?;
+    let submitted = match send(client, throttle, ctx, &path, Some(&fields), true).await? {
+        Sent::Body(body) => body,
+        Sent::Redirect(_) => String::new(),
+    };
 
     let result = fill(&form.result.page, params)?
         .ok_or_else(|| anyhow!("missing parameter in {:?}", form.result.page))?;
-    let main = send(client, throttle, ctx, &result, None).await?;
+    let (main, location) = match send(client, throttle, ctx, &result, None, true).await? {
+        Sent::Body(body) => (body, None),
+        Sent::Redirect(location) => (String::new(), Some(location)),
+    };
     Ok(Responses {
         main,
         submitted,
+        location,
         ..Responses::default()
     })
 }
@@ -511,12 +540,29 @@ pub fn extract(
         }
         Strategy::Html(s) => html::select(&responses.main, &s.select, ctx.origin),
         Strategy::Form(form) => {
+            if let Some(location) = &responses.location {
+                // A redirect can be the answer (to a second factor's form).
+                let path = location
+                    .strip_prefix(ctx.origin)
+                    .unwrap_or(location)
+                    .split('?')
+                    .next()
+                    .unwrap_or_default();
+                return form
+                    .result
+                    .redirects
+                    .iter()
+                    .find(|(suffix, _)| path.ends_with(suffix.as_str()))
+                    .map(|(_, answer)| answer.clone())
+                    .ok_or_else(|| anyhow::Error::new(FormRejected(format!("it led to {path}"))));
+            }
             let value = html::select(&responses.main, &form.result.select, ctx.origin)?;
-            let accepted = form
-                .result
-                .must
-                .as_ref()
-                .is_none_or(|pointer| value.pointer(pointer) == Some(&Value::Bool(true)));
+            let accepted = form.result.must.is_empty()
+                || form
+                    .result
+                    .must
+                    .iter()
+                    .any(|pointer| value.pointer(pointer) == Some(&Value::Bool(true)));
             if !accepted {
                 let mut messages = vec![];
                 if let Some(css) = &form.result.errors {

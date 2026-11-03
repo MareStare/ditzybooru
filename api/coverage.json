@@ -3222,8 +3222,10 @@
     "class": "html-form",
     "area": "auth",
     "phase": 4,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "createSessionTotp"
+    ],
     "note": ""
   },
   "GET /settings/edit": {
@@ -5406,8 +5408,10 @@
     "class": "mutation",
     "area": "auth",
     "phase": 4,
-    "status": "todo",
-    "operations": [],
+    "status": "mapped",
+    "operations": [
+      "createSessionTotp"
+    ],
     "note": ""
   },
   "POST /tag_changes/full_revert": {

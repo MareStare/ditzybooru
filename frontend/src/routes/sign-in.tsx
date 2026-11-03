@@ -11,7 +11,8 @@ import { Panel, PanelBody, PanelHeader } from '#/components/ui/Panel';
 import { SESSION_QUERY_KEY } from '#/hooks/use-session';
 import { useDataSource } from '#/hooks/use-data-source';
 import { useSite } from '#/hooks/use-site';
-import { fetchLoginCaptcha, signIn, SignInRejected } from '#/lib/api/backend/session';
+import { fetchLoginCaptcha, signIn, SignInRejected, signInWithCode } from '#/lib/api/backend/session';
+import type { Session } from '#/lib/api/backend/session';
 
 export const Route = createFileRoute('/sign-in')({ component: SignInPage });
 
@@ -27,6 +28,9 @@ function SignInPage() {
   const [captchaFailed, setCaptchaFailed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<null | string>(null);
+  // Set once the password was right and the site wants a 2FA code.
+  const [needsCode, setNeedsCode] = useState(false);
+  const [code, setCode] = useState('');
   // Browser only: the captcha is not part of the server render.
   const { data: siteKey, isError: captchaUnavailable } = useQuery({
     queryKey: ['login-captcha'],
@@ -35,24 +39,43 @@ function SignInPage() {
     staleTime: 60 * 60_000,
   });
 
-  const ready = kind === 'live' && siteKey !== undefined && (siteKey === null || captchaToken !== null);
+  const ready =
+    kind === 'live' &&
+    (needsCode ? code.trim() !== '' : siteKey !== undefined && (siteKey === null || captchaToken !== null));
+
+  const done = (session: Session) => {
+    queryClient.setQueryData(SESSION_QUERY_KEY, session);
+    void navigate({ to: '/' });
+  };
+
+  const failed = (error: unknown) => {
+    setBusy(false);
+    // A captcha token works once, so the visitor has to solve another.
+    setCaptchaToken(null);
+    setProblem(error instanceof SignInRejected ? error.message : 'Could not reach the site. Try again.');
+  };
 
   const submit = (event: SubmitEvent) => {
     event.preventDefault();
     setBusy(true);
     setProblem(null);
-    signIn({ email, password, rememberMe, captchaToken }).then(
-      session => {
-        queryClient.setQueryData(SESSION_QUERY_KEY, session);
-        void navigate({ to: '/' });
-      },
-      (error: unknown) => {
+    if (needsCode) {
+      signInWithCode(code.trim(), rememberMe).then(done, (error: unknown) => {
+        failed(error);
+        // The site signs the visitor out after a wrong code: start over.
+        setNeedsCode(false);
+        setCode('');
+      });
+      return;
+    }
+    signIn({ email, password, rememberMe, captchaToken }).then(session => {
+      if (session.secondFactorRequired) {
         setBusy(false);
-        // A captcha token works once, so the visitor has to solve another.
-        setCaptchaToken(null);
-        setProblem(error instanceof SignInRejected ? error.message : 'Could not reach the site. Try again.');
-      },
-    );
+        setNeedsCode(true);
+        return;
+      }
+      done(session);
+    }, failed);
   };
 
   return (
@@ -70,32 +93,55 @@ function SignInPage() {
         <PanelHeader>Sign in</PanelHeader>
         <PanelBody>
           <form className="developer-setting" onSubmit={submit}>
-            <div className="developer-setting__text">
-              <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
-              <Field
-                id="sign-in-email"
-                type="email"
-                autoComplete="username"
-                required
-                value={email}
-                onChange={event => {
-                  setEmail(event.target.value);
-                }}
-              />
-            </div>
-            <div className="developer-setting__text">
-              <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
-              <Field
-                id="sign-in-password"
-                type="password"
-                autoComplete="current-password"
-                required
-                value={password}
-                onChange={event => {
-                  setPassword(event.target.value);
-                }}
-              />
-            </div>
+            {needsCode ? (
+              <div className="developer-setting__text">
+                <FieldLabel htmlFor="sign-in-code">Your 2FA code</FieldLabel>
+                <Field
+                  id="sign-in-code"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  required
+                  autoFocus
+                  value={code}
+                  onChange={event => {
+                    setCode(event.target.value);
+                  }}
+                />
+                <span className="developer-setting__hint">
+                  {site.name} asks for the code from your authenticator app, or one of your backup codes.
+                </span>
+              </div>
+            ) : null}
+            {needsCode ? null : (
+              <>
+                <div className="developer-setting__text">
+                  <FieldLabel htmlFor="sign-in-email">Email</FieldLabel>
+                  <Field
+                    id="sign-in-email"
+                    type="email"
+                    autoComplete="username"
+                    required
+                    value={email}
+                    onChange={event => {
+                      setEmail(event.target.value);
+                    }}
+                  />
+                </div>
+                <div className="developer-setting__text">
+                  <FieldLabel htmlFor="sign-in-password">Password</FieldLabel>
+                  <Field
+                    id="sign-in-password"
+                    type="password"
+                    autoComplete="current-password"
+                    required
+                    value={password}
+                    onChange={event => {
+                      setPassword(event.target.value);
+                    }}
+                  />
+                </div>
+              </>
+            )}
             <label className="developer-setting__hint">
               <input
                 type="checkbox"
@@ -106,7 +152,7 @@ function SignInPage() {
               />{' '}
               Remember me
             </label>
-            {typeof siteKey === 'string' ? (
+            {typeof siteKey === 'string' && !needsCode ? (
               <HCaptcha
                 // A new widget after a failed try, as the old token is spent.
                 key={problem ?? 'first'}
