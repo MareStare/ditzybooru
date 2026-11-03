@@ -277,6 +277,10 @@ pub struct SelectSpec {
 )]
 #[derive(Debug, Default, Deserialize)]
 pub struct FieldSpec {
+    /// Starts from the first following sibling that matches this selector
+    /// instead of from the scope itself; `sel`, if given, then selects inside
+    /// it. For markup that groups by position (a heading, then its list).
+    pub after: Option<String>,
     /// CSS selector relative to the parent.
     pub sel: Option<String>,
     /// Read this attribute.

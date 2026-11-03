@@ -522,6 +522,22 @@
         ],
         "type": "object"
       },
+      "ForumList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Forum"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
       "ForumTopic": {
         "additionalProperties": false,
         "properties": {
@@ -1208,6 +1224,135 @@
           "thumb",
           "thumbSmall",
           "thumbTiny"
+        ],
+        "type": "object"
+      },
+      "Rule": {
+        "additionalProperties": false,
+        "properties": {
+          "bodyHtml": {
+            "type": "string"
+          },
+          "examplesHtml": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "important": {
+            "type": "boolean"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "important",
+          "bodyHtml",
+          "examplesHtml"
+        ],
+        "type": "object"
+      },
+      "RuleList": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Rule"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "updatedAt",
+          "items"
+        ],
+        "type": "object"
+      },
+      "StaffGroup": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "members": {
+            "items": {
+              "$ref": "#/components/schemas/StaffMember"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "members"
+        ],
+        "type": "object"
+      },
+      "StaffMember": {
+        "additionalProperties": false,
+        "properties": {
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "profileUrl": {
+            "format": "uri-reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "profileUrl",
+          "avatarUrl",
+          "description"
+        ],
+        "type": "object"
+      },
+      "StaffPage": {
+        "additionalProperties": false,
+        "properties": {
+          "groups": {
+            "items": {
+              "$ref": "#/components/schemas/StaffGroup"
+            },
+            "minItems": 0,
+            "type": "array"
+          }
+        },
+        "required": [
+          "groups"
         ],
         "type": "object"
       },
@@ -2095,6 +2240,66 @@
                     "slug": "/item/slug",
                     "sticky": "/item/sticky",
                     "title": "/item/title"
+                  }
+                }
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums": {
+      "get": {
+        "operationId": "listForums",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ForumList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The forums page: every forum with its description and counters.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums",
+            "GET /forums"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/forums",
+                  "map": {
+                    "description": "/description",
+                    "name": "/name",
+                    "postCount": "/post_count",
+                    "slug": "/short_name",
+                    "topicCount": "/topic_count"
                   }
                 }
               },
@@ -3489,6 +3694,92 @@
         }
       }
     },
+    "/rules": {
+      "get": {
+        "operationId": "listRules",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RuleList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The site rules page: every rule with its text and examples.",
+        "tags": [
+          "pages"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /rules"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/rules"
+              },
+              "select": {
+                "fields": {
+                  "items": {
+                    "fields": {
+                      "bodyHtml": {
+                        "html": true,
+                        "sel": ".rule__body .walloftext"
+                      },
+                      "examplesHtml": {
+                        "html": true,
+                        "optional": true,
+                        "sel": ".rule__example .walloftext"
+                      },
+                      "id": {
+                        "as": "int",
+                        "attr": "id"
+                      },
+                      "important": {
+                        "exists": true,
+                        "sel": ".rule__badge--important"
+                      },
+                      "title": {
+                        "sel": ".rule__title",
+                        "text": true
+                      }
+                    },
+                    "many": true,
+                    "sel": "article.rule"
+                  },
+                  "updatedAt": {
+                    "attr": "datetime",
+                    "sel": "time"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/rule/index.html.slime"
+            }
+          ]
+        }
+      }
+    },
     "/search": {
       "get": {
         "operationId": "searchImages",
@@ -3669,6 +3960,101 @@
                   "sf": "{sf|created_at}"
                 }
               }
+            }
+          ]
+        }
+      }
+    },
+    "/staff": {
+      "get": {
+        "operationId": "getStaff",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffPage"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The staff page: staff groups and the people in each.",
+        "tags": [
+          "pages"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /staff"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/staff"
+              },
+              "select": {
+                "fields": {
+                  "groups": {
+                    "fields": {
+                      "description": {
+                        "after": ".staff-block__description",
+                        "text": true
+                      },
+                      "members": {
+                        "after": ".staff-block__grid",
+                        "fields": {
+                          "avatarUrl": {
+                            "as": "url",
+                            "attr": "src",
+                            "optional": true,
+                            "sel": ".staff-block__avatar img"
+                          },
+                          "description": {
+                            "sel": ".staff-block__user-description",
+                            "text": true
+                          },
+                          "name": {
+                            "sel": ".staff-block__avatar b",
+                            "text": true
+                          },
+                          "profileUrl": {
+                            "as": "url",
+                            "attr": "href",
+                            "sel": "a.profile-block"
+                          }
+                        },
+                        "many": true,
+                        "sel": ".staff-block__user"
+                      },
+                      "name": {
+                        "text": true
+                      }
+                    },
+                    "many": true,
+                    "sel": ".staff-block__category"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/staff/index.html.slime"
             }
           ]
         }

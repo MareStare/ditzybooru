@@ -56,10 +56,30 @@ fn find<'a>(scope: ElementRef<'a>, selector: &Selector) -> Vec<ElementRef<'a>> {
     }
 }
 
+/// The first element after `scope`, among its siblings, that matches `selector`.
+fn following<'a>(scope: ElementRef<'a>, selector: &Selector) -> Option<ElementRef<'a>> {
+    scope
+        .next_siblings()
+        .filter_map(ElementRef::wrap)
+        .find(|sibling| selector.matches(sibling))
+}
+
 fn extract(scope: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
-    let targets = match &spec.sel {
-        Some(css) => find(scope, &parse_selector(css)?),
+    let start: Vec<ElementRef<'_>> = match &spec.after {
+        Some(css) => following(scope, &parse_selector(css)?)
+            .into_iter()
+            .collect(),
         None => vec![scope],
+    };
+    let targets = match &spec.sel {
+        Some(css) => {
+            let selector = parse_selector(css)?;
+            start
+                .into_iter()
+                .flat_map(|from| find(from, &selector))
+                .collect()
+        }
+        None => start,
     };
     if spec.exists {
         return Ok(Value::Bool(!targets.is_empty()));
@@ -115,5 +135,35 @@ fn read(el: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
     match &spec.transform {
         Some(name) => transform::apply(name, &raw, origin),
         None => Ok(raw),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn after_pairs_a_heading_with_the_block_that_follows_it() {
+        let spec: SelectSpec = serde_json::from_value(serde_json::json!({
+            "fields": { "groups": {
+                "sel": "h2", "many": true,
+                "fields": {
+                    "name": { "text": true },
+                    "members": { "after": "ul", "sel": "li", "many": true, "text": true }
+                }
+            }}
+        }))
+        .unwrap();
+        let body = "<div><h2>A</h2><p>x</p><ul><li>a1</li><li>a2</li></ul>\
+                    <h2>B</h2><ul><li>b1</li></ul><h2>C</h2></div>";
+        let out = select(body, &spec, "").unwrap();
+        assert_eq!(
+            out,
+            serde_json::json!({ "groups": [
+                { "name": "A", "members": ["a1", "a2"] },
+                { "name": "B", "members": ["b1"] },
+                { "name": "C", "members": [] },
+            ]})
+        );
     }
 }

@@ -13,6 +13,8 @@ export type Transform =
 
 /** HTML field extractor. `sel` is CSS relative to the parent; exactly one reader applies. */
 export interface FieldSpec {
+  /** Start from the first following sibling matching this selector instead of from the scope; `sel` then selects inside it. */
+  after?: string;
   sel?: string;
   attr?: string;
   text?: true;

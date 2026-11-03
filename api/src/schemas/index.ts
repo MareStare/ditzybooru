@@ -235,6 +235,29 @@ const Embed = s.object({
   tags: s.array(s.string()),
 });
 
+const Rule = s.object({
+  id: s.int(),
+  title: s.string(),
+  important: s.bool(),
+  /** The rule's text, as sanitized HTML. */
+  bodyHtml: s.string(),
+  /** Worked examples, as sanitized HTML. */
+  examplesHtml: s.nullable(s.string()),
+});
+
+const StaffMember = s.object({
+  name: s.string(),
+  profileUrl: s.uri(),
+  avatarUrl: s.nullable(s.uri()),
+  description: s.string(),
+});
+
+const StaffGroup = s.object({
+  name: s.string(),
+  description: s.string(),
+  members: s.array(s.ref('StaffMember')),
+});
+
 const Channel = s.object({
   id: s.int(),
   title: s.string(),
@@ -276,6 +299,9 @@ export const schemas = {
   Topic,
   Profile,
   Embed,
+  Rule,
+  StaffMember,
+  StaffGroup,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
@@ -285,6 +311,9 @@ export const schemas = {
   PostResults: results('Post'),
   GalleryResults: results('Gallery'),
   FilterResults: results('Filter'),
+  RuleList: s.object({ updatedAt: s.dateTime(), items: s.array(s.ref('Rule')) }),
+  StaffPage: s.object({ groups: s.array(s.ref('StaffGroup')) }),
+  ForumList: s.object({ items: s.array(s.ref('Forum')) }),
   ChannelList: s.object({ items: s.array(s.ref('Channel')) }),
   FilterList: s.object({ items: s.array(s.ref('Filter')) }),
   Error: ErrorBody,

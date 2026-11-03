@@ -178,3 +178,36 @@ export const getPost = defineOperation({
     ],
   },
 });
+
+export const listForums = defineOperation({
+  operationId: 'listForums',
+  path: '/forums',
+  method: 'get',
+  summary: 'The forums page: every forum with its description and counters.',
+  tags: ['forums'],
+  params: [],
+  response: s.ref('ForumList'),
+  examples: {},
+  philomena: {
+    routes: ['GET /api/v1/json/forums', 'GET /forums'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'json',
+        request: { method: 'GET', path: '/api/v1/json/forums' },
+        map: {
+          items: {
+            from: '/forums',
+            map: {
+              slug: '/short_name',
+              name: '/name',
+              description: '/description',
+              postCount: '/post_count',
+              topicCount: '/topic_count',
+            },
+          },
+        },
+      },
+    ],
+  },
+});
