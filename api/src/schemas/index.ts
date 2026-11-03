@@ -258,6 +258,13 @@ const StaffGroup = s.object({
   members: s.array(s.ref('StaffMember')),
 });
 
+const StaticPage = s.object({
+  title: s.string(),
+  updatedAt: s.dateTime(),
+  /** The page's text, as sanitized HTML. */
+  bodyHtml: s.string(),
+});
+
 const Channel = s.object({
   id: s.int(),
   title: s.string(),
@@ -302,6 +309,7 @@ export const schemas = {
   Rule,
   StaffMember,
   StaffGroup,
+  StaticPage,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),

@@ -15,6 +15,8 @@ export type Transform =
 export interface FieldSpec {
   /** Start from the first following sibling matching this selector instead of from the scope; `sel` then selects inside it. */
   after?: string;
+  /** With `after` and `html`: the markup of the siblings after the match, not the match itself. */
+  rest?: true;
   sel?: string;
   attr?: string;
   text?: true;

@@ -64,7 +64,25 @@ fn following<'a>(scope: ElementRef<'a>, selector: &Selector) -> Option<ElementRe
         .find(|sibling| selector.matches(sibling))
 }
 
+/// The markup of every element sibling after the first one matching `css`.
+fn rest_html(scope: ElementRef<'_>, css: &str) -> Result<Value> {
+    let marker = following(scope, &parse_selector(css)?)
+        .ok_or_else(|| anyhow!("selector {css:?} matched nothing"))?;
+    let rest: Vec<String> = marker
+        .next_siblings()
+        .filter_map(ElementRef::wrap)
+        .map(|sibling| sibling.html())
+        .collect();
+    Ok(Value::String(rest.join("\n")))
+}
+
 fn extract(scope: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
+    if spec.rest
+        && spec.html
+        && let Some(css) = &spec.after
+    {
+        return rest_html(scope, css);
+    }
     let start: Vec<ElementRef<'_>> = match &spec.after {
         Some(css) => following(scope, &parse_selector(css)?)
             .into_iter()
@@ -141,6 +159,23 @@ fn read(el: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn rest_takes_everything_after_the_marker() {
+        // The page's own markup has no wrapper around the rendered body: it
+        // follows a marker paragraph, as siblings of the heading.
+        let spec: SelectSpec = serde_json::from_value(serde_json::json!({
+            "root": "h1",
+            "fields": { "body": { "after": "p.marker", "rest": true, "html": true } }
+        }))
+        .unwrap();
+        let body =
+            "<main><h1>T</h1><p class=\"marker\">m</p><div>x</div><ul><li>y</li></ul></main>";
+        assert_eq!(
+            select(body, &spec, "").unwrap(),
+            serde_json::json!({ "body": "<div>x</div>\n<ul><li>y</li></ul>" })
+        );
+    }
 
     #[test]
     fn after_pairs_a_heading_with_the_block_that_follows_it() {

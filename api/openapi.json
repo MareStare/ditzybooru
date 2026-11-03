@@ -1356,6 +1356,27 @@
         ],
         "type": "object"
       },
+      "StaticPage": {
+        "additionalProperties": false,
+        "properties": {
+          "bodyHtml": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "updatedAt",
+          "bodyHtml"
+        ],
+        "type": "object"
+      },
       "Tag": {
         "additionalProperties": false,
         "properties": {
@@ -3408,6 +3429,88 @@
                   "url": "{url}"
                 }
               }
+            }
+          ]
+        }
+      }
+    },
+    "/pages/{slug}": {
+      "get": {
+        "operationId": "getPage",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaticPage"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "A static page: its title, last update and text.",
+        "tags": [
+          "pages"
+        ],
+        "x-examples": {
+          "slug": "about"
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /pages/:id"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/pages/{slug}"
+              },
+              "select": {
+                "fields": {
+                  "bodyHtml": {
+                    "after": "p:has(a[href$=\"/history\"])",
+                    "html": true,
+                    "rest": true
+                  },
+                  "title": {
+                    "text": true
+                  },
+                  "updatedAt": {
+                    "after": "p",
+                    "attr": "datetime",
+                    "sel": "time"
+                  }
+                },
+                "root": "main > h1"
+              },
+              "template": "lib/philomena_web/templates/page/show.html.slime"
             }
           ]
         }

@@ -1,6 +1,40 @@
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
 
+/** A static page such as the privacy policy or the about page. */
+export const getPage = defineOperation({
+  operationId: 'getPage',
+  path: '/pages/{slug}',
+  method: 'get',
+  summary: 'A static page: its title, last update and text.',
+  tags: ['pages'],
+  params: [{ name: 'slug', in: 'path', schema: s.string(), required: true }],
+  response: s.ref('StaticPage'),
+  examples: { slug: 'about' },
+  philomena: {
+    routes: ['GET /pages/:id'],
+    auth: 'none',
+    strategies: [
+      {
+        kind: 'html',
+        flavors: ['philomena', 'furbooru'],
+        request: { method: 'GET', path: '/pages/{slug}' },
+        template: 'lib/philomena_web/templates/page/show.html.slime',
+        select: {
+          // The heading is the anchor: the rest of the page, rendered without
+          // a wrapper, follows it as siblings.
+          root: 'main > h1',
+          fields: {
+            title: { text: true },
+            updatedAt: { after: 'p', sel: 'time', attr: 'datetime' },
+            bodyHtml: { after: 'p:has(a[href$="/history"])', rest: true, html: true },
+          },
+        },
+      },
+    ],
+  },
+});
+
 /** The site rules. Only Philomena's current master has this page. */
 export const listRules = defineOperation({
   operationId: 'listRules',

@@ -281,6 +281,11 @@ pub struct FieldSpec {
     /// instead of from the scope itself; `sel`, if given, then selects inside
     /// it. For markup that groups by position (a heading, then its list).
     pub after: Option<String>,
+    /// With `after` and `html`: the markup of every sibling that comes after
+    /// the match, not the match itself. For content rendered straight into
+    /// the page without a wrapper element.
+    #[serde(default)]
+    pub rest: bool,
     /// CSS selector relative to the parent.
     pub sel: Option<String>,
     /// Read this attribute.
