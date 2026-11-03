@@ -1,4 +1,4 @@
-import type { JsonMap, JsonStrategy } from '../dsl/extract.ts';
+import type { AuthLevel, JsonMap, JsonStrategy } from '../dsl/extract.ts';
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
 
@@ -11,6 +11,8 @@ interface ListingOptions {
   resource: string;
   /** Schema name of one item; the response schema is `<Item>Results`. */
   item: string;
+  /** Schema name of the whole response, when it is not `<Item>Results`. */
+  resultsSchema?: string;
   /** Our item field -> pointer into one upstream item. */
   itemMap: JsonMap;
   /** Key of the item array in the upstream response. */
@@ -22,11 +24,15 @@ interface ListingOptions {
   extraQuery?: Record<string, string>;
   examples?: Record<string, string | number>;
   joins?: JsonStrategy['joins'];
+  /** Defaults to `none`. */
+  auth?: AuthLevel;
+  /** Extra top-level fields of the response, beside `items`, `total`, `page` and `perPage`. */
+  extraMap?: JsonMap;
 }
 
 /** A paged listing page backed by the search API (`q`, `page`, `perPage`). */
 export function listingOperation(options: ListingOptions) {
-  const results = `${options.item}Results`;
+  const results = options.resultsSchema ?? `${options.item}Results`;
   return defineOperation({
     operationId: options.operationId,
     path: options.path,
@@ -43,7 +49,7 @@ export function listingOperation(options: ListingOptions) {
     examples: options.examples ?? { q: '*', perPage: 2 },
     philomena: {
       routes: [`GET /api/v1/json/search/${options.resource}`, options.htmlRoute],
-      auth: 'none',
+      auth: options.auth ?? 'none',
       strategies: [
         {
           kind: 'json',
@@ -62,6 +68,7 @@ export function listingOperation(options: ListingOptions) {
             page: { from: '$param:page', as: 'int' },
             perPage: { from: '$param:perPage', as: 'int' },
             items: { from: `/${options.itemsKey}`, map: options.itemMap },
+            ...options.extraMap,
           },
           ...(options.joins ? { joins: options.joins } : {}),
         },

@@ -179,6 +179,16 @@ async function gallery(id: number, page: number, perPage: number): Promise<Galle
   };
 }
 
+/** Images the visitor's watched tags match. Needs their API key. */
+async function watchedMedia(limit: number): Promise<MediaPage> {
+  const response = await get<Results<ApiMedia>>(
+    '/search',
+    { q: 'my:watched', page: 1, perPage: Math.min(limit, MAX_PER_PAGE), ...searchSorts.createdAt },
+    { apiKey: true },
+  );
+  return { images: response.items.flatMap(toMedia), total: response.total };
+}
+
 export const apiSource: DataSource = {
   searchMedia,
   featuredMedia,
@@ -187,4 +197,5 @@ export const apiSource: DataSource = {
   recentTopics,
   liveStreams,
   gallery,
+  watchedMedia,
 };

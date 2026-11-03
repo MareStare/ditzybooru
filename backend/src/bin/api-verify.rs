@@ -13,7 +13,8 @@ use std::{
 
 use anyhow::{Context as _, Result};
 use backend::mapping::{
-    Context, Document, Responses, Strategy, Throttle, extract, fetch, select_strategy, validate,
+    Context, Document, Operation, Responses, Strategy, Throttle, extract, fetch, select_strategy,
+    validate,
 };
 use serde::Deserialize;
 use serde_json::Value;
@@ -65,6 +66,26 @@ fn write_fixtures(
     Ok(())
 }
 
+/// The API key to verify `op` with, if it uses one. It comes from the
+/// environment, e.g. `VERIFY_KEY_PHILOMENA`, so it never lands in a file.
+/// `Err` says why the operation cannot be verified.
+fn key_for(op: &Operation, instance: &str) -> Result<Option<String>, String> {
+    let var = format!(
+        "VERIFY_KEY_{}",
+        instance.to_ascii_uppercase().replace('-', "_")
+    );
+    match op.auth.as_str() {
+        // Optional keys are verified as the public sees the page.
+        "none" | "api-key-optional" => Ok(None),
+        "api-key" => std::env::var(&var)
+            .map(Some)
+            .map_err(|_| format!("needs an API key in {var}")),
+        other => Err(format!(
+            "auth {other:?} is not supported by the verifier yet"
+        )),
+    }
+}
+
 async fn run() -> Result<bool> {
     let api_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../api");
     let document = Document::parse(&fs::read_to_string(api_dir.join("openapi.json"))?)?;
@@ -96,13 +117,13 @@ async fn run() -> Result<bool> {
                 println!("SKIP {label}: remote instance, pass --remote to include it");
                 continue;
             }
-            if op.auth != "none" {
-                println!(
-                    "SKIP {label}: auth {:?} is not supported by the verifier yet",
-                    op.auth
-                );
-                continue;
-            }
+            let api_key = match key_for(op, name) {
+                Ok(key) => key,
+                Err(reason) => {
+                    println!("SKIP {label}: {reason}");
+                    continue;
+                }
+            };
             let Some(strategy) = select_strategy(op, &instance.flavor) else {
                 println!("SKIP {label}: no strategy for flavor {}", instance.flavor);
                 continue;
@@ -110,6 +131,9 @@ async fn run() -> Result<bool> {
             let ctx = Context {
                 origin: &instance.origin,
                 flavor: &instance.flavor,
+                // Optional operations are verified as the public sees them.
+                api_key: api_key.as_deref(),
+                session: None,
             };
             let result = async {
                 let responses =

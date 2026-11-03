@@ -8,6 +8,7 @@ export const searchImages = listingOperation({
   summary: 'The search page: one page of image results for a query.',
   resource: 'images',
   item: 'Media',
+  resultsSchema: 'MediaSearchResults',
   itemsKey: 'images',
   htmlRoute: 'GET /search',
   examples: { q: 'safe', perPage: 2 },
@@ -17,5 +18,14 @@ export const searchImages = listingOperation({
     { name: 'filterId', in: 'query', schema: s.int() },
   ],
   extraQuery: { sf: '{sf|created_at}', sd: '{sd|desc}', filter_id: '{filterId}' },
+  // `my:faves`, `my:watched` and friends need the visitor's key; without it
+  // the page is the public one and cacheable.
+  auth: 'api-key-optional',
+  extraMap: {
+    interactions: {
+      from: '/interactions',
+      map: { imageId: '/image_id', type: '/interaction_type', value: '/value' },
+    },
+  },
   itemMap: mediaFields(),
 });

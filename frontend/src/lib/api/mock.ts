@@ -6,7 +6,16 @@
  * against data that does not change under it.
  */
 
-import { channels, comments, featuredImage, images, topScoring, topics, totalImages } from '#/lib/mock/data';
+import {
+  channels,
+  comments,
+  featuredImage,
+  images,
+  topScoring,
+  topics,
+  totalImages,
+  watchedImages,
+} from '#/lib/mock/data';
 import type { Comment, ForumTopic, Gallery, LiveStreamChannel, Media } from '#/lib/types';
 import type { DataSource, MediaPage, MediaSearchParams } from '#/lib/api/types';
 
@@ -35,6 +44,10 @@ export const mockSource: DataSource = {
 
   async liveStreams(): Promise<Array<LiveStreamChannel>> {
     return channels;
+  },
+
+  async watchedMedia(limit: number): Promise<MediaPage> {
+    return { images: watchedImages.slice(0, limit), total: watchedImages.length };
   },
 
   async gallery(id: number, _page: number, perPage: number): Promise<Gallery> {

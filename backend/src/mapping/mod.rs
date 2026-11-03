@@ -12,14 +12,16 @@
 mod engine;
 mod html;
 mod json;
+mod session;
 mod spec;
 mod throttle;
 mod transform;
 
 pub use engine::{
-    Context, Responses, UpstreamStatus, extract, fetch, plan_request, relevant_params,
-    select_strategy, validate,
+    Context, FormRejected, InvalidApiKey, Responses, UpstreamStatus, extract, fetch, plan_request,
+    relevant_params, select_strategy, validate,
 };
+pub use session::{Session, SetCookie};
 pub use spec::{Document, Operation, Strategy};
 pub use throttle::{RateLimited, Throttle};
 

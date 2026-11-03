@@ -34,7 +34,7 @@ pub enum Outcome {
 pub struct Failure {
     pub status: StatusCode,
     pub code: &'static str,
-    pub message: &'static str,
+    pub message: std::borrow::Cow<'static, str>,
     /// Seconds after which the client may try again.
     pub retry_after: Option<u64>,
 }
@@ -176,7 +176,7 @@ mod tests {
                     Err(Failure {
                         status: StatusCode::INTERNAL_SERVER_ERROR,
                         code: "upstream_error",
-                        message: "upstream error",
+                        message: "upstream error".into(),
                         retry_after: None,
                     })
                 })

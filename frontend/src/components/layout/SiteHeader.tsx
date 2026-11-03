@@ -3,11 +3,13 @@ import { Link } from '@tanstack/react-router';
 import { Bell, ChevronDown, Filter, Mail, Menu as MenuIcon, Upload } from 'lucide-react';
 
 import { useCurrentUser } from '#/hooks/use-current-user';
+import { useDataSource } from '#/hooks/use-data-source';
+import { useSignOut } from '#/hooks/use-session';
 import { useSite } from '#/hooks/use-site';
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
-import { Menu, MenuLink, MenuSeparator } from '#/components/ui/Menu';
+import { Menu, MenuButton, MenuLabel, MenuLink, MenuSeparator } from '#/components/ui/Menu';
 import { BrandMark } from './BrandMark';
 import { HeaderNav } from './HeaderNav';
 import { MobileMenu } from './MobileMenu';
@@ -25,8 +27,36 @@ const userMenuLinks: Array<{ label: string; href: string }> = [
   { label: 'Logout', href: '/sessions' },
 ];
 
+/**
+ * The menu of a visitor signed in on a live site. Only what is built: the
+ * rest of the mock menu points at pages that do not exist yet.
+ */
+function LiveUserMenu({ name }: { name: string }) {
+  const signOut = useSignOut();
+
+  return (
+    <Dropdown
+      align="end"
+      trigger={
+        <button type="button" className="nav-link" aria-label="User menu">
+          <Avatar name={name} src={null} />
+          <ChevronDown className="dropdown__chevron" size={14} />
+        </button>
+      }
+    >
+      <Menu>
+        <MenuLabel>{name}</MenuLabel>
+        <MenuSeparator />
+        <MenuLink href="/settings/account">Account</MenuLink>
+        <MenuButton onClick={signOut}>Sign out</MenuButton>
+      </Menu>
+    </Dropdown>
+  );
+}
+
 function UserMenu() {
   const user = useCurrentUser();
+  const kind = useDataSource();
 
   if (!user) {
     return (
@@ -38,15 +68,15 @@ function UserMenu() {
         >
           Register
         </Link>
-        <Link
-          // @ts-expect-error TODO: route not built yet
-          to="/sessions/new"
-          className="nav-link"
-        >
+        <Link to="/sign-in" className="nav-link">
           Login
         </Link>
       </>
     );
+  }
+
+  if (kind === 'live') {
+    return <LiveUserMenu name={user.name} />;
   }
 
   return (

@@ -827,6 +827,61 @@
         ],
         "type": "object"
       },
+      "Interaction": {
+        "additionalProperties": false,
+        "properties": {
+          "imageId": {
+            "type": "integer"
+          },
+          "type": {
+            "enum": [
+              "faved",
+              "voted",
+              "hidden"
+            ],
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "enum": [
+                  "up",
+                  "down"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "imageId",
+          "type",
+          "value"
+        ],
+        "type": "object"
+      },
+      "LoginCaptcha": {
+        "additionalProperties": false,
+        "properties": {
+          "siteKey": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "siteKey"
+        ],
+        "type": "object"
+      },
       "Media": {
         "additionalProperties": false,
         "properties": {
@@ -912,9 +967,16 @@
         ],
         "type": "object"
       },
-      "MediaResults": {
+      "MediaSearchResults": {
         "additionalProperties": false,
         "properties": {
+          "interactions": {
+            "items": {
+              "$ref": "#/components/schemas/Interaction"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
           "items": {
             "items": {
               "$ref": "#/components/schemas/Media"
@@ -936,7 +998,8 @@
           "items",
           "total",
           "page",
-          "perPage"
+          "perPage",
+          "interactions"
         ],
         "type": "object"
       },
@@ -1280,6 +1343,62 @@
         "required": [
           "updatedAt",
           "items"
+        ],
+        "type": "object"
+      },
+      "Session": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "role": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "signedIn": {
+            "type": "boolean"
+          },
+          "slug": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "signedIn",
+          "id",
+          "name",
+          "slug",
+          "role"
         ],
         "type": "object"
       },
@@ -2198,6 +2317,71 @@
               "request": {
                 "method": "GET",
                 "path": "/api/v1/json/filters/system"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/filters/user": {
+      "get": {
+        "operationId": "listUserFilters",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FilterList"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The signed-in user's own filters. Also the way to check that an API key works.",
+        "tags": [
+          "filters"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "api-key",
+          "routes": [
+            "GET /api/v1/json/filters/user"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/filters",
+                  "map": {
+                    "description": "/description",
+                    "hiddenComplex": "/hidden_complex",
+                    "hiddenTagIds": "/hidden_tag_ids",
+                    "id": "/id",
+                    "name": "/name",
+                    "public": "/public",
+                    "spoileredComplex": "/spoilered_complex",
+                    "spoileredTagIds": "/spoilered_tag_ids",
+                    "system": "/system",
+                    "userCount": "/user_count",
+                    "userId": "/user_id"
+                  }
+                }
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/filters/user"
               }
             }
           ]
@@ -3982,7 +4166,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/MediaResults"
+                  "$ref": "#/components/schemas/MediaSearchResults"
                 }
               }
             },
@@ -4008,7 +4192,7 @@
           "q": "safe"
         },
         "x-philomena": {
-          "auth": "none",
+          "auth": "api-key-optional",
           "routes": [
             "GET /api/v1/json/search/images",
             "GET /search"
@@ -4017,6 +4201,14 @@
             {
               "kind": "json",
               "map": {
+                "interactions": {
+                  "from": "/interactions",
+                  "map": {
+                    "imageId": "/image_id",
+                    "type": "/interaction_type",
+                    "value": "/value"
+                  }
+                },
                 "items": {
                   "from": "/images",
                   "map": {
@@ -4097,6 +4289,370 @@
                   "sf": "{sf|created_at}"
                 }
               }
+            }
+          ]
+        }
+      }
+    },
+    "/session": {
+      "delete": {
+        "operationId": "deleteSession",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Sign out.",
+        "tags": [
+          "session"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "DELETE /sessions"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/"
+              },
+              "kind": "form",
+              "request": {
+                "method": "DELETE",
+                "path": "/sessions"
+              },
+              "result": {
+                "errors": ".flash--warning, .flash--danger, .flash--error, .alert",
+                "must": "/anonymous",
+                "page": "/",
+                "select": {
+                  "fields": {
+                    "anonymous": {
+                      "exists": true,
+                      "sel": "a[href=\"/sessions/new\"]"
+                    },
+                    "id": {
+                      "as": "int",
+                      "attr": "data-user-id",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "name": {
+                      "attr": "data-user-name",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "role": {
+                      "attr": "data-user-role",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "signedIn": {
+                      "as": "bool",
+                      "attr": "data-user-is-signed-in",
+                      "sel": ".js-datastore"
+                    },
+                    "slug": {
+                      "attr": "data-user-slug",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "get": {
+        "operationId": "getSession",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Who the visitor is on the site: signed out, or the user they are signed in as.",
+        "tags": [
+          "session"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "GET /"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/"
+              },
+              "select": {
+                "fields": {
+                  "id": {
+                    "as": "int",
+                    "attr": "data-user-id",
+                    "optional": true,
+                    "sel": ".js-datastore"
+                  },
+                  "name": {
+                    "attr": "data-user-name",
+                    "optional": true,
+                    "sel": ".js-datastore"
+                  },
+                  "role": {
+                    "attr": "data-user-role",
+                    "optional": true,
+                    "sel": ".js-datastore"
+                  },
+                  "signedIn": {
+                    "as": "bool",
+                    "attr": "data-user-is-signed-in",
+                    "sel": ".js-datastore"
+                  },
+                  "slug": {
+                    "attr": "data-user-slug",
+                    "optional": true,
+                    "sel": ".js-datastore"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/layout/app.html.slime"
+            }
+          ]
+        }
+      },
+      "post": {
+        "operationId": "createSession",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "captchaToken": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "rememberMe": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Session"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Sign in. The site sets its session cookie, which is passed on to the browser.",
+        "tags": [
+          "session"
+        ],
+        "x-philomena": {
+          "auth": "session",
+          "routes": [
+            "POST /sessions",
+            "GET /sessions/new"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "form": {
+                "csrf": {
+                  "attr": "content",
+                  "sel": "meta[name=csrf-token]"
+                },
+                "page": "/sessions/new"
+              },
+              "kind": "form",
+              "request": {
+                "body": {
+                  "h-captcha-response": "{captchaToken}",
+                  "user[email]": "{email}",
+                  "user[password]": "{password}",
+                  "user[remember_me]": "{rememberMe|false}"
+                },
+                "method": "POST",
+                "path": "/sessions"
+              },
+              "result": {
+                "errors": ".flash--warning, .flash--danger, .flash--error, .alert",
+                "must": "/signedIn",
+                "page": "/",
+                "select": {
+                  "fields": {
+                    "id": {
+                      "as": "int",
+                      "attr": "data-user-id",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "name": {
+                      "attr": "data-user-name",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "role": {
+                      "attr": "data-user-role",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    },
+                    "signedIn": {
+                      "as": "bool",
+                      "attr": "data-user-is-signed-in",
+                      "sel": ".js-datastore"
+                    },
+                    "slug": {
+                      "attr": "data-user-slug",
+                      "optional": true,
+                      "sel": ".js-datastore"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/session/captcha": {
+      "get": {
+        "operationId": "getLoginCaptcha",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginCaptcha"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The captcha the site asks for at sign-in, so the browser can show it.",
+        "tags": [
+          "session"
+        ],
+        "x-examples": {},
+        "x-philomena": {
+          "auth": "none",
+          "cacheSeconds": 3600,
+          "routes": [
+            "GET /sessions/new"
+          ],
+          "strategies": [
+            {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/sessions/new"
+              },
+              "select": {
+                "fields": {
+                  "siteKey": {
+                    "attr": "data-sitekey",
+                    "optional": true,
+                    "sel": ".js-captcha"
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/session/new.html.slime"
             }
           ]
         }

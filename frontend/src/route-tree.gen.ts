@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root';
 import { Route as IndexRouteImport } from './routes/index';
 import { Route as SearchRouteImport } from './routes/search';
+import { Route as SignInRouteImport } from './routes/sign-in';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
+import { Route as SettingsAccountRouteImport } from './routes/settings/account';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
 import { Route as ApiV1SplatRouteImport } from './routes/api/v1/$';
@@ -26,9 +28,19 @@ const SearchRoute = SearchRouteImport.update({
   path: '/search',
   getParentRoute: () => rootRouteImport,
 } as any);
+const SignInRoute = SignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any);
 const GalleriesIdRoute = GalleriesIdRouteImport.update({
   id: '/galleries/$id',
   path: '/galleries/$id',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const SettingsAccountRoute = SettingsAccountRouteImport.update({
+  id: '/settings/account',
+  path: '/settings/account',
   getParentRoute: () => rootRouteImport,
 } as any);
 const SettingsDeveloperRoute = SettingsDeveloperRouteImport.update({
@@ -50,7 +62,9 @@ const ApiV1SplatRoute = ApiV1SplatRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/sign-in': typeof SignInRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -58,7 +72,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/sign-in': typeof SignInRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -67,7 +83,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport;
   '/': typeof IndexRoute;
   '/search': typeof SearchRoute;
+  '/sign-in': typeof SignInRoute;
   '/galleries/$id': typeof GalleriesIdRoute;
+  '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
@@ -77,7 +95,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/search'
+    | '/sign-in'
     | '/galleries/$id'
+    | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
     | '/api/v1/$';
@@ -85,7 +105,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/search'
+    | '/sign-in'
     | '/galleries/$id'
+    | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
     | '/api/v1/$';
@@ -93,7 +115,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/search'
+    | '/sign-in'
     | '/galleries/$id'
+    | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
     | '/api/v1/$';
@@ -102,7 +126,9 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute;
   SearchRoute: typeof SearchRoute;
+  SignInRoute: typeof SignInRoute;
   GalleriesIdRoute: typeof GalleriesIdRoute;
+  SettingsAccountRoute: typeof SettingsAccountRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
   ApiV1SplatRoute: typeof ApiV1SplatRoute;
@@ -124,11 +150,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SearchRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/sign-in': {
+      id: '/sign-in';
+      path: '/sign-in';
+      fullPath: '/sign-in';
+      preLoaderRoute: typeof SignInRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/galleries/$id': {
       id: '/galleries/$id';
       path: '/galleries/$id';
       fullPath: '/galleries/$id';
       preLoaderRoute: typeof GalleriesIdRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/settings/account': {
+      id: '/settings/account';
+      path: '/settings/account';
+      fullPath: '/settings/account';
+      preLoaderRoute: typeof SettingsAccountRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/settings/developer': {
@@ -158,7 +198,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   SearchRoute: SearchRoute,
+  SignInRoute: SignInRoute,
   GalleriesIdRoute: GalleriesIdRoute,
+  SettingsAccountRoute: SettingsAccountRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
   ApiV1SplatRoute: ApiV1SplatRoute,

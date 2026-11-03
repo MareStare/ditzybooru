@@ -62,3 +62,11 @@ export function galleryQuery(kind: DataSourceKind, id: number, page: number, per
     placeholderData: keepPreviousData,
   });
 }
+
+/** `signedInAs` tells one visitor's key from another's, so a new key never shows the old one's images. */
+export function watchedMediaQuery(kind: DataSourceKind, limit: number, signedInAs: string) {
+  return queryOptions({
+    queryKey: ['media', kind, 'watched', signedInAs, limit],
+    queryFn: () => dataSource(kind).watchedMedia(limit),
+  });
+}

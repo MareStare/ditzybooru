@@ -72,6 +72,14 @@ function results(item: string) {
   });
 }
 
+/** What the signed-in user did to an image. Only filled when the request carries their API key. */
+const Interaction = s.object({
+  imageId: s.int(),
+  type: s.enum('faved', 'voted', 'hidden'),
+  /** `up` or `down` for a vote, `null` otherwise. */
+  value: s.nullable(s.enum('up', 'down')),
+});
+
 const Tag = s.object({
   id: s.int(),
   name: s.string(),
@@ -272,6 +280,20 @@ const TagSuggestion = s.object({
   tag: s.string(),
 });
 
+/** Who the visitor is on the site. Everything after `signedIn` is `null` when signed out. */
+const Session = s.object({
+  signedIn: s.bool(),
+  id: s.nullable(s.int()),
+  name: s.nullable(s.string()),
+  slug: s.nullable(s.string()),
+  role: s.nullable(s.string()),
+});
+
+const LoginCaptcha = s.object({
+  /** The hCaptcha site key to show a widget for, or `null` when the site asks for none. */
+  siteKey: s.nullable(s.string()),
+});
+
 const Channel = s.object({
   id: s.int(),
   title: s.string(),
@@ -318,10 +340,19 @@ export const schemas = {
   StaffGroup,
   StaticPage,
   TagSuggestion,
+  Session,
+  LoginCaptcha,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
-  MediaResults: results('Media'),
+  Interaction,
+  MediaSearchResults: s.object({
+    items: s.array(s.ref('Media')),
+    total: s.int(),
+    page: s.int(),
+    perPage: s.int(),
+    interactions: s.array(s.ref('Interaction')),
+  }),
   TagResults: results('Tag'),
   CommentResults: results('Comment'),
   PostResults: results('Post'),

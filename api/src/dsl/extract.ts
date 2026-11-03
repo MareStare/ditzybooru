@@ -121,12 +121,26 @@ interface HtmlStrategy extends StrategyBase {
 
 interface FormStrategy extends StrategyBase {
   kind: 'form';
-  form: { page: string; csrf: string };
+  /** The page that carries the form's CSRF token. Fetched with the visitor's cookies, so the token matches them. */
+  form: { page: string; csrf: { sel: string; attr: string } };
+  /** The submission. A method other than `POST` is sent as a `POST` with a `_method` field. `body` fields whose placeholders have no value are left out. */
   request: UpstreamRequest;
-  success: { status: number[]; location?: string };
-  errors?: FieldSpec;
+  /** What is read afterwards, to see what the submission did. */
+  result: {
+    page: string;
+    select: SelectSpec;
+    /** Pointer to a boolean in the extracted result that must be true, or the submission counts as rejected. */
+    must?: string;
+    /** Selector of the messages that say why, on the result page or in the submission's own response. */
+    errors?: string;
+  };
 }
 
 export type Strategy = JsonStrategy | HtmlStrategy | FormStrategy;
 
-export type AuthLevel = 'none' | 'session' | 'session+csrf' | 'api-key' | 'role:moderator' | 'role:admin';
+/**
+ * `api-key`: needs the visitor's Philomena API key (our `X-Api-Key` header, sent upstream as `key`).
+ * `api-key-optional`: works without, and uses it when given (e.g. `my:watched` searches).
+ */
+export type AuthLevel =
+  'none' | 'session' | 'session+csrf' | 'api-key' | 'api-key-optional' | 'role:moderator' | 'role:admin';

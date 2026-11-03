@@ -64,6 +64,35 @@ fn following<'a>(scope: ElementRef<'a>, selector: &Selector) -> Option<ElementRe
         .find(|sibling| selector.matches(sibling))
 }
 
+/// The attribute `attr` of the first element matching `css`, if there is one.
+pub fn attribute(body: &str, css: &str, attr: &str) -> Result<Option<String>> {
+    let document = Html::parse_document(body);
+    let selector = parse_selector(css)?;
+    Ok(document
+        .select(&selector)
+        .next()
+        .and_then(|element| element.value().attr(attr))
+        .map(str::to_owned))
+}
+
+/// The trimmed text of every element matching `css`, without the empty ones and
+/// without any `<noscript>` (or what sits in one): a visitor with scripts off
+/// is told off there, which says nothing about the page they asked for.
+pub fn texts(body: &str, css: &str) -> Result<Vec<String>> {
+    let document = Html::parse_document(body);
+    let selector = parse_selector(css)?;
+    Ok(document
+        .select(&selector)
+        .filter(|element| {
+            !std::iter::once(*element)
+                .chain(element.ancestors().filter_map(ElementRef::wrap))
+                .any(|candidate| candidate.value().name() == "noscript")
+        })
+        .map(|element| element.text().collect::<String>().trim().to_owned())
+        .filter(|text| !text.is_empty())
+        .collect())
+}
+
 /// The markup of every element sibling after the first one matching `css`.
 fn rest_html(scope: ElementRef<'_>, css: &str) -> Result<Value> {
     let marker = following(scope, &parse_selector(css)?)

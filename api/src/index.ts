@@ -5,6 +5,7 @@ import * as images from './operations/images.ts';
 import * as items from './operations/items.ts';
 import * as listings from './operations/listings.ts';
 import * as pages from './operations/pages.ts';
+import * as session from './operations/session.ts';
 import * as search from './operations/search.ts';
 
 export const operations: Operation[] = [
@@ -15,4 +16,5 @@ export const operations: Operation[] = [
   ...Object.values(listings),
   ...Object.values(forums),
   ...Object.values(pages),
+  ...Object.values(session),
 ];

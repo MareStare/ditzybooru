@@ -9,6 +9,7 @@
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { getRequestHost } from '@tanstack/react-start/server';
 
+import { getApiKey } from '#/lib/api/api-key';
 import { backendHeaders, backendUrl } from '#/lib/api/backend/backend.server';
 import { HttpClient } from '#/lib/http/http-client';
 import type { RequestParams } from '#/lib/http/http-client';
@@ -41,7 +42,49 @@ const requestHeaders = createIsomorphicFn()
 
 export type QueryParams = NonNullable<RequestParams['query']>;
 
+interface GetOptions {
+  /**
+   * Sends the visitor's saved Philomena API key (browser only), for the
+   * endpoints that act for a signed-in user. Pass a string to use that key
+   * instead, to try one before saving it.
+   */
+  apiKey?: true | string;
+}
+
 /** `GET /api/v1<path>`. */
-export function get<TResponse>(path: string, query: QueryParams = {}): Promise<TResponse> {
-  return backend().fetchJson<TResponse>(`/api/v1${path}`, { query, headers: requestHeaders() });
+export function get<TResponse>(path: string, query: QueryParams = {}, { apiKey }: GetOptions = {}): Promise<TResponse> {
+  const headers = requestHeaders();
+  if (apiKey !== undefined) {
+    const key = apiKey === true ? getApiKey() : apiKey;
+    if (key === null) {
+      return Promise.reject(new Error('There is no API key saved'));
+    }
+    headers['X-Api-Key'] = key;
+  }
+
+  return backend().fetchJson<TResponse>(`/api/v1${path}`, { query, headers });
+}
+
+/** A request with a JSON body, for the endpoints that change something. The browser sends its cookies. */
+function send<TResponse>(method: 'POST' | 'DELETE', path: string, body?: object): Promise<TResponse> {
+  const headers = requestHeaders();
+  if (body !== undefined) {
+    headers['Content-Type'] = 'application/json';
+  }
+
+  return backend().fetchJson<TResponse>(`/api/v1${path}`, {
+    method,
+    headers,
+    ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+  });
+}
+
+/** `POST /api/v1<path>` with a JSON body. */
+export function post<TResponse>(path: string, body: object): Promise<TResponse> {
+  return send<TResponse>('POST', path, body);
+}
+
+/** `DELETE /api/v1<path>`. */
+export function remove<TResponse>(path: string): Promise<TResponse> {
+  return send<TResponse>('DELETE', path);
 }

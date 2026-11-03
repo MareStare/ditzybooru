@@ -40,6 +40,8 @@ fn fixtures_extract_and_validate() {
             let ctx = Context {
                 origin: &instance.origin,
                 flavor: &instance.flavor,
+                api_key: None,
+                session: None,
             };
             let mut responses = Responses {
                 main: fs::read_to_string(&path).unwrap(),

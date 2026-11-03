@@ -7,7 +7,8 @@ use serde_json::Value;
 
 use super::{
     html, json,
-    spec::{Document, Operation, Strategy, UpstreamRequest},
+    session::Session,
+    spec::{Document, FormStrategy, Operation, Strategy, UpstreamRequest},
     throttle::{RateLimited, Throttle},
 };
 use crate::Result;
@@ -24,6 +25,32 @@ impl std::fmt::Display for UpstreamStatus {
 
 impl std::error::Error for UpstreamStatus {}
 
+/// The upstream refused the API key, or answered a keyed request with an empty
+/// body, which is how Philomena treats a key it does not know.
+#[derive(Debug)]
+pub struct InvalidApiKey;
+
+impl std::fmt::Display for InvalidApiKey {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "the upstream does not know this API key")
+    }
+}
+
+impl std::error::Error for InvalidApiKey {}
+
+/// A form submission the site turned down. The messages are the site's own
+/// words about why (a wrong password, a failed captcha).
+#[derive(Debug)]
+pub struct FormRejected(pub String);
+
+impl std::fmt::Display for FormRejected {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "the site rejected the form: {}", self.0)
+    }
+}
+
+impl std::error::Error for FormRejected {}
+
 /// The upstream instance a request is made against.
 #[derive(Debug, Clone, Copy)]
 pub struct Context<'a> {
@@ -31,6 +58,12 @@ pub struct Context<'a> {
     pub origin: &'a str,
     /// Flavor name used to filter strategies, e.g. `furbooru`.
     pub flavor: &'a str,
+    /// The visitor's Philomena API key, sent upstream as `key` on every
+    /// request of the operation. Never logged.
+    pub api_key: Option<&'a str>,
+    /// The visitor's upstream session cookies, for the operations that act as
+    /// them, and where what the upstream sets is collected.
+    pub session: Option<&'a Session>,
 }
 
 /// The first strategy whose flavors admit `flavor`.
@@ -185,6 +218,9 @@ pub struct Responses {
     /// Body of each fan-out request, in the order of the first response's
     /// elements. Empty when that request failed.
     pub fanout: Vec<String>,
+    /// For a form: the submission's own response, where a page that is shown
+    /// again (rather than redirected from) says what was wrong.
+    pub submitted: String,
 }
 
 async fn get_text(
@@ -195,25 +231,82 @@ async fn get_text(
     params: &BTreeMap<String, String>,
 ) -> Result<String> {
     if request.method != "GET" {
-        bail!("only GET requests are executable so far");
+        bail!(
+            "a {} request cannot be sent as a plain fetch",
+            request.method
+        );
     }
     let path = plan_request(request, params)?;
+    send(client, throttle, ctx, &path, None).await
+}
+
+/// One upstream request: a `GET`, or a form `POST` when `form` is given (names
+/// raw, values already percent-encoded). In the second case a redirect is the
+/// normal answer and its body is not read.
+async fn send(
+    client: &reqwest::Client,
+    throttle: &Throttle,
+    ctx: Context<'_>,
+    path: &str,
+    form: Option<&[(String, String)]>,
+) -> Result<String> {
+    let verb = if form.is_some() { "POST" } else { "GET" };
+    // Without the key: this is what errors and logs show.
     let url = format!("{}{}", ctx.origin, path);
     // Held until the body is read, so the cap covers the whole transfer.
-    let _slot = throttle.acquire(ctx.origin, &path).await?;
-    let response = client
-        .get(&url)
+    let _slot = throttle.acquire(ctx.origin, path).await?;
+    let mut target = reqwest::Url::parse(&url).with_context(|| format!("{verb} {url}"))?;
+    if let Some(key) = ctx.api_key {
+        target.query_pairs_mut().append_pair("key", key);
+    }
+    let mut call = match form {
+        Some(_) => client.post(target),
+        None => client.get(target),
+    };
+    if let Some(cookies) = ctx.session.and_then(Session::cookie_header) {
+        call = call.header(reqwest::header::COOKIE, cookies);
+    }
+    if let Some(fields) = form {
+        let encoded = fields
+            .iter()
+            // Values are already encoded: `fill` did it, and so did the token below.
+            .map(|(name, value)| format!("{}={value}", percent_encode(name)))
+            .collect::<Vec<_>>()
+            .join("&");
+        call = call
+            .header(
+                reqwest::header::CONTENT_TYPE,
+                "application/x-www-form-urlencoded",
+            )
+            .body(encoded);
+    }
+    // A `reqwest` error names the URL it failed on, key included.
+    let response = call
         .send()
         .await
-        .with_context(|| format!("GET {url}"))?;
+        .map_err(reqwest::Error::without_url)
+        .with_context(|| format!("{verb} {url}"))?;
+    if let Some(session) = ctx.session {
+        session.absorb(response.headers());
+    }
     let status = response.status();
+    let fail = |error: anyhow::Error| error.context(format!("{verb} {url}"));
+    // A key Philomena does not know gets 403 on the key-only routes.
+    if ctx.api_key.is_some()
+        && matches!(
+            status,
+            reqwest::StatusCode::FORBIDDEN | reqwest::StatusCode::UNAUTHORIZED
+        )
+    {
+        return Err(fail(anyhow::Error::new(InvalidApiKey)));
+    }
     if status == reqwest::StatusCode::TOO_MANY_REQUESTS {
         let retry_after = response
             .headers()
             .get(reqwest::header::RETRY_AFTER)
             .and_then(|value| value.to_str().ok());
         let retry_after = throttle.cool_down(ctx.origin, retry_after);
-        return Err(anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}")));
+        return Err(fail(anyhow::Error::new(RateLimited { retry_after })));
     }
     // Philomena answers its anti-bot challenge with 501 and an HTML page, and
     // a client that ignores it with 500 and an empty body for 15 minutes (any
@@ -226,22 +319,28 @@ async fn get_text(
             .is_some_and(|value| value.starts_with("text/html"));
     if challenged {
         let retry_after = throttle.block(ctx.origin, CHALLENGE_BACKOFF);
-        return Err(anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}")));
+        return Err(fail(anyhow::Error::new(RateLimited { retry_after })));
     }
     if status == reqwest::StatusCode::INTERNAL_SERVER_ERROR {
         let body = response.text().await.unwrap_or_default();
         if body.is_empty() {
             let retry_after = throttle.block(ctx.origin, BLOCKED_BACKOFF);
-            return Err(
-                anyhow::Error::new(RateLimited { retry_after }).context(format!("GET {url}"))
-            );
+            return Err(fail(anyhow::Error::new(RateLimited { retry_after })));
         }
-        return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
+        return Err(fail(anyhow::Error::new(UpstreamStatus(status))));
+    }
+    // A submission answers with a redirect; the page it leads to is read next.
+    if form.is_some() && status.is_redirection() {
+        return Ok(String::new());
     }
     if !status.is_success() {
-        return Err(anyhow::Error::new(UpstreamStatus(status)).context(format!("GET {url}")));
+        return Err(fail(anyhow::Error::new(UpstreamStatus(status))));
     }
-    Ok(response.text().await?)
+    let body = response.text().await.map_err(reqwest::Error::without_url)?;
+    if ctx.api_key.is_some() && body.trim().is_empty() {
+        return Err(fail(anyhow::Error::new(InvalidApiKey)));
+    }
+    Ok(body)
 }
 
 /// Performs the strategy's request, then its joins' follow-up requests.
@@ -253,6 +352,9 @@ pub async fn fetch(
     params: &BTreeMap<String, String>,
 ) -> Result<Responses> {
     let all = effective_params(strategy, params)?;
+    if let Strategy::Form(form) = strategy {
+        return fetch_form(client, throttle, ctx, form, &all).await;
+    }
     let main = get_text(client, throttle, ctx, strategy.request(), &all).await?;
     let mut joins = BTreeMap::new();
     if let Strategy::Json(json_strategy) = strategy
@@ -308,6 +410,7 @@ pub async fn fetch(
         main,
         joins,
         fanout: fanout_bodies,
+        ..Responses::default()
     })
 }
 
@@ -318,6 +421,45 @@ const CHALLENGE_BACKOFF: std::time::Duration = std::time::Duration::from_secs(15
 /// How long to leave an origin alone once it blocks us. The documented block
 /// is 15 minutes; one more minute is the margin.
 const BLOCKED_BACKOFF: std::time::Duration = std::time::Duration::from_mins(16);
+
+/// Fetches the form for its token, submits it, then fetches the page it leads
+/// to. All three share the session's cookies, so the token matches the cookie.
+async fn fetch_form(
+    client: &reqwest::Client,
+    throttle: &Throttle,
+    ctx: Context<'_>,
+    form: &FormStrategy,
+    params: &BTreeMap<String, String>,
+) -> Result<Responses> {
+    let page = fill(&form.form.page, params)?
+        .ok_or_else(|| anyhow!("missing parameter in {:?}", form.form.page))?;
+    let page_html = send(client, throttle, ctx, &page, None).await?;
+    let token = html::attribute(&page_html, &form.form.csrf.sel, &form.form.csrf.attr)?
+        .ok_or_else(|| anyhow!("no CSRF token on {page}"))?;
+
+    // Form values go out percent-encoded; `fill` encodes the ones it fills.
+    let mut fields = vec![("_csrf_token".to_owned(), percent_encode(&token))];
+    // Phoenix reads the real verb of a form from `_method`.
+    if form.request.method != "POST" {
+        fields.push(("_method".to_owned(), percent_encode(&form.request.method)));
+    }
+    for (name, template) in &form.request.body {
+        if let Some(value) = fill(template, params)? {
+            fields.push((name.clone(), value));
+        }
+    }
+    let path = plan_request(&form.request, params)?;
+    let submitted = send(client, throttle, ctx, &path, Some(&fields)).await?;
+
+    let result = fill(&form.result.page, params)?
+        .ok_or_else(|| anyhow!("missing parameter in {:?}", form.result.page))?;
+    let main = send(client, throttle, ctx, &result, None).await?;
+    Ok(Responses {
+        main,
+        submitted,
+        ..Responses::default()
+    })
+}
 
 /// The most fan-out requests one response may cause.
 const MAX_FANOUT: usize = 20;
@@ -366,7 +508,23 @@ pub fn extract(
             )
         }
         Strategy::Html(s) => html::select(&responses.main, &s.select, ctx.origin),
-        Strategy::Form(_) => bail!("form strategies are not executable yet"),
+        Strategy::Form(form) => {
+            let value = html::select(&responses.main, &form.result.select, ctx.origin)?;
+            let accepted = form
+                .result
+                .must
+                .as_ref()
+                .is_none_or(|pointer| value.pointer(pointer) == Some(&Value::Bool(true)));
+            if !accepted {
+                let mut messages = vec![];
+                if let Some(css) = &form.result.errors {
+                    messages.extend(html::texts(&responses.main, css)?);
+                    messages.extend(html::texts(&responses.submitted, css)?);
+                }
+                return Err(anyhow::Error::new(FormRejected(messages.join(" "))));
+            }
+            Ok(value)
+        }
     }
 }
 
@@ -401,6 +559,7 @@ mod tests {
                 .iter()
                 .map(|(k, v)| ((*k).to_owned(), (*v).to_owned()))
                 .collect(),
+            body: BTreeMap::new(),
         }
     }
 
@@ -437,6 +596,8 @@ mod tests {
         let ctx = Context {
             origin: "http://x",
             flavor: "philomena",
+            api_key: None,
+            session: None,
         };
         let extract_body = |body: &str| {
             let responses = Responses {

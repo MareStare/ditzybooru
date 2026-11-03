@@ -6,7 +6,6 @@ import { RECENT_COMMENT_COUNT } from '#/components/home/RecentCommentsBlock';
 import { TRENDING_COUNT } from '#/components/home/TrendingImages';
 import { MediaGrid, SEARCH_RESULTS_TRANSITION } from '#/components/home/MediaGrid';
 import { WatchedImages } from '#/components/home/WatchedImages';
-import { useCurrentUser } from '#/hooks/use-current-user';
 import { useMediaSearch } from '#/hooks/use-media-search';
 import { featuredMediaQuery, mediaSearchQuery, recentCommentsQuery, trendingMediaQuery } from '#/lib/api/queries';
 import { animationsEnabled } from '#/lib/motion';
@@ -43,7 +42,6 @@ export const Route = createFileRoute('/')({
 // layout is a grid rearrangement of exactly this, in `index.css`.
 function Home() {
   const navigate = useNavigate();
-  const currentUser = useCurrentUser();
   const { images, total } = useMediaSearch(RECENT_QUERY, 1);
 
   return (
@@ -76,7 +74,7 @@ function Home() {
             },
           }}
         />
-        {currentUser ? <WatchedImages /> : null}
+        <WatchedImages />
       </div>
       <ActivityFeeds />
     </div>

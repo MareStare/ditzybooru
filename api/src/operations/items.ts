@@ -311,3 +311,25 @@ export const suggestTags = defineOperation({
     ],
   },
 });
+
+export const listUserFilters = defineOperation({
+  operationId: 'listUserFilters',
+  path: '/filters/user',
+  method: 'get',
+  summary: "The signed-in user's own filters. Also the way to check that an API key works.",
+  tags: ['filters'],
+  params: [],
+  response: s.ref('FilterList'),
+  examples: {},
+  philomena: {
+    routes: ['GET /api/v1/json/filters/user'],
+    auth: 'api-key',
+    strategies: [
+      {
+        kind: 'json',
+        request: { method: 'GET', path: '/api/v1/json/filters/user' },
+        map: { items: { from: '/filters', map: filterMap } },
+      },
+    ],
+  },
+});

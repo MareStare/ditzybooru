@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import { SlidersHorizontal, MonitorCog } from 'lucide-react';
+import { SlidersHorizontal, MonitorCog, UserRound } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
 import { Dropdown } from '#/components/ui/Dropdown';
@@ -30,6 +30,10 @@ export function ThemeMenu() {
         <Link to="/settings/display" className="theme-menu__link">
           <SlidersHorizontal size={16} />
           More settings
+        </Link>
+        <Link to="/settings/account" className="theme-menu__link">
+          <UserRound size={16} />
+          Account
         </Link>
       </div>
     </Dropdown>

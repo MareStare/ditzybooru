@@ -93,7 +93,7 @@ pub enum Strategy {
     Json(Box<JsonStrategy>),
     /// Scrape server-rendered HTML.
     Html(HtmlStrategy),
-    /// Submit a form (not executable yet).
+    /// Submit a form and read what comes back.
     Form(FormStrategy),
 }
 
@@ -127,6 +127,10 @@ pub struct UpstreamRequest {
     /// Query parameters; values may use placeholders.
     #[serde(default)]
     pub query: BTreeMap<String, String>,
+    /// Form fields to submit; values may use placeholders. A field whose
+    /// placeholder has no value is left out.
+    #[serde(default)]
+    pub body: BTreeMap<String, String>,
 }
 
 /// JSON pointer remap strategy.
@@ -317,14 +321,53 @@ pub struct FieldSpec {
     pub fields: Option<BTreeMap<String, Self>>,
 }
 
-/// Form submission strategy.
+/// Form submission strategy: fetch the form for its token, submit it, then
+/// read the page the visitor lands on to see what happened.
 #[derive(Debug, Deserialize)]
 pub struct FormStrategy {
     /// Restricts the strategy to these upstream flavors.
     #[serde(default)]
     pub flavors: Vec<String>,
-    /// Request template.
+    /// Where the CSRF token comes from.
+    pub form: FormPage,
+    /// The submission. Methods other than `POST` are sent as a `POST` with a
+    /// `_method` field, which is how the pages themselves do it.
     pub request: UpstreamRequest,
+    /// What is read afterwards.
+    pub result: FormResult,
+}
+
+/// The page that carries a form's CSRF token.
+#[derive(Debug, Deserialize)]
+pub struct FormPage {
+    /// Path of the page, with placeholders.
+    pub page: String,
+    /// Selector of the element holding the token.
+    pub csrf: TokenSpec,
+}
+
+/// An attribute of the element a selector finds.
+#[derive(Debug, Deserialize)]
+pub struct TokenSpec {
+    /// CSS selector.
+    pub sel: String,
+    /// Attribute name.
+    pub attr: String,
+}
+
+/// The page read after a submission.
+#[derive(Debug, Deserialize)]
+pub struct FormResult {
+    /// Path of the page, usually `/`.
+    pub page: String,
+    /// What to take from it.
+    pub select: SelectSpec,
+    /// Pointer to a boolean in the extracted result that must be true, or the
+    /// submission counts as rejected.
+    pub must: Option<String>,
+    /// Selector of the messages that say why, on the result page or in the
+    /// submission's own response.
+    pub errors: Option<String>,
 }
 
 impl Document {

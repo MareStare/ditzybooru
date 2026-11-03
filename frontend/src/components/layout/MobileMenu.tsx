@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from '@tanstack/react-router';
-import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, X } from 'lucide-react';
+import { ChevronDown, Heart, LogIn, Mail, SlidersHorizontal, Upload, UserPlus, UserRound, X } from 'lucide-react';
 
 import { Avatar } from '#/components/ui/Avatar';
 import { Button } from '#/components/ui/Button';
 import { useCurrentUser } from '#/hooks/use-current-user';
+import { useDataSource } from '#/hooks/use-data-source';
+import { useSignOut } from '#/hooks/use-session';
 import { useSite } from '#/hooks/use-site';
 import { primaryNav } from '#/lib/mock/site';
 import { BrandMark } from './BrandMark';
@@ -44,6 +46,8 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
   }, [onClose]);
 
   const user = useCurrentUser();
+  const kind = useDataSource();
+  const signOut = useSignOut();
   const site = useSite();
 
   const overlay = (
@@ -111,20 +115,44 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
 
           {user ? (
             <>
-              <Link
-                // @ts-expect-error TODO: route not built yet
-                to={`/profiles/${user.slug}`}
-                className="drawer__link drawer__link--section"
-                onClick={onClose}
-              >
-                <Avatar name={user.name} src={user.avatarUrl} size="sm" />
-                {user.name}
-              </Link>
-              {accountLinks.map(link => (
-                <Link key={link.href} to={link.href} className="drawer__link" onClick={onClose}>
-                  {link.label}
-                </Link>
-              ))}
+              {kind === 'live' ? (
+                <>
+                  <span className="drawer__link drawer__link--section">
+                    <Avatar name={user.name} src={user.avatarUrl} size="sm" />
+                    {user.name}
+                  </span>
+                  <Link to="/settings/account" className="drawer__link" onClick={onClose}>
+                    Account
+                  </Link>
+                  <button
+                    type="button"
+                    className="drawer__link"
+                    onClick={() => {
+                      signOut();
+                      onClose();
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    // @ts-expect-error TODO: route not built yet
+                    to={`/profiles/${user.slug}`}
+                    className="drawer__link drawer__link--section"
+                    onClick={onClose}
+                  >
+                    <Avatar name={user.name} src={user.avatarUrl} size="sm" />
+                    {user.name}
+                  </Link>
+                  {accountLinks.map(link => (
+                    <Link key={link.href} to={link.href} className="drawer__link" onClick={onClose}>
+                      {link.label}
+                    </Link>
+                  ))}
+                </>
+              )}
             </>
           ) : (
             <>
@@ -137,12 +165,7 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
                 <UserPlus size={16} />
                 Register
               </Link>
-              <Link
-                // @ts-expect-error TODO: route not built yet
-                to="/sessions/new"
-                className="drawer__link"
-                onClick={onClose}
-              >
+              <Link to="/sign-in" className="drawer__link" onClick={onClose}>
                 <LogIn size={16} />
                 Login
               </Link>
@@ -165,6 +188,10 @@ export function MobileMenu({ onClose }: { onClose: () => void }) {
               <Link to="/settings/display" className="drawer__link" onClick={onClose}>
                 <SlidersHorizontal size={16} />
                 More settings
+              </Link>
+              <Link to="/settings/account" className="drawer__link" onClick={onClose}>
+                <UserRound size={16} />
+                Account
               </Link>
             </div>
           </details>

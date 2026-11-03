@@ -38,6 +38,8 @@ export interface DataSource {
   recentTopics: (limit: number) => Promise<Array<ForumTopic>>;
   /** The tracked livestream channels, or `null` when this site has no such page. */
   liveStreams: () => Promise<Array<LiveStreamChannel> | null>;
+  /** Images matching the signed-in user's watched tags. Rejects without a key. */
+  watchedMedia: (limit: number) => Promise<MediaPage>;
   /** One page of a gallery. Rejects when there is no such gallery. */
   gallery: (id: number, page: number, perPage: number) => Promise<Gallery>;
 }
