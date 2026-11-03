@@ -316,3 +316,22 @@ export interface CommentEntry {
 export function fetchComments(query: string, page: number, perPage: number): Promise<Listing<CommentEntry>> {
   return get<Listing<CommentEntry>>('/comments', { q: query, page, perPage });
 }
+
+export type Neighbour = 'prev' | 'next' | 'random';
+
+/**
+ * The id of the image beside this one in a search, or `null` when there is none.
+ * "Previous" is the next newer image and "next" the next older, as on the sites.
+ * Random ignores which image this is.
+ */
+export async function fetchNeighbour(id: number, query: string, rel: Neighbour): Promise<null | number> {
+  const within = (condition: string) => (query === '*' ? condition : `(${query}), ${condition}`);
+  const params = {
+    prev: { q: within(`id.gt:${id}`), sf: 'id', sd: 'asc' },
+    next: { q: within(`id.lt:${id}`), sf: 'id', sd: 'desc' },
+    random: { q: query, sf: 'random', sd: 'desc' },
+  }[rel];
+  const { items } = await get<{ items: Array<{ id: number }> }>('/search', { ...params, page: 1, perPage: 1 });
+
+  return items[0]?.id ?? null;
+}

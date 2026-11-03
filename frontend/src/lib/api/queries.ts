@@ -13,6 +13,7 @@ import {
   fetchComments,
   fetchFilter,
   fetchGalleries,
+  fetchNeighbour,
   fetchForum,
   fetchSystemFilters,
   fetchForums,
@@ -26,6 +27,7 @@ import {
   fetchStaticPage,
   fetchTopicPage,
 } from '#/lib/api/backend/content';
+import type { Neighbour } from '#/lib/api/backend/content';
 import type { DataSourceKind, MediaSearchParams } from '#/lib/api/types';
 
 export function mediaSearchQuery(kind: DataSourceKind, params: MediaSearchParams) {
@@ -135,6 +137,13 @@ export function commentsQuery(query: string, page: number, perPage: number) {
     queryKey: ['content', 'comments', query, page, perPage],
     queryFn: () => fetchComments(query, page, perPage),
     placeholderData: keepPreviousData,
+  });
+}
+
+export function neighbourQuery(id: number, query: string, rel: Neighbour) {
+  return queryOptions({
+    queryKey: ['content', 'image', id, 'neighbour', query, rel],
+    queryFn: () => fetchNeighbour(id, query, rel),
   });
 }
 

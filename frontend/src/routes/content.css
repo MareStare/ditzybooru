@@ -104,6 +104,7 @@
   background-color: var(--surface-media);
 }
 
+.image-page__navigation,
 .image-page__interactions {
   display: flex;
   flex-wrap: wrap;

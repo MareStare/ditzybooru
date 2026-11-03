@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowDown, ArrowUp, EyeOff, MessageSquare, Star } from 'lucide-react';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
+import { useQueryClient } from '@tanstack/react-query';
+import { ArrowDown, ArrowUp, ChevronLeft, ChevronRight, EyeOff, MessageSquare, Shuffle, Star } from 'lucide-react';
 
 import { Button } from '#/components/ui/Button';
 import { CommunityPost } from '#/components/ui/CommunityPost';
@@ -13,9 +14,15 @@ import { useLiveQuery } from '#/hooks/use-live-query';
 import { COMMENTS_PER_PAGE } from '#/lib/api/backend/content';
 import type { ImagePage } from '#/lib/api/backend/content';
 import { prefetchLive } from '#/lib/api/prefetch';
-import { imageCommentsQuery, imagePageQuery } from '#/lib/api/queries';
+import { imageCommentsQuery, imagePageQuery, neighbourQuery } from '#/lib/api/queries';
 import { formatBytes } from '#/lib/format';
 import { pageSearch } from '#/lib/page-search';
+import type { PageSearch } from '#/lib/page-search';
+
+/** `q` is the search the reader came from: the previous and next images are the ones beside this in it. */
+interface ImageSearch extends PageSearch {
+  q?: string;
+}
 
 export const Route = createFileRoute('/images/$id')({
   component: ImageRoute,
@@ -24,7 +31,10 @@ export const Route = createFileRoute('/images/$id')({
     parse: ({ id }: { id: string }) => ({ id: Number(id) }),
     stringify: ({ id }: { id: number }) => ({ id: String(id) }),
   },
-  validateSearch: pageSearch,
+  validateSearch: (search: Record<string, unknown>): ImageSearch => ({
+    ...pageSearch(search),
+    ...(typeof search.q === 'string' && search.q !== '' && search.q !== '*' ? { q: search.q } : {}),
+  }),
   loaderDeps: ({ search }) => search,
   loader: async ({ context, params, deps }) => {
     await Promise.all([
@@ -58,6 +68,41 @@ function ImageMedia({ image }: { image: ImagePage }) {
     <a href={reprs.full} rel="nofollow">
       <img className="image-page__media" src={still} width={image.width} height={image.height} alt="" />
     </a>
+  );
+}
+
+/** Previous, next and random: the images beside this one in the search the reader came from. */
+function Navigation({ id }: { id: number }) {
+  const { q = '*' } = Route.useSearch();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const prev = useLiveQuery(neighbourQuery(id, q, 'prev'));
+  const next = useLiveQuery(neighbourQuery(id, q, 'next'));
+  const search = q === '*' ? {} : { q };
+
+  return (
+    <nav className="image-page__navigation" aria-label="Image navigation">
+      {prev.data === undefined || prev.data === null ? null : (
+        <Link to="/images/$id" params={{ id: prev.data }} search={search} rel="prev">
+          <ChevronLeft size={16} /> Previous
+        </Link>
+      )}
+      <Button
+        onClick={() => {
+          // Fetched on the click, not ahead of it: a random pick is worth nothing once seen.
+          void queryClient
+            .query({ ...neighbourQuery(id, q, 'random'), staleTime: 0 })
+            .then(pick => (pick === null ? undefined : navigate({ to: '/images/$id', params: { id: pick }, search })));
+        }}
+      >
+        <Shuffle size={16} /> Random
+      </Button>
+      {next.data === undefined || next.data === null ? null : (
+        <Link to="/images/$id" params={{ id: next.data }} search={search} rel="next">
+          Next <ChevronRight size={16} />
+        </Link>
+      )}
+    </nav>
   );
 }
 
@@ -177,11 +222,10 @@ function Tags({ image }: { image: ImagePage }) {
         <ul className="image-page__tags">
           {image.tags.map(tag => (
             <li key={tag.name}>
-              {/* The tag's own page is the site's path for it: a full load until our route exists. */}
-              <a href={`/tags/${tag.slug ?? encodeURIComponent(tag.name)}`} className="image-page__tag">
+              <Link to="/tags/$slug" params={{ slug: tag.slug ?? tag.name }} className="image-page__tag">
                 {tag.name}
                 {tag.imageCount === undefined ? null : <span className="content-page__meta"> {tag.imageCount}</span>}
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
@@ -248,6 +292,7 @@ function ImageRoute() {
       <QueryState kind={kind} data={data} error={error} isPending={isPending} refetch={refetch} what="image">
         {image => (
           <>
+            <Navigation key={image.id} id={image.id} />
             <Interactions key={image.id} image={image} />
             <Details image={image} />
             <ImageMedia image={image} />
