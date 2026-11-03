@@ -51,6 +51,32 @@ describe('HttpClient', () => {
     expect(fetchMock).toHaveBeenCalledTimes(2);
   });
 
+  it('should not retry a 500 to a write, which may have gone through', async () => {
+    const client = new HttpClient(BASE_URL);
+
+    fetchMock.mockResolvedValue(
+      new Response('Internal Server Error', { status: 500, statusText: 'Internal Server Error' }),
+    );
+
+    const failure = client.fetch('/', { method: 'POST', body: '{}' }).catch((error: unknown) => error);
+    await vi.runAllTimersAsync();
+    expect(await failure).toMatchObject({ name: 'HttpError', message: expect.stringMatching(/500/) as string });
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
+  it('should not retry 501, which says the upstream does not offer the page', async () => {
+    const client = new HttpClient(BASE_URL);
+
+    fetchMock.mockResolvedValue(new Response('Not Implemented', { status: 501, statusText: 'Not Implemented' }));
+
+    const failure = client.fetch('/').catch((error: unknown) => error);
+    await vi.runAllTimersAsync();
+    expect(await failure).toMatchObject({ name: 'HttpError', message: expect.stringMatching(/501/) as string });
+
+    expect(fetchMock).toHaveBeenCalledOnce();
+  });
+
   it('should not retry AbortError', async () => {
     const client = new HttpClient(BASE_URL);
 

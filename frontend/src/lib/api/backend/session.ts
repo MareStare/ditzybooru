@@ -31,6 +31,9 @@ export interface SignInParams {
 /** The site turned the sign-in down. `message` is its own words about why. */
 export class SignInRejected extends Error {}
 
+/** The site did not take the sign-in at all: it timed out or crashed on its side. Nothing the visitor typed is wrong. */
+export class SignInUnavailable extends Error {}
+
 export function fetchSession(): Promise<Session> {
   return get<Session>('/session');
 }
@@ -41,11 +44,16 @@ export async function fetchLoginCaptcha(): Promise<null | string> {
   return siteKey;
 }
 
-/** Turns the site's 422 into a {@link SignInRejected} with its own words; anything else passes. */
+/** Turns the site's 422 into a {@link SignInRejected} with its own words, and a failure on its side into {@link SignInUnavailable}. */
 async function rejection(error: unknown): Promise<never> {
-  if (error instanceof HttpError && error.response.status === 422) {
-    const body = (await error.response.clone().json()) as { error?: { message?: string } };
-    throw new SignInRejected(body.error?.message ?? 'The site turned this down.');
+  if (error instanceof HttpError) {
+    if (error.response.status === 422) {
+      const body = (await error.response.clone().json()) as { error?: { message?: string } };
+      throw new SignInRejected(body.error?.message ?? 'The site turned this down.');
+    }
+    if (error.response.status >= 500) {
+      throw new SignInUnavailable('The site did not answer the sign-in.');
+    }
   }
   throw error;
 }

@@ -111,8 +111,15 @@ function retryAfterMs(response: Response): number {
 }
 
 function isRetryable(error: Error): boolean {
+  // Only a read is safe to send again: a sign-in that timed out upstream may
+  // have gone through, and trying it again would wait out the timeout again.
   // 501 is a verdict ("this upstream does not offer that"), not a hiccup.
-  return error instanceof HttpError && error.response.status >= 500 && error.response.status !== 501;
+  return (
+    error instanceof HttpError &&
+    error.request.method === 'GET' &&
+    error.response.status >= 500 &&
+    error.response.status !== 501
+  );
 }
 
 /**
@@ -138,10 +145,12 @@ function generateId(prefix: string) {
 
 export class HttpError extends Error {
   override name = 'HttpError';
+  request: Request;
   response: Response;
 
   constructor(request: Request, response: Response) {
     super(`Request failed (${response.status}: ${response.statusText}): ${request.method} ${request.url}`);
+    this.request = request;
     this.response = response;
   }
 }

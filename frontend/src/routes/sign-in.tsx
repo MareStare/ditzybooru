@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { SubmitEvent } from 'react';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { Button } from '#/components/ui/Button';
@@ -11,7 +11,13 @@ import { Panel, PanelBody, PanelHeader } from '#/components/ui/Panel';
 import { SESSION_QUERY_KEY } from '#/hooks/use-session';
 import { useDataSource } from '#/hooks/use-data-source';
 import { useSite } from '#/hooks/use-site';
-import { fetchLoginCaptcha, signIn, SignInRejected, signInWithCode } from '#/lib/api/backend/session';
+import {
+  fetchLoginCaptcha,
+  signIn,
+  SignInRejected,
+  SignInUnavailable,
+  signInWithCode,
+} from '#/lib/api/backend/session';
 import type { Session } from '#/lib/api/backend/session';
 
 export const Route = createFileRoute('/sign-in')({ component: SignInPage });
@@ -28,6 +34,8 @@ function SignInPage() {
   const [captchaFailed, setCaptchaFailed] = useState(false);
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<null | string>(null);
+  // The site itself failed to take the sign-in: not something to retype.
+  const [siteDown, setSiteDown] = useState(false);
   // Set once the password was right and the site wants a 2FA code.
   const [needsCode, setNeedsCode] = useState(false);
   const [code, setCode] = useState('');
@@ -52,13 +60,21 @@ function SignInPage() {
     setBusy(false);
     // A captcha token works once, so the visitor has to solve another.
     setCaptchaToken(null);
-    setProblem(error instanceof SignInRejected ? error.message : 'Could not reach the site. Try again.');
+    setSiteDown(error instanceof SignInUnavailable);
+    if (error instanceof SignInRejected) {
+      setProblem(error.message);
+    } else if (error instanceof SignInUnavailable) {
+      setProblem(`${site.name} is not accepting sign-ins right now: it did not answer.`);
+    } else {
+      setProblem('Could not reach the site. Try again.');
+    }
   };
 
   const submit = (event: SubmitEvent) => {
     event.preventDefault();
     setBusy(true);
     setProblem(null);
+    setSiteDown(false);
     if (needsCode) {
       signInWithCode(code.trim(), rememberMe).then(done, (error: unknown) => {
         failed(error);
@@ -165,6 +181,13 @@ function SignInPage() {
             ) : null}
             <span className="developer-setting__hint" role="status">
               {problem}
+              {siteDown ? (
+                <>
+                  {' '}
+                  Try again later, or <Link to="/settings/account">sign in with an API key</Link> instead, which needs
+                  no captcha.
+                </>
+              ) : null}
               {captchaFailed ? 'The captcha could not be loaded.' : null}
               {captchaUnavailable ? `Could not reach ${site.name} to start the sign-in.` : null}
             </span>

@@ -15,23 +15,27 @@ declare global {
   }
 }
 
-const SCRIPT_URL = 'https://js.hcaptcha.com/1/api.js?render=explicit';
+/** The global hCaptcha calls once its API is ready to render. */
+const ON_LOAD = 'onHCaptchaLoad';
+
+const SCRIPT_URL = `https://js.hcaptcha.com/1/api.js?render=explicit&onload=${ON_LOAD}`;
 
 let loading: Promise<HCaptchaApi> | undefined;
 
-/** Loads hCaptcha's script once and resolves with its API. */
+/** Loads hCaptcha's script once and resolves with its API, once it says it is ready. */
 function load(): Promise<HCaptchaApi> {
   loading ??= new Promise<HCaptchaApi>((resolve, reject) => {
-    const script = document.createElement('script');
-    script.src = SCRIPT_URL;
-    script.async = true;
-    script.onload = () => {
+    // hCaptcha calls this when its API can render; rendering before warns.
+    (window as unknown as Record<string, () => void>)[ON_LOAD] = () => {
       if (window.hcaptcha === undefined) {
         reject(new Error('hCaptcha loaded without its API'));
       } else {
         resolve(window.hcaptcha);
       }
     };
+    const script = document.createElement('script');
+    script.src = SCRIPT_URL;
+    script.async = true;
     script.onerror = () => {
       // Let the next try load it again.
       loading = undefined;

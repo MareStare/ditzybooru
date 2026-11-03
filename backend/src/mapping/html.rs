@@ -68,7 +68,21 @@ fn following<'a>(scope: ElementRef<'a>, selector: &Selector) -> Option<ElementRe
 /// tell what an error page says, for a log.
 pub fn snippet(body: &str, limit: usize) -> String {
     let document = Html::parse_document(body);
-    let text = document.root_element().text().collect::<Vec<_>>().join(" ");
+    // Not the page's styles and scripts: an error page carries a stylesheet
+    // before its message.
+    let text = document
+        .root_element()
+        .descendants()
+        .filter_map(|node| node.value().as_text().map(|text| (node, &**text)))
+        .filter(|(node, _)| {
+            !node
+                .ancestors()
+                .filter_map(ElementRef::wrap)
+                .any(|element| matches!(element.value().name(), "style" | "script" | "noscript"))
+        })
+        .map(|(_, text)| text)
+        .collect::<Vec<_>>()
+        .join(" ");
     text.split_whitespace()
         .collect::<Vec<_>>()
         .join(" ")
@@ -201,6 +215,14 @@ fn read(el: ElementRef<'_>, spec: &FieldSpec, origin: &str) -> Result<Value> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn a_snippet_leaves_out_styles_and_scripts() {
+        let body = "<html><head><style>.a { color: red }</style><script>var x = 1;</script></head>\
+                    <body><h1>MatchError at POST /sessions</h1><p>no match</p></body></html>";
+        assert_eq!(snippet(body, 100), "MatchError at POST /sessions no match");
+        assert_eq!(snippet(body, 10), "MatchError");
+    }
 
     #[test]
     fn rest_takes_everything_after_the_marker() {
