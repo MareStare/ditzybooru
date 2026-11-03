@@ -48,3 +48,21 @@ with the same `sites.local.json` (or `SITES_FILE`) as the frontend. An entry may
 add `"flavor"`; otherwise it is `furbooru` for furbooru origins and `philomena`
 for the rest. Hosts that are not listed get `UPSTREAM_ORIGIN`, or Derpibooru.
 Redirects from the upstream are not followed and read as 404.
+
+### On Cloudflare Workers
+
+The Worker has no backend next to it, so the API is **off** there by default
+and `/api/v1/**` answers 404. To try it, set these Worker variables in the
+Cloudflare dashboard (no deploy needed; a later `wrangler deploy` keeps
+dashboard variables only if they are not in `wrangler.jsonc`, and none are):
+
+| Variable                    | Value                                                                      |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `API_PROXY`                 | `on` to enable. Set it to `off` or delete it to disable at once.           |
+| `API_BACKEND_URL`           | The backend's public URL (reachable from Cloudflare).                      |
+| `API_BACKEND_AUTHORIZATION` | Optional `Authorization` header value, when that URL is behind basic auth. |
+
+Every API call is a Worker request and counts against the account's quota, so
+keep it off unless it is being verified. For `vite dev` and `vite preview`, put
+the same variables in `frontend/.dev.vars` (git-ignored; a preview reads it at
+build time).

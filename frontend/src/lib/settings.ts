@@ -19,6 +19,7 @@ import { createIsomorphicFn } from '@tanstack/react-start';
 import { getCookie } from '@tanstack/react-start/server';
 
 import { DATA_SOURCE_KINDS } from '#/lib/api/types';
+import { CLOUDFLARE_PRODUCTION } from '#/lib/deploy';
 import type { DataSourceKind } from '#/lib/api/types';
 import {
   DEFAULT_COMPONENT_SETTINGS,
@@ -56,7 +57,7 @@ export function defaultSettings(): Settings {
     motion: DEFAULT_MOTION_PREFERENCE,
     display: DEFAULT_DISPLAY_SETTINGS,
     components: DEFAULT_COMPONENT_SETTINGS,
-    dataSource: 'live',
+    dataSource: CLOUDFLARE_PRODUCTION ? 'mock-anonymous' : 'live',
   };
 }
 

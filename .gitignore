@@ -32,3 +32,6 @@ CLAUDE.local.md
 # Per-instance multi-site config and the branding cache it produces.
 sites.local.json
 .site-cache.json
+
+# Local Worker variables (see src/lib/api/backend/backend.server.ts)
+.dev.vars

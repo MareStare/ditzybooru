@@ -10,7 +10,11 @@ import type { DataSourceKind } from '#/lib/api/types';
 export const Route = createFileRoute('/settings/developer')({ component: DeveloperSettingsPage });
 
 const DATA_SOURCE_OPTIONS: Array<{ value: DataSourceKind; label: string; description: string }> = [
-  { value: 'live', label: 'Live', description: 'Read from the Philomena origin server.' },
+  {
+    value: 'live',
+    label: 'Live',
+    description: 'Read from our API. Off on the Cloudflare deploy unless its Worker variables enable it.',
+  },
   { value: 'mock', label: 'Mock', description: 'Read the fabricated data bundled with the frontend.' },
   {
     value: 'mock-anonymous',

@@ -59,6 +59,7 @@ export default defineConfig({
   define: {
     'import.meta.env.COMMIT_SHA': JSON.stringify(commitSha),
     'import.meta.env.COMMIT_DATE': JSON.stringify(commitDate),
+    'import.meta.env.BUILD_TARGET': JSON.stringify(serverTarget),
   },
   css: {
     // Important LightningCSS transforms we depend on:

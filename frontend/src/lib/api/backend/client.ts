@@ -9,20 +9,25 @@
 import { createIsomorphicFn } from '@tanstack/react-start';
 import { getRequestHost } from '@tanstack/react-start/server';
 
+import { backendHeaders, backendUrl } from '#/lib/api/backend/backend.server';
 import { HttpClient } from '#/lib/http/http-client';
 import type { RequestParams } from '#/lib/http/http-client';
 
 let client: HttpClient | undefined;
 
+/** The server calls the backend directly, the browser calls its own origin. */
+const serverBase = createIsomorphicFn()
+  .server((): string => {
+    const base = backendUrl();
+    if (base === undefined) {
+      throw new Error('The API is switched off on this deploy (see backend.server.ts)');
+    }
+    return base;
+  })
+  .client((): string => window.location.origin);
+
 function backend(): HttpClient {
-  if (client === undefined) {
-    // `API_BACKEND_URL` is also what `api-proxy.ts` reads; the default is the
-    // port in `pm2.json`.
-    const base = import.meta.env.SSR
-      ? (process.env.API_BACKEND_URL ?? 'http://127.0.0.1:3711')
-      : window.location.origin;
-    client = new HttpClient(base);
-  }
+  client ??= new HttpClient(serverBase());
   return client;
 }
 
@@ -30,6 +35,7 @@ const requestHeaders = createIsomorphicFn()
   .server((): Record<string, string> => ({
     Accept: 'application/json',
     'X-Forwarded-Host': getRequestHost(),
+    ...backendHeaders(),
   }))
   .client((): Record<string, string> => ({ Accept: 'application/json' }));
 
