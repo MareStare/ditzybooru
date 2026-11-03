@@ -15,7 +15,7 @@ use backend::mapping::{
     select_strategy,
 };
 
-const PAGE: &str = r#"<html><head><meta content="tok1" name="csrf-token"></head><body>{BODY}
+const PAGE: &str = r#"<html><head><meta content="tok1" name="csrf-token"></head><body><header><div class="avatar--28px"><img src="/avatars/pleb.png"></div></header>{BODY}
 <div class="js-datastore" data-user-is-signed-in="{SIGNED}" data-user-id="4" data-user-name="Pleb" data-user-slug="Pleb" data-user-role="user"></div></body></html>"#;
 
 fn page(body: &str, signed_in: bool) -> String {
@@ -168,6 +168,11 @@ async fn a_good_password_signs_in_and_the_cookie_comes_out() {
     let user = result.unwrap();
     assert_eq!(user.get("signedIn"), Some(&serde_json::json!(true)));
     assert_eq!(user.get("name"), Some(&serde_json::json!("Pleb")));
+    // The avatar is the one the site shows in its header, as an address on the site.
+    assert_eq!(
+        user.get("avatarUrl"),
+        Some(&serde_json::json!(format!("{origin}/avatars/pleb.png")))
+    );
     let cookies = session.into_set_cookies();
     assert!(
         cookies

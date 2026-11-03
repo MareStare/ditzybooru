@@ -14,5 +14,5 @@ export function useCurrentUser(): User | null {
     return null;
   }
 
-  return { id: session.id, name: session.name, slug: session.slug ?? session.name, avatarUrl: null };
+  return { id: session.id, name: session.name, slug: session.slug ?? session.name, avatarUrl: session.avatarUrl };
 }

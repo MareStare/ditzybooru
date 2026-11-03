@@ -14,6 +14,8 @@ const sessionFields = {
   name: user('name'),
   slug: user('slug'),
   role: user('role'),
+  // The picture the site shows in its header for them; none when they have not set one.
+  avatarUrl: { sel: '.avatar--28px img', attr: 'src', as: 'url', optional: true },
   // Signed in with a password, but the site wants the 2FA code before it lets them in.
   secondFactorRequired: { sel: 'form[action="/sessions/totp"]', exists: true },
 } satisfies Record<string, FieldSpec>;
@@ -28,6 +30,7 @@ const SECOND_FACTOR_ANSWER = {
   name: null,
   slug: null,
   role: null,
+  avatarUrl: null,
   secondFactorRequired: true,
 };
 

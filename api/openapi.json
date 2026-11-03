@@ -1595,6 +1595,17 @@
       "Session": {
         "additionalProperties": false,
         "properties": {
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "id": {
             "oneOf": [
               {
@@ -1648,6 +1659,7 @@
           "name",
           "slug",
           "role",
+          "avatarUrl",
           "secondFactorRequired"
         ],
         "type": "object"
@@ -5662,6 +5674,12 @@
                       "exists": true,
                       "sel": "a[href=\"/sessions/new\"]"
                     },
+                    "avatarUrl": {
+                      "as": "url",
+                      "attr": "src",
+                      "optional": true,
+                      "sel": ".avatar--28px img"
+                    },
                     "id": {
                       "as": "int",
                       "attr": "data-user-id",
@@ -5746,6 +5764,12 @@
               },
               "select": {
                 "fields": {
+                  "avatarUrl": {
+                    "as": "url",
+                    "attr": "src",
+                    "optional": true,
+                    "sel": ".avatar--28px img"
+                  },
                   "id": {
                     "as": "int",
                     "attr": "data-user-id",
@@ -5878,6 +5902,7 @@
                 "page": "/",
                 "redirects": {
                   "/sessions/totp/new": {
+                    "avatarUrl": null,
                     "id": null,
                     "name": null,
                     "role": null,
@@ -5888,6 +5913,12 @@
                 },
                 "select": {
                   "fields": {
+                    "avatarUrl": {
+                      "as": "url",
+                      "attr": "src",
+                      "optional": true,
+                      "sel": ".avatar--28px img"
+                    },
                     "id": {
                       "as": "int",
                       "attr": "data-user-id",
@@ -6075,6 +6106,12 @@
                 "page": "/",
                 "select": {
                   "fields": {
+                    "avatarUrl": {
+                      "as": "url",
+                      "attr": "src",
+                      "optional": true,
+                      "sel": ".avatar--28px img"
+                    },
                     "id": {
                       "as": "int",
                       "attr": "data-user-id",

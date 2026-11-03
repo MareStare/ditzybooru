@@ -327,6 +327,8 @@ const Session = s.object({
   name: s.nullable(s.string()),
   slug: s.nullable(s.string()),
   role: s.nullable(s.string()),
+  /** The avatar the site shows for them, or `null` when they have none. */
+  avatarUrl: s.nullable(s.uri()),
   /** Signed in with the password, but the site still wants the 2FA code (`createSessionTotp`). */
   secondFactorRequired: s.bool(),
 });

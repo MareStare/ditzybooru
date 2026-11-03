@@ -16,6 +16,7 @@ export interface Session {
   name: null | string;
   slug: null | string;
   role: null | string;
+  avatarUrl: null | string;
   /** The password was right, but the site still wants the 2FA code. */
   secondFactorRequired: boolean;
 }
