@@ -1746,6 +1746,126 @@
           "authorId"
         ],
         "type": "object"
+      },
+      "TopicPage": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "forumName": {
+            "type": "string"
+          },
+          "forumSlug": {
+            "type": "string"
+          },
+          "postCount": {
+            "type": "integer"
+          },
+          "posts": {
+            "items": {
+              "$ref": "#/components/schemas/TopicPost"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "slug": {
+            "type": "string"
+          },
+          "startedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "forumSlug",
+          "forumName",
+          "author",
+          "postCount",
+          "posts"
+        ],
+        "type": "object"
+      },
+      "TopicPost": {
+        "additionalProperties": false,
+        "properties": {
+          "author": {
+            "type": "string"
+          },
+          "authorSlug": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "avatarUrl": {
+            "oneOf": [
+              {
+                "format": "uri-reference",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "body": {
+            "type": "string"
+          },
+          "bodyHtml": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "author",
+          "createdAt"
+        ],
+        "type": "object"
+      },
+      "TopicResults": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Topic"
+            },
+            "minItems": 0,
+            "type": "array"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "perPage": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "page",
+          "perPage"
+        ],
+        "type": "object"
       }
     }
   },
@@ -2644,7 +2764,114 @@
         }
       }
     },
-    "/forums/{forum}/{topic}": {
+    "/forums/{forum}/topics": {
+      "get": {
+        "operationId": "listForumTopics",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "forum",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "description": "At most 50.",
+            "in": "query",
+            "name": "perPage",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TopicResults"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "The topics of a forum, stickies first and then the most recently replied to.",
+        "tags": [
+          "forums"
+        ],
+        "x-examples": {
+          "forum": "dis",
+          "perPage": 5
+        },
+        "x-philomena": {
+          "auth": "none",
+          "routes": [
+            "GET /api/v1/json/forums/:forum_id/topics",
+            "GET /forums/:id"
+          ],
+          "strategies": [
+            {
+              "kind": "json",
+              "map": {
+                "items": {
+                  "from": "/topics",
+                  "map": {
+                    "author": "/author",
+                    "authorId": "/user_id",
+                    "lastRepliedAt": "/last_replied_to_at",
+                    "locked": "/locked",
+                    "postCount": "/post_count",
+                    "slug": "/slug",
+                    "sticky": "/sticky",
+                    "title": "/title",
+                    "viewCount": "/view_count"
+                  }
+                },
+                "page": {
+                  "as": "int",
+                  "from": "$param:page"
+                },
+                "perPage": {
+                  "as": "int",
+                  "from": "$param:perPage"
+                },
+                "total": "/total"
+              },
+              "request": {
+                "method": "GET",
+                "path": "/api/v1/json/forums/{forum}/topics",
+                "query": {
+                  "page": "{page|1}",
+                  "per_page": "{perPage|25}"
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "/forums/{forum}/topics/{topic}": {
       "get": {
         "operationId": "getTopic",
         "parameters": [
@@ -2663,6 +2890,15 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "description": "Posts come 25 to a page.",
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -2670,7 +2906,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Topic"
+                  "$ref": "#/components/schemas/TopicPage"
                 }
               }
             },
@@ -2687,7 +2923,7 @@
             "description": "Error"
           }
         },
-        "summary": "One forum topic: its title, flags and counters.",
+        "summary": "The topic page: the topic and one page of its posts.",
         "tags": [
           "forums"
         ],
@@ -2698,21 +2934,150 @@
         "x-philomena": {
           "auth": "none",
           "routes": [
+            "GET /forums/:forum_id/topics/:id",
             "GET /api/v1/json/forums/:forum_id/topics/:id"
           ],
           "strategies": [
             {
+              "flavors": [
+                "philomena",
+                "furbooru"
+              ],
+              "kind": "html",
+              "request": {
+                "method": "GET",
+                "path": "/forums/{forum}/topics/{topic}",
+                "query": {
+                  "page": "{page|1}"
+                }
+              },
+              "select": {
+                "fields": {
+                  "author": {
+                    "sel": ".page__options strong",
+                    "text": true
+                  },
+                  "forumName": {
+                    "sel": ".block__header > a[href^=\"/forums/\"]",
+                    "text": true
+                  },
+                  "forumSlug": {
+                    "as": "lastSegment",
+                    "attr": "href",
+                    "sel": ".block__header > a[href^=\"/forums/\"]"
+                  },
+                  "postCount": {
+                    "as": "add:1",
+                    "sel": ".page__info .flex--center-distributed > .block__header__item:nth-child(2)",
+                    "text": true
+                  },
+                  "posts": {
+                    "fields": {
+                      "author": {
+                        "sel": ".communication__body__sender-name strong",
+                        "text": true
+                      },
+                      "authorSlug": {
+                        "as": "lastSegment",
+                        "attr": "href",
+                        "optional": true,
+                        "sel": ".communication__body__sender-name strong a"
+                      },
+                      "avatarUrl": {
+                        "as": "url",
+                        "attr": "src",
+                        "optional": true,
+                        "sel": ".communication__body__avatar img"
+                      },
+                      "bodyHtml": {
+                        "as": "sanitizedHtml",
+                        "html": true,
+                        "sel": ".communication__body__text"
+                      },
+                      "createdAt": {
+                        "attr": "datetime",
+                        "sel": ".communication__options time"
+                      },
+                      "id": {
+                        "as": "lastInt",
+                        "attr": "id"
+                      }
+                    },
+                    "many": true,
+                    "sel": "article.communication"
+                  },
+                  "slug": {
+                    "as": "lastSegment",
+                    "attr": "href",
+                    "sel": ".block__header a[href*=\"/topics/\"]"
+                  },
+                  "startedAt": {
+                    "attr": "datetime",
+                    "sel": ".page__info time"
+                  },
+                  "title": {
+                    "sel": "main h1",
+                    "text": true
+                  }
+                }
+              },
+              "template": "lib/philomena_web/templates/topic/show.html.slime"
+            },
+            {
+              "flavors": [
+                "derpibooru"
+              ],
+              "joins": [
+                {
+                  "items": "/posts",
+                  "key": "/id",
+                  "name": "posts",
+                  "request": {
+                    "method": "GET",
+                    "path": "/api/v1/json/forums/{forum}/topics/{topic}/posts",
+                    "query": {
+                      "page": "{page|1}",
+                      "per_page": "25"
+                    }
+                  }
+                },
+                {
+                  "items": "",
+                  "key": "",
+                  "name": "forum",
+                  "request": {
+                    "method": "GET",
+                    "path": "/api/v1/json/forums/{forum}"
+                  }
+                }
+              ],
               "kind": "json",
               "map": {
                 "author": "/topic/author",
-                "authorId": "/topic/user_id",
-                "lastRepliedAt": "/topic/last_replied_to_at",
-                "locked": "/topic/locked",
+                "forumName": {
+                  "at": "/forum/name",
+                  "join": "forum"
+                },
+                "forumSlug": {
+                  "at": "/forum/short_name",
+                  "join": "forum"
+                },
                 "postCount": "/topic/post_count",
+                "posts": {
+                  "join": "posts",
+                  "map": {
+                    "author": "/author",
+                    "avatarUrl": {
+                      "as": "url",
+                      "from": "/avatar"
+                    },
+                    "body": "/body",
+                    "createdAt": "/created_at",
+                    "id": "/id"
+                  }
+                },
                 "slug": "/topic/slug",
-                "sticky": "/topic/sticky",
-                "title": "/topic/title",
-                "viewCount": "/topic/view_count"
+                "title": "/topic/title"
               },
               "request": {
                 "method": "GET",
@@ -2723,7 +3088,7 @@
         }
       }
     },
-    "/forums/{forum}/{topic}/posts": {
+    "/forums/{forum}/topics/{topic}/posts": {
       "get": {
         "operationId": "listTopicPosts",
         "parameters": [
@@ -2841,7 +3206,7 @@
         }
       }
     },
-    "/forums/{forum}/{topic}/posts/{post}": {
+    "/forums/{forum}/topics/{topic}/posts/{post}": {
       "get": {
         "operationId": "getPost",
         "parameters": [

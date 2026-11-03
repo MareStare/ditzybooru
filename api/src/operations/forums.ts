@@ -1,6 +1,7 @@
 import { defineOperation } from '../dsl/operation.ts';
 import { s } from '../dsl/schema.ts';
 import { postMap, under } from './maps.ts';
+import { urlAt } from './media.ts';
 
 /** The latest topics across all forums, for the home page's forum block. */
 export const getForumActivity = defineOperation({
@@ -99,23 +100,142 @@ export const getForum = defineOperation({
   },
 });
 
+/** The topic page: the topic and one page of its posts, at the site's own path. */
 export const getTopic = defineOperation({
   operationId: 'getTopic',
-  path: '/forums/{forum}/{topic}',
+  path: '/forums/{forum}/topics/{topic}',
   method: 'get',
-  summary: 'One forum topic: its title, flags and counters.',
+  summary: 'The topic page: the topic and one page of its posts.',
   tags: ['forums'],
-  params: [forumParam, topicParam],
-  response: s.ref('Topic'),
+  params: [
+    forumParam,
+    topicParam,
+    { name: 'page', in: 'query', schema: s.int(), description: 'Posts come 25 to a page.' },
+  ],
+  response: s.ref('TopicPage'),
   examples: { forum: 'dis', topic: 'example-topic' },
   philomena: {
-    routes: ['GET /api/v1/json/forums/:forum_id/topics/:id'],
+    routes: ['GET /forums/:forum_id/topics/:id', 'GET /api/v1/json/forums/:forum_id/topics/:id'],
+    auth: 'none',
+    strategies: [
+      {
+        // Rendered text for the posts, as the site's own page has it.
+        kind: 'html',
+        flavors: ['philomena', 'furbooru'],
+        request: { method: 'GET', path: '/forums/{forum}/topics/{topic}', query: { page: '{page|1}' } },
+        template: 'lib/philomena_web/templates/topic/show.html.slime',
+        select: {
+          fields: {
+            slug: { sel: '.block__header a[href*="/topics/"]', attr: 'href', as: 'lastSegment' },
+            title: { sel: 'main h1', text: true },
+            forumSlug: { sel: '.block__header > a[href^="/forums/"]', attr: 'href', as: 'lastSegment' },
+            forumName: { sel: '.block__header > a[href^="/forums/"]', text: true },
+            author: { sel: '.page__options strong', text: true },
+            startedAt: { sel: '.page__info time', attr: 'datetime' },
+            // "1 replies" counts the posts after the first.
+            postCount: {
+              sel: '.page__info .flex--center-distributed > .block__header__item:nth-child(2)',
+              text: true,
+              as: 'add:1',
+            },
+            posts: {
+              sel: 'article.communication',
+              many: true,
+              fields: {
+                id: { attr: 'id', as: 'lastInt' },
+                author: { sel: '.communication__body__sender-name strong', text: true },
+                authorSlug: {
+                  sel: '.communication__body__sender-name strong a',
+                  attr: 'href',
+                  as: 'lastSegment',
+                  optional: true,
+                },
+                avatarUrl: { sel: '.communication__body__avatar img', attr: 'src', as: 'url', optional: true },
+                createdAt: { sel: '.communication__options time', attr: 'datetime' },
+                bodyHtml: { sel: '.communication__body__text', html: true, as: 'sanitizedHtml' },
+              },
+            },
+          },
+        },
+      },
+      {
+        // Derpibooru's pages sit behind a bot challenge: the JSON API has the
+        // topic and its posts, as the markup the authors wrote.
+        kind: 'json',
+        flavors: ['derpibooru'],
+        request: { method: 'GET', path: '/api/v1/json/forums/{forum}/topics/{topic}' },
+        joins: [
+          {
+            name: 'posts',
+            request: {
+              method: 'GET',
+              path: '/api/v1/json/forums/{forum}/topics/{topic}/posts',
+              query: { page: '{page|1}', per_page: '25' },
+            },
+            items: '/posts',
+            key: '/id',
+          },
+          {
+            name: 'forum',
+            request: { method: 'GET', path: '/api/v1/json/forums/{forum}' },
+            items: '',
+            key: '',
+          },
+        ],
+        map: {
+          slug: '/topic/slug',
+          title: '/topic/title',
+          forumSlug: { join: 'forum', at: '/forum/short_name' },
+          forumName: { join: 'forum', at: '/forum/name' },
+          author: '/topic/author',
+          postCount: '/topic/post_count',
+          posts: {
+            join: 'posts',
+            map: {
+              id: '/id',
+              author: '/author',
+              createdAt: '/created_at',
+              body: '/body',
+              avatarUrl: urlAt('/avatar'),
+            },
+          },
+        },
+      },
+    ],
+  },
+});
+
+/** A forum's topics, as its page lists them. */
+export const listForumTopics = defineOperation({
+  operationId: 'listForumTopics',
+  path: '/forums/{forum}/topics',
+  method: 'get',
+  summary: 'The topics of a forum, stickies first and then the most recently replied to.',
+  tags: ['forums'],
+  params: [
+    forumParam,
+    { name: 'page', in: 'query', schema: s.int() },
+    { name: 'perPage', in: 'query', schema: s.int(), description: 'At most 50.' },
+  ],
+  response: s.ref('TopicResults'),
+  examples: { forum: 'dis', perPage: 5 },
+  philomena: {
+    routes: ['GET /api/v1/json/forums/:forum_id/topics', 'GET /forums/:id'],
     auth: 'none',
     strategies: [
       {
         kind: 'json',
-        request: { method: 'GET', path: '/api/v1/json/forums/{forum}/topics/{topic}' },
-        map: under('/topic', topicMap),
+        request: {
+          method: 'GET',
+          path: '/api/v1/json/forums/{forum}/topics',
+          query: { page: '{page|1}', per_page: '{perPage|25}' },
+        },
+        map: {
+          total: '/total',
+          page: { from: '$param:page', as: 'int' },
+          perPage: { from: '$param:perPage', as: 'int' },
+          items: { from: '/topics', map: topicMap },
+        },
       },
     ],
   },
@@ -123,7 +243,7 @@ export const getTopic = defineOperation({
 
 export const listTopicPosts = defineOperation({
   operationId: 'listTopicPosts',
-  path: '/forums/{forum}/{topic}/posts',
+  path: '/forums/{forum}/topics/{topic}/posts',
   method: 'get',
   summary: 'The posts of a topic, oldest first.',
   tags: ['forums'],
@@ -159,7 +279,7 @@ export const listTopicPosts = defineOperation({
 
 export const getPost = defineOperation({
   operationId: 'getPost',
-  path: '/forums/{forum}/{topic}/posts/{post}',
+  path: '/forums/{forum}/topics/{topic}/posts/{post}',
   method: 'get',
   summary: 'One forum post.',
   tags: ['forums'],

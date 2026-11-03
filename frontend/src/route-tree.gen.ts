@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index';
 import { Route as RulesRouteImport } from './routes/rules';
 import { Route as SearchRouteImport } from './routes/search';
 import { Route as StaffRouteImport } from './routes/staff';
+import { Route as ForumsIndexRouteImport } from './routes/forums/index';
 import { Route as GalleriesIdRouteImport } from './routes/galleries/$id';
 import { Route as PagesSlugRouteImport } from './routes/pages/$slug';
 import { Route as SessionsNewRouteImport } from './routes/sessions/new';
@@ -20,6 +21,8 @@ import { Route as SettingsAccountRouteImport } from './routes/settings/account';
 import { Route as SettingsDeveloperRouteImport } from './routes/settings/developer';
 import { Route as SettingsDisplayRouteImport } from './routes/settings/display';
 import { Route as ApiV1SplatRouteImport } from './routes/api/v1/$';
+import { Route as ForumsForumIndexRouteImport } from './routes/forums/$forum/index';
+import { Route as ForumsForumTopicsTopicRouteImport } from './routes/forums/$forum/topics/$topic';
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -39,6 +42,11 @@ const SearchRoute = SearchRouteImport.update({
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ForumsIndexRoute = ForumsIndexRouteImport.update({
+  id: '/forums/',
+  path: '/forums/',
   getParentRoute: () => rootRouteImport,
 } as any);
 const GalleriesIdRoute = GalleriesIdRouteImport.update({
@@ -76,6 +84,16 @@ const ApiV1SplatRoute = ApiV1SplatRouteImport.update({
   path: '/api/v1/$',
   getParentRoute: () => rootRouteImport,
 } as any);
+const ForumsForumIndexRoute = ForumsForumIndexRouteImport.update({
+  id: '/forums/$forum/',
+  path: '/forums/$forum/',
+  getParentRoute: () => rootRouteImport,
+} as any);
+const ForumsForumTopicsTopicRoute = ForumsForumTopicsTopicRouteImport.update({
+  id: '/forums/$forum/topics/$topic',
+  path: '/forums/$forum/topics/$topic',
+  getParentRoute: () => rootRouteImport,
+} as any);
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute;
@@ -88,7 +106,10 @@ export interface FileRoutesByFullPath {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
+  '/forums/$forum/': typeof ForumsForumIndexRoute;
+  '/forums/$forum/topics/$topic': typeof ForumsForumTopicsTopicRoute;
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute;
@@ -101,7 +122,10 @@ export interface FileRoutesByTo {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/forums': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
+  '/forums/$forum': typeof ForumsForumIndexRoute;
+  '/forums/$forum/topics/$topic': typeof ForumsForumTopicsTopicRoute;
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport;
@@ -115,7 +139,10 @@ export interface FileRoutesById {
   '/settings/account': typeof SettingsAccountRoute;
   '/settings/developer': typeof SettingsDeveloperRoute;
   '/settings/display': typeof SettingsDisplayRoute;
+  '/forums/': typeof ForumsIndexRoute;
   '/api/v1/$': typeof ApiV1SplatRoute;
+  '/forums/$forum/': typeof ForumsForumIndexRoute;
+  '/forums/$forum/topics/$topic': typeof ForumsForumTopicsTopicRoute;
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath;
@@ -130,7 +157,10 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
-    | '/api/v1/$';
+    | '/forums/'
+    | '/api/v1/$'
+    | '/forums/$forum/'
+    | '/forums/$forum/topics/$topic';
   fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
@@ -143,7 +173,10 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
-    | '/api/v1/$';
+    | '/forums'
+    | '/api/v1/$'
+    | '/forums/$forum'
+    | '/forums/$forum/topics/$topic';
   id:
     | '__root__'
     | '/'
@@ -156,7 +189,10 @@ export interface FileRouteTypes {
     | '/settings/account'
     | '/settings/developer'
     | '/settings/display'
-    | '/api/v1/$';
+    | '/forums/'
+    | '/api/v1/$'
+    | '/forums/$forum/'
+    | '/forums/$forum/topics/$topic';
   fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
@@ -170,7 +206,10 @@ export interface RootRouteChildren {
   SettingsAccountRoute: typeof SettingsAccountRoute;
   SettingsDeveloperRoute: typeof SettingsDeveloperRoute;
   SettingsDisplayRoute: typeof SettingsDisplayRoute;
+  ForumsIndexRoute: typeof ForumsIndexRoute;
   ApiV1SplatRoute: typeof ApiV1SplatRoute;
+  ForumsForumIndexRoute: typeof ForumsForumIndexRoute;
+  ForumsForumTopicsTopicRoute: typeof ForumsForumTopicsTopicRoute;
 }
 
 declare module '@tanstack/react-router' {
@@ -201,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/staff';
       fullPath: '/staff';
       preLoaderRoute: typeof StaffRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/forums/': {
+      id: '/forums/';
+      path: '/forums';
+      fullPath: '/forums/';
+      preLoaderRoute: typeof ForumsIndexRouteImport;
       parentRoute: typeof rootRouteImport;
     };
     '/galleries/$id': {
@@ -252,6 +298,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiV1SplatRouteImport;
       parentRoute: typeof rootRouteImport;
     };
+    '/forums/$forum/': {
+      id: '/forums/$forum/';
+      path: '/forums/$forum';
+      fullPath: '/forums/$forum/';
+      preLoaderRoute: typeof ForumsForumIndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
+    '/forums/$forum/topics/$topic': {
+      id: '/forums/$forum/topics/$topic';
+      path: '/forums/$forum/topics/$topic';
+      fullPath: '/forums/$forum/topics/$topic';
+      preLoaderRoute: typeof ForumsForumTopicsTopicRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -266,7 +326,10 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsAccountRoute: SettingsAccountRoute,
   SettingsDeveloperRoute: SettingsDeveloperRoute,
   SettingsDisplayRoute: SettingsDisplayRoute,
+  ForumsIndexRoute: ForumsIndexRoute,
   ApiV1SplatRoute: ApiV1SplatRoute,
+  ForumsForumIndexRoute: ForumsForumIndexRoute,
+  ForumsForumTopicsTopicRoute: ForumsForumTopicsTopicRoute,
 };
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

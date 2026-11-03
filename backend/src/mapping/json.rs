@@ -23,10 +23,14 @@ impl JoinTable {
     /// Reads the item array of a follow-up response at `items`.
     pub fn parse(body: &str, items: &str, key: &str) -> Result<Self> {
         let doc: Value = serde_json::from_str(body).context("join body is not JSON")?;
-        let items = lookup(&doc, items)?
-            .as_array()
-            .ok_or_else(|| anyhow!("join items {items:?} is not an array"))?
-            .clone();
+        let items = if items.is_empty() {
+            vec![]
+        } else {
+            lookup(&doc, items)?
+                .as_array()
+                .ok_or_else(|| anyhow!("join items {items:?} is not an array"))?
+                .clone()
+        };
         Ok(Self {
             root: doc,
             items,

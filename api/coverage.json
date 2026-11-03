@@ -1456,7 +1456,8 @@
     "phase": 1,
     "status": "verified",
     "operations": [
-      "getForumActivity"
+      "getForumActivity",
+      "listForumTopics"
     ],
     "note": ""
   },
@@ -2149,8 +2150,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "skipped",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "getTopic"
+    ],
     "note": "The topic page: getTopic for the topic, listTopicPosts for its posts."
   },
   "GET /forums/:forum_id/topics/:topic_id/poll/edit": {
@@ -2240,8 +2243,10 @@
     "class": "html-page",
     "area": "public",
     "phase": 3,
-    "status": "todo",
-    "operations": [],
+    "status": "verified",
+    "operations": [
+      "listForumTopics"
+    ],
     "note": ""
   },
   "GET /galleries": {

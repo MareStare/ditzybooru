@@ -8,7 +8,15 @@
 import { keepPreviousData, queryOptions } from '@tanstack/react-query';
 
 import { dataSource } from '#/lib/api';
-import { fetchRules, fetchStaff, fetchStaticPage } from '#/lib/api/backend/content';
+import {
+  fetchForum,
+  fetchForums,
+  fetchForumTopics,
+  fetchRules,
+  fetchStaff,
+  fetchStaticPage,
+  fetchTopicPage,
+} from '#/lib/api/backend/content';
 import type { DataSourceKind, MediaSearchParams } from '#/lib/api/types';
 
 export function mediaSearchQuery(kind: DataSourceKind, params: MediaSearchParams) {
@@ -87,4 +95,28 @@ export function rulesQuery() {
 
 export function staffQuery() {
   return queryOptions({ queryKey: ['content', 'staff'], queryFn: fetchStaff });
+}
+
+export function forumsQuery() {
+  return queryOptions({ queryKey: ['content', 'forums'], queryFn: fetchForums });
+}
+
+export function forumQuery(slug: string) {
+  return queryOptions({ queryKey: ['content', 'forum', slug], queryFn: () => fetchForum(slug) });
+}
+
+export function forumTopicsQuery(slug: string, page: number, perPage: number) {
+  return queryOptions({
+    queryKey: ['content', 'forum', slug, 'topics', page, perPage],
+    queryFn: () => fetchForumTopics(slug, page, perPage),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function topicPageQuery(forum: string, topic: string, page: number) {
+  return queryOptions({
+    queryKey: ['content', 'topic', forum, topic, page],
+    queryFn: () => fetchTopicPage(forum, topic, page),
+    placeholderData: keepPreviousData,
+  });
 }

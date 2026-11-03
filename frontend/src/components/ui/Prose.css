@@ -73,3 +73,22 @@
   border: var(--border);
   border-color: var(--border-color-subtle);
 }
+
+/*
+ * Images the site embedded in a post. Its markup holds both the image and a
+ * "blocked by your filter" notice, both hidden, and its script shows one. We
+ * show the image: the filter is the site's default one, which the text was
+ * fetched with, until filters are applied here.
+ */
+.prose .hidden {
+  display: none;
+}
+
+.prose .image-show.hidden {
+  display: block;
+}
+
+.prose .image-show picture,
+.prose .image-show img {
+  max-inline-size: 100%;
+}

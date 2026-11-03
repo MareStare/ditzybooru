@@ -19,18 +19,14 @@ function TopicStrip({ topic }: { topic: ForumTopic }) {
     <li className="forum-topic">
       {topic.sticky ? <Pin className="forum-topic__pin" size={12} /> : null}
       <Link
-        // @ts-expect-error TODO: route not built yet
-        to={`/forums/${topic.forum.slug}/topics/${topic.slug}`}
+        to="/forums/$forum/topics/$topic"
+        params={{ forum: topic.forum.slug, topic: topic.slug }}
         className="forum-topic__title"
       >
         {topic.title}
       </Link>{' '}
       <span className="forum-topic__meta">in</span>{' '}
-      <Link
-        // @ts-expect-error TODO: route not built yet
-        to={`/forums/${topic.forum.slug}`}
-        className="forum-topic__meta"
-      >
+      <Link to="/forums/$forum" params={{ forum: topic.forum.slug }} className="forum-topic__meta">
         {topic.forum.name}
       </Link>{' '}
       <RelativeTime className="forum-topic__meta" dateTime={topic.lastRepliedAt} />

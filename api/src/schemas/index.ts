@@ -304,6 +304,33 @@ const ImageCounters = s.object({
   faves: s.int(),
 });
 
+/** One post of a topic page. Philomena sites give rendered text, Derpibooru only the markup the author wrote. */
+const TopicPost = s.object({
+  id: s.int(),
+  author: s.string(),
+  /** The path segment of the author's profile, or `null` for an anonymous post. */
+  authorSlug: s.optional(s.nullable(s.string())),
+  avatarUrl: s.optional(s.nullable(s.uri())),
+  createdAt: s.dateTime(),
+  /** The post as HTML cleaned by the backend: safe to render. */
+  bodyHtml: s.optional(s.string()),
+  /** The post as the author wrote it (markdown), where the site's HTML is not available. */
+  body: s.optional(s.string()),
+});
+
+const TopicPage = s.object({
+  slug: s.string(),
+  title: s.string(),
+  forumSlug: s.string(),
+  forumName: s.string(),
+  /** Who started the topic. */
+  author: s.string(),
+  startedAt: s.optional(s.dateTime()),
+  /** Every post of the topic, across pages. */
+  postCount: s.int(),
+  posts: s.array(s.ref('TopicPost')),
+});
+
 const Channel = s.object({
   id: s.int(),
   title: s.string(),
@@ -353,6 +380,8 @@ export const schemas = {
   Session,
   LoginCaptcha,
   ImageCounters,
+  TopicPost,
+  TopicPage,
   Channel,
   ForumTopic,
   ForumActivity: s.object({ items: s.array(s.ref('ForumTopic')) }),
@@ -373,6 +402,7 @@ export const schemas = {
   StaffPage: s.object({ groups: s.array(s.ref('StaffGroup')) }),
   ForumList: s.object({ items: s.array(s.ref('Forum')) }),
   TagSuggestionList: s.object({ items: s.array(s.ref('TagSuggestion')) }),
+  TopicResults: results('Topic'),
   ChannelList: s.object({ items: s.array(s.ref('Channel')) }),
   FilterList: s.object({ items: s.array(s.ref('Filter')) }),
   Error: ErrorBody,

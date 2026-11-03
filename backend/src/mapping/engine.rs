@@ -438,20 +438,16 @@ pub async fn fetch(
     {
         let doc: Value = serde_json::from_str(&main).context("upstream body is not JSON")?;
         for join in &json_strategy.joins {
-            let values = json::collect_values(&doc, &join.collect)?;
-            if values.is_empty() {
-                continue;
-            }
             let mut join_params = all.clone();
             add_defaults(&join.request, &mut join_params)?;
-            join_params.insert(
-                format!("{}Count", join.collect.param),
-                values.len().to_string(),
-            );
-            join_params.insert(
-                join.collect.param.clone(),
-                values.join(&join.collect.separator),
-            );
+            if let Some(collect) = &join.collect {
+                let values = json::collect_values(&doc, collect)?;
+                if values.is_empty() {
+                    continue;
+                }
+                join_params.insert(format!("{}Count", collect.param), values.len().to_string());
+                join_params.insert(collect.param.clone(), values.join(&collect.separator));
+            }
             let body = get_text(client, throttle, ctx, &join.request, &join_params).await?;
             joins.insert(join.name.clone(), body);
         }

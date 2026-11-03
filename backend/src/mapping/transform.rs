@@ -18,6 +18,14 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
         Value::Null => return Ok(Value::Null),
         other => other.to_string(),
     };
+    // `add:N`: the last number in the text, plus N (a count shown as "1 replies"
+    // that stands for one more post, say).
+    if let Some(amount) = name.strip_prefix("add:") {
+        let amount: i64 = amount
+            .parse()
+            .with_context(|| format!("bad amount in {name:?}"))?;
+        return Ok(last_int(&text).map_or(Value::Null, |n| Value::from(n + amount)));
+    }
     if let Some(sep) = name.strip_prefix("split:") {
         let parts = text
             .split(sep)
@@ -59,6 +67,16 @@ pub fn apply(name: &str, value: &Value, origin: &str) -> Result<Value> {
         "date" => Ok(Value::String(text)),
         "url" => Ok(Value::String(resolve_url(origin, &text))),
         "slug" => Ok(Value::String(slugify(&text))),
+        "lastSegment" => Ok(Value::String(
+            text.split(['?', '#'])
+                .next()
+                .unwrap_or_default()
+                .trim_end_matches('/')
+                .rsplit('/')
+                .next()
+                .unwrap_or_default()
+                .to_owned(),
+        )),
         "lastInt" => Ok(last_int(&text).map_or(Value::Null, Value::from)),
         other => bail!("unsupported transform {other:?}"),
     }
@@ -154,6 +172,23 @@ mod tests {
         assert!(clean.contains(r#"href="/rules""#));
         assert!(clean.contains(r#"src="https://site.example/img/a.png""#));
         assert!(clean.contains("noopener"));
+    }
+
+    #[test]
+    fn add_shifts_the_last_number() {
+        let at = |text: &str| apply("add:1", &Value::String(text.to_owned()), "").unwrap();
+        assert_eq!(at("1 replies"), 2);
+        assert_eq!(at("0 replies"), 1);
+        assert_eq!(at("no number"), Value::Null);
+    }
+
+    #[test]
+    fn last_segment_takes_the_end_of_a_path() {
+        let at = |text: &str| apply("lastSegment", &Value::String(text.to_owned()), "").unwrap();
+        assert_eq!(at("/forums/dis"), "dis");
+        assert_eq!(at("/forums/dis/"), "dis");
+        assert_eq!(at("/profiles/Pleb?x=1#top"), "Pleb");
+        assert_eq!(at("dis"), "dis");
     }
 
     #[test]

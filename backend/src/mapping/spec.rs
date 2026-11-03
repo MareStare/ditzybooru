@@ -188,9 +188,11 @@ pub struct Join {
     pub name: String,
     /// Request template; `collect.param` and `<param>Count` are filled in.
     pub request: UpstreamRequest,
-    /// Which values of the first response to send.
-    pub collect: Collect,
-    /// Pointer to the item array of the follow-up response.
+    /// Which values of the first response to send. Absent: the request needs
+    /// none, and is always sent.
+    pub collect: Option<Collect>,
+    /// Pointer to the item array of the follow-up response, or empty when it
+    /// has none and is read for its own values.
     pub items: String,
     /// Pointer, inside each item, to the value `lookup` rules match on.
     pub key: String,

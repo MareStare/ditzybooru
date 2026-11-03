@@ -3,6 +3,8 @@ export type Transform =
   | 'int'
   | 'lastInt'
   | 'sanitizedHtml'
+  | 'lastSegment'
+  | `add:${number}`
   | 'float'
   | 'bool'
   | 'date'
@@ -69,7 +71,8 @@ interface Join {
   name: string;
   /** `{<collect.param>}` and `{<collect.param>Count}` are filled in. */
   request: UpstreamRequest;
-  collect: {
+  /** Absent: the request needs no collected values and is always sent. */
+  collect?: {
     param: string;
     /** Pointer to an array in the first response. */
     from: string;
@@ -78,7 +81,7 @@ interface Join {
     prefix?: string;
     separator: string;
   };
-  /** Pointer to the item array of the follow-up response. */
+  /** Pointer to the item array of the follow-up response, or `''` when it has none and is read for its own values (`{ join, at }`). */
   items: string;
   /** Pointer, inside each item, to the value `lookup` rules match on. */
   key: string;
